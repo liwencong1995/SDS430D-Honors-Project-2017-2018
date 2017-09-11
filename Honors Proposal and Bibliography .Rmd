@@ -1,0 +1,67 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analyzing the NYC Ride-Hail Market 
+
+Wencong (Priscilla) Li ‘18
+
+SDS 430D Honors Project Proposal
+
+Statistical and Data Sciences
+
+Honors Adviser: Benjamin Baumer
+
+Director of Honors: Joseph O’Rourke
+
+The Yellow Cabs are widely recognized as the icons of New York City. NYC Taxicabs are operated by private firms and licensed by the New York City Taxi and Limousine Commission (TLC). TLC issues medallions to taxicabs, and every taxicab must have a medallion to operate. There were 13,437 yellow medallion taxicabs licenses in 2014, and taxi patronage has declined since 2011 because of the competition caused by rideshare services.  
+
+Uber Technologies Inc., famously known as Uber, is an American technology company that operates private cars worldwide. Uber drivers use their own cars, instead of corporate-owned vehicles, to drive with Uber. In NYC, Uber uses ‘upfront pricing”, meaning that riders are informed about the fares that they will pay before requesting a ride, and gratuity is not required. Riders are given the opportunity to compare different transportation fares before making their decisions on which one to choose. Uber NYC was launched in May 2011, and it only took 5 years to have its growth to plateau. Lyft is the main competitor of Uber, and it came into market in July 2014. 
+
+Unsurprisingly consumers prefer rides with cheaper fares. Charging substantially higher prices, consumption of yellow cab has dropped sharply since Uber and Lyft were introduced into the market. Yellow cab drivers’ dreams have been crashed, even though taxi drivers gave twice as much rides per week comparing to Uber drivers in 2016. New York City initially sold 13,566 medallions for $10 each, and their value hit $1.3 million each in 2014. Earlier this year, a medallion was sold for only $241,000, which is less than one-fifth of what the cab-ownership tags were going for just three year ago.
+
+In order to regain their market share, yellow cab operators introduced their own apps in 2016 to help yellow cab drivers improve the cab-riding experience. The traditional taxi industry is cooperating with new technology firm, Verifone System, to add more functionalities to taxi cabs.  
+
+The first section of my project focuses on getting the data ready. I will work on and complete the ‘etl’-dependent R package ‘nyctaxi’ that was created by Professor Benjamin Baumer. The ‘etl’ package provides a CRAN-friendly framework that allows R users to work with medium data with any knowledge in SQL. It has three operations, extract, transfer, and load, which bring real-time data into local or remote databases. The suite of `etl`-dependent packages makes medium data -- too big to store in memory, but not so big that it won't fit on a hard drive --  more accessible to a wider audience. ‘nyctaxi’ R package will allow users to get access to trip-level NYC taxicab data from 2009 to 2017, Uber pickup data from April to September 2014 and January to June 2015, and aggregated Lyft trip data on a weekly basis. 
+
+The second part of my study focuses on data analysis. I want to investigate the sharp decline in the consumption of NYC yellow cab after e-hail services were introduced into the NYC ride-hail market. I also want to study what the impact of introducing new GPS and entertainment system is on the number of rides. The global product and marketing at Verifone, Jason Gross, said that, “I like to say that we provide what Uber says it provides.” With the raised expectation among rides caused by Uber and Lyft, yellow taxi industry need to respond quickly. How does the market react to the newly installed entertainment system? Has the market share of yellow cab rebounded since 2016? By looking into the patterns in market shares, it might be possible for me to predict the future market share distribution and find out what features of ride-hail transportation are the ones that affect market share distribution the most. 
+
+The third part of my project involves creating an interactive data visualization tool that helps users to better understand the distribution of both yellow cab and other e-hail services. This tool would help me with my understanding of services available to riders in terms of geographical location, and this tool would add a new layer to my understanding of market share. 
+
+The last piece of my project involves less programming but would add some color to my thesis paper. I would love to interview some NYC yellow cab drivers and learn about the impact of e-hail services on their lives and how they are reacting to it. Throughout a series of interviews, I would not only get to know more about the not widely-known negative impact of e-hail services on the US economy, but also get some insights on how to improve the interactive visualization tool to make it more intuitive and useful to people who need it. I also plan to interview some Uber or Lyft drivers in NYC to understand the impact thoroughly from both sides.
+
+SDS 430D Honors Project Bibliography
+
+1.	Furfaro, Danielle, Uber and Lyft ordered to hand over trip data, New York post, Feb 2, 2017.
+http://nypost.com/2017/02/02/uber-and-lyft-ordered-to-hand-over-trip-data/
+
+2.	Lyft Trips NYC 2016 Data, NYC Open Data, Sep 3, 2017
+https://data.cityofnewyork.us/Transportation/Lyft-Trips-NYC-2016/2sjf-9g38
+
+3.	Lyft Trips NYC 2016 Description, NYC Open Data, Sep 3, 2017
+https://data.cityofnewyork.us/Transportation/Lyft-Trips-NYC-2016/2sjf-9g38/about
+
+4.	Todd Schneider, Dan Kaplun, and Chenliang Wang. nyc-taxi-data: Import public NYC taxi and Uber trip data into PostgreSQL / PostGIS database, analyze with R.
+https://github.com/toddwschneider/nyc-taxi-data
+
+5.	Ben Baumer and Trang Le (NA). nyctaxi: Use the NYC Taxi Data. R package version 0.0.0.9003.
+https://github.com/beanumber/nyctaxi/blob/master/vignettes/nyc_taxi.Rmd
+
+6.	Schneider, Todd, Analyzing 1.1 Billion NYC Taxi and Uber Trips, with a Vengeance, Todd W. Schneider’s Blog
+http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/
+
+7.	Schneider, Todd, Taxi, Uber, and Lyft Usage in New York City, Todd W. Schneider’s Blog
+http://toddwschneider.com/posts/taxi-uber-lyft-usage-new-york-city/
+
+8.	Andrew Flowers, Reuben Fischer-Baum, and Dhrumil Mehta. Uber-tlc-foil-response: Uber trip data from a freedom of information request to NYC's Taxi & Limousine Commission
+https://github.com/fivethirtyeight/uber-tlc-foil-response
+
+9.	Uber Movement: Interactive Uber Trip Time and Fare Estimator
+https://movement.uber.com/cities?lang=en-US
+
+10.	Uber Trip Data 2014-2015, Data World, Nov 22, 2016 
+https://data.world/data-society/uber-pickups-in-nyc
+
+
+
+
