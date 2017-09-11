@@ -2,7 +2,7 @@
 
 This repository includes all materials related to Priscilla Li's Honors Project.
 
-Author: Wencong (Priscilla) Li Smith College '18
+Author: Wencong (Priscilla) Li, Smith College '18
 
 Major: Statistical and Data Sciences
 
