@@ -12,7 +12,8 @@ taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 #yellow taxi 2015
 taxi %>%
   etl_extract(years = 2015, months = 1, types = c("yellow")) %>% 
-  etl_transform(years = 2015, months = 1, types = c("yellow")) 
+  etl_transform(years = 2015, months = 1, types = c("yellow")) %>%
+  etl_load(years = 2015, months = 1:12, types = c("yellow"))
 
 taxi%>%
   etl_init() %>% 
@@ -31,15 +32,10 @@ taxi %>%
 taxi %>%
   tbl("green")
 
-
-  
 taxi %>%
   etl_extract(years = 2011, months = 1:12, types = c("yellow")) %>% 
   etl_transform(years = 2011, months = 1:12, types = c("yellow")) %>% 
   etl_load(years = 2011, months = 1:12, types = c("yellow"))
-
-
-
 
 library(dplyr)
 library(leaflet)
