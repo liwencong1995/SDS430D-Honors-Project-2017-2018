@@ -4,6 +4,8 @@ library(RMySQL)
 db <- src_mysql("nyctaxi", user = "WencongLi", host = "localhost", password = "P320718")
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 
+taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi")
+
 taxi %>%
   etl_extract(years = 2015, months = 1:12, types = c("yellow"), transportation = "uber") %>% 
   etl_transform(years = 2015, months = 1:12, types = c("yellow"), transportation = "uber") %>% 
