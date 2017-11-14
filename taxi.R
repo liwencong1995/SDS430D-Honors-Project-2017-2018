@@ -45,9 +45,13 @@ taxi %>%
 
 #test the transform function
 taxi %>%
-  etl_extract(years = 2013:2017, months = 1, types = c("yellow","green")) %>%
-  etl_transform(years = 2013:2017, months = 1, types = c("yellow","green")) %>%
-  etl_load(years = 2013:2017, months = 1, types = c("yellow","green"))
+  etl_extract(years = 2013:2016, months = 12, types = c("green"))
+
+taxi %>%
+  etl_transform(years = 2013:2016, months = 12, types = c("green"))
+
+taxi %>%
+  etl_load(years = 2013:2016, months = 12, types = c("green"))
 
 library(dplyr)
 library(leaflet)
