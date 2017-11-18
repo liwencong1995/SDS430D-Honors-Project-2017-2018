@@ -6,7 +6,7 @@ library(nyctaxi)
 library(RMySQL)
 #mysql connection
 db <- src_mysql("nyctaxi", user = "WencongLi", host = "localhost", password = "P320718")
-taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi")
 
 #taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 #Download the data I need for my study
@@ -61,3 +61,19 @@ taxi %>%
 library(dplyr)
 library(leaflet)
 library(lubridate)
+
+#---------------------------------------------------------------------------------
+#Prep data for data analysis
+#Yellow taxi data: 2010-2016, Jan-Dec
+
+taxi %>%
+  etl_extract(years = 2010:2016, months = 1:12, types = c("yellow")) %>% 
+  etl_transform(years = 2010:2016, months = 1:12, types = c("yellow"))
+
+
+
+
+
+
+
+
