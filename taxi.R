@@ -78,6 +78,7 @@ taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 
 taxi %>%
   etl_extract(years = 2010:2016, months = 1:12, types = c("yellow"))
+
 taxi %>%
   etl_load(years = 2010:2016, months = 1:12, types = c("yellow"))
 
