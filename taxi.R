@@ -6,7 +6,8 @@ library(nyctaxi)
 library(RMySQL)
 #mysql connection
 db <- src_mysql("nyctaxi", user = "WencongLi", host = "localhost", password = "P320718")
-taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi")
+#taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 
 #taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 #Download the data I need for my study
@@ -80,7 +81,10 @@ taxi %>%
   etl_extract(years = 2010:2016, months = 1:12, types = c("yellow"))
 
 taxi %>%
-  etl_load(years = 2010:2016, months = 1:12, types = c("yellow"))
+  etl_load(years = 2010, months = 1, types = c("yellow"))
+
+taxi %>%
+  etl_load(years = 2010, months = 1:12, types = c("yellow"))
 
 #Green taxi data: Aug 2010 - Dec 2016
 taxi %>%

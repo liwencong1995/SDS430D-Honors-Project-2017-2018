@@ -20,7 +20,9 @@ taxi %>%
 #Prep data for data analysis
 #uber 2014 - 2015
 taxi %>%
-  etl_extract(years = 2014:2015, months = 1:12, types = c("yellow"), transportation = "uber")
+  etl_extract(years = 2014:2015, months = 1:12, type = "uber")
+taxi %>%
+  etl_transform(years = 2014:2015, months = 1:12, type = "uber")
 taxi %>%
   etl_load(years = 2014:2015, months = 1:12, type = "uber")
 
