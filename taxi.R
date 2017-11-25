@@ -84,9 +84,13 @@ taxi %>%
   etl_load(years = 2016, months = 1, type = "yellow")
 
 taxi %>%
-  etl_load(years = 2010, months = 1:12, type = "yellow")
+  etl_load(years = 2014, months = 7:9, type = "yellow")
 
-hy#Green taxi data: Aug 2010 - Dec 2016
+taxi %>%
+  etl_load(years = 2015, months = 2:6, type = "yellow")
+
+
+#Green taxi data: Aug 2010 - Dec 2016
 taxi %>%
   etl_extract(years = 2014:2016, months = 1:12, type = c("green")) 
 
