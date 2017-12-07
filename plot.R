@@ -21,6 +21,9 @@ summary <- bind_rows(lyft_summary, green_summary, yellow_summary, uber_summary) 
   filter(the_year != 0) %>%
   mutate(time = as.POSIXct(year_month))
 
+
+
+
 library(plotly)
 p <- plot_ly(x = ~summary$time, y = ~summary$num_trips, mode = 'lines', split = summary$type)
 p
