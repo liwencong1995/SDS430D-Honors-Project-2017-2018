@@ -74,6 +74,7 @@ library(RMySQL)
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 
+
 #Prep data for data analysis
 #Yellow taxi data: Jan 2010- Dec 2016
 
@@ -90,7 +91,7 @@ taxi %>%
   etl_load(years = 2015, months = 2:6, type = "yellow")
 
 
-#Green taxi data: Aug 2010 - Dec 2016
+#Green taxi data: Aug 2013 - Dec 2016
 taxi %>%
   etl_extract(years = 2014:2016, months = 1:12, type = c("green")) 
 
