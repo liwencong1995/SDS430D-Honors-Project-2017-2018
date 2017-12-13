@@ -1,19 +1,19 @@
 ---
-author: 'Wencong Li'
-date: 'May 2018'
-institution: 'Smith College'
-division: 'Statistical and Data Sciences'
-advisor: 'Advisor Benjamin Baumer'
+author: 'Your R. Name'
+date: 'May 20xx'
+institution: 'Reed College'
+division: 'Mathematics and Natural Sciences'
+advisor: 'Advisor F. Name'
 #altadvisor: 'Your Other Advisor'
 # Delete line 6 if you only have one advisor
-department: 'Statistical and Data Sciences'
+department: 'Mathematics'
 degree: 'Bachelor of Arts'
-title: 'Analyzing the NYC Ride-Hail Market'
+title: 'My Final College Paper'
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 output: 
-  thesisdown::thesis_pdf: default
-#  thesisdown::thesis_gitbook: default
+#  thesisdown::thesis_pdf: default
+  thesisdown::thesis_gitbook: default
 #  thesisdown::thesis_word: default
 #  thesisdown::thesis_epub: default
 # If you are creating a PDF you'll need to write your preliminary content here or
