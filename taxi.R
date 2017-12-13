@@ -90,6 +90,26 @@ taxi %>%
 taxi %>%
   etl_load(years = 2015, months = 2:6, type = "yellow")
 
+taxi %>%
+  etl_load(years = 2016, months = 7:12, type = "yellow")
+
+taxi %>%
+  etl_load(years = 2016, months = 1:6, type = "yellow")
+
+taxi %>%
+  etl_load(years = 2016, months = 7:12, type = "yellow")
+
+taxi %>%
+  etl_load(years = 2015, months = 5:12, type = "yellow")
+
+taxi %>%
+  etl_load(years = 2014, months = 1:12, type = "yellow")
+
+taxi %>%
+  etl_load(years = 2013, months = 1:12, type = "yellow")
+
+taxi %>%
+  etl_load(years = 2012, months = 1:12, type = "yellow")
 
 #Green taxi data: Aug 2013 - Dec 2016
 taxi %>%
@@ -106,6 +126,4 @@ taxi %>%
 
 taxi %>%
   etl_load(years = 2013:2016, months = 1:12, type = "green")
-
-
 
