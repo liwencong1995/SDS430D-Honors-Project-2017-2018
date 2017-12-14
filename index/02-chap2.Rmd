@@ -1,7 +1,6 @@
 # An investigation of NYC Taxi Driver' Bias in Customers Selection {#chapter2}
 
-## Introduction
-For a specific region
-And a heat map
-Side by decide pickup and drop off 
-Question: social issues about which location has the most pickup and drop-off
+## Question of Interest
+On August 7th, 2015, a New York City taxi driver has been fined $25,000 for failing to pick up two African American passengers, and instead giving two white passengers a ride. There are rumors that say NYC taxi drivers discriminate. However, in NYC, yellow cabs are required to take you anywhere in NYC (any of the 5 boroughs), and they cannot refuse to take any passengers.
+
+In this study, I would love to investigate the locations of pickups and dropoffs in NYC and try to get some insights of this social issue. I will generate heat maps to illustrate the differences in the number of dropoff in different neighborhoods.
