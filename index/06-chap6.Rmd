@@ -1,0 +1,6 @@
+# How much tip a taxi driver would get from a specific region in NYC? {#chapter6}
+
+## Introduction
+Tips
+
+Tip based on payment type?

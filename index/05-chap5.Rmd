@@ -1,0 +1,15 @@
+# An investigation of NYC Taxi Fare: Are Trips Correctly Charged? {#chapter5}
+
+## Introduction
+Modeling the fare!
+Differed rate model through time.
+June 1, 2016
+pricing of NYC taxi
+Simple relationship between 
+Try to figure out how long ppl waited for traffic
+Get the pricing formula for nyc taxi
+R^2=1
+What’s going on?
+Is it linear?
+Correctly charged or not?
+Map the difference in different regions?
