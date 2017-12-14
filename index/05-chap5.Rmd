@@ -1,15 +1,21 @@
 # An investigation of NYC Taxi Fare: Are Trips Correctly Charged? {#chapter5}
 
 ## Introduction
-Modeling the fare!
-Differed rate model through time.
-June 1, 2016
-pricing of NYC taxi
-Simple relationship between 
-Try to figure out how long ppl waited for traffic
-Get the pricing formula for nyc taxi
-R^2=1
-What’s going on?
-Is it linear?
-Correctly charged or not?
-Map the difference in different regions?
+New York City taxicabs has its fare model. According to [Taxi & Limousine Commission](http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml), there are 6 different ways of fare cauculation, and I have included the most common one below: 
+
+Onscreen rate is ‘Rate #01 – Standard City Rate.’
+The initial charge is $2.50.
+Plus 50 cents per 1/5 mile or 50 cents per 60 seconds in slow traffic or when the vehicle is stopped.
+In moving traffic on Manhattan streets, the meter should “click” approximately every four downtown blocks, or one block going cross-town (East-West).
+There is a 50-cent MTA State Surcharge for all trips that end in New York City or Nassau, Suffolk, Westchester, Rockland, Dutchess, Orange or Putnam Counties.
+There is a 30-cent Improvement Surcharge. 
+There is a daily 50-cent surcharge from 8pm to 6am.
+There is a $1 surcharge from 4pm to 8pm on weekdays, excluding holidays.
+Passengers must pay all bridge and tunnel tolls.
+Your receipt will show your total fare including tolls. Please take your receipt.
+The driver is not required to accept bills over $20.
+Please tip your driver for safety and good service.
+There are no charges for extra passengers or bags.
+
+
+
