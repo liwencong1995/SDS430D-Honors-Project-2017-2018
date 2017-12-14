@@ -1,5 +1,6 @@
-# How long does it take NYC's Transportation Net To Recover after A Terrorist Attack Occurs? {#chapter3}
+# How long does it take NYC's Transportation Net To Recover after A Terrorist Attack or A Severe Car Accident Occurs? {#chapter3}
 
-Normal traffic
-The day after terrorist attack
-how long does it take for the traffic to go back to normal
+# Question of Interest
+On October 31st, 2017, 8 people were killed as a truck plowed into pedestrians in downtown NYC. According to New York Post, a terrorist in a rental truck sped for about a mile down on a bicycle path in lower Manhattan, killing innocent civilians. 
+
+New York City has severe traffic congestion problems, and terror attacks always make it the situation worse. How long does it take New York City's traffic to recover to the normal level after a terror attack or a car accident happens? In this study, I would love to answer this question with NYC Taxi trip data.
