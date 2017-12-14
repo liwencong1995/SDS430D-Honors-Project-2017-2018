@@ -1,1 +1,7 @@
 # An investigation of NYC Taxi Driver' Bias in Customers Selection {#chapter2}
+
+## Introduction
+For a specific region
+And a heat map
+Side by decide pickup and drop off 
+Question: social issues about which location has the most pickup and drop-off

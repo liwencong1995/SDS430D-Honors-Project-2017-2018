@@ -8,3 +8,10 @@ The {#rmd-basics} text after the chapter declaration will allow us to link throu
 
 # Are Uber and Lyft Destroying NYC Taxi Industry? {#chapter1}
 
+## Question of Interest
+
+New York City taxicabs, both yellow and green, are the icons of Nthe city. Being a taxi driver who has a medallion taxi used to be a job that is profitable. Many NYC medallion taxis drivers are immigrants, and their professions has always been able to support both themselves' and their families' daily expenses until May, 2011, whien Uber launched in NYC. After 3 years, in July, 2014, Lyft also launched their service in NYC. Since then, a lot of NYC customers started to take Uber or Lyft, since e-hail services are more afforadable and convenient.
+
+In this study, I want to investigate what happened to the NYC taxi industry? Did the total number of rides decrease sharply after the launch of Uber and Lyft? Are people taking shorter rides? Have people's riding habits changed?
+
+
