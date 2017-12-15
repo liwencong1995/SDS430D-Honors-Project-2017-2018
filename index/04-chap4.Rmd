@@ -1,0 +1,20 @@
+# Which Transportation Hubs Gives NYC Taxi Driver the Highest Probability to Pick Up A Customer Who Is Going To the JFK and Newark Airports? {#chapter4}
+
+## Introduction
+Incentivize to maximize their profit!
+Test the common believes that taxi drivers have
+
+If I am at a certain location, where am I most likely going?
+Network model
+Major transportation hubs in NYC
+How much go to the airport?
+Bus terminal
+Train station
+Pick up some one from a major transportation hub? Where would they go?
+
+Journalism style research
+
+they want the largest fare, and the least time!
+Revenue maximizing for cabbies
+A random sample of a year
+Airport
