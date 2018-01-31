@@ -1,7 +1,0 @@
-# Which Transportation Hubs Gives NYC Taxi Driver the Highest Probability to Pick Up A Customer Who Is Going To the JFK and Newark Airports? {#chapter4}
-
-## Introduction
-New York City taxi driver are incentivized to maximize their profit just like every other human being! If I am a taxi driver in NYC, where should I go in order to be more likely to pick up a passenger who would go to the JFK airport? Which major transportation hub in NYC gives taxi drivers the highest probability to pick up someone who wants to go to the Newark Airport?
-
-In this study, I would love to answer these question and creat a network model to study the NYC taxi ride patterns among all major transportation hubs in New York City. 
-
