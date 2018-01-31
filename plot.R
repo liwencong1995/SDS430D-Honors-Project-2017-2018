@@ -8,10 +8,12 @@ lyft_summary <- lyft_summary%>%
   mutate(type = "lyft")
 
 green_summary <- green_summary%>%
-  mutate(type = "green")
+  mutate(type = "green") %>%
+  filter(the_year > 2013)
 
 yellow_summary <- yellow_summary%>%
-  mutate(type = "yellow")
+  mutate(type = "yellow") %>%
+  filter(the_year > 2013)
 
 uber_summary <- uber_summary%>%
   mutate(type = "uber")
@@ -25,6 +27,10 @@ summary <- bind_rows(lyft_summary, green_summary, yellow_summary, uber_summary) 
 library(plotly)
 p <- plot_ly(x = ~summary$time, y = ~summary$num_trips, mode = 'lines', split = summary$type)
 p
+
+#yellow_summary[18,3] <- 10294080
+
+
 
 library(dplyr)
 all_sum <- bind_rows(green_summary, lyft_summary,uber_summary,yellow_summary)

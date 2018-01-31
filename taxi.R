@@ -68,8 +68,12 @@ library(lubridate)
 devtools::install_github("beanumber/nyctaxi")
 library(nyctaxi)
 #Creat the connection
+#require(devtools)
+#install_version("RMySQL", version = "0.10.9", repos = "http://cran.us.r-project.org")
+#devtools::install_version("RMySQL", version = "0.10.9", repos = "http://cran.us.r-project.org")
 library(RMySQL)
 #mysql connection
+#install_version("DBI", version = "0.5", repos = "http://cran.us.r-project.org")
 #db <- src_mysql("nyctaxi", user = "WencongLi", host = "localhost", password = "P320718")
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
@@ -111,6 +115,55 @@ taxi %>%
 taxi %>%
   etl_load(years = 2012, months = 1:12, type = "yellow")
 
+#---------------------------------------------------
+#cannot load in all data
+#mysql does not respond
+taxi %>%
+  etl_load(years = 2015, months = 4, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 5, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 6, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 7, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 8, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 9, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 10, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 11, type = "yellow")
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2015, months = 12, type = "yellow")
+
+
+
+
 #Green taxi data: Aug 2013 - Dec 2016
 taxi %>%
   etl_extract(years = 2014:2016, months = 1:12, type = c("green")) 
@@ -126,4 +179,13 @@ taxi %>%
 
 taxi %>%
   etl_load(years = 2013:2016, months = 1:12, type = "green")
+32
 
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2014, months = 12, type = "green")
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
+taxi %>%
+  etl_load(years = 2016, months = 4:12, type = "green")
