@@ -179,14 +179,6 @@ taxi %>%
 taxi %>%
   etl_transform(years = 2013, months = 8:12, type = c("green"))
 
-taxi %>%
-<<<<<<< HEAD
-  etl_load(years = 2013:2016, months = 1:12, type = "green")
-32
-=======
-  etl_load(years = 2013:2015, months = 1:12, type = "green")
->>>>>>> 3e267097e89ac1826bfab4d5606d454d88706ca3
-
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 taxi %>%
@@ -195,3 +187,21 @@ db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = 
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 taxi %>%
   etl_load(years = 2016, months = 4:12, type = "green")
+
+##----------------------Pricing-----------------------------------
+## One Standard City Rate
+2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
+
+## Two JKF Airport Trips
+52 + + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
+
+## Three Neward Airport Trips
+17.5 + 2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
+
+## Four Westchester & Nassau
+# Hard to measure
+# need to calculate miles travel winthin and beyond City limit
+#2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
+
+## Five Other POints Ouside the City
+# mutually agreed fare amount
