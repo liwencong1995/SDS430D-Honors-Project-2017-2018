@@ -86,13 +86,15 @@ taxi %>%
   etl_extract(years = 2010:2016, months = 1:12, types = c("yellow"))
 
 taxi %>%
-  etl_load(years = 2016, months = 1, type = "yellow")
+  etl_load(years = 2010:2016, months = 1:12, type = "yellow")
 
 taxi %>%
   etl_load(years = 2014, months = 7:9, type = "yellow")
 
 taxi %>%
   etl_load(years = 2015, months = 2:6, type = "yellow")
+taxi %>%
+  etl_load(years = 2010:2012, months = 1:12, type = "yellow")
 
 taxi %>%
   etl_load(years = 2016, months = 7:12, type = "yellow")
@@ -178,8 +180,12 @@ taxi %>%
   etl_transform(years = 2013, months = 8:12, type = c("green"))
 
 taxi %>%
+<<<<<<< HEAD
   etl_load(years = 2013:2016, months = 1:12, type = "green")
 32
+=======
+  etl_load(years = 2013:2015, months = 1:12, type = "green")
+>>>>>>> 3e267097e89ac1826bfab4d5606d454d88706ca3
 
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
