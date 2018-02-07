@@ -26,3 +26,52 @@ tip_high_region_sum <- tip_high_region %>%
   arrange(desc(freq))
 
 write.csv(tip_high_region_sum, "~/Desktop/Honors Thesis/mysql/tip_high_region.csv")
+
+
+# Voided trip
+yellow_2016.08 %>%
+  filter(payment_type == 6)
+
+# no charge
+no_charge <- yellow_2016.08 %>%
+  filter(payment_type == 3)
+no_charge%>%
+  group_by(RatecodeID) %>%
+  summarise(N = n()) %>%
+  mutate(prob = N/sum(N)) %>%
+  arrange(desc(N))
+
+# RatecodeID     N         prob
+# <int> <int>        <dbl>
+# 1          1 38053 0.8833511305
+# 2          2  2163 0.0502112447
+# 3          5  1891 0.0438971169
+# 4          3   770 0.0178745531
+# 5          4   139 0.0032267050
+# 6          6    43 0.0009981893
+# 7         99    19 0.0004410604
+
+#higher probability no charge for the ones that are going to jfk/newark
+mean(no_charge$fare_amount)
+#12.53721
+max(no_charge$fare_amount)
+#22459.24
+hist(no_charge$fare_amount, breaks = 50)
+
+#charge
+charge <- yellow_2016.08 %>%
+  filter(payment_type != 3)
+charge%>%
+  group_by(RatecodeID) %>%
+  summarise(N = n()) %>%
+  mutate(prob = N/sum(N)) %>%
+  arrange(desc(N))
+# RatecodeID       N         prob
+# <int>   <int>        <dbl>
+# 1          1 9613098 9.710999e-01
+# 2          2  229352 2.316878e-02
+# 3          5   31874 3.219861e-03
+# 4          3   19148 1.934301e-03
+# 5          4    5521 5.577227e-04
+# 6         99     141 1.424360e-05
+# 7          6      51 5.151939e-06
