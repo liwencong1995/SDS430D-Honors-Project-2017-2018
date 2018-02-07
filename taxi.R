@@ -188,20 +188,3 @@ taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 taxi %>%
   etl_load(years = 2016, months = 4:12, type = "green")
 
-##----------------------Pricing-----------------------------------
-## One Standard City Rate
-2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
-
-## Two JKF Airport Trips
-52 + + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
-
-## Three Neward Airport Trips
-17.5 + 2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
-
-## Four Westchester & Nassau
-# Hard to measure
-# need to calculate miles travel winthin and beyond City limit
-#2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
-
-## Five Other POints Ouside the City
-# mutually agreed fare amount
