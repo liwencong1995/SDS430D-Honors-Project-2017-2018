@@ -1,10 +1,21 @@
 #tips
+library(dplyr)
+#tips by payment type
+# only when paymen type is  credit card, the data indicate the correct tip amount
+yellow_2016.08 %>%
+  group_by(payment_type) %>%
+  summarise(tip_mean = mean(tip_amount),
+            tip_min = )
 
-high_tip <- yellow_2016.08 %>%
-  filter(tip_amount > fare_amount )
+summary(yellow_2016.08 %>%
+          filter(payment_type==2))
 
+# high_tip <- yellow_2016.08 %>%
+#   filter(tip_amount > fare_amount )
 tip_region <- yellow_2016.08 %>%
   filter(fare_amount > 0) %>%
+  filter(tip_amount > 0) %>%
+  filter(payment_type == 1) %>%
   filter(tip_amount < fare_amount) %>%
   mutate(tip_perct = tip_amount/fare_amount) %>%
   group_by(PULocationID, DOLocationID) %>%
@@ -13,22 +24,57 @@ tip_region <- yellow_2016.08 %>%
   filter(trips > 10) %>%
   arrange(desc(DOLocationID), desc(avg_tip)) %>%
   rename(LocationID = PULocationID) 
-
 tip_region <- left_join(tip_region, taxi_zone_lookup, by = "LocationID")
 
+#visualization
+library(ggplot2)
+quantile(tip_region$avg_tip)
+# 0%        25%        50%        75%       100% 
+# 0.07484415 0.19081151 0.20358737 0.21770189 0.38664646  
+
+summary(tip_region$avg_tip)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 0.07484 0.19081 0.20359 0.20460 0.21770 0.38665
+
+ggplot(data = tip_region, aes(x = avg_tip) ) +
+  xlab("Tips, percent") +
+  geom_histogram(binwidth = 0.005) + 
+  geom_vline(xintercept = c(0.2), col = "red",linetype = "longdash") + 
+  geom_vline(xintercept = c(0.20460), col = "blue",linetype = "longdash")
+
+### find out the regions
+# tip_high_region <- tip_region %>%
+#   group_by(DOLocationID) %>%
+#   top_n(10, avg_tip)
 tip_high_region <- tip_region %>%
-  group_by(DOLocationID) %>%
-  top_n(10, avg_tip)
+  filter(avg_tip > 0.20460)
 
 tip_high_region_sum <- tip_high_region %>%
-  group_by(Borough, Zone) %>%
-  summarise(freq = n()) %>%
-  arrange(desc(freq))
+  group_by(LocationID) %>%
+  summarise(freq = n(), zone_avg_tip = mean(avg_tip) ) %>%
+  arrange(desc(zone_avg_tip)) %>%
+  filter(freq >= 10) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
 
 write.csv(tip_high_region_sum, "~/Desktop/Honors Thesis/mysql/tip_high_region.csv")
+View(tip_high_region_sum)
 
+#pick up location is significant ---------------------------------
+yellow_2016.08 <- yellow_2016.08 %>%
+  filter(fare_amount > 0) %>%
+  filter(tip_amount > 0) %>%
+  filter(payment_type == 1) %>%
+  filter(tip_amount < fare_amount) %>%
+  mutate(tip_perct = tip_amount/fare_amount)
+fit <- lm(tip_perct ~ PULocationID + trip_distance ,data = yellow_2016.08)
+summary(fit)
 
-# Voided trip
+# Coefficients:
+#   Estimate Std. Error  t value Pr(>|t|)    
+# (Intercept)    2.171e-01  7.461e-05 2909.718   <2e-16 ***
+#   PULocationID   1.111e-05  4.275e-07   25.999   <2e-16 ***
+#   trip_distance -4.247e-09  8.728e-09   -0.487    0.627
+# Voided trip-----------------------------------------------------
 yellow_2016.08 %>%
   filter(payment_type == 6)
 
@@ -75,3 +121,5 @@ charge%>%
 # 5          4    5521 5.577227e-04
 # 6         99     141 1.424360e-05
 # 7          6      51 5.151939e-06
+
+#https://github.com/pavelk2/NYC-taxi-tips

@@ -36,7 +36,7 @@ dropoff_region <- left_join(dropoff_sum, taxi_zone_lookup, by = "LocationID")
 
 # LocationID dropoff_num   Borough                         Zone
 # <int>       <int>    <fctr>                       <fctr>
-#   1        161      387702 Manhattan               Midtown Center
+# 1        161      387702 Manhattan               Midtown Center
 # 2        170      338603 Manhattan                  Murray Hill
 # 3        230      325090 Manhattan    Times Sq/Theatre District
 # 4        162      322163 Manhattan                 Midtown East

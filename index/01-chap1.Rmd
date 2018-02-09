@@ -500,6 +500,7 @@ download_nyc_data <- function(obj, url, years, n, names, ...) {
 
 ### ETL Init
 
+```{r, eval = FALSE}
 DROP TABLE IF EXISTS `yellow_old`;
 
 CREATE TABLE `yellow_old` (
@@ -638,3 +639,4 @@ CREATE VIEW yellow_old_sum AS SELECT YEAR(tpep_pickup_datetime) as the_year, MON
   FROM yellow_old
   GROUP BY the_year, the_month; 
 ); 
+```

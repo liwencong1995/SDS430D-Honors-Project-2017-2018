@@ -1,8 +1,16 @@
 # Using New York City Yellow Taxi Data to Answer Real Life Problems {#chapter2}
 
+New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs: taxi drivers want to maxmize their profit, and in order to do that, they need to maximize the revenue while minimizing the cost. Taxi passengers want the cheapest and most convenient way of transportantion. Since Uber and Lyft launched their services in New York City, many consumers started to demand the cheaper e-hail services. TLC wants to protect both taxi drivers and passengers, and it creates policies to make NYC taxi more accessible to consumers who really need this service. In this section, I think about what each party wants and try to find a way for them to be better-off. 
 
-## New York City Taxi Fare Pricing Model
+## New York City Taxi Driver
+The income of Taxi drivers in New York City has two parts: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers:
 
-## Transportation Network in New York City
+
+Taxi drivers sometimes  does not charger 
+
+## New York City Taxi Consumer
+
+
+## New York City Taxi Fare & Limousine Commission
 
 
