@@ -1,60 +1,231 @@
 #tips
 library(dplyr)
+yellow_2016.08 <- yellow_2016.08_cleaned
+library(nyctaxi)
+View(taxi_zone_lookup)
+taxi_zone_lookup$LocationID <- as.factor(taxi_zone_lookup$LocationID)
+
+#Load geographic information
+data("taxi_zone_lookup")
+data("taxi_zones")
+
 #tips by payment type
 # only when paymen type is  credit card, the data indicate the correct tip amount
 yellow_2016.08 %>%
   group_by(payment_type) %>%
   summarise(tip_mean = mean(tip_amount),
-            tip_min = )
+            tip_min = min(tip_amount),
+            tip_max = max(tip_amount))
 
-summary(yellow_2016.08 %>%
-          filter(payment_type==2))
+# # A tibble: 5 x 4
+# payment_type      tip_mean tip_min tip_max
+# <int>         <dbl>   <dbl>   <dbl>
+#   1            1  2.722735e+00  -16.00  999.99
+# 2            2  8.598192e-05    0.00   71.01
+# 3            3 -1.328520e-03  -19.32   10.00
+# 4            4 -7.190188e-03  -40.00    3.63
+# 5            5  0.000000e+00    0.00    0.00
 
-# high_tip <- yellow_2016.08 %>%
-#   filter(tip_amount > fare_amount )
-tip_region <- yellow_2016.08 %>%
+#filter out the unwanted observations
+yellow_2016.08_tip <- yellow_2016.08 %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%
   filter(payment_type == 1) %>%
-  filter(tip_amount < fare_amount) %>%
-  mutate(tip_perct = tip_amount/fare_amount) %>%
+  filter(tip_amount < fare_amount)
+
+#Find the regions that offer the largest tip
+yellow_2016.08_tip <- yellow_2016.08_tip %>%
+  mutate(tip_perct = tip_amount/fare_amount)
+
+#summary
+quantile(tip_region$avg_tip)
+# 0%          25%          50%          75%         100% 
+# 0.0001408451 0.1810815868 0.2043803873 0.2231832030 0.9973913043 
+
+#visualization of individual trips
+library(ggplot2)
+tip_individual <- ggplot(data = yellow_2016.08_tip, aes(x = tip_perct) ) +
+  xlab("Tips, percent") +
+  geom_histogram(binwidth = 0.005) + 
+  geom_vline(xintercept = c(0.20), col = "red",linetype = "longdash") + 
+  geom_vline(xintercept = c(0.2043), col = "blue",linetype = "longdash") +
+  geom_vline(xintercept = c(0.25), col = "green",linetype = "longdash") +
+  geom_vline(xintercept = c(0.28), col = "yellow",linetype = "longdash")
+tip_individual
+
+#do longer trips result in higher tip percent?
+tip_distance <- lm(tip_perct ~ trip_distance, data = yellow_2016.08_tip)
+summary(tip_distance)
+
+#not significant
+# Coefficients:
+#   Estimate Std. Error  t value Pr(>|t|)    
+# (Intercept)    2.189e-01  2.812e-05 7785.080   <2e-16 ***
+#   trip_distance -4.146e-09  8.729e-09   -0.475    0.635 
+
+#transform location id into factors
+str(yellow_2016.08_tip)
+yellow_2016.08_tip$PULocationID <- as.factor(yellow_2016.08_tip$PULocationID)
+yellow_2016.08_tip$DOLocationID <- as.factor(yellow_2016.08_tip$DOLocationID)
+
+#by controlling pickup and dropoff locations, does trip distance have any impact on tip?
+#takes forever
+tip_distance_2 <- lm(tip_perct ~ trip_distance + PULocationID + DOLocationID, data = yellow_2016.08_tip)
+summary(tip_distance_2)
+
+# so try agregated region-level data
+#aggregated level tip amount
+tip_region <- yellow_2016.08_tip  %>%
+  group_by(PULocationID, DOLocationID) %>%
+  summarise(avg_tip = mean(tip_perct), trips = n(),
+            avg_dis = mean(trip_distance)) %>%
+  #filter(trips > 10) %>%
+  arrange(desc(avg_tip)) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+#by controlling pickup and dropoff locations, does trip distance have any impact on tip?
+#takes forever
+tip_distance_3 <- lm(avg_tip ~ avg_dis + LocationID + DOLocationID, data = tip_region)
+summary(tip_distance_3)
+
+#by controlling pickup locations, does trip distance have any impact on tip?
+#takes forever
+tip_distance_4 <- lm(avg_tip ~ avg_dis + LocationID, data = tip_region)
+summary(tip_distance_4)
+
+#by controlling dropoff locations, does trip distance have any impact on tip?
+#takes forever
+tip_distance_5 <- lm(avg_tip ~ avg_dis + DOLocationID, data = tip_region)
+summary(tip_distance_5)
+#AVERAGE DISTANCE DOES NOT MATTER
+
+
+#visualization region level
+region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
+  xlab("Tips, percent") +
+  geom_histogram(binwidth = 0.005) + 
+  geom_vline(xintercept = c(0.20), col = "red",linetype = "longdash") +
+  geom_vline(xintercept = c(0.25), col = "green",linetype = "longdash") +
+  geom_vline(xintercept = c(0.28), col = "yellow",linetype = "longdash") + 
+  scale_x_continuous(limits = c(0, 0.5))
+region_vis
+
+
+#aggregated pick
+tip_pickup <- yellow_2016.08_tip  %>%
+  group_by(PULocationID) %>%
+  summarise(avg_tip = mean(tip_perct), trips = n(),
+            avg_dis = mean(trip_distance)) %>%
+  #filter(trips > 10) %>%
+  arrange(desc(avg_tip)) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+region_pickup_vis <- region_vis %+% tip_pickup
+region_pickup_vis
+
+#aggregated dropoff
+tip_dropoff <- yellow_2016.08_tip  %>%
+  group_by(DOLocationID) %>%
+  summarise(avg_tip = mean(tip_perct), trips = n(),
+            avg_dis = mean(trip_distance)) %>%
+  filter(trips > 10) %>%
+  arrange(desc(avg_tip)) %>%
+  rename(LocationID = DOLocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+region_dropoff_vis <- region_pickup_vis %+% tip_dropoff
+region_dropoff_vis
+
+mean(tip_region$avg_tip)
+mean(tip_pickup$avg_tip)
+mean(tip_dropoff$avg_tip)
+
+### find out the regions
+tip_high_region <- tip_region %>%
+  filter(avg_tip > 0.2)
+
+#among all the avg_tip > 0.2 regions
+tip_high_region_pickup <- tip_high_region %>%
+  group_by(LocationID) %>%
+  summarise(freq = n(), zone_avg_tip = mean(avg_tip) ) %>%
+  arrange(desc(zone_avg_tip)) %>%
+  filter(freq >= 50) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+tip_high_region_dropoff <- tip_high_region %>%
+  group_by(DOLocationID) %>%
+  summarise(freq = n(), zone_avg_tip = mean(avg_tip) ) %>%
+  arrange(desc(zone_avg_tip)) %>%
+  filter(freq >= 50) %>%
+  rename(LocationID = DOLocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+#problem with longer trip usually have higher tip percent?
+
+# how do taxi driver get paid
+# one pic for fare amount
+# one pick for tip amount, percetage
+# fare per hour
+# take the fare and divide by time, cost of time, 
+# think about the locations, pickup and drop off
+# how upset or excited a cab triver would be when someone
+# if tell them where they are going
+
+#how about taking out the ones that are going to the airport?
+standard_fare <- yellow_2016.08_tip %>%
+  filter(RatecodeID == 1)
+
+standard_tip_region <- standard_fare  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), trips = n(),
             avg_dis = mean(trip_distance)) %>%
   filter(trips > 10) %>%
-  arrange(desc(DOLocationID), desc(avg_tip)) %>%
-  rename(LocationID = PULocationID) 
-tip_region <- left_join(tip_region, taxi_zone_lookup, by = "LocationID")
+  arrange(desc(avg_tip)) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
 
-#visualization
-library(ggplot2)
-quantile(tip_region$avg_tip)
-# 0%        25%        50%        75%       100% 
-# 0.07484415 0.19081151 0.20358737 0.21770189 0.38664646  
+tip_distance_6 <- lm(avg_tip ~ avg_dis, data = standard_tip_region)
+summary(tip_distance_6)
 
-summary(tip_region$avg_tip)
-# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-# 0.07484 0.19081 0.20359 0.20460 0.21770 0.38665
-
-ggplot(data = tip_region, aes(x = avg_tip) ) +
+standard_region_vis <- ggplot(data = standard_tip_region, aes(x = avg_tip) ) +
   xlab("Tips, percent") +
   geom_histogram(binwidth = 0.005) + 
-  geom_vline(xintercept = c(0.2), col = "red",linetype = "longdash") + 
-  geom_vline(xintercept = c(0.20460), col = "blue",linetype = "longdash")
+  geom_vline(xintercept = c(0.20), col = "red",linetype = "longdash") +
+  geom_vline(xintercept = c(0.25), col = "green",linetype = "longdash") +
+  geom_vline(xintercept = c(0.28), col = "yellow",linetype = "longdash")
+standard_region_vis
 
 ### find out the regions
-# tip_high_region <- tip_region %>%
-#   group_by(DOLocationID) %>%
-#   top_n(10, avg_tip)
-tip_high_region <- tip_region %>%
-  filter(avg_tip > 0.20460)
+standard_tip_high_region <- tip_region %>%
+  filter(avg_tip > 0.2)
 
-tip_high_region_sum <- tip_high_region %>%
+#among all the avg_tip > 0.2 regions
+standard_tip_high_region_pickup <- tip_high_region %>%
   group_by(LocationID) %>%
   summarise(freq = n(), zone_avg_tip = mean(avg_tip) ) %>%
   arrange(desc(zone_avg_tip)) %>%
-  filter(freq >= 10) %>%
+  filter(freq >= 50) %>%
   left_join(taxi_zone_lookup, by = "LocationID")
+
+standard_tip_high_region_dropoff <- tip_high_region %>%
+  group_by(DOLocationID) %>%
+  summarise(freq = n(), zone_avg_tip = mean(avg_tip) ) %>%
+  arrange(desc(zone_avg_tip)) %>%
+  filter(freq >= 50) %>%
+  rename(LocationID = DOLocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+
+
+
+
+
+
+#how about the ones going to different residential area?
+
+
 
 write.csv(tip_high_region_sum, "~/Desktop/Honors Thesis/mysql/tip_high_region.csv")
 View(tip_high_region_sum)
@@ -66,7 +237,7 @@ yellow_2016.08 <- yellow_2016.08 %>%
   filter(payment_type == 1) %>%
   filter(tip_amount < fare_amount) %>%
   mutate(tip_perct = tip_amount/fare_amount)
-fit <- lm(tip_perct ~ PULocationID + trip_distance ,data = yellow_2016.08)
+###fit <- lm(tip_perct ~  + trip_distance ,data = yellow_2016.08)
 summary(fit)
 
 # Coefficients:

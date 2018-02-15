@@ -13,4 +13,16 @@ Taxi drivers sometimes  does not charger
 
 ## New York City Taxi Fare & Limousine Commission
 
-
+### What shoud the fare be
+Should there be one?
+Should their be multiple ones?
+PPL who have the higher fare would not take cab
+Closer regions?
+$52 make profit?
+Compute for each pick up zone, the expected fare to JFK and plot that, and find out the zone that are close to 52
+nice for people who are not from nyc
+flat rate
+estmate slow traffic time
+where is 533 dollar
+look at the neighborhood situation?
+Zone rates?

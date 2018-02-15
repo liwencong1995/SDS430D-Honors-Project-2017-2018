@@ -7,6 +7,7 @@ data("taxi_zone_lookup")
 View(taxi_zone_lookup)
 ## One Standard City Rate
 2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
+#for the regular rate
 
 ## Two JKF Airport Trips-------------------------------------------
 52 + + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
