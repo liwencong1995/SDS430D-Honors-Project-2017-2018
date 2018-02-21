@@ -1,13 +1,14 @@
 #tips
 library(dplyr)
-yellow_2016.08 <- yellow_2016.08_cleaned
+#yellow_2016.08 <- yellow_2016.08_cleaned
 library(nyctaxi)
-View(taxi_zone_lookup)
-taxi_zone_lookup$LocationID <- as.factor(taxi_zone_lookup$LocationID)
 
 #Load geographic information
 data("taxi_zone_lookup")
 data("taxi_zones")
+View(taxi_zone_lookup)
+taxi_zone_lookup$LocationID <- as.factor(taxi_zone_lookup$LocationID)
+
 
 #tips by payment type
 # only when paymen type is  credit card, the data indicate the correct tip amount
@@ -33,7 +34,7 @@ yellow_2016.08_tip <- yellow_2016.08 %>%
   filter(payment_type == 1) %>%
   filter(tip_amount < fare_amount)
 
-#Find the regions that offer the largest tip
+#Find the regions that offer the largest tip-----------------------
 yellow_2016.08_tip <- yellow_2016.08_tip %>%
   mutate(tip_perct = tip_amount/fare_amount)
 
@@ -64,9 +65,9 @@ summary(tip_distance)
 #   trip_distance -4.146e-09  8.729e-09   -0.475    0.635 
 
 #transform location id into factors
-str(yellow_2016.08_tip)
-yellow_2016.08_tip$PULocationID <- as.factor(yellow_2016.08_tip$PULocationID)
-yellow_2016.08_tip$DOLocationID <- as.factor(yellow_2016.08_tip$DOLocationID)
+# str(yellow_2016.08_tip)
+# yellow_2016.08_tip$PULocationID <- as.factor(yellow_2016.08_tip$PULocationID)
+# yellow_2016.08_tip$DOLocationID <- as.factor(yellow_2016.08_tip$DOLocationID)
 
 #by controlling pickup and dropoff locations, does trip distance have any impact on tip?
 #takes forever
@@ -111,6 +112,8 @@ region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
   scale_x_continuous(limits = c(0, 0.5))
 region_vis
 
+LocationID
+LocationID
 
 #aggregated pick
 tip_pickup <- tip_region %>%
@@ -120,6 +123,10 @@ tip_pickup <- tip_region %>%
   arrange(desc(avg_tip)) %>%
   filter(Zone != "Unknown")
 
+str(taxi_zone_lookup)
+str(tip_region)
+taxi_zone_lookup$LocationID <- as.character()
+
 ggplot(data = tip_pickup, aes(x = num_trips)) +
   geom_histogram(binwidth = 100)
 
@@ -128,11 +135,11 @@ summary(tip_pickup$num_trips)
 sd(tip_pickup$num_trips)
 23380 - 52793.89
 pickup_zone <- tip_pickup %>%
-  filter(num_trips >= ) %>%
+  filter(num_trips >= 1000) %>%
   arrange(desc(avg_tip))
 
 
-write.csv(pickup_zone, "/Users/priscilla/Desktop/Honors Thesis/thesis/index/data/pickup_zone.csv")
+#write.csv(tip_pickup, "/Users/priscilla/Desktop/Honors Thesis/thesis/index/data/tip_pickup.csv")
 
 tip_and_trip <- lm(avg_tip ~ num_trips, data = pickup_zone)
 summary(tip_and_trip)
@@ -313,3 +320,28 @@ charge%>%
 require(rgdal)
 View(taxi_zones)
 shape <- readOGR()
+require(plyr)
+require(maptools)
+require(ggmap)
+
+# https://www.r-bloggers.com/basic-mapping-and-attribute-joins-in-r/
+
+str(tip_pickup)
+tip_pickup$LocationID <- as.factor(tip_pickup$LocationID)
+
+#str(taxi_zones)
+newobj <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
+names(taxi_zones)
+names(pickup_zone)
+plot(newobj, col = newobj$num_trips )
+
+summary(taxi_zones)
+nrow(taxi_zones)
+str(taxi_zones[1,])
+head(taxi_zones@data)
+
+cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(newobj$num_trips,
+             breaks = quantile(newobj$num_trips, na.rm = TRUE),
+             labels = cols)
+plot(newobj, col = as.character(lcols))

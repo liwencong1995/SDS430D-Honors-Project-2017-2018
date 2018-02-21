@@ -121,15 +121,22 @@ Taxi drivers are required to be indifferent to where passengers are going. There
 
 Let's fist take a look at which zones have the highest number of pickups.
 ```{r}
-
+names(taxi_zones)
+names(pickup_zone)
+newobj <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
+cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(newobj$num_trips,
+             breaks = quantile(newobj$num_trips, na.rm = TRUE),
+             labels = cols)
+plot(newobj, col = as.character(lcols))
 ```
-
+![](figure/pickup_numtrip_heatmap.jpeg)
 
 
 ```{r}
 quantile(tip_pickup$num_trips, probs = seq(0,1,0.1))
 pickup_zone <- tip_pickup %>%
-  filter(num_trips >= 1893) %>%
+  filter(num_trips >= 1000) %>%
   arrange(desc(avg_tip))
 
 library(knitr)
