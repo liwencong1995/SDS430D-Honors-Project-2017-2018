@@ -68,7 +68,7 @@ region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
   geom_vline(xintercept = c(0.28), col = "yellow",linetype = "longdash") + 
   scale_x_continuous(limits = c(0, 0.5))
 ```
-![](figure/region_vis.jpeg)
+![](figure/Region_vis.jpeg)
 
 Taxi drivers are required to be indifferent to where passengers want to go.
 
