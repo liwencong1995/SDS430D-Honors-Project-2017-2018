@@ -79,26 +79,26 @@ tip_region <- yellow_2016.08_tip  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), trips = n(),
             avg_dis = mean(trip_distance)) %>%
-  #filter(trips > 10) %>%
+  filter(trips > 10) %>%
   arrange(desc(avg_tip)) %>%
   rename(LocationID = PULocationID) %>%
   left_join(taxi_zone_lookup, by = "LocationID")
 
-#by controlling pickup and dropoff locations, does trip distance have any impact on tip?
-#takes forever
-tip_distance_3 <- lm(avg_tip ~ avg_dis + LocationID + DOLocationID, data = tip_region)
-summary(tip_distance_3)
-
-#by controlling pickup locations, does trip distance have any impact on tip?
-#takes forever
-tip_distance_4 <- lm(avg_tip ~ avg_dis + LocationID, data = tip_region)
-summary(tip_distance_4)
-
-#by controlling dropoff locations, does trip distance have any impact on tip?
-#takes forever
-tip_distance_5 <- lm(avg_tip ~ avg_dis + DOLocationID, data = tip_region)
-summary(tip_distance_5)
-#AVERAGE DISTANCE DOES NOT MATTER
+# #by controlling pickup and dropoff locations, does trip distance have any impact on tip?
+# #takes forever
+# tip_distance_3 <- lm(avg_tip ~ avg_dis + LocationID + DOLocationID, data = tip_region)
+# summary(tip_distance_3)
+# 
+# #by controlling pickup locations, does trip distance have any impact on tip?
+# #takes forever
+# tip_distance_4 <- lm(avg_tip ~ avg_dis + LocationID, data = tip_region)
+# summary(tip_distance_4)
+# 
+# #by controlling dropoff locations, does trip distance have any impact on tip?
+# #takes forever
+# tip_distance_5 <- lm(avg_tip ~ avg_dis + DOLocationID, data = tip_region)
+# summary(tip_distance_5)
+# #AVERAGE DISTANCE DOES NOT MATTER
 
 
 #visualization region level
@@ -113,25 +113,37 @@ region_vis
 
 
 #aggregated pick
-tip_pickup <- yellow_2016.08_tip  %>%
-  group_by(PULocationID) %>%
-  summarise(avg_tip = mean(tip_perct), trips = n(),
-            avg_dis = mean(trip_distance)) %>%
-  #filter(trips > 10) %>%
+tip_pickup <- tip_region %>%
+  group_by(LocationID) %>%
+  summarise(avg_tip = mean(avg_tip), num_trips=sum(trips)) %>%
+  left_join(taxi_zone_lookup, by = "LocationID") %>%
   arrange(desc(avg_tip)) %>%
-  rename(LocationID = PULocationID) %>%
-  left_join(taxi_zone_lookup, by = "LocationID")
+  filter(Zone != "Unknown")
+
+ggplot(data = tip_pickup, aes(x = num_trips)) +
+  geom_histogram(binwidth = 100)
+
+quantile(tip_pickup$num_trips, probs = seq(0,1,0.1))
+summary(tip_pickup$num_trips)
+sd(tip_pickup$num_trips)
+23380 - 52793.89
+pickup_zone <- tip_pickup %>%
+  filter(num_trips >= ) %>%
+  arrange(desc(avg_tip))
+
+
+write.csv(pickup_zone, "/Users/priscilla/Desktop/Honors Thesis/thesis/index/data/pickup_zone.csv")
+
+tip_and_trip <- lm(avg_tip ~ num_trips, data = pickup_zone)
+summary(tip_and_trip)
 
 region_pickup_vis <- region_vis %+% tip_pickup
 region_pickup_vis
 
 #aggregated dropoff
-tip_dropoff <- yellow_2016.08_tip  %>%
+tip_dropoff <- tip_region %>%
   group_by(DOLocationID) %>%
-  summarise(avg_tip = mean(tip_perct), trips = n(),
-            avg_dis = mean(trip_distance)) %>%
-  filter(trips > 10) %>%
-  arrange(desc(avg_tip)) %>%
+  summarise(avg_tip = mean(avg_tip)) %>% 
   rename(LocationID = DOLocationID) %>%
   left_join(taxi_zone_lookup, by = "LocationID")
 
@@ -294,3 +306,10 @@ charge%>%
 # 7          6      51 5.151939e-06
 
 #https://github.com/pavelk2/NYC-taxi-tips
+
+
+
+#---------------------------------SHAPEFILE-----------------------
+require(rgdal)
+View(taxi_zones)
+shape <- readOGR()

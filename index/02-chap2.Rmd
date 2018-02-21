@@ -9,7 +9,7 @@ The income of Taxi drivers in New York City has two parts: taxi fare and tips. T
 
 In the following analysis, I will focus on trip data collected in August 2016. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
 
-```{r}
+```{r, eval=FALSE}
 yellow_2016.08_tip <- yellow_2016.08 %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%
@@ -19,7 +19,7 @@ yellow_2016.08_tip <- yellow_2016.08 %>%
 
 Instead of the absolute amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. 
 
-```{r}
+```{r, eval=FALSE}
 yellow_2016.08_tip <- yellow_2016.08_tip %>%
   mutate(tip_perct = tip_amount/fare_amount)
 ```
@@ -44,11 +44,32 @@ tip_distance <- lm(tip_perct ~ trip_distance, data = yellow_2016.08_tip)
 summary(tip_distance)
 ```
 
+---
+**NOTE**
+Call:
+lm(formula = tip_perct ~ trip_distance, data = yellow_2016.08_tip)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.21887 -0.01889  0.00244  0.02682  0.77850 
+
+Coefficients:
+                Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)    2.189e-01  2.812e-05 7785.080   <2e-16 ***
+trip_distance -4.146e-09  8.729e-09   -0.475    0.635    
+
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.06938 on 6088289 degrees of freedom
+Multiple R-squared:  3.706e-08,	Adjusted R-squared:  -1.272e-07 
+F-statistic: 0.2256 on 1 and 6088289 DF,  p-value: 0.6348
+---
+
 Acoording to the simple linear regression result, trip distance does not have significant impact on the percent of tips paid.
 
 #### Aggregated Zone-level Tip Information
 
-```{r}
+```{r, eval=FALSE}
 tip_region <- yellow_2016.08_tip  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), trips = n(),
@@ -60,6 +81,7 @@ tip_region <- yellow_2016.08_tip  %>%
 ```
 
 ```{r, eval=FALSE}
+#zone
 region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
   xlab("Tips, percent") +
   geom_histogram(binwidth = 0.005) + 
@@ -70,13 +92,13 @@ region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
 ```
 ![](figure/Region_vis.jpeg)
 
-Taxi drivers are required to be indifferent to where passengers want to go.
-
 ```{r, eval=FALSE}
 tip_pickup <- tip_region %>%
-  group_by(LocationID) %>%
-  summarise(avg_tip = mean(avg_tip)) %>%
-  left_join(taxi_zone_lookup, by = "LocationID")
+  group_by(PULocationID) %>%
+  summarise(avg_tip = mean(avg_tip), num_trips=sum(trips)) %>%
+  left_join(taxi_zone_lookup, by = "LocationID") %>%
+  arrange(desc(avg_tip)) %>%
+  filter(Zone != "Unknown")
 
 region_pickup_vis <- region_vis %+% tip_pickup
 region_pickup_vis
@@ -94,6 +116,31 @@ region_dropoff_vis <- region_pickup_vis %+% tip_dropoff
 region_dropoff_vis
 ```
 ![](figure/region_dropoff.jpeg)
+
+Taxi drivers are required to be indifferent to where passengers are going. Therefore, it makes more sense to investigate the average amount of tips paid for each pick-up zone. What are the taxi zones that have the highest tip percents?
+
+Let's fist take a look at which zones have the highest number of pickups.
+```{r}
+
+```
+
+
+
+```{r}
+quantile(tip_pickup$num_trips, probs = seq(0,1,0.1))
+pickup_zone <- tip_pickup %>%
+  filter(num_trips >= 1893) %>%
+  arrange(desc(avg_tip))
+
+library(knitr)
+data(pickup_zone)
+kable(pickup_zone[1:10,2:5], caption = "Taxi zone with the highest tip percent")
+```
+
+
+Zones with higher tips should attract more taxi drivers.
+
+
 ### Which pick-up zone has the highest price per minute
 estmate slow traffic time
 

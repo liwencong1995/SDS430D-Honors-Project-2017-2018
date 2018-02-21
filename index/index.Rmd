@@ -76,5 +76,3 @@ and 00-abstract.Rmd since they are handled in the YAML above differently for the
 on chapters.
 -->
 
-# Introduction {.unnumbered}
-
