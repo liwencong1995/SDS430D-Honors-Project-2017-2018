@@ -189,19 +189,64 @@ estmate slow traffic time
 
 
 ## New York City Taxi Fare & Limousine Commission
-### Should there be a flat rate to the JFK Airport?
+### Should there be a flat rate between Manhattan and the JFK Airport?
 
+#### People in Manhattan benefit from the $52 flat rate.
 Why is there a flat rate to and from JFK airport and any location in Manhattan? Why is the flat rate \$52? Does TLC make profit from the \$52 flat rate? Does \$52 reduce the cogestion on the road to JFK airport and make taking a train a more preferable choice?
 
-Imagine you are travelling to New York City and you do not know much about the city. 
-nice for people who are not from nyc
+If there is no flat rate between JFK and Manhattan, 
 
-Compute for each pick up zone, the expected fare to JFK and plot that, and find out the zone that are close to 52
+```{r, eval=FALSE}
+jfk_trip <- yellow_2016.08_cleaned %>%
+  filter(RatecodeID == 2) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + 
+           improvement_surcharge + mta_tax + tolls_amount,
+         est_diff = est_fare - fare_amount)
 
-People who have the higher fare would not take cab
-Closer regions?
+to_jfk <- jfk_trip %>%
+  filter(DOLocationID == 132)
 
-Should there be one universal flat rate? Should their be multiple ones? Should their be one flat rate for each brough?
-where is 52 dollar
+from_jfk <- jfk_trip %>%
+  filter(PULocationID == 132)
+```
+
+
+```{r, eval=FALSE}
+to_jkf_zone <- to_jfk %>%
+  group_by(PULocationID) %>%
+  summarise(num_trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_fare = mean(est_fare))
+
+to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
+library(RColorBrewer)
+cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(to_jkf_fare$avg_fare,
+             breaks = quantile(to_jkf_fare$avg_fare, na.rm = TRUE),
+             labels = cols)
+plot(to_jkf_fare, col = as.character(lcols))
+```
+
+![](figure/to_jfk_fare.jpeg)
+
+
+```{r}
+to_jkf_zone_above <- to_jkf_zone %>%
+  filter(avg_fare >= 52) %>%
+  arrange(desc(avg_fare))
+kable(to_jkf_zone_above[1:10,], caption = "Zones that woulde have paid more than $52")
+```
+
+
+Imagine you are travelling to New York City and you do not know much about the city. Travellers tend to gather around Mahanttan, and without the flat rate, passengers would have paid more than $52 to take a taxi to go to the JFK Airport. The \$52 flat rate is nice for people who are not very familiar with New York City, and it incentivize tourists to take taxi to the JFK Airport. It also helps taxi drivers to get more tips to JFK Airport.
+
+### However, are taxi drivers happy with the flat rate? 
+
+
+ 
 
 

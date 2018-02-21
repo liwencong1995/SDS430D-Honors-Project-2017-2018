@@ -9,10 +9,24 @@ View(taxi_zone_lookup)
 2.5 + 0.5 * trip_distance/5 + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
 #for the regular rate
 
+
+#----------------------------Distance to JFK-----------------------------
+
+
+
+tip_region <- yellow_2016.08_cleaned  %>%
+  group_by(PULocationID, DOLocationID) %>%
+  summarise(avg_tip = mean(tip_perct), trips = n(),
+            avg_dis = mean(trip_distance)) %>%
+  filter(trips > 10) %>%
+  arrange(desc(avg_tip)) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
 ## Two JKF Airport Trips-------------------------------------------
 52 + + extra + improvement_surcharge + mta_tax + tolls_amount + tip_amont
 
-jfk_trip <- yellow_2016.08 %>%
+jfk_trip <- yellow_2016.08_cleaned %>%
   filter(RatecodeID == 2) %>%
   filter(payment_type != 3) %>%
   filter(trip_distance > 0) %>%
@@ -21,6 +35,37 @@ jfk_trip <- yellow_2016.08 %>%
   mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + 
            improvement_surcharge + mta_tax + tolls_amount,
          est_diff = est_fare - fare_amount)
+
+to_jfk <- jfk_trip %>%
+  filter(DOLocationID == 132)
+
+
+to_jkf_zone <- to_jfk %>%
+  group_by(PULocationID) %>%
+  summarise(num_trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_fare = mean(est_fare)) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
+quantile(to_jkf_zone$num_trips)
+to_jkf_zone_above <- to_jkf_zone %>%
+  filter(num_trips > 10) %>%
+  filter(avg_fare >= 52) %>%
+  arrange(desc(avg_fare))
+
+to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
+library(RColorBrewer)
+cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(to_jkf_fare$avg_fare,
+             breaks = quantile(to_jkf_fare$avg_fare, na.rm = TRUE),
+             labels = cols)
+plot(to_jkf_fare, col = as.character(lcols))
+
+
+from_jfk <- jfk_trip %>%
+  filter(PULocationID == 132)
+
 
 min(jfk_trip$est_diff)
 #-48.675

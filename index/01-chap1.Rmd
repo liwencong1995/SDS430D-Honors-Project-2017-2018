@@ -10,6 +10,8 @@ The {#rmd-basics} text after the chapter declaration will allow us to link throu
 
 ## Data and Storage
 
+![](figure/Num_trips_summary.png)
+
 ### Yellow Taxi
 
 The total size of all yellow taxi trip data CSV files (from Jan 2010 to Dec 2016) is 191.38 GB, and NYC yellow taxi trip data from Jan 2009 to the most recent month can be found on NYC Taxi & Limousine Commission (TLC). The data were collected and provided to the NYC TLC by technology providers authorized under the Taxicab & Livery Passenger Enhancement Programs (TPEP/LPEP).
@@ -70,6 +72,11 @@ taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 In the example above, a folder called nyctaxi is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, a local folder contains two subfolders, `raw` and `load`, are also created under the directory the user specifies. `raw` folder stores data downloaded from online open sources, and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
 
 After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) obj: an etl object (2) years: a numeric vector giving the years. The default is the most recent year. (3) months: a numeric vector giving the months. The default is January to December. (4) type: a character variable giving the type of data the user wants to download. There are four types: yellow, green, uber, and lyft. The default is yellow.
+
+
+
+
+### Taxi zone shapefile attached to nyctaxi R package
 
 ## Extract
 
