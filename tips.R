@@ -35,13 +35,8 @@ yellow_2016.08_tip <- yellow_2016.08 %>%
   filter(tip_amount < fare_amount)
 
 #Find the regions that offer the largest tip-----------------------
-yellow_2016.08_tip <- yellow_2016.08_tip %>%
+yellow_2016.08_tip <- yellow_2016.08_tip[,2:18] %>%
   mutate(tip_perct = tip_amount/fare_amount)
-
-#summary
-quantile(tip_region$avg_tip)
-# 0%          25%          50%          75%         100% 
-# 0.0001408451 0.1810815868 0.2043803873 0.2231832030 0.9973913043 
 
 #visualization of individual trips
 library(ggplot2)
@@ -85,6 +80,11 @@ tip_region <- yellow_2016.08_tip  %>%
   rename(LocationID = PULocationID) %>%
   left_join(taxi_zone_lookup, by = "LocationID")
 
+#summary
+quantile(tip_region$avg_tip)
+write.csv(tip_region, "/Users/priscilla/Desktop/Honors Thesis/thesis/index/data/tip_region.csv")
+
+
 # #by controlling pickup and dropoff locations, does trip distance have any impact on tip?
 # #takes forever
 # tip_distance_3 <- lm(avg_tip ~ avg_dis + LocationID + DOLocationID, data = tip_region)
@@ -122,27 +122,27 @@ tip_pickup <- tip_region %>%
   left_join(taxi_zone_lookup, by = "LocationID") %>%
   arrange(desc(avg_tip)) %>%
   filter(Zone != "Unknown")
+#write.csv(tip_pickup, "/Users/priscilla/Desktop/Honors Thesis/thesis/index/data/tip_pickup.csv")
 
 str(taxi_zone_lookup)
 str(tip_region)
-taxi_zone_lookup$LocationID <- as.character()
+taxi_zone_lookup$LocationID <- as.character(taxi_zone_lookup$LocationID)
 
-ggplot(data = tip_pickup, aes(x = num_trips)) +
-  geom_histogram(binwidth = 100)
+# ggplot(data = tip_pickup, aes(x = num_trips)) +
+#   geom_histogram(binwidth = 100)
+# quantile(tip_pickup$num_trips, probs = seq(0,1,0.1))
+# summary(tip_pickup$num_trips)
+# sd(tip_pickup$num_trips)
 
-quantile(tip_pickup$num_trips, probs = seq(0,1,0.1))
-summary(tip_pickup$num_trips)
-sd(tip_pickup$num_trips)
-23380 - 52793.89
+
 pickup_zone <- tip_pickup %>%
   filter(num_trips >= 1000) %>%
   arrange(desc(avg_tip))
 
-
-#write.csv(tip_pickup, "/Users/priscilla/Desktop/Honors Thesis/thesis/index/data/tip_pickup.csv")
-
+# tip and trip distance
 tip_and_trip <- lm(avg_tip ~ num_trips, data = pickup_zone)
 summary(tip_and_trip)
+str(tip_pickup)
 
 region_pickup_vis <- region_vis %+% tip_pickup
 region_pickup_vis

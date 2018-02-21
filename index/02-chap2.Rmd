@@ -132,20 +132,49 @@ plot(newobj, col = as.character(lcols))
 ```
 ![](figure/pickup_numtrip_heatmap.jpeg)
 
-
+#### What are the zones with the highest tip percent?
 ```{r}
-quantile(tip_pickup$num_trips, probs = seq(0,1,0.1))
-pickup_zone <- tip_pickup %>%
+#pick a threshold for the cutoff of number of trips
+pickup_zone_1000 <- tip_pickup %>%
   filter(num_trips >= 1000) %>%
   arrange(desc(avg_tip))
 
 library(knitr)
-data(pickup_zone)
-kable(pickup_zone[1:10,2:5], caption = "Taxi zone with the highest tip percent")
+kable(pickup_zone_1000[1:10,2:5], caption = "Taxi zone with the highest tip percent, threshold = 1000")
 ```
 
+```{r}
+#pick a threshold for the cutoff of number of trips
+pickup_zone_10000 <- tip_pickup %>%
+  filter(num_trips >= 10000) %>%
+  arrange(desc(avg_tip))
+kable(pickup_zone_10000[1:10,2:5], caption = "Taxi zone with the highest tip percent, threshold = 10000")
+```
+#### Do taxi drivers go to zones that offer high tips?
+Pick-up zones with higher tips should attract more taxi drivers.
+```{r}
+tip_region$LocationID <- as.character(tip_region$LocationID)
+tip_pickup$LocationID <- as.character(tip_pickup$LocationID)
+tip_and_trip_1 <- lm(trips ~ avg_tip + LocationID, data = tip_region)
+summary(tip_and_trip_1)
+```
 
-Zones with higher tips should attract more taxi drivers.
+---
+Call:
+lm(formula = trips ~ avg_tip + LocationID, data = tip_region)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -3780   -663   -183    246  62515 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   -2907.26    1456.57  -1.996   0.0460 *  
+avg_tip       18382.03     643.53  28.564   <2e-16 ***
+---
+
+Each one percent increase in tips is associated with 18382.03 increase in the number of trips, controlling the pick-up zone. 
+
 
 
 ### Which pick-up zone has the highest price per minute
@@ -169,7 +198,7 @@ nice for people who are not from nyc
 
 Compute for each pick up zone, the expected fare to JFK and plot that, and find out the zone that are close to 52
 
-PPL who have the higher fare would not take cab
+People who have the higher fare would not take cab
 Closer regions?
 
 Should there be one universal flat rate? Should their be multiple ones? Should their be one flat rate for each brough?
