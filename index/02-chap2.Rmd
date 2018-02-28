@@ -8,7 +8,7 @@ The income of Taxi drivers in New York City has two parts: taxi fare and tips. T
 
 In the following analysis, I will focus on trip data collected in August 2016. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
 
-```{r, eval=FALSE}
+```{r}
 yellow_2016.08_tip <- yellow_2016.08 %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%
