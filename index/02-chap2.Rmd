@@ -1,5 +1,4 @@
 # Using New York City Yellow Taxi Data to Answer Real Life Problems {#chapter2}
-
 New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs: taxi drivers want to maxmize their profit, and in order to do that, they need to maximize the revenue while minimizing the cost. Taxi passengers want the cheapest and most convenient way of transportantion. Since Uber and Lyft launched their services in New York City, many consumers started to demand the cheaper e-hail services. TLC wants to protect both taxi drivers and passengers, and it creates policies to make NYC taxi more accessible to consumers who really need this service. In this section, I think about what each party wants and try to find a way for them to be better-off. 
 
 ## New York City Taxi Driver
@@ -39,13 +38,12 @@ tip_individual
 
 One of the questions that I always wonder is whether longer trips result in higher tip percent. It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. I personally pay higher percent of tips for longer rides, so I believe trip distance has an impact on percentage of tips paid.
 
-```{r}
+```{r, eval=FALSE}
 tip_distance <- lm(tip_perct ~ trip_distance, data = yellow_2016.08_tip)
 summary(tip_distance)
 ```
 
 ---
-**NOTE**
 Call:
 lm(formula = tip_perct ~ trip_distance, data = yellow_2016.08_tip)
 
@@ -120,7 +118,7 @@ region_dropoff_vis
 Taxi drivers are required to be indifferent to where passengers are going. Therefore, it makes more sense to investigate the average amount of tips paid for each pick-up zone. What are the taxi zones that have the highest tip percents?
 
 Let's fist take a look at which zones have the highest number of pickups.
-```{r}
+```{r, eval=FALSE}
 names(taxi_zones)
 names(pickup_zone)
 newobj <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
@@ -133,7 +131,7 @@ plot(newobj, col = as.character(lcols))
 ![](figure/pickup_numtrip_heatmap.jpeg)
 
 #### What are the zones with the highest tip percent?
-```{r}
+```{r, eval=FALSE}
 #pick a threshold for the cutoff of number of trips
 pickup_zone_1000 <- tip_pickup %>%
   filter(num_trips >= 1000) %>%
@@ -143,7 +141,7 @@ library(knitr)
 kable(pickup_zone_1000[1:10,2:5], caption = "Taxi zone with the highest tip percent, threshold = 1000")
 ```
 
-```{r}
+```{r, eval=FALSE}
 #pick a threshold for the cutoff of number of trips
 pickup_zone_10000 <- tip_pickup %>%
   filter(num_trips >= 10000) %>%
@@ -234,18 +232,35 @@ plot(to_jkf_fare, col = as.character(lcols))
 ![](figure/to_jfk_fare.jpeg)
 
 
-```{r}
+```{r, eval=FALSE}
 to_jkf_zone_above <- to_jkf_zone %>%
   filter(avg_fare >= 52) %>%
   arrange(desc(avg_fare))
 kable(to_jkf_zone_above[1:10,], caption = "Zones that woulde have paid more than $52")
 ```
 
+---
+# A tibble: 41 x 6
+   LocationID num_trips  avg_dis avg_fare   Borough                     Zone
+        <int>     <int>    <dbl>    <dbl>    <fctr>                   <fctr>
+ 1         13      1266 22.09787 62.44055 Manhattan        Battery Park City
+ 2        244        74 20.42216 60.27892 Manhattan Washington Heights South
+ 3        239      1685 20.47249 60.11053 Manhattan    Upper West Side South
+ 4        261       723 21.22151 59.59012 Manhattan       World Trade Center
+ 5        143       655 20.53586 59.26524 Manhattan      Lincoln Square West
+ 6        238      1233 19.93394 59.02019 Manhattan    Upper West Side North
+ 7         12        41 20.62537 58.44146 Manhattan             Battery Park
+ 8         88       362 20.30909 57.79963 Manhattan Financial District South
+ 9        151       637 19.39038 57.71180 Manhattan         Manhattan Valley
+10        116        67 19.27463 57.54149 Manhattan         Hamilton Heights
+---
 
 Imagine you are travelling to New York City and you do not know much about the city. Travellers tend to gather around Mahanttan, and without the flat rate, passengers would have paid more than $52 to take a taxi to go to the JFK Airport. The \$52 flat rate is nice for people who are not very familiar with New York City, and it incentivize tourists to take taxi to the JFK Airport. It also helps taxi drivers to get more tips to JFK Airport.
 
 ### However, are taxi drivers happy with the flat rate? 
 
+What the expected fare from JKF Airport
+how much time it would take for a cb driver to do a round trip 
 
  
 

@@ -133,6 +133,8 @@ The {#rmd-basics} text after the chapter declaration will allow us to link throu
 
 ## Data and Storage
 
+![](figure/Num_trips_summary.png)
+
 ### Yellow Taxi
 
 The total size of all yellow taxi trip data CSV files (from Jan 2010 to Dec 2016) is 191.38 GB, and NYC yellow taxi trip data from Jan 2009 to the most recent month can be found on NYC Taxi & Limousine Commission (TLC). The data were collected and provided to the NYC TLC by technology providers authorized under the Taxicab & Livery Passenger Enhancement Programs (TPEP/LPEP).
@@ -193,6 +195,11 @@ taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 In the example above, a folder called nyctaxi is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, a local folder contains two subfolders, `raw` and `load`, are also created under the directory the user specifies. `raw` folder stores data downloaded from online open sources, and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
 
 After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) obj: an etl object (2) years: a numeric vector giving the years. The default is the most recent year. (3) months: a numeric vector giving the months. The default is January to December. (4) type: a character variable giving the type of data the user wants to download. There are four types: yellow, green, uber, and lyft. The default is yellow.
+
+
+
+
+### Taxi zone shapefile attached to nyctaxi R package
 
 ## Extract
 
@@ -777,7 +784,7 @@ The income of Taxi drivers in New York City has two parts: taxi fare and tips. T
 
 In the following analysis, I will focus on trip data collected in August 2016. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
 
-```{r}
+```{r, eval=FALSE}
 yellow_2016.08_tip <- yellow_2016.08 %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%
@@ -787,7 +794,7 @@ yellow_2016.08_tip <- yellow_2016.08 %>%
 
 Instead of the absolute amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. 
 
-```{r}
+```{r, eval=FALSE}
 yellow_2016.08_tip <- yellow_2016.08_tip %>%
   mutate(tip_perct = tip_amount/fare_amount)
 ```
@@ -807,16 +814,36 @@ tip_individual
 
 One of the questions that I always wonder is whether longer trips result in higher tip percent. It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. I personally pay higher percent of tips for longer rides, so I believe trip distance has an impact on percentage of tips paid.
 
-```{r}
+```{r, eval=FALSE}
 tip_distance <- lm(tip_perct ~ trip_distance, data = yellow_2016.08_tip)
 summary(tip_distance)
 ```
+
+---
+Call:
+lm(formula = tip_perct ~ trip_distance, data = yellow_2016.08_tip)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.21887 -0.01889  0.00244  0.02682  0.77850 
+
+Coefficients:
+                Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)    2.189e-01  2.812e-05 7785.080   <2e-16 ***
+trip_distance -4.146e-09  8.729e-09   -0.475    0.635    
+
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.06938 on 6088289 degrees of freedom
+Multiple R-squared:  3.706e-08,	Adjusted R-squared:  -1.272e-07 
+F-statistic: 0.2256 on 1 and 6088289 DF,  p-value: 0.6348
+---
 
 Acoording to the simple linear regression result, trip distance does not have significant impact on the percent of tips paid.
 
 #### Aggregated Zone-level Tip Information
 
-```{r}
+```{r, eval=FALSE}
 tip_region <- yellow_2016.08_tip  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), trips = n(),
@@ -828,6 +855,7 @@ tip_region <- yellow_2016.08_tip  %>%
 ```
 
 ```{r, eval=FALSE}
+#zone
 region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
   xlab("Tips, percent") +
   geom_histogram(binwidth = 0.005) + 
@@ -838,13 +866,13 @@ region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
 ```
 ![](figure/Region_vis.jpeg)
 
-Taxi drivers are required to be indifferent to where passengers want to go.
-
 ```{r, eval=FALSE}
 tip_pickup <- tip_region %>%
-  group_by(LocationID) %>%
-  summarise(avg_tip = mean(avg_tip)) %>%
-  left_join(taxi_zone_lookup, by = "LocationID")
+  group_by(PULocationID) %>%
+  summarise(avg_tip = mean(avg_tip), num_trips=sum(trips)) %>%
+  left_join(taxi_zone_lookup, by = "LocationID") %>%
+  arrange(desc(avg_tip)) %>%
+  filter(Zone != "Unknown")
 
 region_pickup_vis <- region_vis %+% tip_pickup
 region_pickup_vis
@@ -862,6 +890,67 @@ region_dropoff_vis <- region_pickup_vis %+% tip_dropoff
 region_dropoff_vis
 ```
 ![](figure/region_dropoff.jpeg)
+
+Taxi drivers are required to be indifferent to where passengers are going. Therefore, it makes more sense to investigate the average amount of tips paid for each pick-up zone. What are the taxi zones that have the highest tip percents?
+
+Let's fist take a look at which zones have the highest number of pickups.
+```{r, eval=FALSE}
+names(taxi_zones)
+names(pickup_zone)
+newobj <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
+cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(newobj$num_trips,
+             breaks = quantile(newobj$num_trips, na.rm = TRUE),
+             labels = cols)
+plot(newobj, col = as.character(lcols))
+```
+![](figure/pickup_numtrip_heatmap.jpeg)
+
+#### What are the zones with the highest tip percent?
+```{r, eval=FALSE}
+#pick a threshold for the cutoff of number of trips
+pickup_zone_1000 <- tip_pickup %>%
+  filter(num_trips >= 1000) %>%
+  arrange(desc(avg_tip))
+
+library(knitr)
+kable(pickup_zone_1000[1:10,2:5], caption = "Taxi zone with the highest tip percent, threshold = 1000")
+```
+
+```{r, eval=FALSE}
+#pick a threshold for the cutoff of number of trips
+pickup_zone_10000 <- tip_pickup %>%
+  filter(num_trips >= 10000) %>%
+  arrange(desc(avg_tip))
+kable(pickup_zone_10000[1:10,2:5], caption = "Taxi zone with the highest tip percent, threshold = 10000")
+```
+#### Do taxi drivers go to zones that offer high tips?
+Pick-up zones with higher tips should attract more taxi drivers.
+```{r}
+tip_region$LocationID <- as.character(tip_region$LocationID)
+tip_pickup$LocationID <- as.character(tip_pickup$LocationID)
+tip_and_trip_1 <- lm(trips ~ avg_tip + LocationID, data = tip_region)
+summary(tip_and_trip_1)
+```
+
+---
+Call:
+lm(formula = trips ~ avg_tip + LocationID, data = tip_region)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -3780   -663   -183    246  62515 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   -2907.26    1456.57  -1.996   0.0460 *  
+avg_tip       18382.03     643.53  28.564   <2e-16 ***
+---
+
+Each one percent increase in tips is associated with 18382.03 increase in the number of trips, controlling the pick-up zone. 
+
+
+
 ### Which pick-up zone has the highest price per minute
 estmate slow traffic time
 
@@ -874,20 +963,80 @@ estmate slow traffic time
 
 
 ## New York City Taxi Fare & Limousine Commission
-### Should there be a flat rate to the JFK Airport?
+### Should there be a flat rate between Manhattan and the JFK Airport?
 
+#### People in Manhattan benefit from the $52 flat rate.
 Why is there a flat rate to and from JFK airport and any location in Manhattan? Why is the flat rate \$52? Does TLC make profit from the \$52 flat rate? Does \$52 reduce the cogestion on the road to JFK airport and make taking a train a more preferable choice?
 
-Imagine you are travelling to New York City and you do not know much about the city. 
-nice for people who are not from nyc
+If there is no flat rate between JFK and Manhattan, 
 
-Compute for each pick up zone, the expected fare to JFK and plot that, and find out the zone that are close to 52
+```{r, eval=FALSE}
+jfk_trip <- yellow_2016.08_cleaned %>%
+  filter(RatecodeID == 2) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + 
+           improvement_surcharge + mta_tax + tolls_amount,
+         est_diff = est_fare - fare_amount)
 
-PPL who have the higher fare would not take cab
-Closer regions?
+to_jfk <- jfk_trip %>%
+  filter(DOLocationID == 132)
 
-Should there be one universal flat rate? Should their be multiple ones? Should their be one flat rate for each brough?
-where is 52 dollar
+from_jfk <- jfk_trip %>%
+  filter(PULocationID == 132)
+```
+
+
+```{r, eval=FALSE}
+to_jkf_zone <- to_jfk %>%
+  group_by(PULocationID) %>%
+  summarise(num_trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_fare = mean(est_fare))
+
+to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
+library(RColorBrewer)
+cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(to_jkf_fare$avg_fare,
+             breaks = quantile(to_jkf_fare$avg_fare, na.rm = TRUE),
+             labels = cols)
+plot(to_jkf_fare, col = as.character(lcols))
+```
+
+![](figure/to_jfk_fare.jpeg)
+
+
+```{r, eval=FALSE}
+to_jkf_zone_above <- to_jkf_zone %>%
+  filter(avg_fare >= 52) %>%
+  arrange(desc(avg_fare))
+kable(to_jkf_zone_above[1:10,], caption = "Zones that woulde have paid more than $52")
+```
+
+---
+# A tibble: 41 x 6
+   LocationID num_trips  avg_dis avg_fare   Borough                     Zone
+        <int>     <int>    <dbl>    <dbl>    <fctr>                   <fctr>
+ 1         13      1266 22.09787 62.44055 Manhattan        Battery Park City
+ 2        244        74 20.42216 60.27892 Manhattan Washington Heights South
+ 3        239      1685 20.47249 60.11053 Manhattan    Upper West Side South
+ 4        261       723 21.22151 59.59012 Manhattan       World Trade Center
+ 5        143       655 20.53586 59.26524 Manhattan      Lincoln Square West
+ 6        238      1233 19.93394 59.02019 Manhattan    Upper West Side North
+ 7         12        41 20.62537 58.44146 Manhattan             Battery Park
+ 8         88       362 20.30909 57.79963 Manhattan Financial District South
+ 9        151       637 19.39038 57.71180 Manhattan         Manhattan Valley
+10        116        67 19.27463 57.54149 Manhattan         Hamilton Heights
+---
+
+Imagine you are travelling to New York City and you do not know much about the city. Travellers tend to gather around Mahanttan, and without the flat rate, passengers would have paid more than $52 to take a taxi to go to the JFK Airport. The \$52 flat rate is nice for people who are not very familiar with New York City, and it incentivize tourists to take taxi to the JFK Airport. It also helps taxi drivers to get more tips to JFK Airport.
+
+### However, are taxi drivers happy with the flat rate? 
+
+
+ 
 
 
 
