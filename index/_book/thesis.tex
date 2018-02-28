@@ -254,10 +254,7 @@ customers try to go.
 \mainmatter % here the regular arabic numbering starts
 \pagestyle{fancyplain} % turns page numbering back on
 
-\chapter*{Introduction}\label{introduction}
-\addcontentsline{toc}{chapter}{Introduction}
-
-\chapter{Introduction}\label{introduction-1}
+\chapter{Introduction}\label{introduction}
 
 \section{Motivation}\label{motivation}
 
@@ -343,7 +340,11 @@ all user interaction is in R.
 \chapter{Data and nyctaxi Package}\label{chapter1}
 
 \section{Data and Storage}\label{data-and-storage}
-
+\begin{figure}
+\centering
+\includegraphics{figure/Num_trips_summary.png}
+\caption{}
+\end{figure}
 \subsection{Yellow Taxi}\label{yellow-taxi-2}
 
 The total size of all yellow taxi trip data CSV files (from Jan 2010 to
@@ -488,6 +489,9 @@ The default is January to December. (4) type: a character variable
 giving the type of data the user wants to download. There are four
 types: yellow, green, uber, and lyft. The default is yellow.
 
+\subsection{Taxi zone shapefile attached to nyctaxi R
+package}\label{taxi-zone-shapefile-attached-to-nyctaxi-r-package}
+
 \section{Extract}\label{extract}
 
 etl\_extract.nyctaxi allows users to download New York City yellow taxi,
@@ -539,6 +543,9 @@ database.
 \subsection{Uber}\label{uber-6}
 
 \subsection{Lyft}\label{lyft-6}
+
+\section{New Yoek City Hail Service
+Summary}\label{new-yoek-city-hail-service-summary}
 
 \section{Source Code}\label{source-code}
 
@@ -922,123 +929,757 @@ ETL extract.
 \end{Highlighting}
 \end{Shaded}
 \subsection{ETL Init}\label{etl-init}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DROP TABLE IF EXISTS }\StringTok{`}\DataTypeTok{yellow_old}\StringTok{`}\NormalTok{;}
 
-DROP TABLE IF EXISTS \texttt{yellow\_old};
+\NormalTok{CREATE TABLE }\StringTok{`}\DataTypeTok{yellow_old}\StringTok{`}\NormalTok{ (}
+ \StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tpep_pickup_datetime}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tpep_dropoff_datetime}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{passenger_count}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{trip_distance}\StringTok{`} \KeywordTok{float}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{pickup_longitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{pickup_latitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{RatecodeID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{store_and_fwd_flag}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{10}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{dropoff_longitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{dropoff_latitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{payment_type}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{fare_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{extra}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{mta_tax}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tip_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tolls_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{improvement_surcharge}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{total_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_datetime}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{tpep_pickup_datetime}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{dropoff_datetime}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{tpep_dropoff_datetime}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_longitude}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{pickup_longitude}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_latitude}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{pickup_latitude}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{dropoff_longitude}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{dropoff_longitude}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{dropoff_latitude}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{dropoff_latitude}\StringTok{`}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{PARTITION BY }\KeywordTok{RANGE}\NormalTok{( }\KeywordTok{YEAR}\NormalTok{(tpep_pickup_datetime) ) (}
+\NormalTok{  PARTITION p09 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2010}\NormalTok{),}
+\NormalTok{  PARTITION p10 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2011}\NormalTok{),}
+\NormalTok{  PARTITION p11 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2012}\NormalTok{),}
+\NormalTok{  PARTITION p12 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2013}\NormalTok{),}
+\NormalTok{  PARTITION p13 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2014}\NormalTok{),}
+\NormalTok{  PARTITION p14 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2015}\NormalTok{),}
+\NormalTok{  PARTITION p15 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2016}\NormalTok{),}
+\NormalTok{  PARTITION p16 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2017}\NormalTok{)}
+\NormalTok{);}
 
-CREATE TABLE \texttt{yellow\_old} ( \texttt{VendorID} tinyint DEFAULT
-NULL, \texttt{tpep\_pickup\_datetime} DATETIME NOT NULL,
-\texttt{tpep\_dropoff\_datetime} DATETIME NOT NULL,
-\texttt{passenger\_count} tinyint DEFAULT NULL, \texttt{trip\_distance}
-float(10,2) DEFAULT NULL, \texttt{pickup\_longitude} double(7,5) DEFAULT
-NULL, \texttt{pickup\_latitude} double(7,5) DEFAULT NULL,
-\texttt{RatecodeID} tinyint DEFAULT NULL, \texttt{store\_and\_fwd\_flag}
-varchar(10) COLLATE latin1\_general\_ci DEFAULT NULL,
-\texttt{dropoff\_longitude} double(7,5) DEFAULT NULL,
-\texttt{dropoff\_latitude} double(7,5) DEFAULT NULL,
-\texttt{payment\_type} tinyint DEFAULT NULL, \texttt{fare\_amount}
-decimal(5,3) DEFAULT NULL, \texttt{extra} decimal(5,3) DEFAULT NULL,
-\texttt{mta\_tax} decimal(5,3) DEFAULT NULL, \texttt{tip\_amount}
-decimal(5,3) DEFAULT NULL, \texttt{tolls\_amount} decimal(5,3) DEFAULT
-NULL, \texttt{improvement\_surcharge} decimal(5,3) DEFAULT NULL,
-\texttt{total\_amount} decimal(5,3) DEFAULT NULL, KEY \texttt{VendorID}
-(\texttt{VendorID}), KEY \texttt{pickup\_datetime}
-(\texttt{tpep\_pickup\_datetime}), KEY \texttt{dropoff\_datetime}
-(\texttt{tpep\_dropoff\_datetime}), KEY \texttt{pickup\_longitude}
-(\texttt{pickup\_longitude}), KEY \texttt{pickup\_latitude}
-(\texttt{pickup\_latitude}), KEY \texttt{dropoff\_longitude}
-(\texttt{dropoff\_longitude}), KEY \texttt{dropoff\_latitude}
-(\texttt{dropoff\_latitude}) ) PARTITION BY RANGE(
-YEAR(tpep\_pickup\_datetime) ) ( PARTITION p09 VALUES LESS THAN (2010),
-PARTITION p10 VALUES LESS THAN (2011), PARTITION p11 VALUES LESS THAN
-(2012), PARTITION p12 VALUES LESS THAN (2013), PARTITION p13 VALUES LESS
-THAN (2014), PARTITION p14 VALUES LESS THAN (2015), PARTITION p15 VALUES
-LESS THAN (2016), PARTITION p16 VALUES LESS THAN (2017) );
+\NormalTok{DROP TABLE IF EXISTS }\StringTok{`}\DataTypeTok{yellow}\StringTok{`}\NormalTok{;}
 
-DROP TABLE IF EXISTS \texttt{yellow};
+\NormalTok{CREATE TABLE }\StringTok{`}\DataTypeTok{yellow}\StringTok{`}\NormalTok{ (}
+ \StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tpep_pickup_datetime}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tpep_dropoff_datetime}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{passenger_count}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{trip_distance}\StringTok{`} \KeywordTok{float}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{RatecodeID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{store_and_fwd_flag}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{10}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{PULocationID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{DOLocationID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{payment_type}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{fare_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{extra}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{mta_tax}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tip_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{tolls_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{improvement_surcharge}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{total_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_datetime}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{tpep_pickup_datetime}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{dropoff_datetime}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{tpep_dropoff_datetime}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{PULocationID}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{PULocationID}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{DOLocationID}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{DOLocationID}\StringTok{`}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{PARTITION BY }\KeywordTok{RANGE}\NormalTok{( }\KeywordTok{YEAR}\NormalTok{(tpep_pickup_datetime) ) (}
+\NormalTok{  PARTITION p16 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2017}\NormalTok{),}
+\NormalTok{  PARTITION p17 VALUES LESS }\KeywordTok{THAN}\NormalTok{ (}\DecValTok{2018}\NormalTok{)}
+\NormalTok{);}
 
-CREATE TABLE \texttt{yellow} ( \texttt{VendorID} tinyint DEFAULT NULL,
-\texttt{tpep\_pickup\_datetime} DATETIME NOT NULL,
-\texttt{tpep\_dropoff\_datetime} DATETIME NOT NULL,
-\texttt{passenger\_count} tinyint DEFAULT NULL, \texttt{trip\_distance}
-float(10,2) DEFAULT NULL, \texttt{RatecodeID} tinyint DEFAULT NULL,
-\texttt{store\_and\_fwd\_flag} varchar(10) COLLATE latin1\_general\_ci
-DEFAULT NULL, \texttt{PULocationID} tinyint DEFAULT NULL,
-\texttt{DOLocationID} tinyint DEFAULT NULL, \texttt{payment\_type}
-tinyint DEFAULT NULL, \texttt{fare\_amount} decimal(5,3) DEFAULT NULL,
-\texttt{extra} decimal(5,3) DEFAULT NULL, \texttt{mta\_tax} decimal(5,3)
-DEFAULT NULL, \texttt{tip\_amount} decimal(5,3) DEFAULT NULL,
-\texttt{tolls\_amount} decimal(5,3) DEFAULT NULL,
-\texttt{improvement\_surcharge} decimal(5,3) DEFAULT NULL,
-\texttt{total\_amount} decimal(5,3) DEFAULT NULL, KEY \texttt{VendorID}
-(\texttt{VendorID}), KEY \texttt{pickup\_datetime}
-(\texttt{tpep\_pickup\_datetime}), KEY \texttt{dropoff\_datetime}
-(\texttt{tpep\_dropoff\_datetime}), KEY \texttt{PULocationID}
-(\texttt{PULocationID}), KEY \texttt{DOLocationID}
-(\texttt{DOLocationID}) ) PARTITION BY RANGE(
-YEAR(tpep\_pickup\_datetime) ) ( PARTITION p16 VALUES LESS THAN (2017),
-PARTITION p17 VALUES LESS THAN (2018) );
 
-DROP TABLE IF EXISTS \texttt{green};
+\NormalTok{DROP TABLE IF EXISTS }\StringTok{`}\DataTypeTok{green}\StringTok{`}\NormalTok{;}
 
-CREATE TABLE \texttt{green} ( \texttt{VendorID} tinyint DEFAULT NULL,
-\texttt{lpep\_pickup\_datetime} DATETIME NOT NULL,
-\texttt{Lpep\_dropoff\_datetime} DATETIME NOT NULL,
-\texttt{Store\_and\_fwd\_flag} varchar(10) COLLATE latin1\_general\_ci
-DEFAULT NULL, \texttt{RatecodeID} tinyint DEFAULT NULL,
-\texttt{Pickup\_longitude} double(7,5) DEFAULT NULL,
-\texttt{Pickup\_latitude} double(7,5) DEFAULT NULL,
-\texttt{Dropoff\_longitude} double(7,5) DEFAULT NULL,
-\texttt{Dropoff\_latitude} double(7,5) DEFAULT NULL,
-\texttt{Passenger\_count} tinyint DEFAULT NULL, \texttt{Trip\_distance}
-float(10,2) DEFAULT NULL, \texttt{Fare\_amount} decimal(5,3) DEFAULT
-NULL, \texttt{Extra} decimal(5,3) DEFAULT NULL, \texttt{MTA\_tax}
-decimal(5,3) DEFAULT NULL, \texttt{Tip\_amount} decimal(5,3) DEFAULT
-NULL, \texttt{Tolls\_amount} decimal(5,3) DEFAULT NULL,
-\texttt{improvement\_surcharge} decimal(5,3) DEFAULT NULL,
-\texttt{Total\_amount} decimal(5,3) DEFAULT NULL, \texttt{Payment\_type}
-tinyint DEFAULT NULL, \texttt{Trip\_type} tinyint DEFAULT NULL, KEY
-\texttt{VendorID} (\texttt{VendorID}), KEY \texttt{pickup\_datetime}
-(\texttt{lpep\_pickup\_datetime}), KEY \texttt{dropoff\_datetime}
-(\texttt{Lpep\_dropoff\_datetime}) );
+\NormalTok{CREATE TABLE }\StringTok{`}\DataTypeTok{green}\StringTok{`}\NormalTok{ (}
+ \StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{lpep_pickup_datetime}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Lpep_dropoff_datetime}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Store_and_fwd_flag}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{10}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{RatecodeID}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Pickup_longitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Pickup_latitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Dropoff_longitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Dropoff_latitude}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Passenger_count}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Trip_distance}\StringTok{`} \KeywordTok{float}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{2}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Fare_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Extra}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{MTA_tax}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Tip_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Tolls_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{improvement_surcharge}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Total_amount}\StringTok{`} \KeywordTok{decimal}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{3}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Payment_type}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{Trip_type}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{VendorID}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_datetime}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{lpep_pickup_datetime}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{dropoff_datetime}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{Lpep_dropoff_datetime}\StringTok{`}\NormalTok{)}
+\NormalTok{);}
 
-DROP TABLE IF EXISTS \texttt{lyft};
 
-CREATE TABLE \texttt{lyft} ( \texttt{base\_license\_number} varchar(15)
-COLLATE latin1\_general\_ci DEFAULT NULL, \texttt{base\_name}
-varchar(40) COLLATE latin1\_general\_ci DEFAULT NULL, \texttt{dba}
-varchar(40) COLLATE latin1\_general\_ci DEFAULT NULL,
-\texttt{pickup\_end\_date} DATE NOT NULL, \texttt{pickup\_start\_date}
-DATE NOT NULL, \texttt{total\_dispatched\_trips} smallint DEFAULT NULL,
-\texttt{unique\_dispatched\_vehicle} smallint DEFAULT NULL,
-\texttt{wave\_number} tinyint DEFAULT NULL, \texttt{week\_number}
-tinyint DEFAULT NULL, \texttt{years} smallint DEFAULT NULL, KEY
-\texttt{base\_name} (\texttt{base\_name}), KEY
-\texttt{pickup\_end\_date} (\texttt{pickup\_end\_date}), KEY
-\texttt{pickup\_start\_date} (\texttt{pickup\_start\_date}) );
+\NormalTok{DROP TABLE IF EXISTS }\StringTok{`}\DataTypeTok{lyft}\StringTok{`}\NormalTok{;}
 
-DROP TABLE IF EXISTS \texttt{uber};
+\NormalTok{CREATE TABLE }\StringTok{`}\DataTypeTok{lyft}\StringTok{`}\NormalTok{ (}
+ \StringTok{`}\DataTypeTok{base_license_number}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{15}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{base_name}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{40}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{dba}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{40}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{pickup_end_date}\StringTok{`}\NormalTok{ DATE NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{pickup_start_date}\StringTok{`}\NormalTok{ DATE NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{total_dispatched_trips}\StringTok{`}\NormalTok{ smallint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{unique_dispatched_vehicle}\StringTok{`}\NormalTok{ smallint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{wave_number}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{week_number}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{years}\StringTok{`}\NormalTok{ smallint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{base_name}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{base_name}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_end_date}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{pickup_end_date}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_start_date}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{pickup_start_date}\StringTok{`}\NormalTok{)}
+\NormalTok{);}
 
-CREATE TABLE \texttt{uber} ( \texttt{lat} double(7,5) DEFAULT NULL,
-\texttt{lon} double(7,5) DEFAULT NULL, \texttt{dispatching\_base\_num}
-varchar(15) COLLATE latin1\_general\_ci DEFAULT NULL,
-\texttt{pickup\_date} DATETIME NOT NULL, \texttt{affiliated\_base\_num}
-varchar(15) COLLATE latin1\_general\_ci DEFAULT NULL,
-\texttt{locationid} tinyint DEFAULT NULL, KEY \texttt{pickup\_date}
-(\texttt{pickup\_date}), KEY \texttt{locationid} (\texttt{locationid})
-);
 
-CREATE VIEW yellow\_old\_sum AS SELECT YEAR(tpep\_pickup\_datetime) as
-the\_year, MONTH(tpep\_pickup\_datetime) AS the\_month, count(*) AS
-num\_trips FROM yellow\_old GROUP BY the\_year, the\_month; );
+\NormalTok{DROP TABLE IF EXISTS }\StringTok{`}\DataTypeTok{uber}\StringTok{`}\NormalTok{;}
 
+\NormalTok{CREATE TABLE }\StringTok{`}\DataTypeTok{uber}\StringTok{`}\NormalTok{ (}
+ \StringTok{`}\DataTypeTok{lat}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{lon}\StringTok{`} \KeywordTok{double}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{5}\NormalTok{) DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{dispatching_base_num}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{15}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{pickup_date}\StringTok{`}\NormalTok{ DATETIME NOT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{affiliated_base_num}\StringTok{`} \KeywordTok{varchar}\NormalTok{(}\DecValTok{15}\NormalTok{) COLLATE latin1_general_ci DEFAULT }\OtherTok{NULL}\NormalTok{,}
+ \StringTok{`}\DataTypeTok{locationid}\StringTok{`}\NormalTok{ tinyint DEFAULT }\OtherTok{NULL}\NormalTok{,}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{pickup_date}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{pickup_date}\StringTok{`}\NormalTok{),}
+\NormalTok{ KEY }\StringTok{`}\DataTypeTok{locationid}\StringTok{`}\NormalTok{ (}\StringTok{`}\DataTypeTok{locationid}\StringTok{`}\NormalTok{)}
+\NormalTok{);}
+
+\NormalTok{CREATE VIEW yellow_old_sum AS SELECT }\KeywordTok{YEAR}\NormalTok{(tpep_pickup_datetime) as the_year, }\KeywordTok{MONTH}\NormalTok{(tpep_pickup_datetime) AS the_month, }\KeywordTok{count}\NormalTok{(}\OperatorTok{*}\NormalTok{) AS num_trips}
+\NormalTok{  FROM yellow_old}
+\NormalTok{  GROUP BY the_year, the_month; }
+\ErrorTok{)}\NormalTok{; }
+\end{Highlighting}
+\end{Shaded}
 \chapter{Using New York City Yellow Taxi Data to Answer Real Life
 Problems}\label{chapter2}
 
-\section{New York City Taxi Fare Pricing
-Model}\label{new-york-city-taxi-fare-pricing-model}
+New York City taxi drivers, passengers, and NYC Taxi \& Limousine
+Commission are the three parties who are closely involved in the NYC
+taxi industry. Each party has its own needs: taxi drivers want to
+maxmize their profit, and in order to do that, they need to maximize the
+revenue while minimizing the cost. Taxi passengers want the cheapest and
+most convenient way of transportantion. Since Uber and Lyft launched
+their services in New York City, many consumers started to demand the
+cheaper e-hail services. TLC wants to protect both taxi drivers and
+passengers, and it creates policies to make NYC taxi more accessible to
+consumers who really need this service. In this section, I think about
+what each party wants and try to find a way for them to be better-off.
 
-\section{Transportation Network in New York
-City}\label{transportation-network-in-new-york-city}
+\section{New York City Taxi Driver}\label{new-york-city-taxi-driver}
+
+\subsection{Trip-level Tip
+Inofrmation}\label{trip-level-tip-inofrmation}
+
+The income of Taxi drivers in New York City has two parts: taxi fare and
+tips. Taxi fare is usually calculated by the meters installed in the
+taxis, and the rate of fare cannot be changed by taxi drivers.
+Therefore, in order to make more profit, taxi drivers prefer to pick up
+passengers who offer big amount of tips. What are the regions that
+provide the most tips to yellow taxicab drivers?
+
+In the following analysis, I will focus on trip data collected in August
+2016. Taxi drivers usually does not correctly record the amount of tips
+paid by cash or check. Therefore, in order to find out the regions that
+offer the most tips, we need to filter out the trips that are not paid
+by credit or debit card.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(readr)}
+\NormalTok{dataset <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+Parsed with column specification:
+cols(
+  VendorID = col_integer(),
+  tpep_pickup_datetime = col_datetime(format = ""),
+  tpep_dropoff_datetime = col_datetime(format = ""),
+  passenger_count = col_integer(),
+  trip_distance = col_double(),
+  RatecodeID = col_integer(),
+  store_and_fwd_flag = col_character(),
+  PULocationID = col_integer(),
+  DOLocationID = col_integer(),
+  payment_type = col_integer(),
+  fare_amount = col_double(),
+  extra = col_double(),
+  mta_tax = col_double(),
+  tip_amount = col_double(),
+  tolls_amount = col_double(),
+  improvement_surcharge = col_double(),
+  total_amount = col_double()
+)
+\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip <-}\StringTok{ }\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{<}\StringTok{ }\NormalTok{fare_amount)}
+\end{Highlighting}
+\end{Shaded}
+Instead of the absolute amount of tips, we want to focus on the
+percentage of tips that passengers pay in addition to the total fare
+amount.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{tip_perct =}\NormalTok{ tip_amount}\OperatorTok{/}\NormalTok{fare_amount)}
+\end{Highlighting}
+\end{Shaded}
+Let's visualize the distribution of tip percentage:
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\NormalTok{tip_individual <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ yellow_}\FloatTok{2016.}\NormalTok{08_tip, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tip_perct) ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Tips, percent"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.005}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.20}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{), }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.28}\NormalTok{), }\DataTypeTok{col =} \StringTok{"yellow"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{)}
+\NormalTok{tip_individual}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+One of the questions that I always wonder is whether longer trips result
+in higher tip percent. It takes taxi drivers more time to complete
+longer trips, so passengers might want to compensate taxi drivers more.
+I personally pay higher percent of tips for longer rides, so I believe
+trip distance has an impact on percentage of tips paid.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tip_distance <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(tip_perct }\OperatorTok{~}\StringTok{ }\NormalTok{trip_distance, }\DataTypeTok{data =}\NormalTok{ yellow_}\FloatTok{2016.}\NormalTok{08_tip)}
+\KeywordTok{summary}\NormalTok{(tip_distance)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+
+Call:
+lm(formula = tip_perct ~ trip_distance, data = yellow_2016.08_tip)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.21887 -0.01889  0.00244  0.02682  0.77850 
+
+Coefficients:
+                Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)    2.189e-01  2.812e-05 7785.080   <2e-16 ***
+trip_distance -4.146e-09  8.729e-09   -0.475    0.635    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.06938 on 6088289 degrees of freedom
+Multiple R-squared:  3.706e-08, Adjusted R-squared:  -1.272e-07 
+F-statistic: 0.2256 on 1 and 6088289 DF,  p-value: 0.6348
+\end{verbatim}
+Acoording to the simple linear regression result, trip distance does not
+have significant impact on the percent of tips paid.
+
+\subsection{Aggregated Zone-level Tip
+Information}\label{aggregated-zone-level-tip-information}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(taxi_zone_lookup)}
+\NormalTok{tip_region <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip  }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(PULocationID, DOLocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }\DataTypeTok{trips =} \KeywordTok{n}\NormalTok{(),}
+            \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(trips }\OperatorTok{>}\StringTok{ }\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#zone}
+\NormalTok{region_vis <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ tip_region, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ avg_tip) ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Tips, percent"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.005}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.20}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{), }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.28}\NormalTok{), }\DataTypeTok{col =} \StringTok{"yellow"}\NormalTok{,}\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.5}\NormalTok{))}
+\NormalTok{region_vis}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tip_pickup <-}\StringTok{ }\NormalTok{tip_region }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(LocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(avg_tip), }\DataTypeTok{num_trips=}\KeywordTok{sum}\NormalTok{(trips)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Zone }\OperatorTok{!=}\StringTok{ "Unknown"}\NormalTok{)}
+
+\NormalTok{region_pickup_vis <-}\StringTok{ }\NormalTok{region_vis }\OperatorTok{%+%}\StringTok{ }\NormalTok{tip_pickup}
+\NormalTok{region_pickup_vis}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-15-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tip_dropoff <-}\StringTok{ }\NormalTok{tip_region }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(DOLocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(avg_tip)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
+
+\NormalTok{region_dropoff_vis <-}\StringTok{ }\NormalTok{region_pickup_vis }\OperatorTok{%+%}\StringTok{ }\NormalTok{tip_dropoff}
+\NormalTok{region_dropoff_vis}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+Taxi drivers are required to be indifferent to where passengers are
+going. Therefore, it makes more sense to investigate the average amount
+of tips paid for each pick-up zone. What are the taxi zones that have
+the highest tip percents?
+
+Let's fist take a look at which zones have the highest number of
+pickups.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(}\StringTok{"taxi_zones"}\NormalTok{)}
+\KeywordTok{names}\NormalTok{(taxi_zones)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+Loading required package: sp
+\end{verbatim}
+\begin{verbatim}
+Warning: package 'sp' was built under R version 3.4.3
+\end{verbatim}
+\begin{verbatim}
+[1] "OBJECTID"   "Shape_Leng" "Shape_Area" "zone"       "LocationID"
+[6] "borough"   
+\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#names(taxi_zones)}
+\NormalTok{newobj <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(taxi_zones, tip_pickup, }\DataTypeTok{by.x =} \StringTok{"LocationID"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"LocationID"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(RColorBrewer)}
+\NormalTok{cols <-}\StringTok{ }\KeywordTok{brewer.pal}\NormalTok{(}\DataTypeTok{n =} \DecValTok{4}\NormalTok{, }\DataTypeTok{name =} \StringTok{"Greys"}\NormalTok{)}
+\NormalTok{lcols <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(newobj}\OperatorTok{$}\NormalTok{num_trips,}
+             \DataTypeTok{breaks =} \KeywordTok{quantile}\NormalTok{(newobj}\OperatorTok{$}\NormalTok{num_trips, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+             \DataTypeTok{labels =}\NormalTok{ cols)}
+\KeywordTok{plot}\NormalTok{(newobj, }\DataTypeTok{col =} \KeywordTok{as.character}\NormalTok{(lcols))}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\subsection{What are the zones with the highest percent
+?}\label{what-are-the-zones-with-the-highest-percent}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#pick a threshold for the cutoff of number of trips}
+\NormalTok{pickup_zone_}\DecValTok{1000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\DecValTok{1000}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
+
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{1000}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,}\DecValTok{2}\OperatorTok{:}\DecValTok{5}\NormalTok{], }\DataTypeTok{caption =} \StringTok{"Taxi zone with the highest tip percent, threshold = 1000"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-18}Taxi zone with the highest tip percent, threshold = 1000}
+\centering
+\begin{tabular}[t]{r|r|l|l}
+\hline
+avg\_tip & num\_trips & Borough & Zone\\
+\hline
+0.2220842 & 1514 & Brooklyn & Prospect Heights\\
+\hline
+0.2209707 & 1890 & Brooklyn & Bushwick South\\
+\hline
+0.2203979 & 1049 & Brooklyn & Crown Heights North\\
+\hline
+0.2203508 & 1812 & Brooklyn & Clinton Hill\\
+\hline
+0.2202720 & 2637 & Queens & Steinway\\
+\hline
+0.2196133 & 1177 & Brooklyn & Bedford\\
+\hline
+0.2189780 & 3321 & Brooklyn & Carroll Gardens\\
+\hline
+0.2148377 & 3429 & Brooklyn & Greenpoint\\
+\hline
+0.2143333 & 5566 & Queens & Long Island City/Hunters Point\\
+\hline
+0.2137938 & 4234 & Brooklyn & East Williamsburg\\
+\hline
+\end{tabular}
+\end{table}
+If we focus on the pick-up zones that have more than 10000 trips per
+month, then we observe that all pick-up zones that have the highest
+percent tips are in Manhattan besides LaGuardia Airport.
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#pick a threshold for the cutoff of number of trips}
+\NormalTok{pickup_zone_}\DecValTok{10000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\DecValTok{10000}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
+\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{10000}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,}\DecValTok{2}\OperatorTok{:}\DecValTok{5}\NormalTok{], }\DataTypeTok{caption =} \StringTok{"Taxi zone with the highest tip percent, threshold = 10000"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-19}Taxi zone with the highest tip percent, threshold = 10000}
+\centering
+\begin{tabular}[t]{r|r|l|l}
+\hline
+avg\_tip & num\_trips & Borough & Zone\\
+\hline
+0.2111362 & 39854 & Manhattan & Hudson Sq\\
+\hline
+0.2100087 & 224163 & Manhattan & Midtown East\\
+\hline
+0.2089467 & 63884 & Manhattan & Central Park\\
+\hline
+0.2087323 & 177105 & Queens & LaGuardia Airport\\
+\hline
+0.2085443 & 107154 & Manhattan & Greenwich Village North\\
+\hline
+0.2076574 & 33450 & Manhattan & World Trade Center\\
+\hline
+0.2076139 & 88966 & Manhattan & UN/Turtle Bay South\\
+\hline
+0.2075438 & 213399 & Manhattan & Penn Station/Madison Sq West\\
+\hline
+0.2073151 & 27055 & Manhattan & Financial District South\\
+\hline
+0.2064646 & 56759 & Manhattan & SoHo\\
+\hline
+\end{tabular}
+\end{table}
+\subsection{Do taxi drivers go to zones that offer high
+tips?}\label{do-taxi-drivers-go-to-zones-that-offer-high-tips}
+
+Pick-up zones with higher tips should attract more taxi drivers.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tip_region}\OperatorTok{$}\NormalTok{LocationID <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(tip_region}\OperatorTok{$}\NormalTok{LocationID)}
+\NormalTok{tip_pickup}\OperatorTok{$}\NormalTok{LocationID <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(tip_pickup}\OperatorTok{$}\NormalTok{LocationID)}
+\NormalTok{tip_and_trip_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(trips }\OperatorTok{~}\StringTok{ }\NormalTok{avg_tip }\OperatorTok{+}\StringTok{ }\NormalTok{LocationID, }\DataTypeTok{data =}\NormalTok{ tip_region)}
+\KeywordTok{summary}\NormalTok{(tip_and_trip_}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+
+Call:
+lm(formula = trips ~ avg_tip + LocationID, data = tip_region)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -3780   -663   -183    246  62515 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   -2907.26    1456.57  -1.996   0.0460 *  
+avg_tip       18382.03     643.53  28.564   <2e-16 ***
+LocationID10   -936.47    1471.76  -0.636   0.5246    
+LocationID100  -146.65    1456.66  -0.101   0.9198    
+LocationID106 -1327.88    1478.24  -0.898   0.3691    
+LocationID107   367.36    1457.42   0.252   0.8010    
+LocationID112  -990.71    1463.11  -0.677   0.4983    
+LocationID113   -75.78    1458.00  -0.052   0.9586    
+LocationID114  -151.25    1457.84  -0.104   0.9174    
+LocationID115  -932.89    2053.75  -0.454   0.6497    
+LocationID116  -545.87    1464.83  -0.373   0.7094    
+LocationID117 -1355.28    2053.90  -0.660   0.5094    
+LocationID12   -913.56    1464.52  -0.624   0.5328    
+LocationID125  -594.29    1459.17  -0.407   0.6838    
+LocationID127 -1036.80    1523.19  -0.681   0.4961    
+LocationID129  -862.22    1478.89  -0.583   0.5599    
+LocationID13   -236.51    1458.24  -0.162   0.8712    
+LocationID130  -801.18    1523.08  -0.526   0.5989    
+LocationID132   -41.13    1455.22  -0.028   0.9775    
+LocationID133 -1390.30    1623.97  -0.856   0.3920    
+LocationID134 -1464.23    1677.23  -0.873   0.3827    
+LocationID135 -4184.09    2058.02  -2.033   0.0421 *  
+LocationID137  -185.17    1457.69  -0.127   0.8989    
+LocationID138  -146.01    1455.46  -0.100   0.9201    
+LocationID14  -1130.61    1778.69  -0.636   0.5250    
+LocationID140    68.23    1457.41   0.047   0.9627    
+LocationID141   232.75    1457.51   0.160   0.8731    
+LocationID142   354.11    1457.96   0.243   0.8081    
+LocationID143   -76.35    1459.87  -0.052   0.9583    
+LocationID144  -233.85    1458.16  -0.160   0.8726    
+LocationID145  -967.14    1460.82  -0.662   0.5080    
+LocationID146  -693.04    1462.82  -0.474   0.6357    
+LocationID148   -16.40    1456.93  -0.011   0.9910    
+LocationID151  -160.33    1460.48  -0.110   0.9126    
+LocationID152  -613.12    1466.90  -0.418   0.6760    
+LocationID157  -921.67    2053.70  -0.449   0.6536    
+LocationID158   -41.50    1458.24  -0.028   0.9773    
+LocationID159 -1560.66    2054.04  -0.760   0.4474    
+LocationID161   575.57    1456.82   0.395   0.6928    
+LocationID162   350.15    1456.48   0.240   0.8100    
+LocationID163   266.21    1457.50   0.183   0.8551    
+LocationID164   155.58    1456.71   0.107   0.9149    
+LocationID165 -2688.69    2055.25  -1.308   0.1908    
+LocationID166  -555.16    1461.49  -0.380   0.7041    
+LocationID168 -1234.45    1530.99  -0.806   0.4201    
+LocationID17  -1090.44    1476.37  -0.739   0.4602    
+LocationID170   415.75    1456.42   0.285   0.7753    
+LocationID177 -1538.40    2054.03  -0.749   0.4539    
+LocationID178  -445.39    2053.60  -0.217   0.8283    
+LocationID179  -834.77    1469.84  -0.568   0.5701    
+LocationID181  -886.06    1459.97  -0.607   0.5439    
+LocationID186   347.47    1456.51   0.239   0.8114    
+LocationID188 -1101.31    1516.92  -0.726   0.4678    
+LocationID189 -1135.25    1471.38  -0.772   0.4404    
+LocationID190 -1267.45    1591.05  -0.797   0.4257    
+LocationID193  -918.34    1479.93  -0.621   0.5349    
+LocationID194 -1070.92    1540.42  -0.695   0.4869    
+LocationID195 -1280.82    1568.81  -0.816   0.4143    
+LocationID196 -1132.43    1552.63  -0.729   0.4658    
+LocationID197  -872.05    1778.57  -0.490   0.6239    
+LocationID198 -1965.61    1677.73  -1.172   0.2414    
+LocationID200 -1357.03    2053.91  -0.661   0.5088    
+LocationID202 -1286.33    1623.87  -0.792   0.4283    
+LocationID206 -1097.95    2053.77  -0.535   0.5929    
+LocationID209  -727.16    1459.76  -0.498   0.6184    
+LocationID210 -2751.74    2055.35  -1.339   0.1807    
+LocationID211  -390.09    1458.59  -0.267   0.7891    
+LocationID215  -754.50    1516.75  -0.497   0.6189    
+LocationID216  -758.87    1676.84  -0.453   0.6509    
+LocationID217 -1072.02    1530.88  -0.700   0.4838    
+LocationID219  -689.67    1676.80  -0.411   0.6809    
+LocationID220 -2136.47    2054.56  -1.040   0.2984    
+LocationID221  -834.38    2053.69  -0.406   0.6845    
+LocationID223 -1089.04    1466.82  -0.742   0.4578    
+LocationID224  -472.24    1460.49  -0.323   0.7464    
+LocationID225 -1284.59    1503.46  -0.854   0.3929    
+LocationID226  -647.57    1460.79  -0.443   0.6576    
+LocationID228 -1331.63    1517.09  -0.878   0.3801    
+LocationID229    22.10    1457.62   0.015   0.9879    
+LocationID230   129.93    1456.52   0.089   0.9289    
+LocationID231    37.85    1457.24   0.026   0.9793    
+LocationID232  -709.19    1459.45  -0.486   0.6270    
+LocationID233  -224.75    1457.82  -0.154   0.8775    
+LocationID234   657.47    1457.03   0.451   0.6518    
+LocationID236   522.15    1457.81   0.358   0.7202    
+LocationID237   687.51    1457.72   0.472   0.6372    
+LocationID238    85.83    1458.25   0.059   0.9531    
+LocationID239   267.90    1458.00   0.184   0.8542    
+LocationID24   -575.82    1463.15  -0.394   0.6939    
+LocationID243  -776.99    1486.37  -0.523   0.6012    
+LocationID244  -563.98    1463.81  -0.385   0.7000    
+LocationID245 -1055.00    2053.76  -0.514   0.6075    
+LocationID246   -28.13    1458.16  -0.019   0.9846    
+LocationID247 -1116.20    1540.46  -0.725   0.4687    
+LocationID249   183.07    1457.44   0.126   0.9000    
+LocationID25   -925.19    1461.22  -0.633   0.5266    
+LocationID255  -712.61    1459.30  -0.488   0.6253    
+LocationID256  -730.24    1460.07  -0.500   0.6170    
+LocationID257 -1384.43    1677.16  -0.825   0.4091    
+LocationID26  -1078.96    2053.76  -0.525   0.5993    
+LocationID260  -599.78    1470.18  -0.408   0.6833    
+LocationID261  -637.95    1458.13  -0.438   0.6618    
+LocationID262  -163.52    1458.97  -0.112   0.9108    
+LocationID263    45.49    1457.67   0.031   0.9751    
+LocationID264  -248.23    1459.69  -0.170   0.8650    
+LocationID265  -488.28    1590.89  -0.307   0.7589    
+LocationID28  -1056.99    1676.94  -0.630   0.5285    
+LocationID33   -882.15    1460.78  -0.604   0.5459    
+LocationID34  -1406.30    1591.15  -0.884   0.3768    
+LocationID35  -1293.82    2053.87  -0.630   0.5287    
+LocationID36  -1152.73    1494.51  -0.771   0.4405    
+LocationID37  -1100.63    1472.98  -0.747   0.4550    
+LocationID38   -907.22    2053.69  -0.442   0.6587    
+LocationID39  -1458.54    2053.98  -0.710   0.4777    
+LocationID4    -606.70    1459.29  -0.416   0.6776    
+LocationID40  -1066.91    1463.49  -0.729   0.4660    
+LocationID41   -519.09    1462.81  -0.355   0.7227    
+LocationID42   -575.20    1465.29  -0.393   0.6947    
+LocationID43   -307.29    1459.36  -0.211   0.8332    
+LocationID45   -730.91    1459.53  -0.501   0.6165    
+LocationID48    319.92    1456.55   0.220   0.8262    
+LocationID49  -1095.55    1471.36  -0.745   0.4565    
+LocationID50   -363.85    1458.10  -0.250   0.8030    
+LocationID52   -930.55    1462.76  -0.636   0.5247    
+LocationID54  -1667.06    1540.91  -1.082   0.2793    
+LocationID56   -961.27    2053.73  -0.468   0.6398    
+LocationID6    -972.02    2053.72  -0.473   0.6360    
+LocationID61  -1109.13    1476.38  -0.751   0.4525    
+LocationID62  -1391.55    1591.14  -0.875   0.3818    
+LocationID65   -734.58    1459.59  -0.503   0.6148    
+LocationID66   -858.00    1463.19  -0.586   0.5576    
+LocationID68    270.91    1457.16   0.186   0.8525    
+LocationID69  -1571.95    2054.06  -0.765   0.4441    
+LocationID7    -753.88    1461.49  -0.516   0.6060    
+LocationID70  -1311.82    1494.61  -0.878   0.3801    
+LocationID74   -517.69    1461.93  -0.354   0.7233    
+LocationID75   -302.63    1459.76  -0.207   0.8358    
+LocationID76  -1424.36    2053.96  -0.693   0.4880    
+LocationID77  -1579.84    2054.06  -0.769   0.4418    
+LocationID79    517.61    1456.75   0.355   0.7224    
+LocationID8    -792.30    2053.66  -0.386   0.6997    
+LocationID80   -960.44    1462.94  -0.657   0.5115    
+LocationID82  -1052.65    1494.43  -0.704   0.4812    
+LocationID83   -982.97    1540.37  -0.638   0.5234    
+LocationID87   -390.35    1457.74  -0.268   0.7889    
+LocationID88   -670.38    1458.49  -0.460   0.6458    
+LocationID89   -997.81    1516.87  -0.658   0.5107    
+LocationID9   -1433.27    2053.96  -0.698   0.4853    
+LocationID90    157.84    1457.70   0.108   0.9138    
+LocationID91    323.71    1778.61   0.182   0.8556    
+LocationID92   -175.80    1778.47  -0.099   0.9213    
+LocationID93  -1127.50    1479.02  -0.762   0.4459    
+LocationID95  -1065.11    1497.03  -0.711   0.4768    
+LocationID97   -844.35    1460.75  -0.578   0.5633    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1452 on 9499 degrees of freedom
+Multiple R-squared:  0.1573,    Adjusted R-squared:  0.1437 
+F-statistic: 11.59 on 153 and 9499 DF,  p-value: < 2.2e-16
+\end{verbatim}
+Each one percent increase in tips is associated with 18382.03 increase
+in the number of trips, controlling the pick-up zone.
+
+\subsection{Which pick-up zone has the highest price per
+minute}\label{which-pick-up-zone-has-the-highest-price-per-minute}
+
+estmate slow traffic time
+
+\section{New York City Taxi Consumer}\label{new-york-city-taxi-consumer}
+
+\subsection{Does taxi fare change through time? Is taxi ride becoming
+more
+expensive?}\label{does-taxi-fare-change-through-time-is-taxi-ride-becoming-more-expensive}
+
+\section{New York City Taxi Fare \& Limousine
+Commission}\label{new-york-city-taxi-fare-limousine-commission}
+
+\subsection{Should there be a flat rate between Manhattan and the JFK
+Airport?}\label{should-there-be-a-flat-rate-between-manhattan-and-the-jfk-airport}
+
+\subsubsection{People in Manhattan benefit from the \$52 flat
+rate.}\label{people-in-manhattan-benefit-from-the-52-flat-rate.}
+
+Why is there a flat rate to and from JFK airport and any location in
+Manhattan? Why is the flat rate \$52? Does TLC make profit from the \$52
+flat rate? Does \$52 reduce the cogestion on the road to JFK airport and
+make taking a train a more preferable choice?
+
+If there is no flat rate between JFK and Manhattan,
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jfk_trip <-}\StringTok{ }\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(RatecodeID }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }\NormalTok{DOLocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }
+\StringTok{           }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount,}
+         \DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount)}
+
+\NormalTok{to_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
+
+\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jkf_zone <-}\StringTok{ }\NormalTok{to_jfk }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(PULocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(),}
+            \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance),}
+            \DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare))}
+
+\NormalTok{to_jkf_fare <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(taxi_zones, to_jkf_zone, }\DataTypeTok{by.x =} \StringTok{"LocationID"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"PULocationID"}\NormalTok{)}
+
+\NormalTok{cols <-}\StringTok{ }\KeywordTok{brewer.pal}\NormalTok{(}\DataTypeTok{n =} \DecValTok{4}\NormalTok{, }\DataTypeTok{name =} \StringTok{"Greys"}\NormalTok{)}
+\NormalTok{lcols <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(to_jkf_fare}\OperatorTok{$}\NormalTok{avg_fare,}
+             \DataTypeTok{breaks =} \KeywordTok{quantile}\NormalTok{(to_jkf_fare}\OperatorTok{$}\NormalTok{avg_fare, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+             \DataTypeTok{labels =}\NormalTok{ cols)}
+\KeywordTok{plot}\NormalTok{(to_jkf_fare, }\DataTypeTok{col =} \KeywordTok{as.character}\NormalTok{(lcols))}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-22-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jkf_zone_above <-}\StringTok{ }\NormalTok{to_jkf_zone }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(avg_fare }\OperatorTok{>=}\StringTok{ }\DecValTok{52}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_fare))}
+\KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{,], }\DataTypeTok{caption =} \StringTok{"Zones that woulde have paid more than $52"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\textbackslash{}begin\{table\}
+
+\textbackslash{}caption\{\label{tab:unnamed-chunk-23}Zones that woulde have
+paid more than \$52\} \centering
+\begin{tabular}[t]{r|r|r|r}
+\hline
+PULocationID & num\_trips & avg\_dis & avg\_fare\\
+\hline
+47 & 1 & 27.08000 & 76.54000\\
+\hline
+195 & 4 & 26.14000 & 74.19000\\
+\hline
+220 & 1 & 24.30000 & 69.59000\\
+\hline
+54 & 1 & 25.80000 & 67.80000\\
+\hline
+127 & 6 & 22.85833 & 65.06250\\
+\hline
+243 & 8 & 21.54250 & 63.82125\\
+\hline
+17 & 1 & 23.70000 & 62.55000\\
+\hline
+13 & 1266 & 22.09787 & 62.44055\\
+\hline
+244 & 74 & 20.42216 & 60.27892\\
+\hline
+133 & 1 & 18.74000 & 60.19000\\
+\hline
+\end{tabular}
+\textbackslash{}end\{table\}
+
+Imagine you are travelling to New York City and you do not know much
+about the city. Travellers tend to gather around Mahanttan, and without
+the flat rate, passengers would have paid more than \$52 to take a taxi
+to go to the JFK Airport. The \$52 flat rate is nice for people who are
+not very familiar with New York City, and it incentivize tourists to
+take taxi to the JFK Airport. It also helps taxi drivers to get more
+tips to JFK Airport.
+
+\subsection{However, are taxi drivers happy with the flat
+rate?}\label{however-are-taxi-drivers-happy-with-the-flat-rate}
+
+What the expected fare from JKF Airport how much time it would take for
+a cb driver to do a round trip
 
 \chapter*{Conclusion}\label{conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}

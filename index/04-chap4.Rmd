@@ -19,9 +19,6 @@ jfk_trip <- dataset %>%
 
 to_jfk <- jfk_trip %>%
   filter(DOLocationID == 132)
-
-from_jfk <- jfk_trip %>%
-  filter(PULocationID == 132)
 ```
 
 
@@ -30,7 +27,9 @@ to_jkf_zone <- to_jfk %>%
   group_by(PULocationID) %>%
   summarise(num_trips = n(),
             avg_dis = mean(trip_distance),
-            avg_fare = mean(est_fare))
+            avg_fare = mean(est_fare)) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup , by = "LocationID")
 
 to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
 
@@ -44,16 +43,49 @@ plot(to_jkf_fare, col = as.character(lcols))
 
 ```{r}
 to_jkf_zone_above <- to_jkf_zone %>%
-  filter(avg_fare >= 52) %>%
+  filter(Borough == "Manhattan") %>%
+  #filter(avg_fare >= 52) %>%
   arrange(desc(avg_fare))
-kable(to_jkf_zone_above[1:10,], caption = "Zones that woulde have paid more than $52")
+kable(to_jkf_zone_above[1:44,], caption = "Pick-up Zones that woulde have paid more than $52")
 ```
 
-Imagine you are travelling to New York City and you do not know much about the city. Travellers tend to gather around Mahanttan, and without the flat rate, passengers would have paid more than $52 to take a taxi to go to the JFK Airport. The \$52 flat rate is nice for people who are not very familiar with New York City, and it incentivize tourists to take taxi to the JFK Airport. It also helps taxi drivers to get more tips to JFK Airport.
+Imagine it's your first time travelling to New York City, and you decided to live in a hotel in Manhattan Since you do not know much about the city, the \$52 flat rate is nice for you, and it incentivizes you to take taxi to the JFK Airport. If there is no flat rate, there is uncertainty in how much someone needs to pay to take a taxi to JFK, and tourists might instead choose to take the train, even though taking a train would cost them more time and inconvenience. 
+
+Additionally, people who are native to Manhattan would have paid more than $52 to take a taxi to go to the JFK Airport. The higher the taxi fare is, the less the demand for taxi will be. Therefore, having a flat rate,helps taxi drivers to get more trips from Manhattan to JFK Airport.
+
 
 ### However, are taxi drivers happy with the flat rate? 
 
-What the expected fare from JKF Airport
+What the expected fare from JKF Airport to Manhattan?
+
+```{r}
+from_jfk <- jfk_trip %>%
+  filter(PULocationID == 132)
+
+from_jkf_zone <- from_jfk %>%
+  group_by(DOLocationID) %>%
+  summarise(num_trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_fare = mean(est_fare)) %>%
+  rename(LocationID = DOLocationID) %>%
+  left_join(taxi_zone_lookup , by = "LocationID")
+
+from_jkf_fare <- merge(taxi_zones, from_jkf_zone, by.x = "LocationID", by.y = "LocationID")
+
+#cols <- brewer.pal(n = 4, name = "Greys")
+lcols <- cut(from_jkf_fare$avg_fare,
+             breaks = quantile(from_jkf_fare$avg_fare, na.rm = TRUE),
+             labels = cols)
+plot(from_jkf_fare, col = as.character(lcols))
+
+from_jkf_zone_above <- from_jkf_zone %>%
+  filter(Borough == "Manhattan") %>%
+  #filter(avg_fare >= 52) %>%
+  arrange(desc(avg_fare))
+kable(to_jkf_zone_above[1:67,], caption = "Drop-off Zones that woulde have paid more than $52")
+```
+
+
 how much time it would take for a cb driver to do a round trip 
 
  
