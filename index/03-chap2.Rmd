@@ -1,7 +1,4 @@
-# Using New York City Yellow Taxi Data to Answer Real Life Problems {#chapter2}
-New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs: taxi drivers want to maxmize their profit, and in order to do that, they need to maximize the revenue while minimizing the cost. Taxi passengers want the cheapest and most convenient way of transportantion. Since Uber and Lyft launched their services in New York City, many consumers started to demand the cheaper e-hail services. TLC wants to protect both taxi drivers and passengers, and it creates policies to make NYC taxi more accessible to consumers who really need this service. In this section, I think about what each party wants and try to find a way for them to be better-off. 
-
-## New York City Taxi Driver
+# New York City Taxi Driver {#chapter2}
 
 ### Trip-level Tip Inofrmation
 The income of Taxi drivers in New York City has two parts: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers?
@@ -11,8 +8,8 @@ In the following analysis, I will focus on trip data collected in August 2016. T
 ```{r}
 library(dplyr)
 library(readr)
-dataset <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
-yellow_2016.08_tip <- dataset %>%
+yellow_2016.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
+yellow_2016.08_tip <- yellow_2016.08_cleaned %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%
   filter(payment_type == 1) %>%
@@ -27,7 +24,7 @@ yellow_2016.08_tip <- yellow_2016.08_tip %>%
 ```
 
 Let's visualize the distribution of tip percentage:
-```{r}
+```{r tip-individual, fig.cap="this is my caption"}
 library(ggplot2)
 tip_individual <- ggplot(data = yellow_2016.08_tip, aes(x = tip_perct) ) +
   xlab("Tips, percent") +
@@ -141,8 +138,16 @@ tip_pickup$LocationID <- as.character(tip_pickup$LocationID)
 tip_and_trip_1 <- lm(trips ~ avg_tip + LocationID, data = tip_region)
 summary(tip_and_trip_1)
 ```
+Each one percent increase in average tips in pick-up zones is associated with 18382.03 increase in the number of trips per month, controlling the pick-up zone. 
 
-Each one percent increase in tips is associated with 18382.03 increase in the number of trips, controlling the pick-up zone. 
+```{r}
+9942263/31
+18382.03/31
+593/320718
+```
+In August 2016, yellow cabs made an average of 320,718 daily trips. Additionally, each one percent increase in average tips in pick-up zones is associated with 593 increase in the number of trips per day in a specific pick-up zone.
+
+https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers
 
 ### Which pick-up zone has the highest price per minute
 estmate slow traffic time

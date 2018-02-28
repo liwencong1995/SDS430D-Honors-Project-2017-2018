@@ -1,0 +1,24 @@
+# New York City Taxi Consumer {#chapter3}
+
+## How long does it take for passengers to get to JFK, LaGuardia, and Newark Airports? When is the best time to travel?
+
+
+
+```{r}
+library(dplyr)
+library(readr)
+yellow_2015.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_tripdata_2015-08.csv")
+yellow_2016.08_tip <- yellow_2015.08_cleaned %>%
+  filter(fare_amount > 0) %>%
+  filter(tip_amount > 0) %>%
+  filter(PULocationID != DOLocationID)
+```
+
+```{r}
+dataset %>%
+  group_by()
+```
+
+
+## How does weather affect New York City taxi and Uber trips? How does snowfall affect taxi and Uber trips?
+

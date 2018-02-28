@@ -9,6 +9,10 @@ db <- src_mysql("nyctaxi", user = "WencongLi", host = "localhost", password = "P
 taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi")
 taxi <- etl("nyctaxi", dir = "/Volumes/UNTITLED/Honors/nyctaxi", db)
 
+
+taxi %>%
+  etl_extract(years = 2015, months = 8, type = c("yellow"))
+
 #taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 #Download the data I need for my study
 #green taxi 2015

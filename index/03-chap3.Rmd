@@ -1,6 +1,0 @@
-## New York City Taxi Consumer
-### Does taxi fare change through time? Is taxi ride becoming more expensive?
-
-
-
-
