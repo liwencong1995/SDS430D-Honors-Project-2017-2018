@@ -4,7 +4,7 @@
 
 
 
-```{r}
+```{r, eval=FALSE}
 library(dplyr)
 library(readr)
 yellow_2015.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_tripdata_2015-08.csv")
@@ -14,7 +14,7 @@ yellow_2016.08_tip <- yellow_2015.08_cleaned %>%
   filter(PULocationID != DOLocationID)
 ```
 
-```{r}
+```{r, eval=FALSE}
 dataset %>%
   group_by()
 ```
