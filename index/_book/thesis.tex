@@ -521,7 +521,8 @@ generated as default.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# initializing an etl object}
-\NormalTok{db <-}\StringTok{ }\KeywordTok{src_mysql}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{user =} \StringTok{"urname"}\NormalTok{, }\DataTypeTok{host =} \StringTok{"host"}\NormalTok{, }\DataTypeTok{password =} \StringTok{"pw"}\NormalTok{)}
+\NormalTok{db <-}\StringTok{ }\KeywordTok{src_mysql}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{user =} \StringTok{"urname"}\NormalTok{, }\DataTypeTok{host =} \StringTok{"host"}\NormalTok{, }
+    \DataTypeTok{password =} \StringTok{"pw"}\NormalTok{)}
 \NormalTok{taxi <-}\StringTok{ }\KeywordTok{etl}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{dir =} \StringTok{"~/Desktop/nyctaxi"}\NormalTok{, db)}
 \end{Highlighting}
 \end{Shaded}
@@ -605,466 +606,474 @@ Summary}\label{new-yoek-city-hail-service-summary}
 \section{Source Code}\label{source-code}
 
 \subsection{ETL Extract}\label{etl-extract}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{etl_extract.etl_nyctaxi <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, }\DataTypeTok{years =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{format}\NormalTok{(}\KeywordTok{Sys.Date}\NormalTok{(), }
-    \StringTok{"%Y"}\NormalTok{)), }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \StringTok{"yellow"}\NormalTok{, ...) \{}
-    \CommentTok{# TAXI}
-    \CommentTok{# YELLOW-----------------------------------------------------------------------}
-\NormalTok{    taxi_yellow <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Extracting raw yellow taxi data..."}\NormalTok{)}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2009-01-01"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{            }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\StringTok{"https://s3.amazonaws.com/nyc-tlc/trip+data"}\NormalTok{, }
-                \KeywordTok{paste0}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"_tripdata_"}\NormalTok{, year, }\StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }
-                  \DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-        \KeywordTok{tryCatch}\NormalTok{(}\DataTypeTok{expr =}\NormalTok{ etl}\OperatorTok{::}\KeywordTok{smart_download}\NormalTok{(obj, remote}\OperatorTok{$}\NormalTok{src, }
-\NormalTok{            ...), }\DataTypeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{}
-            \KeywordTok{warning}\NormalTok{(e)}
-\NormalTok{        \}, }\DataTypeTok{finally =} \KeywordTok{warning}\NormalTok{(}\StringTok{"Only the following data are availabel on TLC:}
-\StringTok{                               Yellow taxi data: 2009 Jan - last month"}\NormalTok{))}
-\NormalTok{    \}}
-    \CommentTok{# TAXI}
-    \CommentTok{# GREEN-----------------------------------------------------------------------}
-\NormalTok{    taxi_green <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Extracting raw green taxi data..."}\NormalTok{)}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2013-08-01"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{            }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\StringTok{"https://s3.amazonaws.com/nyc-tlc/trip+data"}\NormalTok{, }
-                \KeywordTok{paste0}\NormalTok{(}\StringTok{"green"}\NormalTok{, }\StringTok{"_tripdata_"}\NormalTok{, year, }\StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }
-                  \DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-        \KeywordTok{tryCatch}\NormalTok{(}\DataTypeTok{expr =}\NormalTok{ etl}\OperatorTok{::}\KeywordTok{smart_download}\NormalTok{(obj, remote}\OperatorTok{$}\NormalTok{src, }
-\NormalTok{            ...), }\DataTypeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{}
-            \KeywordTok{warning}\NormalTok{(e)}
-\NormalTok{        \}, }\DataTypeTok{finally =} \KeywordTok{warning}\NormalTok{(}\StringTok{"Only the following data are availabel on TLC:}
-\StringTok{                               Green taxi data: 2013 Aug - last month"}\NormalTok{))}
-\NormalTok{    \}}
-    \CommentTok{# UBER-----------------------------------------------------------------------}
-\NormalTok{    uber <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Extracting raw uber data..."}\NormalTok{)}
-\NormalTok{        raw_month_}\DecValTok{2014}\NormalTok{ <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\NormalTok{, }
-            \DataTypeTok{months =} \DecValTok{4}\OperatorTok{:}\DecValTok{9}\NormalTok{)}
-\NormalTok{        raw_month_}\DecValTok{2015}\NormalTok{ <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2015}\NormalTok{, }
-            \DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{6}\NormalTok{)}
-\NormalTok{        raw_month <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(raw_month_}\DecValTok{2014}\NormalTok{, raw_month_}\DecValTok{2015}\NormalTok{)}
-\NormalTok{        path =}\StringTok{ "https://raw.githubusercontent.com/fivethirtyeight/uber-tlc-foil-response/master/uber-trip-data"}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months)}
-\NormalTok{        remote_small <-}\StringTok{ }\KeywordTok{intersect}\NormalTok{(raw_month, remote)}
-        \ControlFlowTok{if}\NormalTok{ (}\DecValTok{2015} \OperatorTok{%in%}\StringTok{ }\NormalTok{remote_small}\OperatorTok{$}\NormalTok{year }\OperatorTok{&&}\StringTok{ }\OperatorTok{!}\NormalTok{(}\DecValTok{2014} \OperatorTok{%in%}\StringTok{ }\NormalTok{remote_small}\OperatorTok{$}\NormalTok{year)) \{}
-            \CommentTok{# download 2015 data}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Downloading Uber 2015 data..."}\NormalTok{)}
-\NormalTok{            etl}\OperatorTok{::}\KeywordTok{smart_download}\NormalTok{(obj, }\StringTok{"https://github.com/fivethirtyeight/uber-tlc-foil-response/raw/master/uber-trip-data/uber-raw-data-janjune-15.csv.zip"}\NormalTok{, }
-\NormalTok{                ...)}
-\NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\DecValTok{2015} \OperatorTok{%in%}\StringTok{ }\NormalTok{remote_small}\OperatorTok{$}\NormalTok{year }\OperatorTok{&&}\StringTok{ }\DecValTok{2014} \OperatorTok{%in%}\StringTok{ }\NormalTok{remote_small}\OperatorTok{$}\NormalTok{year) \{}
-            \CommentTok{# download 2015 data}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Downloading Uber 2015 data..."}\NormalTok{)}
-\NormalTok{            etl}\OperatorTok{::}\KeywordTok{smart_download}\NormalTok{(obj, }\StringTok{"https://github.com/fivethirtyeight/uber-tlc-foil-response/raw/master/uber-trip-data/uber-raw-data-janjune-15.csv.zip"}\NormalTok{, }
-\NormalTok{                ...)}
-            \CommentTok{# download 2014 data}
-\NormalTok{            small <-}\StringTok{ }\NormalTok{remote_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter_}\NormalTok{(}\OperatorTok{~}\NormalTok{year }\OperatorTok{==}\StringTok{ }\DecValTok{2014}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{                }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{month_abb =} \OperatorTok{~}\KeywordTok{tolower}\NormalTok{(month.abb[month]), }
-                  \DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(path, }\KeywordTok{paste0}\NormalTok{(}\StringTok{"uber-raw-data-"}\NormalTok{, }
-\NormalTok{                    month_abb, }\KeywordTok{substr}\NormalTok{(year, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Downloading Uber 2014 data..."}\NormalTok{)}
-\NormalTok{            etl}\OperatorTok{::}\KeywordTok{smart_download}\NormalTok{(obj, small}\OperatorTok{$}\NormalTok{src, ...)}
-\NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\DecValTok{2014} \OperatorTok{%in%}\StringTok{ }\NormalTok{remote_small}\OperatorTok{$}\NormalTok{year }\OperatorTok{&&}\StringTok{ }\OperatorTok{!}\NormalTok{(}\DecValTok{2015} \OperatorTok{%in%}\StringTok{ }\NormalTok{remote_small}\OperatorTok{$}\NormalTok{year)) \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Downloading Uber 2014 data..."}\NormalTok{)}
-            \CommentTok{# file paths}
-\NormalTok{            small <-}\StringTok{ }\NormalTok{remote_small }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{month_abb =} \OperatorTok{~}\KeywordTok{tolower}\NormalTok{(month.abb[month]), }
-                \DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(path, }\KeywordTok{paste0}\NormalTok{(}\StringTok{"uber-raw-data-"}\NormalTok{, }
-\NormalTok{                  month_abb, }\KeywordTok{substr}\NormalTok{(year, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-\NormalTok{            etl}\OperatorTok{::}\KeywordTok{smart_download}\NormalTok{(obj, small}\OperatorTok{$}\NormalTok{src, ...)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \KeywordTok{warning}\NormalTok{(}\StringTok{"The Uber data you requested are not currently available. Only data from 2014/04-2014/09 and 2015/01-2015/06 are available..."}\NormalTok{)}
-\NormalTok{        \}}
-\NormalTok{    \}}
-    \CommentTok{# LYFT-----------------------------------------------------------------------}
-\NormalTok{    lyft <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Extracting raw lyft data..."}\NormalTok{)}
-        \CommentTok{# check if the week is valid}
-\NormalTok{        valid_months <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }
-            \DataTypeTok{begin =} \StringTok{"2015-01-01"}\NormalTok{)}
-\NormalTok{        base_url =}\StringTok{ "https://data.cityofnewyork.us/resource/edp9-qgv4.csv"}
-\NormalTok{        valid_months <-}\StringTok{ }\NormalTok{valid_months }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{new_filenames =} \OperatorTok{~}\KeywordTok{paste0}\NormalTok{(}\StringTok{"lyft-"}\NormalTok{, }
-\NormalTok{            year, }\StringTok{".csv"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{drop =} \OtherTok{TRUE}\NormalTok{)}
-        \CommentTok{# only keep one data set per year}
-\NormalTok{        year <-}\StringTok{ }\NormalTok{valid_months[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]}
-\NormalTok{        n <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(valid_months)}
-        \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{n) \{}
-            \ControlFlowTok{if}\NormalTok{ (year }\OperatorTok{==}\StringTok{ }\NormalTok{valid_months[i }\OperatorTok{-}\StringTok{ }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]) \{}
-\NormalTok{                valid_months[i, }\DecValTok{6}\NormalTok{] <-}\StringTok{ }\OtherTok{FALSE}
-\NormalTok{                year <-}\StringTok{ }\NormalTok{valid_months[i }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]}
-\NormalTok{            \} }\ControlFlowTok{else}\NormalTok{ \{}
-\NormalTok{                valid_months[i, }\DecValTok{6}\NormalTok{] <-}\StringTok{ }\OtherTok{TRUE}
-\NormalTok{                year <-}\StringTok{ }\NormalTok{valid_months[i }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]}
-\NormalTok{            \}}
-\NormalTok{        \}}
-\NormalTok{        row_to_keep =}\StringTok{ }\NormalTok{valid_months}\OperatorTok{$}\NormalTok{drop}
-\NormalTok{        valid_months <-}\StringTok{ }\NormalTok{valid_months[row_to_keep, ]}
-        
-        \CommentTok{# download lyft files, try two different methods}
-\NormalTok{        first_try <-}\StringTok{ }\KeywordTok{tryCatch}\NormalTok{(}\KeywordTok{download_nyc_data}\NormalTok{(obj, base_url, }
-\NormalTok{            valid_months}\OperatorTok{$}\NormalTok{year, }\DataTypeTok{n =} \DecValTok{50000}\NormalTok{, }\DataTypeTok{names =}\NormalTok{ valid_months}\OperatorTok{$}\NormalTok{new_filenames), }
-            \DataTypeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{}
-                \KeywordTok{warning}\NormalTok{(e)}
-\NormalTok{            \}, }\DataTypeTok{finally =} \StringTok{"method = }\CharTok{\textbackslash{}"}\StringTok{libcurl}\CharTok{\textbackslash{}"}\StringTok{ fails"}\NormalTok{)}
-\NormalTok{    \}}
+\begin{verbatim}
+opts_chunk$set(tidy.opts=list(width.cutoff=60))
+
+etl_extract.etl_nyctaxi <- 
+  function(obj, 
+years = as.numeric(format(Sys.Date(),'%Y')), 
+                                    months = 1:12, 
+                                    type  = "yellow",...) {
+  #TAXI YELLOW-------------------------
+  taxi_yellow <- function(obj, years, months,...) {
+    message("Extracting raw yellow taxi data...")
+    remote <- etl::valid_year_month(years, months, 
+    begin = "2009-01-01") %>%
+      mutate_(src = 
+  ~file.path("https://s3.amazonaws.com/nyc-tlc/trip+data", 
+                               paste0("yellow", "_tripdata_", year, "-",
+                      stringr::str_pad(month, 2, "left", "0"), ".csv"))) 
+    tryCatch(expr = etl::smart_download(obj, remote$src, ...),
+             error = function(e){warning(e)}, 
+             finally = warning("Only the following data are availabel on
+                                TLC: Yellow taxi data: 2009 Jan - 
+                               last month"))} 
+  #TAXI GREEN----------------------
+  taxi_green <- function(obj, years, months,...) {
+    message("Extracting raw green taxi data...")
+    remote <- etl::valid_year_month(years, months, begin = "2013-08-01") %>%
+      mutate_(src = 
+                ~file.path("https://s3.amazonaws.com/nyc-tlc/trip+data", 
+                               paste0("green", "_tripdata_", year, "-",
+                          stringr::str_pad(month, 2, "left", "0"), ".csv")))
+    tryCatch(expr = etl::smart_download(obj, remote$src, ...),
+             error = function(e){warning(e)}, 
+             finally = warning("Only the following data are availabel on TLC:
+                               Green taxi data: 2013 Aug - last month"))} 
+  #UBER--------------------------------
+  uber <- function(obj, years, months,...) {
+    message("Extracting raw uber data...")
+    raw_month_2014 <- etl::valid_year_month(years = 2014, months = 4:9)
+    raw_month_2015 <- etl::valid_year_month(years = 2015, months = 1:6)
+    raw_month <- bind_rows(raw_month_2014, raw_month_2015)
+    path = "https://raw.githubusercontent.com/
+    fivethirtyeight/uber-tlc-foil-response/master/uber-trip-data"
+    remote <- etl::valid_year_month(years, months)
+    remote_small <- intersect(raw_month, remote)
+    if (2015 %in% remote_small$year && !(2014 %in% remote_small$year)){
+      #download 2015 data
+      message("Downloading Uber 2015 data...")
+      etl::smart_download(obj, "https://github.com/fivethirtyeight/
+                          uber-tlc-foil-response/raw/master/
+                    uber-trip-data/uber-raw-data-janjune-15.csv.zip",...)}
+    else if (2015 %in% remote_small$year && 2014 %in% remote_small$year) {
+      #download 2015 data
+      message("Downloading Uber 2015 data...")
+      etl::smart_download(obj, "https://github.com/fivethirtyeight/
+                        uber-tlc-foil-response/raw/master/uber-trip-data
+                          /uber-raw-data-janjune-15.csv.zip",...)
+      #download 2014 data
+      small <- remote_small %>%
+        filter_(~year == 2014) %>%
+        mutate_(month_abb = ~tolower(month.abb[month]),
+                src = ~file.path(path,
+                paste0("uber-raw-data-",month_abb,
+                substr(year,3,4),".csv")))
+      message("Downloading Uber 2014 data...")
+      etl::smart_download(obj, small$src,...) 
+    } else if (2014 %in% remote_small$year && 
+    !(2015 %in% remote_small$year)) {
+      message("Downloading Uber 2014 data...")
+      #file paths
+      small <- remote_small %>%
+        mutate_(month_abb = 
+                  ~tolower(month.abb[month]),
+                src = ~file.path(path,
+                paste0("uber-raw-data-",month_abb,
+                substr(year,3,4),".csv")))
+      etl::smart_download(obj, small$src,...)}
+    else {warning("The Uber data you requested are 
+                  not currently available. Only data
+                  from 2014/04-2014/09 and 2015/01-
+                  2015/06 are available...")}
+    } 
+  #LYFT----------------------------------
+  lyft <- function(obj, years, months,...){
+    message("Extracting raw lyft data...")
+    #check if the week is valid
+    valid_months <- etl::valid_year_month(years, months,
+    begin = "2015-01-01")
+    base_url = "https://data.cityofnewyork.us/
+    resource/edp9-qgv4.csv"
+    valid_months <- valid_months %>%
+      mutate_(new_filenames = 
+                ~paste0("lyft-", year, ".csv")) %>%
+      mutate_(drop = TRUE)
+    #only keep one data set per year
+    year <- valid_months[1,1]
+    n <- nrow(valid_months)
+    for (i in 2:n) {
+      if(year == valid_months[i-1,1]) {
+        valid_months[i,6] <- FALSE
+        year <- valid_months[i+1,1]
+      } else {
+        valid_months[i,6] <- TRUE
+        year <- valid_months[i+1,1]}
+      }
+    row_to_keep = valid_months$drop
+    valid_months <- valid_months[row_to_keep,]
     
-    \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "yellow"}\NormalTok{) \{}
-        \KeywordTok{taxi_yellow}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "green"}\NormalTok{) \{}
-        \KeywordTok{taxi_green}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "uber"}\NormalTok{) \{}
-        \KeywordTok{uber}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "lyft"}\NormalTok{) \{}
-        \KeywordTok{lyft}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"The type you chose does not exit..."}\NormalTok{)}
-\NormalTok{    \}}
-    
-    \KeywordTok{invisible}\NormalTok{(obj)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+    #download lyft files, try two different methods
+    first_try<-tryCatch(
+      download_nyc_data(obj, base_url, valid_months$year, 
+      n = 50000, names = valid_months$new_filenames),
+      error = function(e){warning(e)},
+      finally = 'method = "libcurl" fails')
+  }
+  
+  if (type == "yellow"){taxi_yellow(obj, years, months,...)} 
+  else if (type == "green"){taxi_green(obj, years, months,...)}
+  else if (type == "uber"){uber(obj, years, months,...)}
+  else if (type == "lyft"){lyft(obj, years, months,...)}
+  else {message("The type you chose does not exit...")}
+  
+  invisible(obj)
+}
+\end{verbatim}
 \subsection{ETL Transform}\label{etl-transform}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{etl_transform.etl_nyctaxi <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, }\DataTypeTok{years =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{format}\NormalTok{(}\KeywordTok{Sys.Date}\NormalTok{(), }
-    \StringTok{"%Y"}\NormalTok{)), }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \StringTok{"yellow"}\NormalTok{, ...) \{}
-    \CommentTok{# TAXI}
-    \CommentTok{# YELLOW----------------------------------------------------------------}
-\NormalTok{    taxi_yellow <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Transforming yellow taxi data from raw to load directory..."}\NormalTok{)}
-        \CommentTok{# create a df of file path of the files that the user wants}
-        \CommentTok{# to transform}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2009-01-01"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{            }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }\KeywordTok{paste0}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }
-                \StringTok{"_tripdata_"}\NormalTok{, year, }\StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }
-                  \DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-        \CommentTok{# create a df of file path of the files that are in the raw}
-        \CommentTok{# directory}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }\StringTok{"yellow"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{        src_small <-}\StringTok{ }\KeywordTok{intersect}\NormalTok{(src, remote}\OperatorTok{$}\NormalTok{src)}
-        \CommentTok{# Move the files}
-\NormalTok{        in_raw <-}\StringTok{ }\KeywordTok{basename}\NormalTok{(src_small)}
-\NormalTok{        in_load <-}\StringTok{ }\KeywordTok{basename}\NormalTok{(}\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }
-            \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{))}
-\NormalTok{        file_remian <-}\StringTok{ }\KeywordTok{setdiff}\NormalTok{(in_raw, in_load)}
-        \KeywordTok{file.copy}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), file_remian), }
-            \KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), file_remian))}
-\NormalTok{    \}}
-    \CommentTok{# TAXI}
-    \CommentTok{# GREEN----------------------------------------------------------------}
-\NormalTok{    taxi_green <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Transforming green taxi data from raw to load directory..."}\NormalTok{)}
-        \CommentTok{# create a df of file path of the files that the user wants}
-        \CommentTok{# to transform}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2013-08-01"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{            }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }\KeywordTok{paste0}\NormalTok{(}\StringTok{"green"}\NormalTok{, }
-                \StringTok{"_tripdata_"}\NormalTok{, year, }\StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }
-                  \DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-        \CommentTok{# create a df of file path of the files that are in the raw}
-        \CommentTok{# directory}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }\StringTok{"green"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{        src_small <-}\StringTok{ }\KeywordTok{intersect}\NormalTok{(src, remote}\OperatorTok{$}\NormalTok{src)}
-        \CommentTok{# Clean the green taxi data files get rid of 2nd blank}
-        \CommentTok{# row----------------------------------------------------------}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(src_small) }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"The files you requested are not available in the raw directory."}\NormalTok{)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \CommentTok{# a list of the ones that have a 2nd blank row}
-\NormalTok{            remote_green_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{remote }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter_}\NormalTok{(}\OperatorTok{~}\NormalTok{year }\OperatorTok{!=}\StringTok{ }\DecValTok{2015}\NormalTok{)}
-\NormalTok{            src_small_green_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{intersect}\NormalTok{(src, remote_green_}\DecValTok{1}\OperatorTok{$}\NormalTok{src)}
-            \CommentTok{# check that the sys support command line, and then remove}
-            \CommentTok{# the blank 2nd row}
-            \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(src_small_green_}\DecValTok{1}\NormalTok{) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-                \ControlFlowTok{if}\NormalTok{ (.Platform}\OperatorTok{$}\NormalTok{OS.type }\OperatorTok{==}\StringTok{ "unix"}\NormalTok{) \{}
-\NormalTok{                  cmds_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"sed -i -e '2d'"}\NormalTok{, src_small_green_}\DecValTok{1}\NormalTok{)}
-                  \KeywordTok{lapply}\NormalTok{(cmds_}\DecValTok{1}\NormalTok{, system)}
-\NormalTok{                \} }\ControlFlowTok{else}\NormalTok{ \{}
-                  \KeywordTok{message}\NormalTok{(}\StringTok{"Windows system does not currently support removing the 2nd blank row }
-\StringTok{                  in the green taxi datasets. This might affect loading data into SQL..."}\NormalTok{)}
-\NormalTok{                \}}
-\NormalTok{            \} }\ControlFlowTok{else}\NormalTok{ \{}
-                \StringTok{"You did not request for any green taxi data, or all the green taxi data you requested are cleaned."}
-\NormalTok{            \}}
-            \CommentTok{# fix column}
-            \CommentTok{# number---------------------------------------------------------------}
-\NormalTok{            remote_green_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\NormalTok{remote }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter_}\NormalTok{(}\OperatorTok{~}\NormalTok{year }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2013}\NormalTok{, }
-                \DecValTok{2014}\NormalTok{, }\DecValTok{2015}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{keep =} \OperatorTok{~}\KeywordTok{ifelse}\NormalTok{(year }\OperatorTok{%in%}\StringTok{ }
-\StringTok{                }\KeywordTok{c}\NormalTok{(}\DecValTok{2013}\NormalTok{, }\DecValTok{2014}\NormalTok{), }\DecValTok{20}\NormalTok{, }\DecValTok{21}\NormalTok{), }\DataTypeTok{new_file =} \OperatorTok{~}\KeywordTok{paste0}\NormalTok{(}\StringTok{"green_tripdata_"}\NormalTok{, }
-\NormalTok{                year, }\StringTok{"_"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }\DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }
-                  \StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{))}
-\NormalTok{            src_small_green_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{intersect}\NormalTok{(src, remote_green_}\DecValTok{2}\OperatorTok{$}\NormalTok{src)}
-\NormalTok{            src_small_green_2_df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(src_small_green_}\DecValTok{2}\NormalTok{)}
-            \KeywordTok{names}\NormalTok{(src_small_green_2_df) <-}\StringTok{ "src"}
-\NormalTok{            src_small_green_2_df <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(src_small_green_2_df, }
-\NormalTok{                remote_green_}\DecValTok{2}\NormalTok{, }\DataTypeTok{by =} \StringTok{"src"}\NormalTok{)}
-\NormalTok{            src_small_green_2_df <-}\StringTok{ }\NormalTok{src_small_green_2_df }\OperatorTok{%>%}\StringTok{ }
-\StringTok{                }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{cmds_2 =} \KeywordTok{paste}\NormalTok{(}\StringTok{"cut -d, -f1-"}\NormalTok{, keep, }\StringTok{" "}\NormalTok{, }
-\NormalTok{                  src, }\StringTok{" > "}\NormalTok{, }\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }\StringTok{"/green_tripdata_"}\NormalTok{, }
-\NormalTok{                  year, }\StringTok{"_"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }\DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }
-                    \StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{))}
-            \CommentTok{# remove the extra column}
-            \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(src_small_green_}\DecValTok{2}\NormalTok{) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-                \ControlFlowTok{if}\NormalTok{ (.Platform}\OperatorTok{$}\NormalTok{OS.type }\OperatorTok{==}\StringTok{ "unix"}\NormalTok{) \{}
-                  \KeywordTok{lapply}\NormalTok{(src_small_green_2_df}\OperatorTok{$}\NormalTok{cmds_}\DecValTok{2}\NormalTok{, system)}
-\NormalTok{                \} }\ControlFlowTok{else}\NormalTok{ \{}
-                  \KeywordTok{message}\NormalTok{(}\StringTok{"Windows system does not currently support removing the 2nd blank row }
-\StringTok{                  in the green taxi datasets. This might affect loading data into SQL..."}\NormalTok{)}
-\NormalTok{                \}}
-\NormalTok{            \} }\ControlFlowTok{else}\NormalTok{ \{}
-                \StringTok{"All the green taxi data you requested are in cleaned formats."}
-\NormalTok{            \}}
-            \CommentTok{# Find the files paths of the files that need to be}
-            \CommentTok{# transformed----------------------}
-            \KeywordTok{file.rename}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{dirname}\NormalTok{(src_small_green_2_df}\OperatorTok{$}\NormalTok{src), }
-\NormalTok{                src_small_green_2_df}\OperatorTok{$}\NormalTok{new_file), }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }
-                \StringTok{"load_dir"}\NormalTok{), }\KeywordTok{basename}\NormalTok{(src_small_green_2_df}\OperatorTok{$}\NormalTok{src)))}
-            \CommentTok{# Move the files}
-\NormalTok{            in_raw <-}\StringTok{ }\KeywordTok{basename}\NormalTok{(src_small)}
-\NormalTok{            in_load <-}\StringTok{ }\KeywordTok{basename}\NormalTok{(}\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }
-                \StringTok{"green"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{))}
-\NormalTok{            file_remian <-}\StringTok{ }\KeywordTok{setdiff}\NormalTok{(in_raw, in_load)}
-            \KeywordTok{file.copy}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), file_remian), }
-                \KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), file_remian))}
-\NormalTok{        \}}
-\NormalTok{    \}}
-    \CommentTok{# UBER----------------------------------------------------------------}
-\NormalTok{    uber <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Transforming uber data from raw to load directory..."}\NormalTok{)}
-        \CommentTok{# creat a list of 2014 uber data file directory}
-\NormalTok{        uber14_list <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{path =} \KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }
-            \DataTypeTok{pattern =} \StringTok{"14.csv"}\NormalTok{)}
-\NormalTok{        uber14_list <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(uber14_list)}
-\NormalTok{        uber14_list <-}\StringTok{ }\NormalTok{uber14_list }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{file_path =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }
-            \StringTok{"raw_dir"}\NormalTok{), uber14_list))}
-\NormalTok{        uber14file <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(uber14_list}\OperatorTok{$}\NormalTok{file_path, readr}\OperatorTok{::}\NormalTok{read_csv)}
-\NormalTok{        n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(uber14file)}
-        \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) \{}
-\NormalTok{            uber14 <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(uber14file[}\DecValTok{1}\NormalTok{])}
-\NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{) \{}
-\NormalTok{            uber14 <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(uber14file[}\DecValTok{1}\NormalTok{], uber14file[}\DecValTok{2}\NormalTok{])}
-\NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (n }\OperatorTok{>}\StringTok{ }\DecValTok{2}\NormalTok{) \{}
-\NormalTok{            uber14 <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(uber14file[}\DecValTok{1}\NormalTok{], uber14file[}\DecValTok{2}\NormalTok{])}
-            \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{3}\OperatorTok{:}\NormalTok{n) \{}
-\NormalTok{                uber14 <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(uber14, uber14file[i])}
-\NormalTok{            \}}
-\NormalTok{        \}}
-\NormalTok{        substrRight <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x, n) \{}
-            \KeywordTok{substr}\NormalTok{(x, }\KeywordTok{nchar}\NormalTok{(x) }\OperatorTok{-}\StringTok{ }\NormalTok{n }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{, }\KeywordTok{nchar}\NormalTok{(x))}
-\NormalTok{        \}}
-\NormalTok{        uber14_datetime <-}\StringTok{ }\NormalTok{uber14 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{date =} \KeywordTok{gsub}\NormalTok{(}\StringTok{" .*$"}\NormalTok{, }
-            \StringTok{""}\NormalTok{, }\StringTok{`}\DataTypeTok{Date/Time}\StringTok{`}\NormalTok{), }\DataTypeTok{len_date =} \KeywordTok{nchar}\NormalTok{(date), }\DataTypeTok{time =} \KeywordTok{sub}\NormalTok{(}\StringTok{".*}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{ "}\NormalTok{, }
-            \StringTok{""}\NormalTok{, }\StringTok{`}\DataTypeTok{Date/Time}\StringTok{`}\NormalTok{))}
-\NormalTok{        uber14_datetime <-}\StringTok{ }\NormalTok{uber14_datetime }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{month =} \KeywordTok{substr}\NormalTok{(}\StringTok{`}\DataTypeTok{Date/Time}\StringTok{`}\NormalTok{, }
-            \DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DataTypeTok{day =} \KeywordTok{ifelse}\NormalTok{(len_date }\OperatorTok{==}\StringTok{ }\DecValTok{8}\NormalTok{, }\KeywordTok{substr}\NormalTok{(}\StringTok{`}\DataTypeTok{Date/Time}\StringTok{`}\NormalTok{, }
-            \DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{), }\KeywordTok{substr}\NormalTok{(}\StringTok{`}\DataTypeTok{Date/Time}\StringTok{`}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{)), }\DataTypeTok{pickup_date =}\NormalTok{ lubridate}\OperatorTok{::}\KeywordTok{ymd_hms}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\StringTok{"2014-"}\NormalTok{, }
-\NormalTok{            month, }\StringTok{"-"}\NormalTok{, day, }\StringTok{" "}\NormalTok{, time)))}
-\NormalTok{        uber14_df <-}\StringTok{ }\NormalTok{uber14_datetime[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\OperatorTok{:}\DecValTok{9}\NormalTok{)]}
-        
-        \CommentTok{# 2015}
-\NormalTok{        zipped_uberfileURL <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }
-            \StringTok{"uber-raw-data-janjune-15.csv.zip"}\NormalTok{)}
-\NormalTok{        raw_month_}\DecValTok{2015}\NormalTok{ <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2015}\NormalTok{, }
-            \DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{6}\NormalTok{)}
-\NormalTok{        remote_}\DecValTok{2015}\NormalTok{ <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months)}
-\NormalTok{        remote_small_}\DecValTok{2015}\NormalTok{ <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(raw_month_}\DecValTok{2015}\NormalTok{, remote_}\DecValTok{2015}\NormalTok{)}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{file.exists}\NormalTok{(zipped_uberfileURL) }\OperatorTok{&&}\StringTok{ }\KeywordTok{nrow}\NormalTok{(remote_small_}\DecValTok{2015}\NormalTok{) }\OperatorTok{!=}\StringTok{ }
-\StringTok{            }\DecValTok{0}\NormalTok{) \{}
-\NormalTok{            utils}\OperatorTok{::}\KeywordTok{unzip}\NormalTok{(}\DataTypeTok{zipfile =}\NormalTok{ zipped_uberfileURL, }\DataTypeTok{unzip =} \StringTok{"internal"}\NormalTok{, }
-                \DataTypeTok{exdir =} \KeywordTok{file.path}\NormalTok{(}\KeywordTok{tempdir}\NormalTok{(), }\StringTok{"uber-raw-data-janjune-15.csv.zip"}\NormalTok{))}
-\NormalTok{            uber15 <-}\StringTok{ }\NormalTok{readr}\OperatorTok{::}\KeywordTok{read_csv}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{tempdir}\NormalTok{(), }\StringTok{"uber-raw-data-janjune-15.csv.zip"}\NormalTok{, }
-                \StringTok{"uber-raw-data-janjune-15.csv"}\NormalTok{))}
-\NormalTok{        \}}
-        
-        \KeywordTok{names}\NormalTok{(uber14_df) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"lat"}\NormalTok{, }\StringTok{"lon"}\NormalTok{, }\StringTok{"affiliated_base_num"}\NormalTok{, }
-            \StringTok{"pickup_date"}\NormalTok{)}
-        \KeywordTok{names}\NormalTok{(uber15) <-}\StringTok{ }\KeywordTok{tolower}\NormalTok{(}\KeywordTok{names}\NormalTok{(uber15))}
-\NormalTok{        uber <-}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(uber14_df, uber15)}
-\NormalTok{        utils}\OperatorTok{::}\KeywordTok{write.csv}\NormalTok{(uber, }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{tempdir}\NormalTok{(), }\StringTok{"uber.csv"}\NormalTok{))}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{nrow}\NormalTok{(uber) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-            \ControlFlowTok{if}\NormalTok{ (.Platform}\OperatorTok{$}\NormalTok{OS.type }\OperatorTok{==}\StringTok{ "unix"}\NormalTok{) \{}
-\NormalTok{                cmds_}\DecValTok{3}\NormalTok{ <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"cut -d, -f2-7 "}\NormalTok{, }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{tempdir}\NormalTok{(), }
-                  \StringTok{"uber.csv"}\NormalTok{), }\StringTok{" > "}\NormalTok{, }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }
-                  \StringTok{"uber.csv"}\NormalTok{))}
-                \KeywordTok{lapply}\NormalTok{(cmds_}\DecValTok{3}\NormalTok{, system)}
-\NormalTok{            \} }\ControlFlowTok{else}\NormalTok{ \{}
-                \KeywordTok{message}\NormalTok{(}\StringTok{"Windows system does not currently support removing the 2nd blank row }
-\StringTok{                in the green taxi datasets. This might affect loading data into SQL..."}\NormalTok{)}
-\NormalTok{            \}}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \StringTok{"You did not request for any green taxi data, or all the green taxi data you requested are cleaned."}
-\NormalTok{        \}}
-\NormalTok{    \}}
-    \CommentTok{# LYFT----------------------------------------------------------------}
-\NormalTok{    lyft <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months) \{}
-\NormalTok{        valid_months <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, }\DataTypeTok{months =} \DecValTok{1}\NormalTok{, }
-            \DataTypeTok{begin =} \StringTok{"2015-01-01"}\NormalTok{)}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Transforming lyft data from raw to load directory..."}\NormalTok{)}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw_dir"}\NormalTok{), }\StringTok{"lyft"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{        src_year <-}\StringTok{ }\NormalTok{valid_months }\OperatorTok{%>%}\StringTok{ }\KeywordTok{distinct_}\NormalTok{(}\OperatorTok{~}\NormalTok{year)}
-\NormalTok{        remote <-}\StringTok{ }\KeywordTok{data_frame}\NormalTok{(src)}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{remote }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{lcl =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }
-            \StringTok{"load_dir"}\NormalTok{), }\KeywordTok{basename}\NormalTok{(src)), }\DataTypeTok{basename =} \OperatorTok{~}\KeywordTok{basename}\NormalTok{(src), }
-            \DataTypeTok{year =} \OperatorTok{~}\KeywordTok{substr}\NormalTok{(basename, }\DecValTok{6}\NormalTok{, }\DecValTok{9}\NormalTok{))}
-        \KeywordTok{class}\NormalTok{(remote}\OperatorTok{$}\NormalTok{year) <-}\StringTok{ "numeric"}
-\NormalTok{        remote <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(remote, src_year, }\DataTypeTok{by =} \StringTok{"year"}\NormalTok{)}
-        \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(remote)) \{}
-\NormalTok{            datafile <-}\StringTok{ }\NormalTok{readr}\OperatorTok{::}\KeywordTok{read_csv}\NormalTok{(remote}\OperatorTok{$}\NormalTok{src[i])}
-\NormalTok{            readr}\OperatorTok{::}\KeywordTok{write_delim}\NormalTok{(datafile, }\DataTypeTok{path =}\NormalTok{ remote}\OperatorTok{$}\NormalTok{lcl[i], }
-                \DataTypeTok{delim =} \StringTok{"|"}\NormalTok{, }\DataTypeTok{na =} \StringTok{""}\NormalTok{)}
-\NormalTok{        \}}
-\NormalTok{    \}}
+\begin{verbatim}
+opts_chunk$set(tidy.opts=list(width.cutoff=60))
+etl_transform.etl_nyctaxi <- function(obj, 
+                          years = as.numeric(format(Sys.Date(),'%Y')), 
+                          months = 1:12, 
+                          type  = "yellow",...) {
+  #TAXI YELLOW-----------------------------
+  taxi_yellow <- function(obj, years, months) {
+    message("Transforming yellow taxi data from raw to 
+            load directory...")
+    #create a df of file path of the files that the user wants to transform
+    remote <- etl::valid_year_month(years, months, 
+    begin = "2009-01-01") %>%
+      mutate_(src = ~file.path(attr(obj, "raw_dir"), 
+      paste0("yellow", "_tripdata_", year, "-",
+      stringr::str_pad(month, 2, "left", "0"), ".csv"))) 
+    #create a df of file path of the files that are in the raw directory
+    src <- list.files(attr(obj, "raw_dir"), "yellow", full.names = TRUE)
+    src_small <- intersect(src, remote$src)
+    #Move the files
+    in_raw <- basename(src_small)
+    in_load <- basename(list.files(attr(obj, "load_dir"), "yellow", 
+    full.names = TRUE))
+    file_remian <- setdiff(in_raw,in_load)
+    file.copy(file.path(attr(obj, "raw_dir"),file_remian),
+              file.path(attr(obj, "load_dir"),file_remian) )}
+  #TAXI GREEN-----------------------------
+  taxi_green <- function(obj, years, months) {
+    message("Transforming green taxi data from raw 
+            to load directory...")
+    #create a df of file path of the files that the user wants to transform
+    remote <- etl::valid_year_month(years, months, 
+    begin = "2013-08-01") %>%
+      mutate_(src = ~file.path(attr(obj, "raw_dir"), 
+      paste0("green", "_tripdata_", year, "-",
+      stringr::str_pad(month, 2, "left", "0"), ".csv"))) 
+    #create a df of file path of the files that are in the raw directory
+    src <- list.files(attr(obj, "raw_dir"), "green", full.names = TRUE)
+    src_small <- intersect(src, remote$src)
+    #Clean the green taxi data files
+    #get rid of 2nd blank row
+    if (length(src_small) == 0){
+      message("The files you requested are not available 
+              in the raw directory.")
+    } else{
+      #a list of the ones that have a 2nd blank row
+      remote_green_1 <- remote %>% filter_(~year != 2015)
+      src_small_green_1 <- intersect(src, remote_green_1$src)
+      # check that the sys support command line, 
+      #and then remove the blank 2nd row
+      if(length(src_small_green_1) != 0) {
+        if (.Platform$OS.type == "unix"){
+          cmds_1 <- paste("sed -i -e '2d'", src_small_green_1)
+          lapply(cmds_1, system)
+        } else {
+          message("Windows system does not 
+          currently support removing the 2nd blank row
+          in the green taxi datasets. This might affect 
+          loading data into SQL...")}
+        }else {
+          "You did not request for any 
+          green taxi data, or all the green
+          taxi data you requested are cleaned."}
+      #fix column number
+      remote_green_2 <- remote %>%
+        filter_(~year %in% c(2013, 2014, 2015)) %>%
+        mutate_(keep = 
+                  ~ifelse(year %in% c(2013,2014), 20,21),
+                new_file = 
+                  ~paste0("green_tripdata_", year, "_", 
+                      stringr::str_pad(month, 2, "left", "0"),
+                                   ".csv"))
+      src_small_green_2 <- intersect(src, remote_green_2$src)
+      src_small_green_2_df <- data.frame(src_small_green_2) 
+      names(src_small_green_2_df) <- "src"
+      src_small_green_2_df <- inner_join(src_small_green_2_df, 
+      remote_green_2, by = "src")
+      src_small_green_2_df <- src_small_green_2_df %>%
+        mutate(cmds_2 = paste("cut -d, -f1-", keep," ",src, " > ",
+        attr(obj, "raw_dir"),"/green_tripdata_", 
+        year, "_", stringr::str_pad(month, 2, "left", "0"),".csv", 
+        sep = ""))
+      #remove the extra column
+      if(length(src_small_green_2) != 0) {
+        if (.Platform$OS.type == "unix"){
+          lapply(src_small_green_2_df$cmds_2, system)} 
+        else {
+          message("Windows system does not currently 
+          support removing the 2nd blank row 
+          in the green taxi datasets. This might 
+          affect loading data into SQL...")}
+        }else {
+          "All the green taxi data you
+          requested are in cleaned formats."}
+      #Find the files paths of the files that need to be transformed
+      file.rename(file.path(dirname(src_small_green_2_df$src),
+                            src_small_green_2_df$new_file), 
+                  file.path(attr(obj, "load_dir"),
+                  basename(src_small_green_2_df$src)))
+      #Move the files
+      in_raw <- basename(src_small)
+      in_load <- basename(list.files(attr(obj, "load_dir"), 
+      "green", full.names = TRUE))
+      file_remian <- setdiff(in_raw,in_load)
+      file.copy(file.path(attr(obj, "raw_dir"),file_remian), 
+      file.path(attr(obj, "load_dir"),file_remian) )}}
+  #UBER--------------------------------
+  uber <- function(obj) {
+    message("Transforming uber data from raw to load directory...")
+    #creat a list of 2014 uber data file directory
+    uber14_list <- list.files(path = attr(obj, "raw_dir"), 
+    pattern = "14.csv")
+    uber14_list <- data.frame(uber14_list)
+    uber14_list <- uber14_list %>% mutate_(file_path = 
+    ~file.path(attr(obj, "raw_dir"), uber14_list))
+    uber14file <- lapply(uber14_list$file_path, readr::read_csv)
+    n <- length(uber14file)
+    if (n == 1) {
+      uber14 <- data.frame(uber14file[1])
+    } else if (n == 2) {
+      uber14 <- bind_rows(uber14file[1], uber14file[2])
+    } else if (n > 2) {
+      uber14 <- bind_rows(uber14file[1], uber14file[2])
+      for (i in 3:n){uber14 <- bind_rows(uber14, uber14file[i])}
+    }
+    substrRight <- function(x, n){substr(x, nchar(x)-n+1, nchar(x))}
+    uber14_datetime <- uber14 %>%
+      mutate(date = gsub( " .*$", "", `Date/Time`), 
+      len_date = nchar(date), 
+             time = sub('.*\\ ', '', `Date/Time`))
+    uber14_datetime <- uber14_datetime %>%
+      mutate(month = 
+               substr(`Date/Time`, 1, 1),
+             day = ifelse(len_date == 8, 
+             substr(`Date/Time`, 3,3),substr(`Date/Time`, 3,4)),
+             pickup_date = 
+               lubridate::ymd_hms(paste0("2014-", month, "-", 
+                                         day, " ", time)))
+    uber14_df <- uber14_datetime[-c(1,5:9)]
     
-    \CommentTok{# transform the data from raw to load}
-    \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "yellow"}\NormalTok{) \{}
-        \KeywordTok{taxi_yellow}\NormalTok{(obj, years, months)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "green"}\NormalTok{) \{}
-        \KeywordTok{taxi_green}\NormalTok{(obj, years, months)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "uber"}\NormalTok{) \{}
-        \KeywordTok{uber}\NormalTok{(obj)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "lyft"}\NormalTok{) \{}
-        \KeywordTok{lyft}\NormalTok{(obj, years, months)}
-\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"The type you chose does not exit..."}\NormalTok{)}
-\NormalTok{    \}}
+    #2015
+    zipped_uberfileURL <- file.path(attr(obj, "raw_dir"),
+    "uber-raw-data-janjune-15.csv.zip")
+    raw_month_2015 <- etl::valid_year_month(years = 2015, months = 1:6)
+    remote_2015 <- etl::valid_year_month(years, months)
+    remote_small_2015 <- inner_join(raw_month_2015, remote_2015)
+    if(file.exists(zipped_uberfileURL) && 
+       nrow(remote_small_2015) != 0){
+      utils::unzip(zipfile = zipped_uberfileURL,unzip = "internal",
+      exdir = file.path(tempdir(), "uber-raw-data-janjune-15.csv.zip"))
+      uber15 <- readr::read_csv(file.path(tempdir(),
+      "uber-raw-data-janjune-15.csv.zip",
+      "uber-raw-data-janjune-15.csv"))}
     
-    \KeywordTok{invisible}\NormalTok{(obj)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+    names(uber14_df) <- c("lat", "lon", "affiliated_base_num", 
+    "pickup_date")
+    names(uber15) <- tolower(names(uber15))
+    uber <- bind_rows(uber14_df, uber15)
+    utils::write.csv(uber, file.path(tempdir() ,"uber.csv"))
+    if(nrow(uber) != 0) {
+      if (.Platform$OS.type == "unix"){cmds_3 <- 
+      paste("cut -d, -f2-7",file.path(tempdir(),"uber.csv"), " > ", 
+      file.path(attr(obj, "load_dir"),"uber.csv"))
+        lapply(cmds_3, system)
+      } else {
+        message("Windows system does not currently 
+        support removing the 2nd blank row 
+        in the green taxi datasets. This might
+        affect loading data into SQL...")}
+      }else {
+        "You did not request for any 
+        green taxi data, or all the green 
+        taxi data you requested are cleaned."}
+    }
+  #LYFT--------------------------------
+  lyft <- function(obj, years, months){
+    valid_months <- etl::valid_year_month(years, months = 1, 
+    begin = "2015-01-01")
+    message("Transforming lyft data from raw to load directory...")
+    src <- list.files(attr(obj, "raw_dir"), "lyft", full.names = TRUE)
+    src_year <- valid_months %>% distinct_(~year)
+    remote <- data_frame(src)
+    remote <- remote %>%
+      mutate_(lcl = ~file.path(attr(obj, "load_dir"),basename(src)),
+              basename = ~basename(src), year = ~substr(basename,6,9))
+    class(remote$year) <- "numeric"
+    remote <- inner_join(remote,src_year, by = "year" )
+    for(i in 1:nrow(remote)) {
+        datafile <- readr::read_csv(remote$src[i])
+        readr::write_delim(datafile, path = remote$lcl[i], 
+        delim = "|", na = "")}}
+  
+  #transform the data from raw to load
+  if (type == "yellow"){taxi_yellow(obj, years, months)} 
+  else if (type == "green"){taxi_green(obj, years, months)}
+  else if (type == "uber"){uber(obj)}
+  else if (type == "lyft"){lyft(obj, years, months)}
+  else {message("The type you chose does not exit...")}
+  
+  invisible(obj)
+}
+\end{verbatim}
 \subsection{ETL Load}\label{etl-load}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{etl_load.etl_nyctaxi <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, }\DataTypeTok{years =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{format}\NormalTok{(}\KeywordTok{Sys.Date}\NormalTok{(), }
-    \StringTok{"%Y"}\NormalTok{)), }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \StringTok{"yellow"}\NormalTok{, ...) \{}
-    \CommentTok{# TAXI}
-    \CommentTok{# YELLOW----------------------------------------------------------------}
-\NormalTok{    taxi_yellow <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \CommentTok{# create a df of file path of the files that are in the load}
-        \CommentTok{# directory}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }\StringTok{"yellow"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(src)}
-        
-        \CommentTok{# files before 2016-07}
-\NormalTok{        remote_old <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2009-01-01"}\NormalTok{, }
-            \DataTypeTok{end =} \StringTok{"2016-06-30"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }
-            \StringTok{"load_dir"}\NormalTok{), }\KeywordTok{paste0}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"_tripdata_"}\NormalTok{, year, }
-            \StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }\DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-\NormalTok{        src_small_old <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(remote_old, src, }\DataTypeTok{by =} \StringTok{"src"}\NormalTok{)}
-        \CommentTok{# files later then 2017-06}
-\NormalTok{        remote_new <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2016-07-01"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{            }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }\KeywordTok{paste0}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }
-                \StringTok{"_tripdata_"}\NormalTok{, year, }\StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }
-                  \DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-\NormalTok{        src_small_new <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(remote_new, src, }\DataTypeTok{by =} \StringTok{"src"}\NormalTok{)}
-        \CommentTok{# data earlier than 2016-07}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{nrow}\NormalTok{(src_small_old) }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"The taxi files (earlier than 2016-07) you requested are not available in the load directory..."}\NormalTok{)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Loading taxi data from load directory to a sql database..."}\NormalTok{)}
-            \KeywordTok{mapply}\NormalTok{(DBI}\OperatorTok{::}\NormalTok{dbWriteTable, }\DataTypeTok{name =} \StringTok{"yellow_old"}\NormalTok{, }\DataTypeTok{value =}\NormalTok{ src_small_old}\OperatorTok{$}\NormalTok{src, }
-                \DataTypeTok{MoreArgs =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{conn =}\NormalTok{ obj}\OperatorTok{$}\NormalTok{con, }\DataTypeTok{append =} \OtherTok{TRUE}\NormalTok{))}
-\NormalTok{        \}}
-        
-        \CommentTok{# data later then 2016-06}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{nrow}\NormalTok{(src_small_new) }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"The new taxi files (later than 2016-06) you requested are not available in the load directory..."}\NormalTok{)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Loading taxi data from load directory to a sql database..."}\NormalTok{)}
-            \KeywordTok{mapply}\NormalTok{(DBI}\OperatorTok{::}\NormalTok{dbWriteTable, }\DataTypeTok{name =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{value =}\NormalTok{ src_small_new}\OperatorTok{$}\NormalTok{src, }
-                \DataTypeTok{MoreArgs =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{conn =}\NormalTok{ obj}\OperatorTok{$}\NormalTok{con, }\DataTypeTok{append =} \OtherTok{TRUE}\NormalTok{))}
-\NormalTok{        \}}
-        
-\NormalTok{    \}}
-    \CommentTok{# TAXI}
-    \CommentTok{# GREEN----------------------------------------------------------------}
-\NormalTok{    taxi_green <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \CommentTok{# create a list of file that the user wants to load}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }\DataTypeTok{begin =} \StringTok{"2013-08-01"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{            }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{src =} \OperatorTok{~}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }\KeywordTok{paste0}\NormalTok{(}\StringTok{"green"}\NormalTok{, }
-                \StringTok{"_tripdata_"}\NormalTok{, year, }\StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }
-                  \DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{".csv"}\NormalTok{)))}
-        \CommentTok{# create a df of file path of the files that are in the load}
-        \CommentTok{# directory}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }\StringTok{"tripdata"}\NormalTok{, }
-            \DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(src)}
-        \CommentTok{# only keep the files thst the user wants to transform}
-\NormalTok{        src_small <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(remote, src, }\DataTypeTok{by =} \StringTok{"src"}\NormalTok{)}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{nrow}\NormalTok{(src_small) }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"The taxi files you requested are not available in the load directory..."}\NormalTok{)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Loading taxi data from load directory to a sql database..."}\NormalTok{)}
-            \KeywordTok{mapply}\NormalTok{(DBI}\OperatorTok{::}\NormalTok{dbWriteTable, }\DataTypeTok{name =} \StringTok{"green"}\NormalTok{, }\DataTypeTok{value =}\NormalTok{ src_small}\OperatorTok{$}\NormalTok{src, }
-                \DataTypeTok{MoreArgs =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{conn =}\NormalTok{ obj}\OperatorTok{$}\NormalTok{con, }\DataTypeTok{append =} \OtherTok{TRUE}\NormalTok{, }
-                  \DataTypeTok{... =}\NormalTok{ ...))}
-\NormalTok{        \}}
-\NormalTok{    \}}
-    \CommentTok{# UBER----------------------------------------------------------------}
-\NormalTok{    uber <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, ...) \{}
-\NormalTok{        uberfileURL <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }\StringTok{"uber.csv"}\NormalTok{)}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{file.exists}\NormalTok{(uberfileURL)) \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"Loading uber data from load directory to a sql database..."}\NormalTok{)}
-\NormalTok{            DBI}\OperatorTok{::}\KeywordTok{dbWriteTable}\NormalTok{(}\DataTypeTok{conn =}\NormalTok{ obj}\OperatorTok{$}\NormalTok{con, }\DataTypeTok{name =} \StringTok{"uber"}\NormalTok{, }
-                \DataTypeTok{value =}\NormalTok{ uberfileURL, }\DataTypeTok{append =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{... =}\NormalTok{ ...)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"There is no uber data in the load directory..."}\NormalTok{)}
-\NormalTok{        \}}
-\NormalTok{    \}}
-    \CommentTok{# LYFT----------------------------------------------------------------}
-\NormalTok{    lyft <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, years, months, ...) \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"Loading lyft data from load directory to a sql database..."}\NormalTok{)}
-        \CommentTok{# create a list of file that the user wants to load}
-\NormalTok{        valid_months <-}\StringTok{ }\NormalTok{etl}\OperatorTok{::}\KeywordTok{valid_year_month}\NormalTok{(years, months, }
-            \DataTypeTok{begin =} \StringTok{"2015-01-01"}\NormalTok{)}
-\NormalTok{        src <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"load_dir"}\NormalTok{), }\StringTok{"lyft"}\NormalTok{, }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{)}
-\NormalTok{        src_year <-}\StringTok{ }\NormalTok{valid_months }\OperatorTok{%>%}\StringTok{ }\KeywordTok{distinct_}\NormalTok{(}\OperatorTok{~}\NormalTok{year)}
-\NormalTok{        remote <-}\StringTok{ }\KeywordTok{data_frame}\NormalTok{(src)}
-\NormalTok{        remote <-}\StringTok{ }\NormalTok{remote }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_}\NormalTok{(}\DataTypeTok{tablename =} \OperatorTok{~}\StringTok{"lyft"}\NormalTok{, }\DataTypeTok{year =} \OperatorTok{~}\KeywordTok{substr}\NormalTok{(}\KeywordTok{basename}\NormalTok{(src), }
-            \DecValTok{6}\NormalTok{, }\DecValTok{9}\NormalTok{))}
-        \KeywordTok{class}\NormalTok{(remote}\OperatorTok{$}\NormalTok{year) <-}\StringTok{ "numeric"}
-\NormalTok{        remote <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(remote, src_year, }\DataTypeTok{by =} \StringTok{"year"}\NormalTok{)}
-        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{nrow}\NormalTok{(remote) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
-\NormalTok{            write_data <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(...) \{}
-                \KeywordTok{lapply}\NormalTok{(remote}\OperatorTok{$}\NormalTok{src, }\DataTypeTok{FUN =}\NormalTok{ DBI}\OperatorTok{::}\NormalTok{dbWriteTable, }\DataTypeTok{conn =}\NormalTok{ obj}\OperatorTok{$}\NormalTok{con, }
-                  \DataTypeTok{name =} \StringTok{"lyft"}\NormalTok{, }\DataTypeTok{append =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{sep =} \StringTok{"|"}\NormalTok{, }\DataTypeTok{... =}\NormalTok{ ...)}
-\NormalTok{            \}}
-            \KeywordTok{write_data}\NormalTok{(...)}
-\NormalTok{        \} }\ControlFlowTok{else}\NormalTok{ \{}
-            \KeywordTok{message}\NormalTok{(}\StringTok{"The lyft files you requested are not available in the load directory..."}\NormalTok{)}
-\NormalTok{        \}}
-\NormalTok{    \}}
+\begin{verbatim}
+opts_chunk$set(tidy.opts=list(width.cutoff=60))
+etl_load.etl_nyctaxi <- function(obj, 
+ years = as.numeric(format(Sys.Date(),'%Y')), 
+                                 months = 1:12, 
+                                 type  = "yellow", ...) {
+  #TAXI YELLOW-----------------------------
+  taxi_yellow <- function(obj, years, months,...) {
+    #create a df of file path of the files that are in the load directory
+    src <- list.files(attr(obj, "load_dir"), "yellow", 
+    full.names = TRUE)
+    src <- data.frame(src)
     
-    \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "yellow"}\NormalTok{) \{}
-        \KeywordTok{taxi_yellow}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "green"}\NormalTok{) \{}
-        \KeywordTok{taxi_green}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "uber"}\NormalTok{) \{}
-        \KeywordTok{uber}\NormalTok{(obj, ...)}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (type }\OperatorTok{==}\StringTok{ "lyft"}\NormalTok{) \{}
-        \KeywordTok{lyft}\NormalTok{(obj, years, months, ...)}
-\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
-        \KeywordTok{message}\NormalTok{(}\StringTok{"The type you chose does not exit..."}\NormalTok{)}
-\NormalTok{    \}}
+    #files before 2016-07
+    remote_old <- etl::valid_year_month(years, months, 
+    begin = "2009-01-01", end = "2016-06-30") %>%
+      mutate_(src = ~file.path(attr(obj, "load_dir"), 
+      paste0("yellow", "_tripdata_", year, "-",
+      stringr::str_pad(month, 2, "left", "0"), ".csv"))) 
+    src_small_old <- inner_join(remote_old, src, by = "src")
+    #files later then 2017-06
+    remote_new <- etl::valid_year_month(years, months, 
+    begin = "2016-07-01") %>%
+      mutate_(src =  ~file.path(attr(obj, "load_dir"), 
+      paste0("yellow", "_tripdata_", year, "-",
+      stringr::str_pad(month, 2, "left", "0"), ".csv"))) 
+    src_small_new <- inner_join(remote_new, src, by = "src")
+    #data earlier than 2016-07
+    if(nrow(src_small_old) == 0) {
+      message("The taxi files (earlier than 2016-07) 
+              you requested are not available in 
+              the load directory...")
+    } else {
+      message("Loading taxi data from 
+              load directory to a sql database...")
+      mapply(DBI::dbWriteTable, 
+             name = "yellow_old", value = src_small_old$src, 
+             MoreArgs = 
+               list(conn = obj$con, append = TRUE))}
     
-    \KeywordTok{invisible}\NormalTok{(obj)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+    #data later then 2016-06
+    if(nrow(src_small_new) == 0) {
+      message("The new taxi files (later than 2016-06) 
+              you requested are not available in the 
+              load directory...")
+    } else {
+      message("Loading taxi data from load 
+              directory to a sql database...")
+      mapply(DBI::dbWriteTable, 
+             name = "yellow", value = src_small_new$src, 
+             MoreArgs = 
+               list(conn = obj$con, append = TRUE))}
+    
+    }
+  #TAXI GREEN----------------------------
+  taxi_green <- function(obj, years, months,...) {
+    #create a list of file that the user wants to load
+    remote <- etl::valid_year_month(years, months, 
+    begin = "2013-08-01") %>%
+      mutate_(src = ~file.path(attr(obj, "load_dir"), 
+      paste0("green", "_tripdata_", year, "-",
+      stringr::str_pad(month, 2, "left", "0"), ".csv")))
+    #create a df of file path of the files that are in the load directory
+    src <- list.files(attr(obj, "load_dir"), "tripdata", 
+    full.names = TRUE)
+    src <- data.frame(src)
+    #only keep the files thst the user wants to transform
+    src_small <- inner_join(remote, src, by = "src")
+    if(nrow(src_small) == 0) {
+      message("The taxi files you requested 
+              are not available in the 
+              load directory...")
+    } else {
+      message("Loading taxi data from 
+              load directory to a sql database...")
+      mapply(DBI::dbWriteTable, 
+             name = "green", value = src_small$src, 
+             MoreArgs = 
+               list(conn = obj$con, append = TRUE, ... = ...))}}
+  #UBER--------------------------------
+  uber <- function(obj,...) {
+    uberfileURL <- file.path(attr(obj, "load_dir"), "uber.csv")
+    if(file.exists(uberfileURL)) {
+      message("Loading uber data from 
+              load directory to a sql database...")
+      DBI::dbWriteTable(conn = obj$con, name = "uber", 
+      value = uberfileURL, append = TRUE, ... = ...)
+    } else {
+      message("There is no uber data 
+              in the load directory...")}}
+  #LYFT---------------------------------
+  lyft <- function(obj, years, months,...){
+    message("Loading lyft data from 
+            load directory to a sql database...")
+    #create a list of file that the user wants to load
+    valid_months <- etl::valid_year_month(years, months, 
+    begin = "2015-01-01")
+    src <- list.files(attr(obj, "load_dir"), "lyft", 
+    full.names = TRUE)
+    src_year <- valid_months %>% distinct_(~year)
+    remote <- data_frame(src)
+    remote <- remote %>% mutate_(tablename = ~"lyft", 
+    year =~substr(basename(src),6,9))
+    class(remote$year) <- "numeric"
+    remote <- inner_join(remote,src_year, by = "year" )
+    if(nrow(remote) != 0) {
+      write_data <- function(...) {
+        lapply(remote$src, FUN = DBI::dbWriteTable, 
+        conn = obj$con, name = "lyft", append = TRUE, 
+        sep = "|", ... = ...)}
+      write_data(...)
+    } else {
+      message("The lyft files you requested 
+              are not available in the 
+              load directory...")}}
+  
+  if (type == "yellow"){taxi_yellow(obj, years, months,...)
+  }else if (type == "green"){taxi_green(obj, years, months,...)
+  }else if (type == "uber"){uber(obj,...)
+  }else if (type == "lyft"){lyft(obj, years, months,...)
+  }else {message("The type you chose does not exit...")
+            }
+  
+  invisible(obj)
+}
+\end{verbatim}
 \subsection{utils}\label{utils}
 
 This utility function below was written to shortened the source code in
 ETL extract.
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{download_nyc_data <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, url, years, n, names, ...) \{}
-\NormalTok{    url <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(url, }\StringTok{"?years="}\NormalTok{, years, }\StringTok{"&$limit="}\NormalTok{, n)}
-\NormalTok{    lcl <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw"}\NormalTok{), names)}
-\NormalTok{    downloader}\OperatorTok{::}\KeywordTok{download}\NormalTok{(url, }\DataTypeTok{destfile =}\NormalTok{ lcl, ...)}
-\NormalTok{    lcl}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+\begin{verbatim}
+opts_chunk$set(tidy.opts=list(width.cutoff=60))
+download_nyc_data <- function(obj, url, years, n, names, ...) {
+  url <- paste0(url,"?years=",
+                years,"&$limit=", n)
+  lcl <- file.path(attr(obj, "raw"), names)
+  downloader::download(url, destfile = lcl, ...)
+  lcl
+}
+\end{verbatim}
 \subsection{ETL Init}\label{etl-init}
 \begin{verbatim}
 DROP TABLE IF EXISTS `yellow_old`;
@@ -1247,11 +1256,12 @@ August 2016:
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(ggplot2)}
-\NormalTok{tip_individual <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ yellow_}\FloatTok{2016.}\NormalTok{08_tip, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tip_perct)) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Tips, percent"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.005}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\NormalTok{tip_individual <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ yellow_}\FloatTok{2016.}\NormalTok{08_tip, }
+    \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tip_perct)) }\OperatorTok{+}\StringTok{ }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Tips, percent"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.005}\NormalTok{) }\OperatorTok{+}\StringTok{ }
 \StringTok{    }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.2}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{), }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.28}\NormalTok{), }\DataTypeTok{col =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{)}
+\StringTok{    }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{), }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{, }
+        \DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.28}\NormalTok{), }
+    \DataTypeTok{col =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{)}
 \NormalTok{tip_individual}
 \end{Highlighting}
 \end{Shaded}
@@ -1282,10 +1292,10 @@ with their average percent tip:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tip_pickup <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }
-    \DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Zone }\OperatorTok{!=}\StringTok{ }
-\StringTok{    "Unknown"}\NormalTok{)}
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }
+        \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Zone }\OperatorTok{!=}\StringTok{ "Unknown"}\NormalTok{)}
 \NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>}\StringTok{ }\DecValTok{1000}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -1310,10 +1320,11 @@ As show on the plot, the first peak is around 20\%, which is the
 cheapest default option on the touch panel for passengers to chose.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{pickup_vis <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ tip_pickup, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ avg_tip)) }\OperatorTok{+}\StringTok{ }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Tips, percent"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.005}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.2}\NormalTok{), }
-    \DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{), }
-    \DataTypeTok{col =} \StringTok{"green"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.28}\NormalTok{), }
+\NormalTok{pickup_vis <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ tip_pickup, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ avg_tip)) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Tips, percent"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \FloatTok{0.005}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.2}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.25}\NormalTok{), }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{, }
+        \DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.28}\NormalTok{), }
     \DataTypeTok{col =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"longdash"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }
     \FloatTok{0.5}\NormalTok{))}
 \NormalTok{pickup_vis}
@@ -1322,11 +1333,12 @@ cheapest default option on the touch panel for passengers to chose.
 \begin{verbatim}
 Warning: Removed 3 rows containing non-finite values (stat_bin).
 \end{verbatim}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-13-1.pdf}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-9-1.pdf}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{tip_region <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID, DOLocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }\DataTypeTok{trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance)) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{tip_region <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID, }
+\NormalTok{    DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }
+    \DataTypeTok{trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance)) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\CommentTok{# filter(trips > 10) %>%}
 \KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
@@ -1338,7 +1350,7 @@ Warning: Removed 3 rows containing non-finite values (stat_bin).
 \begin{verbatim}
 Warning: Removed 95 rows containing non-finite values (stat_bin).
 \end{verbatim}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-14-1.pdf} The
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-10-1.pdf} The
 20\% peak is more clearly shown when we calculate the percent tips for
 each pick-up and drop-off locatins pair instead of pick-up location
 only.
@@ -1351,8 +1363,8 @@ pay higher percent of tips for longer rides, so I believe trip distance
 has an impact on percentage of tips paid.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{tip_distance <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(avg_tip }\OperatorTok{~}\StringTok{ }\NormalTok{avg_dis }\OperatorTok{+}\StringTok{ }\NormalTok{LocationID }\OperatorTok{+}\StringTok{ }\NormalTok{DOLocationID, }
-    \DataTypeTok{data =}\NormalTok{ tip_region)}
+\NormalTok{tip_distance <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(avg_tip }\OperatorTok{~}\StringTok{ }\NormalTok{avg_dis }\OperatorTok{+}\StringTok{ }\NormalTok{LocationID }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID, }\DataTypeTok{data =}\NormalTok{ tip_region)}
 \KeywordTok{summary}\NormalTok{(tip_distance)}\OperatorTok{$}\NormalTok{coef[}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, ]}
 \end{Highlighting}
 \end{Shaded}
@@ -1391,9 +1403,9 @@ Warning: package 'sp' was built under R version 3.4.3
 \KeywordTok{library}\NormalTok{(leaflet)}
 \NormalTok{reds =}\StringTok{ }\KeywordTok{colorNumeric}\NormalTok{(}\StringTok{"Reds"}\NormalTok{, }\DataTypeTok{domain =} \OtherTok{NULL}\NormalTok{)}
 \CommentTok{# leaflet(data = pick_up_zones) %>% addTiles() %>%}
-\CommentTok{# addPolygons(fillColor = ~reds(num_trips), fillOpacity =}
-\CommentTok{# 0.6, weight = 1, opacity = 0.8) %>% setView(lat = 40.7128,}
-\CommentTok{# lng = -74.0060, zoom = 10)}
+\CommentTok{# addPolygons(fillColor = ~reds(num_trips),}
+\CommentTok{# fillOpacity = 0.6, weight = 1, opacity = 0.8) %>%}
+\CommentTok{# setView(lat = 40.7128, lng = -74.0060, zoom = 10)}
 \end{Highlighting}
 \end{Shaded}
 It's obbivous that Manhattan, La Guardia Airport, and JKF Airport have
@@ -1406,8 +1418,8 @@ are in Brooklyn.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# pick a threshold for the cutoff number of trips}
-\NormalTok{pickup_zone_}\DecValTok{900}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\DecValTok{900}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
+\NormalTok{pickup_zone_}\DecValTok{900}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }
+\StringTok{    }\DecValTok{900}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 
 \NormalTok{pickup_zone_}\DecValTok{900} \OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 \end{Highlighting}
@@ -1430,8 +1442,9 @@ are in Brooklyn.
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# library(knitr) kable(pickup_zone_1000[1:10,2:6], caption =}
-\CommentTok{# 'Taxi zone with the highest tip percent, threshold = 1000')}
+\CommentTok{# library(knitr) kable(pickup_zone_1000[1:10,2:6],}
+\CommentTok{# caption = 'Taxi zone with the highest tip}
+\CommentTok{# percent, threshold = 1000')}
 \end{Highlighting}
 \end{Shaded}
 People might think it is more reasonable to ses a list that is populated
@@ -1445,9 +1458,10 @@ have the highest percent tips are in Manhattan besides La Guardia
 Airport.
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# pick a threshold for the cutoff of number of trips}
-\NormalTok{pickup_zone_}\DecValTok{90000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\DecValTok{90000}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
+\CommentTok{# pick a threshold for the cutoff of number of}
+\CommentTok{# trips}
+\NormalTok{pickup_zone_}\DecValTok{90000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }
+\StringTok{    }\DecValTok{90000}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 \NormalTok{pickup_zone_}\DecValTok{90000} \OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -1469,8 +1483,9 @@ Airport.
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# kable(pickup_zone_10000[1:10,2:5], caption = 'Taxi zone}
-\CommentTok{# with the highest tip percent, threshold = 10000')}
+\CommentTok{# kable(pickup_zone_10000[1:10,2:5], caption =}
+\CommentTok{# 'Taxi zone with the highest tip percent,}
+\CommentTok{# threshold = 10000')}
 \end{Highlighting}
 \end{Shaded}
 There are more than 100 times more yellow cab pick-ups that happen in
@@ -1496,7 +1511,8 @@ of taxi zones. Let's test it out and see whether it is true:
 \begin{Highlighting}[]
 \NormalTok{tip_region}\OperatorTok{$}\NormalTok{LocationID <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(tip_region}\OperatorTok{$}\NormalTok{LocationID)}
 \NormalTok{tip_pickup}\OperatorTok{$}\NormalTok{LocationID <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(tip_pickup}\OperatorTok{$}\NormalTok{LocationID)}
-\NormalTok{tip_and_trip_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(trips }\OperatorTok{~}\StringTok{ }\NormalTok{avg_tip }\OperatorTok{+}\StringTok{ }\NormalTok{LocationID, }\DataTypeTok{data =}\NormalTok{ tip_region)}
+\NormalTok{tip_and_trip_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(trips }\OperatorTok{~}\StringTok{ }\NormalTok{avg_tip }\OperatorTok{+}\StringTok{ }\NormalTok{LocationID, }
+    \DataTypeTok{data =}\NormalTok{ tip_region)}
 \CommentTok{# summary(tip_and_trip_1)}
 \KeywordTok{summary}\NormalTok{(tip_and_trip_}\DecValTok{1}\NormalTok{)}\OperatorTok{$}\NormalTok{coef[}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, ]}
 \end{Highlighting}
@@ -1655,31 +1671,31 @@ make taking a train a more preferable choice?
 If there is no flat rate between JFK and Manhattan,
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{jfk_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(RatecodeID }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }
-\StringTok{        }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount, }\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }
-\StringTok{        }\NormalTok{fare_amount)}
+\NormalTok{jfk_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(RatecodeID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }
+\StringTok{    }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount, }\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount)}
 
 \NormalTok{to_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{to_jkf_zone <-}\StringTok{ }\NormalTok{to_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }
-    \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }\DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }
-    \DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
+\NormalTok{to_jkf_zone <-}\StringTok{ }\NormalTok{to_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }
+        \DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
 
-\CommentTok{# to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x =}
-\CommentTok{# 'LocationID', by.y = 'PULocationID')}
+\CommentTok{# to_jkf_fare <- merge(taxi_zones, to_jkf_zone,}
+\CommentTok{# by.x = 'LocationID', by.y = 'PULocationID')}
 \end{Highlighting}
 \end{Shaded}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{to_jkf_zone_above <-}\StringTok{ }\NormalTok{to_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\CommentTok{# filter(avg_fare >= 52) %>%}
+\NormalTok{to_jkf_zone_above <-}\StringTok{ }\NormalTok{to_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ }
+\StringTok{    "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# filter(avg_fare >= 52) %>%}
 \KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_fare))}
 
 \KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{44}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Pick-up Zones with avergae fare to JKF Airport"}\NormalTok{)}
@@ -1687,7 +1703,7 @@ If there is no flat rate between JFK and Manhattan,
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-27}Pick-up Zones with avergae fare to JKF Airport}
+\caption{\label{tab:unnamed-chunk-23}Pick-up Zones with avergae fare to JKF Airport}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1804,10 +1820,10 @@ What the expected fare from JKF Airport to Manhattan?
 \begin{Highlighting}[]
 \NormalTok{from_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
 
-\NormalTok{from_jkf_zone <-}\StringTok{ }\NormalTok{from_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }
-    \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }\DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }
-    \DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
+\NormalTok{from_jkf_zone <-}\StringTok{ }\NormalTok{from_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(DOLocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }
+        \DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
 
 \NormalTok{from_jkf_fare <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(taxi_zones, from_jkf_zone, }\DataTypeTok{by.x =} \StringTok{"LocationID"}\NormalTok{, }
     \DataTypeTok{by.y =} \StringTok{"LocationID"}\NormalTok{)}
@@ -1817,8 +1833,8 @@ What the expected fare from JKF Airport to Manhattan?
     \DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{labels =}\NormalTok{ cols)}
 \KeywordTok{plot}\NormalTok{(from_jkf_fare, }\DataTypeTok{col =} \KeywordTok{as.character}\NormalTok{(lcols))}
 
-\NormalTok{from_jkf_zone_above <-}\StringTok{ }\NormalTok{from_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\CommentTok{# filter(avg_fare >= 52) %>%}
+\NormalTok{from_jkf_zone_above <-}\StringTok{ }\NormalTok{from_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ }
+\StringTok{    "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# filter(avg_fare >= 52) %>%}
 \KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_fare))}
 \KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{67}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Drop-off Zones with average fare amount from JFK Airport"}\NormalTok{)}
 \end{Highlighting}
@@ -1855,10 +1871,11 @@ chunk tag) to help with readibility and/or setup.
 \textbf{In the main Rmd file}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# This chunk ensures that the thesisdown package is installed}
-\CommentTok{# and loaded. This thesisdown package includes the template}
-\CommentTok{# files for the thesis.}
-\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(devtools)) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"devtools"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.rstudio.com"}\NormalTok{)}
+\CommentTok{# This chunk ensures that the thesisdown package is}
+\CommentTok{# installed and loaded. This thesisdown package}
+\CommentTok{# includes the template files for the thesis.}
+\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(devtools)) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"devtools"}\NormalTok{, }
+    \DataTypeTok{repos =} \StringTok{"http://cran.rstudio.com"}\NormalTok{)}
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(thesisdown)) devtools}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"ismayc/thesisdown"}\NormalTok{)}
 \KeywordTok{library}\NormalTok{(thesisdown)}
 \end{Highlighting}
