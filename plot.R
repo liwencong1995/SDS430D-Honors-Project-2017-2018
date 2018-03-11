@@ -59,3 +59,22 @@ write.csv(lyft_summary, "~/Desktop/lyft_summary.csv", row.names = FALSE)
 #shiny
 #save it as a image file
 
+#---------------------------------------------------------------------------------
+
+library(nyctaxi)
+library(ggplot2)
+library(leaflet)
+library(ggmap)
+data("taxi_zones")
+summary(taxi_zones)
+plot(taxi_zones)
+
+reds = colorNumeric("Reds", domain = NULL)
+leaflet(data = newobj) %>% 
+  addTiles() %>%
+  addPolygons(fillColor = ~reds(num_trips),
+              fillOpacity = 0.6,
+              weight = 1,
+              opacity = 0.8)
+
+

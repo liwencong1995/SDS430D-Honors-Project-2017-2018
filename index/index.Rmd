@@ -3,12 +3,12 @@ author: 'Wencong (Priscilla) Li'
 date: 'May 2018'
 institution: 'Smith College'
 #division: 'Statistical and Data Sciences'
-advisor: 'Advisor Benjamin Baumer'
-#altadvisor: 'Your Other Advisor'
+advisor: 'Benjamin Baumer'
+altadvisor: 'Jordan Crouser'
 # Delete line 6 if you only have one advisor
 department: 'Statistical and Data Sciences'
 degree: 'Bachelor of Arts'
-title: 'NYC Taxi'
+title: 'Developing A Tool to Uncover The Mysterious New York City Through Taxi Trip Records'
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 output: 
@@ -25,12 +25,8 @@ abstract: |
 # like below, use a command like that for the abstract above.  Note that a tab is 
 # needed on the line after the |.
 acknowledgements: |
-  I want to thank a few people.
-dedication: |
-  You can have a dedication here if you wish. 
-preface: |
-  This is an example of a thesis setup to use the reed thesis document class
-  (for LaTeX) and the R bookdown package, in general.
+  `r if(knitr:::is_latex_output()) paste(readLines("00-prelim.Rmd"), collapse = '\n  ')`
+
 bibliography: bib/thesis.bib
 # Download your specific bibliography database file and refer to it in the line above.
 csl: csl/apa.csl
