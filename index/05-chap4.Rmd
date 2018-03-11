@@ -23,7 +23,7 @@ to_jfk <- jfk_trip %>%
 ```
 
 
-```{r, eval=FALSE}
+```{r}
 to_jkf_zone <- to_jfk %>%
   group_by(PULocationID) %>%
   summarise(num_trips = n(),
@@ -32,7 +32,7 @@ to_jkf_zone <- to_jfk %>%
   rename(LocationID = PULocationID) %>%
   left_join(taxi_zone_lookup , by = "LocationID")
 
-to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
+#to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
 
 
 ```
@@ -56,7 +56,7 @@ Additionally, people who are native to Manhattan would have paid more than $52 t
 
 What the expected fare from JKF Airport to Manhattan?
 
-```{r}
+```{r, eval=FALSE}
 from_jfk <- jfk_trip %>%
   filter(PULocationID == 132)
 

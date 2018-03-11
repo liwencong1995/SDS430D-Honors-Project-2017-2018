@@ -101,17 +101,21 @@ Acoording to the simple linear regression result, trip distance does not have si
 Let's fist take a look at which pick-up zones have the highest number of pickups. We create a heat map to visulizae the number of trip for each pick-up zones on a map of New York City Taxi Zones.
 
 ```{r, message=FALSE}
-library(leaflet)
 data("taxi_zones")
+library(sp)
 pick_up_zones <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
+```
+
+```{r}
+library(leaflet)
 reds = colorNumeric("Reds", domain = NULL)
-leaflet(data = pick_up_zones) %>% 
-  addTiles() %>%
-  addPolygons(fillColor = ~reds(num_trips),
-              fillOpacity = 0.6,
-              weight = 1,
-              opacity = 0.8) %>%
-  setView(lat = 40.7128, lng = -74.0060, zoom = 10)
+# leaflet(data = pick_up_zones) %>% 
+#   addTiles() %>%
+#   addPolygons(fillColor = ~reds(num_trips),
+#               fillOpacity = 0.6,
+#               weight = 1,
+#               opacity = 0.8) %>%
+#   setView(lat = 40.7128, lng = -74.0060, zoom = 10)
 ```
 It's obbivous that Manhattan, La Guardia Airport, and JKF Airport have the most number of pick-ups.
 
