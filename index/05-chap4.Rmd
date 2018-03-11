@@ -23,7 +23,7 @@ to_jfk <- jfk_trip %>%
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 to_jkf_zone <- to_jfk %>%
   group_by(PULocationID) %>%
   summarise(num_trips = n(),
@@ -34,11 +34,7 @@ to_jkf_zone <- to_jfk %>%
 
 to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "PULocationID")
 
-cols <- brewer.pal(n = 4, name = "Greys")
-lcols <- cut(to_jkf_fare$avg_fare,
-             breaks = quantile(to_jkf_fare$avg_fare, na.rm = TRUE),
-             labels = cols)
-plot(to_jkf_fare, col = as.character(lcols))
+
 ```
 
 
@@ -47,7 +43,8 @@ to_jkf_zone_above <- to_jkf_zone %>%
   filter(Borough == "Manhattan") %>%
   #filter(avg_fare >= 52) %>%
   arrange(desc(avg_fare))
-kable(to_jkf_zone_above[1:44,], caption = "Pick-up Zones that woulde have paid more than $52")
+
+kable(to_jkf_zone_above[1:44,], caption = "Pick-up Zones with avergae fare to JKF Airport")
 ```
 
 Imagine it's your first time travelling to New York City, and you decided to live in a hotel in Manhattan Since you do not know much about the city, the \$52 flat rate is nice for you, and it incentivizes you to take taxi to the JFK Airport. If there is no flat rate, there is uncertainty in how much someone needs to pay to take a taxi to JFK, and tourists might instead choose to take the train, even though taking a train would cost them more time and inconvenience. 
@@ -83,13 +80,10 @@ from_jkf_zone_above <- from_jkf_zone %>%
   filter(Borough == "Manhattan") %>%
   #filter(avg_fare >= 52) %>%
   arrange(desc(avg_fare))
-kable(to_jkf_zone_above[1:67,], caption = "Drop-off Zones that woulde have paid more than $52")
+kable(to_jkf_zone_above[1:67,], caption = "Drop-off Zones with average fare amount from JFK Airport")
 ```
 
 
 how much time it would take for a cb driver to do a round trip 
-
- 
-
 https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers
 

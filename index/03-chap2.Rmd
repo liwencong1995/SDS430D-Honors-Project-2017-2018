@@ -101,6 +101,7 @@ Acoording to the simple linear regression result, trip distance does not have si
 Let's fist take a look at which pick-up zones have the highest number of pickups. We create a heat map to visulizae the number of trip for each pick-up zones on a map of New York City Taxi Zones.
 
 ```{r, message=FALSE}
+library(leaflet)
 data("taxi_zones")
 pick_up_zones <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
 reds = colorNumeric("Reds", domain = NULL)
