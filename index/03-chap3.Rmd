@@ -1,6 +1,5 @@
 # New York City Taxi Driver {#chapter3}
-
-### Trip-level Tip Inofrmation
+## Trip-level Tip Inofrmation
 The income of Taxi drivers in New York City has two parts: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers?
 
 In the following analysis, I will focus on trip data collected in August 2016. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
@@ -35,7 +34,7 @@ tip_individual <- ggplot(data = yellow_2016.08_tip, aes(x = tip_perct) ) +
 tip_individual
 ```
 
-### Aggregated Zone-level Tip Information
+## Aggregated Zone-level Tip Information
 Instead of studying factors that affect individual trips' percent tip, it is more useful to study the aggregated effect of each zone on percent tip.
 
 ```{r}
@@ -45,7 +44,7 @@ data(taxi_zone_lookup)
 Taxi drivers are required to be indifferent to where passengers are going. Therefore, it makes sense to investigate the average amount of tips paid for each pick-up zone. What are the taxi pick-up zones that have the highest tip percents?
 
 We first calculate the average percent tip paid for each pick-up zone. Here is a list of pick-up zones with their average percent tip:
-```{r tip_pickup, message=FALSE}
+```{r, message=FALSE}
 tip_pickup <- yellow_2016.08_tip %>%
   group_by(PULocationID) %>%
   summarise(avg_tip = mean(tip_perct), 
@@ -57,13 +56,12 @@ tip_pickup <- yellow_2016.08_tip %>%
   filter(Zone != "Unknown")
 
 library(knitr)
-kable(tip_pickup[1:10,])
-#ten pickup zone with the highest average tip
+kable(tip_pickup[1:10,], caption = "Ten taxi pick-up zones with the highest average tip without any threshold")
 ```
 
 Below is a histogram of average percent tips paid for all pick-up zones. As show on the plot, the first peak is around 20%, which is the cheapest default option on the touch panel for passengers to chose. 
 
-```{r pickup_vis, fig.cap="Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC"}
+```{r pickup-vis, fig.cap = "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC"}
 pickup_vis <- ggplot(data = tip_pickup, aes(x = avg_tip) ) +
   xlab("Tips, percent") +
   geom_histogram(binwidth = 0.005) + 
@@ -74,7 +72,7 @@ pickup_vis <- ggplot(data = tip_pickup, aes(x = avg_tip) ) +
 pickup_vis
 ```
 
-```{r tip_region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC"}
+```{r tip-region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC"}
 tip_region <- yellow_2016.08_tip  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), 
@@ -99,7 +97,7 @@ summary(tip_distance)$coef[1:2,]
 ```
 Acoording to the simple linear regression result, trip distance does not have significant impact on the percent of tips paid, controlling for both pick-up and drop-off locations.
 
-### Which zones have the highest percent tip?
+## Which zones have the highest percent tip?
 Let's fist take a look at which pick-up zones have the highest number of pickups. We create a heat map to visulizae the number of trip for each pick-up zones on a map of New York City Taxi Zones.
 
 ```{r, message=FALSE}
@@ -122,31 +120,29 @@ reds = colorNumeric("Reds", domain = NULL)
 It's obbivous that Manhattan, La Guardia Airport, and JKF Airport have the most number of pick-ups.
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up zones that have more than 900 trips per month or 30 trips per day, then we observe that many pick-up zones that have the highest percent tips are in Brooklyn. 
-```{r pickup_zone_900}
+```{r}
 #pick a threshold for the cutoff number of trips
 pickup_zone_900 <- tip_pickup %>%
   filter(num_trips >= 900) %>%
   arrange(desc(avg_tip))
 
 #pickup_zone_900 %>% head(10)
-kable(pickup_zone_900[1:10, ])
-# 10 Taxi zone with the highest percent tip, threshold is 900
+kable(pickup_zone_900[1:10, ], caption = "Ten taxi pick-up zones with the highest percent tip with threshold equals to 900")
 ```
 People might think it is more reasonable to ses a list that is populated with Zones in Manhattan, since that's where all the wealthy people live. However, it turns out that passengers who get on taxis in Brooklyn pays more tips.
 
 If we focus on the pick-up zones that have more than 90000 trips per month or 3000 trips per day, then we observe that all pick-up zones that have the highest percent tips are in Manhattan besides La Guardia Airport.
-```{r pickup_zone_90000}
+```{r}
 #pick a threshold for the cutoff of number of trips
 pickup_zone_90000 <- tip_pickup %>%
   filter(num_trips >= 90000) %>%
   arrange(desc(avg_tip))
 #pickup_zone_90000 %>% head(10)
-kable(pickup_zone_90000[1:10,])
-# Ten Taxi zone with the highest percent tip, threshold is 90000
+kable(pickup_zone_90000[1:10,], caption = "Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000")
 ```
 There are more than 100 times more yellow cab pick-ups that happen in Manhattan everyday than in Brooklyn, and that is why there are many dense red-shade polygons in the visulization above.
 
-### Do taxi drivers tend to go to zones that offer high tips?
+## Do taxi drivers tend to go to zones that offer high tips?
 So far, we have learned what pick-up zones offer the highest percent tip. Now, we want to dig into the relationships between percent tip and taxi-zone-specific variables. 
 
 It is not easy to find an available taxi on the street on New York City, because the demand for taxi trips is much higher than the supply. Does paying more tips help customers to more easily get taxis? If customers from certain regions keep paying higher tips, taxi drivers might be able to learn from their experiences in those regions, and be more willing to wonder around those regions more often and pick up passengers. Pick-up zones with higher tips should attract more taxi drivers with the control of taxi zones. Let's test it out and see whether it is true:

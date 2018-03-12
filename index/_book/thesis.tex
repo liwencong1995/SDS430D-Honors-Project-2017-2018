@@ -406,7 +406,7 @@ tables, figures, and anything included in the Appendix attached to this
 thesis, scripts that are used to generate them are included in the
 Github repository.
 
-\chapter{Data and nyctaxi Package}\label{chapter1}
+\chapter{Data and nyctaxi Package}\label{chapter2}
 
 \section{Data and Storage}\label{data-and-storage}
 
@@ -710,11 +710,9 @@ Due to the large size of Yellow Taxi datasets, \texttt{yellow\_old} and
 \texttt{yellow} are partitioned into subgroups by \texttt{year}. When we
 need to run query on data from a specific year, having partitions allows
 MySQL to directly find the data specified without filtering on every
-single row. It speeds up the query process.
-
-A \texttt{VIEW} called \texttt{yellow\_old\_sum} is also created to
-generate a summary table for the number of Yellow Taxi trips in each
-month.
+single row. It speeds up the query process. A \texttt{VIEW} called
+\texttt{yellow\_old\_sum} is also created to generate a summary table
+for the number of Yellow Taxi trips in each month.
 
 \section{New Yoek City Street-hail and E-hail Services
 Summary}\label{new-yoek-city-street-hail-and-e-hail-services-summary}
@@ -1334,10 +1332,9 @@ CREATE VIEW yellow_old_sum AS SELECT YEAR(tpep_pickup_datetime) as the_year, MON
   GROUP BY the_year, the_month; 
 ); 
 \end{verbatim}
-\chapter{New York City Taxi Driver}\label{chapter2}
+\chapter{New York City Taxi Driver}\label{chapter3}
 
-\subsection{Trip-level Tip
-Inofrmation}\label{trip-level-tip-inofrmation}
+\section{Trip-level Tip Inofrmation}\label{trip-level-tip-inofrmation}
 
 The income of Taxi drivers in New York City has two parts: taxi fare and
 tips. Taxi fare is usually calculated by the meters installed in the
@@ -1390,7 +1387,7 @@ August 2016:
 \caption{\label{fig:tip-individual}Percent Tip Paid by Passengers on
 Individual Yellow Taxi Trip in NYC}
 \end{figure}
-\subsection{Aggregated Zone-level Tip
+\section{Aggregated Zone-level Tip
 Information}\label{aggregated-zone-level-tip-information}
 
 Instead of studying factors that affect individual trips' percent tip,
@@ -1417,10 +1414,14 @@ Here is a list of pick-up zones with their average percent tip:
 \StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Zone }\OperatorTok{!=}\StringTok{ "Unknown"}\NormalTok{)}
 
 \KeywordTok{library}\NormalTok{(knitr)}
-\KeywordTok{kable}\NormalTok{(tip_pickup[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ])}
+\KeywordTok{kable}\NormalTok{(tip_pickup[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Ten taxi pick-up zones with the highest average tip without any threshold"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\begin{tabular}{r|r|r|r|l|l}
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-11}Ten taxi pick-up zones with the highest average tip without any threshold}
+\centering
+\begin{tabular}[t]{r|r|r|r|l|l}
 \hline
 LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
 \hline
@@ -1445,11 +1446,7 @@ LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
 150 & 0.2987986 & 12 & 13.161667 & Brooklyn & Manhattan Beach\\
 \hline
 \end{tabular}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# ten pickup zone with the highest average tip}
-\end{Highlighting}
-\end{Shaded}
+\end{table}
 Below is a histogram of average percent tips paid for all pick-up zones.
 As show on the plot, the first peak is around 20\%, which is the
 cheapest default option on the touch panel for passengers to chose.
@@ -1470,8 +1467,8 @@ Warning: Removed 3 rows containing non-finite values (stat_bin).
 \end{verbatim}
 \begin{figure}
 \centering
-\includegraphics{thesis_files/figure-latex/pickup_vis-1.pdf}
-\caption{(\#fig:pickup\_vis)Percent Tip Paid by Passengers on Each
+\includegraphics{thesis_files/figure-latex/pickup-vis-1.pdf}
+\caption{\label{fig:pickup-vis}Percent Tip Paid by Passengers on Each
 Pick-up Taxi Zone in NYC}
 \end{figure}
 \begin{Shaded}
@@ -1490,7 +1487,7 @@ Pick-up Taxi Zone in NYC}
 \begin{verbatim}
 Warning: Removed 95 rows containing non-finite values (stat_bin).
 \end{verbatim}
-\includegraphics{thesis_files/figure-latex/tip_region-1.pdf} The 20\%
+\includegraphics{thesis_files/figure-latex/tip-region-1.pdf} The 20\%
 peak is more clearly shown when we calculate the percent tips for each
 pick-up and drop-off locatins pair instead of pick-up location only.
 
@@ -1516,7 +1513,7 @@ Acoording to the simple linear regression result, trip distance does not
 have significant impact on the percent of tips paid, controlling for
 both pick-up and drop-off locations.
 
-\subsection{Which zones have the highest percent
+\section{Which zones have the highest percent
 tip?}\label{which-zones-have-the-highest-percent-tip}
 
 Let's fist take a look at which pick-up zones have the highest number of
@@ -1561,10 +1558,14 @@ are in Brooklyn.
 \StringTok{    }\DecValTok{900}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 
 \CommentTok{# pickup_zone_900 %>% head(10)}
-\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{900}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ])}
+\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{900}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Ten taxi pick-up zones with the highest percent tip with threshold equals to 900"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\begin{tabular}{r|r|r|r|l|l}
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-15}Ten taxi pick-up zones with the highest percent tip with threshold equals to 900}
+\centering
+\begin{tabular}[t]{r|r|r|r|l|l}
 \hline
 LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
 \hline
@@ -1589,12 +1590,7 @@ LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
 230 & 0.2267445 & 171017 & 3.044212 & Manhattan & Times Sq/Theatre District\\
 \hline
 \end{tabular}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# 10 Taxi zone with the highest percent tip,}
-\CommentTok{# threshold is 900}
-\end{Highlighting}
-\end{Shaded}
+\end{table}
 People might think it is more reasonable to ses a list that is populated
 with Zones in Manhattan, since that's where all the wealthy people live.
 However, it turns out that passengers who get on taxis in Brooklyn pays
@@ -1611,10 +1607,14 @@ Airport.
 \NormalTok{pickup_zone_}\DecValTok{90000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }
 \StringTok{    }\DecValTok{90000}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 \CommentTok{# pickup_zone_90000 %>% head(10)}
-\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{90000}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ])}
+\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{90000}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-\begin{tabular}{r|r|r|r|l|l}
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-16}Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000}
+\centering
+\begin{tabular}[t]{r|r|r|r|l|l}
 \hline
 LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
 \hline
@@ -1639,17 +1639,12 @@ LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
 163 & 0.2218928 & 152459 & 2.556783 & Manhattan & Midtown North\\
 \hline
 \end{tabular}
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# Ten Taxi zone with the highest percent tip,}
-\CommentTok{# threshold is 90000}
-\end{Highlighting}
-\end{Shaded}
+\end{table}
 There are more than 100 times more yellow cab pick-ups that happen in
 Manhattan everyday than in Brooklyn, and that is why there are many
 dense red-shade polygons in the visulization above.
 
-\subsection{Do taxi drivers tend to go to zones that offer high
+\section{Do taxi drivers tend to go to zones that offer high
 tips?}\label{do-taxi-drivers-tend-to-go-to-zones-that-offer-high-tips}
 
 So far, we have learned what pick-up zones offer the highest percent
@@ -1785,7 +1780,7 @@ traffic time spent on the road reduces the fare per minute ratio, slow
 traffice does increase the impact on percent tip. Passengers do pay more
 tips to taxi drivers during rush hours.
 
-\chapter{New York City Taxi Consumer}\label{chapter3}
+\chapter{New York City Taxi Consumer}\label{chapter4}
 
 \section{How long does it take for passengers to get to JFK, LaGuardia,
 and Newark Airports? When is the best time to
@@ -1810,10 +1805,11 @@ does snowfall affect taxi and Uber
 trips?}\label{how-does-weather-affect-new-york-city-taxi-and-uber-trips-how-does-snowfall-affect-taxi-and-uber-trips}
 
 \chapter{New York City Taxi Fare \& Limousine
-Commission}\label{chapter4}
+Commission}\label{chapter5}
 
-\section{Should there be a flat rate between Manhattan and the JFK
-Airport?}\label{should-there-be-a-flat-rate-between-manhattan-and-the-jfk-airport}
+\section{Should there be a flat rate between Manhattan and John F.
+Kennedy International
+Airport?}\label{should-there-be-a-flat-rate-between-manhattan-and-john-f.-kennedy-international-airport}
 
 \subsection{People in Manhattan benefit from the \$52 flat
 rate.}\label{people-in-manhattan-benefit-from-the-52-flat-rate.}
@@ -1858,7 +1854,7 @@ If there is no flat rate between JFK and Manhattan,
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-21}Pick-up Zones with avergae fare to JKF Airport}
+\caption{\label{tab:unnamed-chunk-24}Pick-up Zones with avergae fare to JKF Airport}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
