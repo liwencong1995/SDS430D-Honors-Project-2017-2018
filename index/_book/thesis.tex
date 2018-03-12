@@ -199,6 +199,7 @@ taxi drivers to better understand where the customers are and where the
 customers try to go.
 }
 
+	\usepackage{setspace}\doublespacing
 % End of CII addition
 %%
 %% End Preamble
@@ -283,7 +284,6 @@ Commission are the three parties who are closely involved in the NYC
 taxi industry. Each party has its own needs. Better understanding the
 needs of the three parties and provide solutions to better satisfy their
 needs are what I am hooping to be the result of this thiesis.
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
 \section{Background}\label{background}
 
@@ -326,10 +326,31 @@ Similar to Uber, Lyft is also an on-demand transportation company, and
 it operates the Lyft car transportation mobile app. Lyft is the main
 competitor of Uber, and it came into market in July 2014 in New York
 City.
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
 \section{Literature Review}\label{literature-review}
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{New York City Taxi}\label{new-york-city-taxi}
+
+\url{https://www.reuters.com/article/us-driving-roadrage-life/new-york-drivers-named-most-aggressive-angry-in-u-s-idUSTRE55F1J720090616}
+
+\url{https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers}
+
+\url{https://nypost.com/2016/12/02/new-york-citys-traffic-is-intentionally-horrible/}
+
+\url{http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/}
+
+\subsection{Competition between New York City taxi and e-hail
+services}\label{competition-between-new-york-city-taxi-and-e-hail-services}
+
+\url{http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/}
+
+\url{https://www.forbes.com/sites/federicoguerrini/2015/04/09/living-in-new-york-this-app-will-tell-you-which-is-cheaper-uber-or-a-taxi/2/\#26bc29904023}
+
+\url{https://www.openstreetcab.com}
+
+\url{https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers}
+
+\url{https://nycdatascience.com/blog/student-works/finding-fare-uber-recommendation-system/}
 
 \section{Contribution}\label{contribution}
 
@@ -393,13 +414,8 @@ The \texttt{nyctaxi} R package allows users to download, clean, and load
 data into SQL databasses. There are four types of data that are
 available for users to get access to, and they are New York City yellow
 taxi trip data, NYC green taxi data, NYC uber trip data, and NYC lyft
-data. Here is a summary of data that are available to users from 2014 to
-2016.
-\begin{figure}
-\centering
-\includegraphics{figure/Num_trips_summary.png}
-\caption{}
-\end{figure}
+data.
+
 \subsection{Yellow Taxi}\label{yellow-taxi-1}
 
 The total size of all yellow taxi trip data \texttt{csv} files (from Jan
@@ -454,7 +470,7 @@ The total size of weely-aggregated Lyft trip data (from Jan 2015 to Dec
 weekly-aggregated Lyft data from 2015 to the most recent week can be
 found on NYC OpenData website.
 
-\subsection{Storage}\label{storage}
+\subsection{Data Storage}\label{data-storage}
 
 The total size of all \texttt{csv} files of the four services is about
 200 GB, and a laptop usually has memory less than or equal to 8GB.
@@ -508,7 +524,10 @@ Packages can be installed with the install.packages() function in R.
 \begin{Highlighting}[]
 \CommentTok{# install the package}
 \KeywordTok{install.packages}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{)}
-
+\end{Highlighting}
+\end{Shaded}
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{# load the package}
 \KeywordTok{library}\NormalTok{(nyctaxi)}
 \end{Highlighting}
@@ -548,60 +567,160 @@ types: yellow, green, uber, and lyft. The default is yellow.
 \subsection{Taxi zone shapefile attached to nyctaxi R
 package}\label{taxi-zone-shapefile-attached-to-nyctaxi-r-package}
 
-\section{Extract}\label{extract}
+Two datasets are attached to \texttt{nyctaxi}. The first one is called
+\texttt{taxi\_zones}, and this dataset contains information, such as
+taxi zone location IDs, location names, and corresponding boroughs for
+each ID. A shapefile containing the boundaries for the taxi zones,
+\texttt{taxi\_zone\_lookup}, is also included in the package for users
+to do spatial analysis.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(}\StringTok{"taxi_zones"}\NormalTok{)}
+\CommentTok{# plot(taxi_zones)}
+\end{Highlighting}
+\end{Shaded}
+\section{Extract-Transform-Load}\label{extract-transform-load}
 
-etl\_extract.nyctaxi allows users to download New York City yellow taxi,
-green taxi, Uber, and Lyft data that are specific to their month of
-interest.
+\subsection{Extract}\label{extract}
 
-\subsection{Yellow Taxi}\label{yellow-taxi-2}
+\texttt{etl\_extract.nyctaxi} allows users to download New York City
+yellow taxi, green taxi, Uber, and Lyft data from the corresponding data
+sources. It takes the \texttt{years}, \texttt{months}, and \texttt{type}
+parameters and download the New York City taxi data specified by users.
+New York City Yellow and Green Taxi data are updated on NYC Taxi \&
+Limousine Commission (TLC) website on a monthly basis.
 
-\subsection{Green Taxi}\label{green-taxi-2}
+Uber trip record data is static and small, so we decided to only give
+users the options to either download all data from April to Sepetember,
+2014 or download all Uber trip records from Janaury to June, 2015 at
+onc. Users do not have the lesuire to download Uber data from a specific
+month.
 
-\subsection{Uber}\label{uber-2}
+Lyft data is updated on NYC Open Data webiste on a weekly basis. Since
+the weekly-aggregated data is tiny and only data later then 2014 is
+available, we decided to only allow users to download Lyft data by year.
 
-\subsection{Lyft}\label{lyft-2}
+The default \texttt{years} is the current year, and the default
+\texttt{months} are the all twelve months. The default type of
+transportation is \texttt{yellow}. When an invalid month is entered,
+warning message will suggest users to reconsider their choice and select
+a new set of month.
 
-\section{Transform}\label{transform}
+\subsection{Transform}\label{transform}
 
-etl\_extract.nyctaxi allows users to transform New York City yellow
-taxi, green taxi, Uber, and Lyft data into forms that are meaningful to
-users.
+\texttt{etl\_transform.nyctaxi} allows users to transform New York City
+yellow taxi, green taxi, Uber, and Lyft data into cleaned formats, and
+it utlizes different data cleaning techiniques when it transforms data
+for each transportation type. In general, it cleans the data and creates
+a new \texttt{csv} file in the \texttt{load} directory to store the
+cleaned data. It helps us to retain and protect raw data from being
+mondified or destroyed. Users are allows to specify the month of
+interest in order to only transform the data that they are interested
+in. This functionality helps people to be more efficient with their use
+of time.
 
-\subsection{Yellow Taxi}\label{yellow-taxi-3}
+By default, it takes the current year Yellow taxi trip records data
+files, and save copies of them in the \texttt{load} diectory. It skips
+the cleaning step, because the raw Yellow Taxi data downloaded from TLC
+is already in a desired format with all variables correctly labelled.
 
-\subsection{Green Taxi}\label{green-taxi-3}
+There are a few main transformations that are done by this fucntion:
 
-\subsection{Uber}\label{uber-3}
+\subsubsection{Green Taxi -- Extra Blank Row and
+Column}\label{green-taxi-extra-blank-row-and-column}
 
-\subsection{Lyft}\label{lyft-3}
+Green Taxi monthly data from August 2013 to the most recent month
+besides 2015 all have a blank second row in the \texttt{csv} files.
+Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all
+have an extra blank columns attanched to the right-most column. These
+blank row and solumn causes problems in the later stage when users want
+to load data into SQL database. In order to get Green Taxi data ready
+for the \texttt{load} phase, we used \texttt{system()} to invoke the OS
+command specified to remove the blank rows and columns.
 
-\section{Load}\label{load}
+\subsubsection{Uber Data -- Reconciling Inconsistent
+Filenames}\label{uber-data-reconciling-inconsistent-filenames}
 
-etl\_extract.nyctaxi allows users to load New York City yellow taxi,
-green taxi, Uber, and Lyft data into different data tables in a SQL
-database.
+Uber only released over 4.5 million data records from April to Sepetmber
+2014 and 14.3 million records from Janaury to June 2015. Information of
+different sets of variables are released for 2014 and 2015, and
+variables have different naming convention. When users want to download
+data from both years, variables are renamed so that data from both years
+can be cosolidated into one big dataset with consistent variable names.
 
-\subsection{Yellow Taxi}\label{yellow-taxi-4}
+\subsubsection{Uber Data -- Reconciling Inconsistent Data
+Formats}\label{uber-data-reconciling-inconsistent-data-formats}
 
-\subsection{Green Taxi}\label{green-taxi-4}
+The data type of \texttt{Date/Time} variable in Uber datasets is
+originally encoded as \texttt{character}. In order to enable it to be
+recognized as \texttt{timestamp} by R, we use \texttt{ymd\_hms} in
+\texttt{lubridate} to transform date time to POSIXct objects.
 
-\subsection{Uber}\label{uber-4}
+\subsubsection{Optimizing I/O Process}\label{optimizing-io-process}
 
-\subsection{Lyft}\label{lyft-4}
+h p://scholarworks.smith.edu/theses/1871 Zhang, Weijia, ``Improving
+access to open-source data about the NYC bike sharing system (Citi
+Bike)'' (2017). eses, Dissertations, and Projects. 1871.
 
-\section{SQL Database Initialization}\label{sql-database-initialization}
+Meking the file inout and output processes more efficient is an
+important pasrt of \texttt{etl\_transform}. According to Zhang's (2017)
+study, \texttt{data.table} only takes half of the time to read from and
+write into datasets comparing to \texttt{readr}. Therefore,
+\texttt{etl\_transform} uses \texttt{fread()} and \texttt{fwrite()} from
+\texttt{data.table} instead of \texttt{read\_csv} or \texttt{write\_csv}
+from \texttt{readr} to reduce the data processing time.
 
-\subsection{Yellow Taxi}\label{yellow-taxi-5}
+\subsection{Load}\label{load}
 
-\subsection{Green Taxi}\label{green-taxi-5}
+\texttt{etl\_load.nyctaxi} allows users to load New York City yellow
+taxi, green taxi, Uber, and Lyft data into different data tables in a
+SQL database. It populates a SQL database with data cleaned by
+\texttt{etl\_transform}. In order to reduce the data processing
+complexity, \texttt{init.mysql()} is written under \texttt{nyctaxi} to
+help users to set up five basic table structures for MySQL database.
 
-\subsection{Uber}\label{uber-5}
+\subsection{SQL Database
+Initialization}\label{sql-database-initialization}
 
-\subsection{Lyft}\label{lyft-5}
+\texttt{init.mysql()} helps users to set up five basic table structures
+for MySQL database. \texttt{yellow\_old} is created for Yellow Taxi data
+that are prior to August 2016, and \texttt{yellow} is created for data
+later than July 2016. \texttt{green}, \texttt{uber}, and \texttt{lyft}
+are also initiated for the three transportations.
 
-\section{New Yoek City Hail Service
-Summary}\label{new-yoek-city-hail-service-summary}
+\texttt{etl\_init()} can be run after a database connection is built to
+process to process \texttt{init.mysql()} to initialize a MySQL database,
+and default columns with the correct variable names and typed defined
+will be automatically generated.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{db <-}\StringTok{ }\KeywordTok{src_mysql}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{user =} \StringTok{"urname"}\NormalTok{, }\DataTypeTok{host =} \StringTok{"host"}\NormalTok{, }
+    \DataTypeTok{password =} \StringTok{"pw"}\NormalTok{)}
+\NormalTok{taxi <-}\StringTok{ }\KeywordTok{etl}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{dir =} \StringTok{"~/Desktop/nyctaxi"}\NormalTok{, db)}
+\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{etl_init}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+In order to increase the query speed at the data analysis stage,
+\texttt{KEY}s are created for multiple variables for each
+transportation. Since there is no variable containing unique value for
+each observation, no primary variable is needed. Using \texttt{KEY} in
+data analysis query can spped up the query process.
+
+Due to the large size of Yellow Taxi datasets, \texttt{yellow\_old} and
+\texttt{yellow} are partitioned into subgroups by \texttt{year}. When we
+need to run query on data from a specific year, having partitions allows
+MySQL to directly find the data specified without filtering on every
+single row. It speeds up the query process.
+
+A \texttt{VIEW} called \texttt{yellow\_old\_sum} is also created to
+generate a summary table for the number of Yellow Taxi trips in each
+month.
+
+\section{New Yoek City Street-hail and E-hail Services
+Summary}\label{new-yoek-city-street-hail-and-e-hail-services-summary}
+
+Below is a summary of data that are available to users from 2014 to
+2016. \includegraphics{figure/Num_trips_summary.png}
 
 \section{Source Code}\label{source-code}
 
@@ -1060,7 +1179,7 @@ etl_load.etl_nyctaxi <- function(obj,
   invisible(obj)
 }
 \end{verbatim}
-\subsection{utils}\label{utils}
+\subsection{utility function}\label{utility-function}
 
 This utility function below was written to shortened the source code in
 ETL extract.
@@ -1268,7 +1387,8 @@ August 2016:
 \begin{figure}
 \centering
 \includegraphics{thesis_files/figure-latex/tip-individual-1.pdf}
-\caption{\label{fig:tip-individual}this is my caption}
+\caption{\label{fig:tip-individual}Percent Tip Paid by Passengers on
+Individual Yellow Taxi Trip in NYC}
 \end{figure}
 \subsection{Aggregated Zone-level Tip
 Information}\label{aggregated-zone-level-tip-information}
@@ -1287,8 +1407,7 @@ tips paid for each pick-up zone. What are the taxi pick-up zones that
 have the highest tip percents?
 
 We first calculate the average percent tip paid for each pick-up zone.
-Here is a list of pick-up zones with more than 1000 trip per month along
-with their average percent tip:
+Here is a list of pick-up zones with their average percent tip:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tip_pickup <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID) }\OperatorTok{%>%}\StringTok{ }
@@ -1296,25 +1415,41 @@ with their average percent tip:
         \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Zone }\OperatorTok{!=}\StringTok{ "Unknown"}\NormalTok{)}
-\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>}\StringTok{ }\DecValTok{1000}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{kable}\NormalTok{(tip_pickup[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ])}
 \end{Highlighting}
 \end{Shaded}
-\begin{verbatim}
-# A tibble: 10 x 6
-   LocationID   avg_tip num_trips  avg_dis   Borough
-        <int>     <dbl>     <int>    <dbl>    <fctr>
- 1        106 0.2343283      1088 3.600248  Brooklyn
- 2        223 0.2335789      3014 4.212296    Queens
- 3         37 0.2318139      2309 3.251091  Brooklyn
- 4         80 0.2290748      4547 3.212947  Brooklyn
- 5        189 0.2286701      1842 3.361069  Brooklyn
- 6        112 0.2278641      3709 3.335044  Brooklyn
- 7          7 0.2277946      7277 3.397217    Queens
- 8         40 0.2275125      3537 4.186876  Brooklyn
- 9         36 0.2271561      1334 3.571627  Brooklyn
-10        230 0.2267445    171017 3.044212 Manhattan
-# ... with 1 more variables: Zone <fctr>
-\end{verbatim}
+\begin{tabular}{r|r|r|r|l|l}
+\hline
+LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
+\hline
+46 & 0.6000000 & 1 & 0.000000 & Bronx & City Island\\
+\hline
+15 & 0.5052363 & 10 & 5.584000 & Queens & Bay Terrace/Fort Totten\\
+\hline
+175 & 0.5020756 & 16 & 4.246875 & Queens & Oakland Gardens\\
+\hline
+98 & 0.3541095 & 29 & 5.887241 & Queens & Fresh Meadows\\
+\hline
+21 & 0.3270126 & 28 & 6.307857 & Brooklyn & Bensonhurst East\\
+\hline
+135 & 0.3269817 & 77 & 5.126753 & Queens & Kew Gardens Hills\\
+\hline
+11 & 0.3211306 & 14 & 4.470000 & Brooklyn & Bath Beach\\
+\hline
+121 & 0.3040954 & 24 & 4.494167 & Queens & Hillcrest/Pomonok\\
+\hline
+210 & 0.2997459 & 36 & 3.799444 & Brooklyn & Sheepshead Bay\\
+\hline
+150 & 0.2987986 & 12 & 13.161667 & Brooklyn & Manhattan Beach\\
+\hline
+\end{tabular}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# ten pickup zone with the highest average tip}
+\end{Highlighting}
+\end{Shaded}
 Below is a histogram of average percent tips paid for all pick-up zones.
 As show on the plot, the first peak is around 20\%, which is the
 cheapest default option on the touch panel for passengers to chose.
@@ -1333,7 +1468,12 @@ cheapest default option on the touch panel for passengers to chose.
 \begin{verbatim}
 Warning: Removed 3 rows containing non-finite values (stat_bin).
 \end{verbatim}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-9-1.pdf}
+\begin{figure}
+\centering
+\includegraphics{thesis_files/figure-latex/pickup_vis-1.pdf}
+\caption{(\#fig:pickup\_vis)Percent Tip Paid by Passengers on Each
+Pick-up Taxi Zone in NYC}
+\end{figure}
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{tip_region <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID, }
@@ -1350,10 +1490,9 @@ Warning: Removed 3 rows containing non-finite values (stat_bin).
 \begin{verbatim}
 Warning: Removed 95 rows containing non-finite values (stat_bin).
 \end{verbatim}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-10-1.pdf} The
-20\% peak is more clearly shown when we calculate the percent tips for
-each pick-up and drop-off locatins pair instead of pick-up location
-only.
+\includegraphics{thesis_files/figure-latex/tip_region-1.pdf} The 20\%
+peak is more clearly shown when we calculate the percent tips for each
+pick-up and drop-off locatins pair instead of pick-up location only.
 
 \textbf{Does trip distance increase the percent tips paid?} One of the
 questions that I always wonder is whether longer trips result in higher
@@ -1421,30 +1560,39 @@ are in Brooklyn.
 \NormalTok{pickup_zone_}\DecValTok{900}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }
 \StringTok{    }\DecValTok{900}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 
-\NormalTok{pickup_zone_}\DecValTok{900} \OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\CommentTok{# pickup_zone_900 %>% head(10)}
+\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{900}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ])}
 \end{Highlighting}
 \end{Shaded}
-\begin{verbatim}
-# A tibble: 10 x 6
-   LocationID   avg_tip num_trips  avg_dis   Borough
-        <int>     <dbl>     <int>    <dbl>    <fctr>
- 1        106 0.2343283      1088 3.600248  Brooklyn
- 2        223 0.2335789      3014 4.212296    Queens
- 3         37 0.2318139      2309 3.251091  Brooklyn
- 4         80 0.2290748      4547 3.212947  Brooklyn
- 5        189 0.2286701      1842 3.361069  Brooklyn
- 6        112 0.2278641      3709 3.335044  Brooklyn
- 7          7 0.2277946      7277 3.397217    Queens
- 8         40 0.2275125      3537 4.186876  Brooklyn
- 9         36 0.2271561      1334 3.571627  Brooklyn
-10        230 0.2267445    171017 3.044212 Manhattan
-# ... with 1 more variables: Zone <fctr>
-\end{verbatim}
+\begin{tabular}{r|r|r|r|l|l}
+\hline
+LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
+\hline
+106 & 0.2343283 & 1088 & 3.600248 & Brooklyn & Gowanus\\
+\hline
+223 & 0.2335789 & 3014 & 4.212296 & Queens & Steinway\\
+\hline
+37 & 0.2318139 & 2309 & 3.251091 & Brooklyn & Bushwick South\\
+\hline
+80 & 0.2290748 & 4547 & 3.212947 & Brooklyn & East Williamsburg\\
+\hline
+189 & 0.2286701 & 1842 & 3.361070 & Brooklyn & Prospect Heights\\
+\hline
+112 & 0.2278641 & 3709 & 3.335044 & Brooklyn & Greenpoint\\
+\hline
+7 & 0.2277946 & 7277 & 3.397217 & Queens & Astoria\\
+\hline
+40 & 0.2275125 & 3537 & 4.186876 & Brooklyn & Carroll Gardens\\
+\hline
+36 & 0.2271561 & 1334 & 3.571627 & Brooklyn & Bushwick North\\
+\hline
+230 & 0.2267445 & 171017 & 3.044212 & Manhattan & Times Sq/Theatre District\\
+\hline
+\end{tabular}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# library(knitr) kable(pickup_zone_1000[1:10,2:6],}
-\CommentTok{# caption = 'Taxi zone with the highest tip}
-\CommentTok{# percent, threshold = 1000')}
+\CommentTok{# 10 Taxi zone with the highest percent tip,}
+\CommentTok{# threshold is 900}
 \end{Highlighting}
 \end{Shaded}
 People might think it is more reasonable to ses a list that is populated
@@ -1462,30 +1610,39 @@ Airport.
 \CommentTok{# trips}
 \NormalTok{pickup_zone_}\DecValTok{90000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }
 \StringTok{    }\DecValTok{90000}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
-\NormalTok{pickup_zone_}\DecValTok{90000} \OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+\CommentTok{# pickup_zone_90000 %>% head(10)}
+\KeywordTok{kable}\NormalTok{(pickup_zone_}\DecValTok{90000}\NormalTok{[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ])}
 \end{Highlighting}
 \end{Shaded}
-\begin{verbatim}
-# A tibble: 10 x 6
-   LocationID   avg_tip num_trips   avg_dis   Borough
-        <int>     <dbl>     <int>     <dbl>    <fctr>
- 1        230 0.2267445    171017  3.044212 Manhattan
- 2        186 0.2249650    213759  2.399181 Manhattan
- 3        138 0.2249391    177262 10.084311    Queens
- 4        161 0.2245180    230968  2.533839 Manhattan
- 5        100 0.2245116    115242  2.467806 Manhattan
- 6        162 0.2237261    224543  2.578228 Manhattan
- 7        237 0.2226464    193035  1.942023 Manhattan
- 8         48 0.2226313    180209  2.576908 Manhattan
- 9        239 0.2224459    134925  2.454595 Manhattan
-10        163 0.2218928    152459  2.556783 Manhattan
-# ... with 1 more variables: Zone <fctr>
-\end{verbatim}
+\begin{tabular}{r|r|r|r|l|l}
+\hline
+LocationID & avg\_tip & num\_trips & avg\_dis & Borough & Zone\\
+\hline
+230 & 0.2267445 & 171017 & 3.044212 & Manhattan & Times Sq/Theatre District\\
+\hline
+186 & 0.2249650 & 213759 & 2.399181 & Manhattan & Penn Station/Madison Sq West\\
+\hline
+138 & 0.2249391 & 177262 & 10.084311 & Queens & LaGuardia Airport\\
+\hline
+161 & 0.2245180 & 230968 & 2.533839 & Manhattan & Midtown Center\\
+\hline
+100 & 0.2245116 & 115242 & 2.467806 & Manhattan & Garment District\\
+\hline
+162 & 0.2237261 & 224543 & 2.578228 & Manhattan & Midtown East\\
+\hline
+237 & 0.2226464 & 193035 & 1.942023 & Manhattan & Upper East Side South\\
+\hline
+48 & 0.2226313 & 180209 & 2.576908 & Manhattan & Clinton East\\
+\hline
+239 & 0.2224459 & 134925 & 2.454595 & Manhattan & Upper West Side South\\
+\hline
+163 & 0.2218928 & 152459 & 2.556783 & Manhattan & Midtown North\\
+\hline
+\end{tabular}
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# kable(pickup_zone_10000[1:10,2:5], caption =}
-\CommentTok{# 'Taxi zone with the highest tip percent,}
-\CommentTok{# threshold = 10000')}
+\CommentTok{# Ten Taxi zone with the highest percent tip,}
+\CommentTok{# threshold is 90000}
 \end{Highlighting}
 \end{Shaded}
 There are more than 100 times more yellow cab pick-ups that happen in
@@ -1590,8 +1747,6 @@ traffic during rush hours. Does fare per minute ratio have an impact on
 the percent tip that passengers pay? Do passengers compensate taxi
 drivers more during rush hours? Are passengers sympathetic to taxi
 drivers for the time they spend in slow traffic?
-
-\url{https://www.reuters.com/article/us-driving-roadrage-life/new-york-drivers-named-most-aggressive-angry-in-u-s-idUSTRE55F1J720090616}
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(lubridate)}
@@ -1703,7 +1858,7 @@ If there is no flat rate between JFK and Manhattan,
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-23}Pick-up Zones with avergae fare to JKF Airport}
+\caption{\label{tab:unnamed-chunk-21}Pick-up Zones with avergae fare to JKF Airport}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1832,15 +1987,18 @@ What the expected fare from JKF Airport to Manhattan?
 \NormalTok{lcols <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(from_jkf_fare}\OperatorTok{$}\NormalTok{avg_fare, }\DataTypeTok{breaks =} \KeywordTok{quantile}\NormalTok{(from_jkf_fare}\OperatorTok{$}\NormalTok{avg_fare, }
     \DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{labels =}\NormalTok{ cols)}
 \KeywordTok{plot}\NormalTok{(from_jkf_fare, }\DataTypeTok{col =} \KeywordTok{as.character}\NormalTok{(lcols))}
-
+\end{Highlighting}
+\end{Shaded}
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{from_jkf_zone_above <-}\StringTok{ }\NormalTok{from_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ }
 \StringTok{    "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# filter(avg_fare >= 52) %>%}
 \KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_fare))}
+
 \KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{67}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Drop-off Zones with average fare amount from JFK Airport"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 how much time it would take for a cb driver to do a round trip
-\url{https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers}
 
 \chapter{Conclusion}\label{chapter5}
 

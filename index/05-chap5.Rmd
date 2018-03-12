@@ -1,4 +1,4 @@
-# New York City Taxi Fare & Limousine Commission {#chapter4}
+# New York City Taxi Fare & Limousine Commission {#chapter5}
 
 ## Should there be a flat rate between Manhattan and the JFK Airport?
 
@@ -75,15 +75,17 @@ lcols <- cut(from_jkf_fare$avg_fare,
              breaks = quantile(from_jkf_fare$avg_fare, na.rm = TRUE),
              labels = cols)
 plot(from_jkf_fare, col = as.character(lcols))
+```
 
+```{r from_jkf_zone_above, eval=FALSE}
 from_jkf_zone_above <- from_jkf_zone %>%
   filter(Borough == "Manhattan") %>%
   #filter(avg_fare >= 52) %>%
   arrange(desc(avg_fare))
+
 kable(to_jkf_zone_above[1:67,], caption = "Drop-off Zones with average fare amount from JFK Airport")
 ```
 
 
 how much time it would take for a cb driver to do a round trip 
-https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers
 

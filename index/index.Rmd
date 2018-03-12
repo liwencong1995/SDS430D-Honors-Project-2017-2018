@@ -1,5 +1,7 @@
 ---
 author: 'Wencong (Priscilla) Li'
+header-includes:
+    - \usepackage{setspace}\doublespacing
 date: 'May 2018'
 institution: 'Smith College'
 #division: 'Statistical and Data Sciences'

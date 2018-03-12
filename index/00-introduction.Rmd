@@ -4,8 +4,6 @@ Working with medium data in R is not an easy task. Loading medium-sized data int
 
 New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs. Better understanding the needs of the three parties and provide solutions to better satisfy their needs are what I am hooping to be the result of this thiesis.
 
-***
-
 ## Background
 ### Yellow Taxi
 The Yellow Cabs are widely recognized as the icons of New York City. NYC Taxicabs are operated by private firms and licensed by the New York City Taxi and Limousine Commission (TLC).  TLC issues medallions to taxicabs, and every taxicab must have a medallion to operate. There were 13,437 yellow medallion taxicabs licenses in 2014, and taxi patronage has declined since 2011 because of the competition caused by rideshare services.
@@ -19,11 +17,29 @@ Uber Technologies Inc., famously known as Uber, is an American technology compan
 ### Lyft
 Similar to Uber, Lyft is also an on-demand transportation company, and it operates the Lyft car transportation mobile app. Lyft is the main competitor of Uber, and it came into market in July 2014 in New York City.
 
-***
 
 ## Literature Review 
 
-***
+### New York City Taxi
+https://www.reuters.com/article/us-driving-roadrage-life/new-york-drivers-named-most-aggressive-angry-in-u-s-idUSTRE55F1J720090616
+
+https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers
+
+https://nypost.com/2016/12/02/new-york-citys-traffic-is-intentionally-horrible/
+
+http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/
+
+### Competition between New York City taxi and e-hail services
+http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/
+
+https://www.forbes.com/sites/federicoguerrini/2015/04/09/living-in-new-york-this-app-will-tell-you-which-is-cheaper-uber-or-a-taxi/2/#26bc29904023
+
+https://www.openstreetcab.com
+
+https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers
+
+https://nycdatascience.com/blog/student-works/finding-fare-uber-recommendation-system/
+
 
 ## Contribution
 ### nyctaxi Package
@@ -33,24 +49,8 @@ nyctaxi is an etl-dependent R package that help users to easily get access to Ne
 New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs: taxi drivers want to maxmize their profit, and in order to do that, they need to maximize the revenue while minimizing the cost. Taxi passengers want the cheapest and most convenient way of transportantion. Since Uber and Lyft launched their services in New York City, many consumers started to demand the cheaper e-hail services. TLC wants to protect both taxi drivers and passengers, and it creates policies to make NYC taxi more accessible to consumers who really need this service. In this section, I think about what each party wants and try to find a way for them to be better-off. 
 
 ### Reproducible Research
-
 Reproducible research and open sources are the very first things that Ben mentioned to me in the beginning of my honors project. As scholars place more emphasis on the reproducibility of research studies, it is essential for me to make my dat and code openly available for people to eith redo my analysis or test my result. 
 
 `Knitr` and Github are used in my project to make my study reproducible, ranging from the initial source to raw data to the package I wrote to utlize the raw data to the statistical data analysis. I used an Github Ripository called `thesisdown` to layout the basic structure of my paper, this tool allows students to create reproducible and dynamic techinical report in R Markdown. It also allows users to embed R code and interactive applicationis, and output into PDF, Word, ePub, or gitbook doocuments. `thesisdown` helps users to efficiently put together any paper with similar format.
 
 Github is used to store the scripts for `nyctaxi` and this thesis. `nyctaxi` is available on CRAN for people to download and install, and the source code for data analysis in this thesis is available under the Github account of the author so that scholars can easyil access the  information that thery are interested in. In terms of tables, figures, and anything included in the Appendix attached to this thesis, scripts that are used to generate them are included in the Github repository.  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-# New York City Taxi Driver {#chapter2}
+# New York City Taxi Driver {#chapter3}
 
 ### Trip-level Tip Inofrmation
 The income of Taxi drivers in New York City has two parts: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers?
@@ -24,7 +24,7 @@ yellow_2016.08_tip <- yellow_2016.08_tip %>%
 ```
 
 Let's visualize the distribution of percent tip of all trips occurred in August 2016:
-```{r tip-individual, fig.cap="this is my caption"}
+```{r tip-individual, fig.cap="Percent Tip Paid by Passengers on Individual Yellow Taxi Trip in NYC"}
 library(ggplot2)
 tip_individual <- ggplot(data = yellow_2016.08_tip, aes(x = tip_perct) ) +
   xlab("Tips, percent") +
@@ -44,8 +44,8 @@ data(taxi_zone_lookup)
 
 Taxi drivers are required to be indifferent to where passengers are going. Therefore, it makes sense to investigate the average amount of tips paid for each pick-up zone. What are the taxi pick-up zones that have the highest tip percents?
 
-We first calculate the average percent tip paid for each pick-up zone. Here is a list of pick-up zones with more than 1000 trip per month along with their average percent tip:
-```{r}
+We first calculate the average percent tip paid for each pick-up zone. Here is a list of pick-up zones with their average percent tip:
+```{r tip_pickup, message=FALSE}
 tip_pickup <- yellow_2016.08_tip %>%
   group_by(PULocationID) %>%
   summarise(avg_tip = mean(tip_perct), 
@@ -55,12 +55,15 @@ tip_pickup <- yellow_2016.08_tip %>%
   left_join(taxi_zone_lookup, by = "LocationID") %>%
   arrange(desc(avg_tip)) %>%
   filter(Zone != "Unknown")
-tip_pickup %>% filter(num_trips > 1000) %>% head(10)
+
+library(knitr)
+kable(tip_pickup[1:10,])
+#ten pickup zone with the highest average tip
 ```
 
 Below is a histogram of average percent tips paid for all pick-up zones. As show on the plot, the first peak is around 20%, which is the cheapest default option on the touch panel for passengers to chose. 
 
-```{r}
+```{r pickup_vis, fig.cap="Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC"}
 pickup_vis <- ggplot(data = tip_pickup, aes(x = avg_tip) ) +
   xlab("Tips, percent") +
   geom_histogram(binwidth = 0.005) + 
@@ -71,8 +74,7 @@ pickup_vis <- ggplot(data = tip_pickup, aes(x = avg_tip) ) +
 pickup_vis
 ```
 
-
-```{r}
+```{r tip_region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC"}
 tip_region <- yellow_2016.08_tip  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), 
@@ -120,26 +122,27 @@ reds = colorNumeric("Reds", domain = NULL)
 It's obbivous that Manhattan, La Guardia Airport, and JKF Airport have the most number of pick-ups.
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up zones that have more than 900 trips per month or 30 trips per day, then we observe that many pick-up zones that have the highest percent tips are in Brooklyn. 
-```{r, message=FALSE}
+```{r pickup_zone_900}
 #pick a threshold for the cutoff number of trips
 pickup_zone_900 <- tip_pickup %>%
   filter(num_trips >= 900) %>%
   arrange(desc(avg_tip))
 
-pickup_zone_900 %>% head(10)
-# library(knitr)
-# kable(pickup_zone_1000[1:10,2:6], caption = "Taxi zone with the highest tip percent, threshold = 1000")
+#pickup_zone_900 %>% head(10)
+kable(pickup_zone_900[1:10, ])
+# 10 Taxi zone with the highest percent tip, threshold is 900
 ```
 People might think it is more reasonable to ses a list that is populated with Zones in Manhattan, since that's where all the wealthy people live. However, it turns out that passengers who get on taxis in Brooklyn pays more tips.
 
 If we focus on the pick-up zones that have more than 90000 trips per month or 3000 trips per day, then we observe that all pick-up zones that have the highest percent tips are in Manhattan besides La Guardia Airport.
-```{r}
+```{r pickup_zone_90000}
 #pick a threshold for the cutoff of number of trips
 pickup_zone_90000 <- tip_pickup %>%
   filter(num_trips >= 90000) %>%
   arrange(desc(avg_tip))
-pickup_zone_90000 %>% head(10)
-# kable(pickup_zone_10000[1:10,2:5], caption = "Taxi zone with the highest tip percent, threshold = 10000")
+#pickup_zone_90000 %>% head(10)
+kable(pickup_zone_90000[1:10,])
+# Ten Taxi zone with the highest percent tip, threshold is 90000
 ```
 There are more than 100 times more yellow cab pick-ups that happen in Manhattan everyday than in Brooklyn, and that is why there are many dense red-shade polygons in the visulization above.
 
@@ -184,9 +187,6 @@ New York City Taxi Fare & Limousine Commission has information on how New York C
 In taxi fare calculation, the only unknown variable is slow-trafice time, and all other variables were collected by the meters installed on each medallion taxi for each trip. It is reasonable to assume that for trips with the same pick-up and drop-off locations, the longer the total slow traffic time is, the longer the trip would take. Taxi drivers are compensated for both the normal-speed trip distance and the time spent in slow-traffice. According to the fare calculation algorithm, in moving traffic on Manhattan streets, the meter should “click” approximately every four downtown blocks, or one block going cross-town (East-West); in slow traffic, the meter should "click" every 60 seconds. Therefore, slow traffic reduces the fare per minute ratio. 
 
 New York CIty has the worst traffic jam, and it has overtaken Miami to be voted the U.S. city with the angriest and most aggressive drivers in 2009, according to a survey on road rage released on Tuesday. Bad traffic also cause slow-traffic, and taxi drivers tend to suck in traffic during rush hours. Does fare per minute ratio have an impact on the percent tip that passengers pay? Do passengers compensate taxi drivers more during rush hours? Are passengers sympathetic to taxi drivers for the time they spend in slow traffic?
-
-https://www.reuters.com/article/us-driving-roadrage-life/new-york-drivers-named-most-aggressive-angry-in-u-s-idUSTRE55F1J720090616
-
 
 ```{r, message=FALSE}
 library(lubridate)
