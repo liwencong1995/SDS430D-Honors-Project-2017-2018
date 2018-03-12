@@ -98,7 +98,7 @@ summary(tip_distance)$coef[1:2,]
 Acoording to the simple linear regression result, trip distance does not have significant impact on the percent of tips paid, controlling for both pick-up and drop-off locations.
 
 ## Which zones have the highest percent tip?
-Let's fist take a look at which pick-up zones have the highest number of pickups. We create a heat map to visulizae the number of trip for each pick-up zones on a map of New York City Taxi Zones.
+Let's fist take a look at which pick-up zones have the highest number of pickups. 
 
 ```{r, message=FALSE}
 data("taxi_zones")
@@ -106,18 +106,28 @@ library(sp)
 pick_up_zones <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "LocationID")
 ```
 
-```{r}
+We can create a heat map to visulizae the number of trip for each pick-up zones on a map of New York City Taxi Zones.
+```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone"}
 library(leaflet)
+library(webshot)
+
 reds = colorNumeric("Reds", domain = NULL)
-# leaflet(data = pick_up_zones) %>% 
+#create visulization
+# leaflet(data = pick_up_zones) %>%
 #   addTiles() %>%
 #   addPolygons(fillColor = ~reds(num_trips),
 #               fillOpacity = 0.6,
 #               weight = 1,
 #               opacity = 0.8) %>%
 #   setView(lat = 40.7128, lng = -74.0060, zoom = 10)
+# 
+# library(htmlwidgets)
+# saveWidget(m, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/temp.html")
+# URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/temp.html"
+# webshot(URL, cliprect = "viewport")
 ```
-It's obbivous that Manhattan, La Guardia Airport, and JKF Airport have the most number of pick-ups.
+![](figure/num_trip.png)
+It's obivous that Manhattan, La Guardia Airport, and JKF Airport have the most number of pick-ups.
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up zones that have more than 900 trips per month or 30 trips per day, then we observe that many pick-up zones that have the highest percent tips are in Brooklyn. 
 ```{r}

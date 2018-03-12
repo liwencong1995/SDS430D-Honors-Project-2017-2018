@@ -505,12 +505,14 @@ is convenient for users to compare and contrast the performance of these
 three services.
 
 This package inherits functions from many packages: etl, dplyr, DBI,
-rlang, and stringr. Since SQL databases are good tools for medium data
-analysis, ETL functions build connection to a SQL database at the back
-end and convert R code automatically into SQL queries and send them to
-the SQL database to get data tables containing data of each hail
-service. Thus, users do not need to have any knowledge of SQL queries
-and they can draw in any subsets of the data from the SQL database in R.
+rlang, and stringr.
+
+Since SQL databases are good tools for medium data analysis, ETL
+functions build connection to a SQL database at the back end and convert
+R code automatically into SQL queries and send them to the SQL database
+to get data tables containing data of each hail service. Thus, users do
+not need to have any knowledge of SQL queries and they can draw in any
+subsets of the data from the SQL database in R.
 
 In general, extract.nyctaxi function download data of the four types of
 hail service data (yellow taxi, green taxi, uber, and lyft) from the
@@ -530,6 +532,7 @@ Packages can be installed with the install.packages() function in R.
 \begin{Highlighting}[]
 \CommentTok{# load the package}
 \KeywordTok{library}\NormalTok{(nyctaxi)}
+\KeywordTok{library}\NormalTok{(RMySQL)}
 \end{Highlighting}
 \end{Shaded}
 Users need to create an etl object in order to apply the etl operations
@@ -1517,8 +1520,7 @@ both pick-up and drop-off locations.
 tip?}\label{which-zones-have-the-highest-percent-tip}
 
 Let's fist take a look at which pick-up zones have the highest number of
-pickups. We create a heat map to visulizae the number of trip for each
-pick-up zones on a map of New York City Taxi Zones.
+pickups.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{data}\NormalTok{(}\StringTok{"taxi_zones"}\NormalTok{)}
@@ -1534,18 +1536,35 @@ Warning: package 'sp' was built under R version 3.4.3
     \DataTypeTok{by.y =} \StringTok{"LocationID"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+We can create a heat map to visulizae the number of trip for each
+pick-up zones on a map of New York City Taxi Zones.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(leaflet)}
-\NormalTok{reds =}\StringTok{ }\KeywordTok{colorNumeric}\NormalTok{(}\StringTok{"Reds"}\NormalTok{, }\DataTypeTok{domain =} \OtherTok{NULL}\NormalTok{)}
-\CommentTok{# leaflet(data = pick_up_zones) %>% addTiles() %>%}
-\CommentTok{# addPolygons(fillColor = ~reds(num_trips),}
-\CommentTok{# fillOpacity = 0.6, weight = 1, opacity = 0.8) %>%}
-\CommentTok{# setView(lat = 40.7128, lng = -74.0060, zoom = 10)}
+\KeywordTok{library}\NormalTok{(webshot)}
 \end{Highlighting}
 \end{Shaded}
-It's obbivous that Manhattan, La Guardia Airport, and JKF Airport have
-the most number of pick-ups.
+\begin{verbatim}
+Warning: package 'webshot' was built under R version 3.4.3
+\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reds =}\StringTok{ }\KeywordTok{colorNumeric}\NormalTok{(}\StringTok{"Reds"}\NormalTok{, }\DataTypeTok{domain =} \OtherTok{NULL}\NormalTok{)}
+\CommentTok{# create visulization leaflet(data = pick_up_zones)}
+\CommentTok{# %>% addTiles() %>% addPolygons(fillColor =}
+\CommentTok{# ~reds(num_trips), fillOpacity = 0.6, weight = 1,}
+\CommentTok{# opacity = 0.8) %>% setView(lat = 40.7128, lng =}
+\CommentTok{# -74.0060, zoom = 10) library(htmlwidgets)}
+\CommentTok{# saveWidget(m, file =}
+\CommentTok{# '/Users/priscilla/Desktop/Honors}
+\CommentTok{# Thesis/writing/figures/temp.html') URL <-}
+\CommentTok{# '/Users/priscilla/Desktop/Honors}
+\CommentTok{# Thesis/writing/figures/temp.html' webshot(URL,}
+\CommentTok{# cliprect = 'viewport')}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{figure/num_trip.png} It's obivous that Manhattan, La
+Guardia Airport, and JKF Airport have the most number of pick-ups.
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up
 zones that have more than 900 trips per month or 30 trips per day, then
@@ -1563,7 +1582,7 @@ are in Brooklyn.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-15}Ten taxi pick-up zones with the highest percent tip with threshold equals to 900}
+\caption{\label{tab:unnamed-chunk-14}Ten taxi pick-up zones with the highest percent tip with threshold equals to 900}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1612,7 +1631,7 @@ Airport.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-16}Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000}
+\caption{\label{tab:unnamed-chunk-15}Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1811,145 +1830,12 @@ Commission}\label{chapter5}
 Kennedy International
 Airport?}\label{should-there-be-a-flat-rate-between-manhattan-and-john-f.-kennedy-international-airport}
 
-\subsection{People in Manhattan benefit from the \$52 flat
-rate.}\label{people-in-manhattan-benefit-from-the-52-flat-rate.}
-
 Why is there a flat rate to and from JFK airport and any location in
 Manhattan? Why is the flat rate \$52? Does TLC make profit from the \$52
 flat rate? Does \$52 reduce the cogestion on the road to JFK airport and
-make taking a train a more preferable choice?
+make taking a train a more preferable choice? The New York City taxi
+trip records can reveal the answers to these questions.
 
-If there is no flat rate between JFK and Manhattan,
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{jfk_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(RatecodeID }\OperatorTok{==}\StringTok{ }
-\StringTok{    }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
-\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
-\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }
-\StringTok{    }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount, }\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount)}
-
-\NormalTok{to_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{to_jkf_zone <-}\StringTok{ }\NormalTok{to_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }
-        \DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
-
-\CommentTok{# to_jkf_fare <- merge(taxi_zones, to_jkf_zone,}
-\CommentTok{# by.x = 'LocationID', by.y = 'PULocationID')}
-\end{Highlighting}
-\end{Shaded}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{to_jkf_zone_above <-}\StringTok{ }\NormalTok{to_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ }
-\StringTok{    "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# filter(avg_fare >= 52) %>%}
-\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_fare))}
-
-\KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{44}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Pick-up Zones with avergae fare to JKF Airport"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\begin{table}
-
-\caption{\label{tab:unnamed-chunk-24}Pick-up Zones with avergae fare to JKF Airport}
-\centering
-\begin{tabular}[t]{r|r|r|r|l|l}
-\hline
-LocationID & num\_trips & avg\_dis & avg\_fare & Borough & Zone\\
-\hline
-127 & 6 & 22.85833 & 65.06250 & Manhattan & Inwood\\
-\hline
-243 & 8 & 21.54250 & 63.82125 & Manhattan & Washington Heights North\\
-\hline
-13 & 1266 & 22.09787 & 62.44055 & Manhattan & Battery Park City\\
-\hline
-244 & 74 & 20.42216 & 60.27892 & Manhattan & Washington Heights South\\
-\hline
-239 & 1685 & 20.47249 & 60.11053 & Manhattan & Upper West Side South\\
-\hline
-261 & 723 & 21.22151 & 59.59012 & Manhattan & World Trade Center\\
-\hline
-143 & 655 & 20.53586 & 59.26524 & Manhattan & Lincoln Square West\\
-\hline
-238 & 1233 & 19.93394 & 59.02019 & Manhattan & Upper West Side North\\
-\hline
-12 & 41 & 20.62537 & 58.44146 & Manhattan & Battery Park\\
-\hline
-88 & 362 & 20.30909 & 57.79963 & Manhattan & Financial District South\\
-\hline
-151 & 637 & 19.39038 & 57.71180 & Manhattan & Manhattan Valley\\
-\hline
-116 & 67 & 19.27463 & 57.54149 & Manhattan & Hamilton Heights\\
-\hline
-158 & 751 & 19.68667 & 57.52564 & Manhattan & Meatpacking/West Village West\\
-\hline
-24 & 248 & 19.21508 & 57.20560 & Manhattan & Bloomingdale\\
-\hline
-152 & 67 & 19.12522 & 57.10769 & Manhattan & Manhattanville\\
-\hline
-236 & 1574 & 18.94848 & 56.57681 & Manhattan & Upper East Side North\\
-\hline
-166 & 447 & 18.88353 & 56.54928 & Manhattan & Morningside Heights\\
-\hline
-140 & 1005 & 18.90681 & 56.04591 & Manhattan & Lenox Hill East\\
-\hline
-262 & 1127 & 18.62596 & 55.91055 & Manhattan & Yorkville East\\
-\hline
-50 & 628 & 18.90573 & 55.50548 & Manhattan & Clinton West\\
-\hline
-263 & 1185 & 18.56361 & 55.47873 & Manhattan & Yorkville West\\
-\hline
-87 & 1252 & 19.67124 & 55.39298 & Manhattan & Financial District North\\
-\hline
-142 & 1832 & 19.19067 & 55.37192 & Manhattan & Lincoln Square East\\
-\hline
-246 & 591 & 18.24122 & 54.95910 & Manhattan & West Chelsea/Hudson Yards\\
-\hline
-42 & 92 & 18.05380 & 54.87038 & Manhattan & Central Harlem North\\
-\hline
-43 & 826 & 18.74347 & 54.85187 & Manhattan & Central Park\\
-\hline
-75 & 470 & 18.16949 & 54.77060 & Manhattan & East Harlem South\\
-\hline
-41 & 238 & 18.02353 & 54.33887 & Manhattan & Central Harlem\\
-\hline
-68 & 1623 & 17.91729 & 53.98436 & Manhattan & East Chelsea\\
-\hline
-231 & 947 & 19.36168 & 53.91387 & Manhattan & TriBeCa/Civic Center\\
-\hline
-249 & 866 & 18.50783 & 53.65980 & Manhattan & West Village\\
-\hline
-237 & 1493 & 18.42390 & 53.65730 & Manhattan & Upper East Side South\\
-\hline
-48 & 2780 & 17.99023 & 53.33922 & Manhattan & Clinton East\\
-\hline
-141 & 1197 & 18.23483 & 53.16414 & Manhattan & Lenox Hill West\\
-\hline
-90 & 1151 & 17.58740 & 53.09904 & Manhattan & Flatiron\\
-\hline
-230 & 6585 & 17.78133 & 52.99621 & Manhattan & Times Sq/Theatre District\\
-\hline
-74 & 257 & 17.28008 & 52.70712 & Manhattan & East Harlem North\\
-\hline
-186 & 2236 & 17.30646 & 52.66024 & Manhattan & Penn Station/Madison Sq West\\
-\hline
-113 & 947 & 17.94572 & 52.65996 & Manhattan & Greenwich Village North\\
-\hline
-125 & 430 & 18.69965 & 52.63090 & Manhattan & Hudson Sq\\
-\hline
-100 & 1742 & 17.24245 & 52.43794 & Manhattan & Garment District\\
-\hline
-234 & 1803 & 17.20495 & 52.42949 & Manhattan & Union Sq\\
-\hline
-105 & 1 & 17.31000 & 52.11500 & Manhattan & Governor's Island/Ellis Island/Liberty Island\\
-\hline
-224 & 315 & 17.46460 & 52.07268 & Manhattan & Stuy Town/Peter Cooper Village\\
-\hline
-\end{tabular}
-\end{table}
 Imagine it's your first time travelling to New York City, and you
 decided to live in a hotel in Manhattan Since you do not know much about
 the city, the \$52 flat rate is nice for you, and it incentivizes you to
@@ -1963,38 +1849,258 @@ than \$52 to take a taxi to go to the JFK Airport. The higher the taxi
 fare is, the less the demand for taxi will be. Therefore, having a flat
 rate,helps taxi drivers to get more trips from Manhattan to JFK Airport.
 
-\section{However, are taxi drivers happy with the flat
-rate?}\label{however-are-taxi-drivers-happy-with-the-flat-rate}
+\subsection{People in Manhattan benefit from the \$52 flat
+rate.}\label{people-in-manhattan-benefit-from-the-52-flat-rate.}
 
-What the expected fare from JKF Airport to Manhattan?
+If there is no flat rate between JFK and Manhattan, how much would
+passengers pay for the distance they travelled between JFK Airport AND
+Manhattan? And how much more or less should they have paid comparing to
+the \$52 flat rate?
+
+In this study, we are only interested in yellow taxi trip between
+Manhattan and JFK Airport.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
+\CommentTok{# jfk_trip <- taxi %>% tbl('yellow') %>%}
+\CommentTok{# filter(RatecodeID == 2) %>% collect()}
 
+\NormalTok{jfk_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(RatecodeID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID)}
+\end{Highlighting}
+\end{Shaded}
+\textbf{Trips from Manhattan to JFK Airport} We first focus on all the
+trips that departed in Manhattan and went to JFK Airport, and then we
+calculate the estmated fare amount that the passengers should have paid
+based on the distance travelled from each pick-up point to JFK Airport
+based on the fare rate suggested by TLC for each pick-up zone.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(}\StringTok{"taxi_zone_lookup"}\NormalTok{)}
+\NormalTok{to_jfk <-}\StringTok{ }\NormalTok{jfk_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }
+\StringTok{        }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ PULocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ "Manhattan"}\NormalTok{)}
+
+\NormalTok{to_jkf_zone <-}\StringTok{ }\NormalTok{to_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(LocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_est_fare =} \KeywordTok{mean}\NormalTok{(est_fare), }
+        \DataTypeTok{avg_est_diff =} \KeywordTok{mean}\NormalTok{(est_diff)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }
+    \DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+Here is a map of estmated fare amount calculated by taking the average
+of all estimated fare amounts from the same pick-up zone to JFK Airport
+based on the fare rate suggested by TLC for each pick-up zone.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jkf_fare <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(taxi_zones, to_jkf_zone, }\DataTypeTok{by.x =} \StringTok{"LocationID"}\NormalTok{, }
+    \DataTypeTok{by.y =} \StringTok{"LocationID"}\NormalTok{)}
+
+\CommentTok{# leaflet(data = to_jkf_fare) %>% addTiles() %>%}
+\CommentTok{# addPolygons(fillColor = ~reds(avg_est_fare),}
+\CommentTok{# fillOpacity = 0.6, weight = 1, opacity = 0.8) %>%}
+\CommentTok{# setView(lat = 40.7128, lng = -74.0060, zoom = 10)}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{figure/to_jfk_fare.png} According to the map, trips
+from Midtown on average cost less than trips from other taxi zones in
+Manhattan.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jkf_zone_above <-}\StringTok{ }\NormalTok{to_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(avg_est_fare }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{52}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_est_fare))}
+
+\KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-25}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\centering
+\begin{tabular}[t]{r|r|r|r|l|l}
+\hline
+LocationID & num\_trips & avg\_est\_fare & avg\_est\_diff & Borough & Zone\\
+\hline
+127 & 6 & 65.06250 & 13.062500 & Manhattan & Inwood\\
+\hline
+243 & 8 & 63.82125 & 11.821250 & Manhattan & Washington Heights North\\
+\hline
+13 & 1266 & 62.44055 & 10.440545 & Manhattan & Battery Park City\\
+\hline
+244 & 74 & 60.27892 & 8.278919 & Manhattan & Washington Heights South\\
+\hline
+239 & 1685 & 60.11053 & 8.110525 & Manhattan & Upper West Side South\\
+\hline
+261 & 723 & 59.59012 & 7.590118 & Manhattan & World Trade Center\\
+\hline
+143 & 655 & 59.26524 & 7.265244 & Manhattan & Lincoln Square West\\
+\hline
+238 & 1233 & 59.02019 & 7.020191 & Manhattan & Upper West Side North\\
+\hline
+12 & 41 & 58.44146 & 6.441463 & Manhattan & Battery Park\\
+\hline
+88 & 362 & 57.79963 & 5.799627 & Manhattan & Financial District South\\
+\hline
+\end{tabular}
+\end{table}
+Let's visualize the taxi zones that would have costed more than the \$52
+flat rate.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jkf_fare_above <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(taxi_zones, to_jkf_zone_above, }
+    \DataTypeTok{by.x =} \StringTok{"LocationID"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"LocationID"}\NormalTok{)}
+
+\CommentTok{# leaflet(data = to_jkf_fare_above) %>% addTiles()}
+\CommentTok{# %>% addPolygons(fillColor = ~reds(avg_est_fare),}
+\CommentTok{# fillOpacity = 0.6, weight = 1, opacity = 0.8) %>%}
+\CommentTok{# setView(lat = 40.7128, lng = -74.0060, zoom = 10)}
+
+\CommentTok{# add t test to test average fare vs 52}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{figure/to_jfk_fare_above.png} Therefore, passengers
+from places in Manhattan besides Midtown, East Village, and some parts
+of Lower Manhattan benefit from the \$52 flat rate. However, people
+living in Midtown, East Village, and some parts of Lower Manhattan might
+be relatively more indifferent to the price of taxi. Instead, they
+probably put more emphasis on convenience and time.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(to_jkf_zone}\OperatorTok{$}\NormalTok{avg_est_diff)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+[1] 2.138185
+\end{verbatim}
+On average people travel from Manhattan pay \$2.14 less with the \$52
+flat rate policy.
+
+\section{However, are taxi drivers happy when their passengers are going
+to JFK Airport from
+Manhattan?}\label{however-are-taxi-drivers-happy-when-their-passengers-are-going-to-jfk-airport-from-manhattan}
+
+Everytime I travel to New York City, I always take Yellow cabs to go
+around the city. It seemed to me that the cab drivers were always happy
+whenever they heard me telling them that I need to go to the JFK Airport
+from Manhattan. Are taxi drivers happy when their passengers are going
+to JFK Airport from Manhattan? How much on average would taxi driver
+make on their way bavk to the city from Manhattan?
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }
+\StringTok{    }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{fare_amount)}
+\end{Highlighting}
+\end{Shaded}
+Since a taxi driver coming from Manhattan to JFK Airport could be
+directed back to anywhere in the city. We can calculate the average taxi
+fare amount that the taxi drivers would get paid for a random trip from
+JFK Airport to any part of the city.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(from_jfk}\OperatorTok{$}\NormalTok{est_fare)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+[1] 46.89639
+\end{verbatim}
+On average, taxi drivers would be paid for \$46.90 for a trip from the
+JFK Airport to any taxi zone. What are the most popular drop-off zones
+for yellow taxis from JFK Airport?
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{from_jkf_zone <-}\StringTok{ }\NormalTok{from_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(DOLocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }
-        \DataTypeTok{avg_fare =} \KeywordTok{mean}\NormalTok{(est_fare)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{num_trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_est_fare =} \KeywordTok{mean}\NormalTok{(est_fare), }
+        \DataTypeTok{avg_est_diff =} \KeywordTok{mean}\NormalTok{(est_diff)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
-
+\end{Highlighting}
+\end{Shaded}
+\textbf{What's the average fare to each dropp-off zone from JFK Airport?
+}
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{from_jkf_fare <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(taxi_zones, from_jkf_zone, }\DataTypeTok{by.x =} \StringTok{"LocationID"}\NormalTok{, }
     \DataTypeTok{by.y =} \StringTok{"LocationID"}\NormalTok{)}
 
-\CommentTok{# cols <- brewer.pal(n = 4, name = 'Greys')}
-\NormalTok{lcols <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(from_jkf_fare}\OperatorTok{$}\NormalTok{avg_fare, }\DataTypeTok{breaks =} \KeywordTok{quantile}\NormalTok{(from_jkf_fare}\OperatorTok{$}\NormalTok{avg_fare, }
-    \DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{labels =}\NormalTok{ cols)}
-\KeywordTok{plot}\NormalTok{(from_jkf_fare, }\DataTypeTok{col =} \KeywordTok{as.character}\NormalTok{(lcols))}
+\CommentTok{# leaflet(data = from_jkf_fare) %>% addTiles() %>%}
+\CommentTok{# addPolygons(fillColor = ~reds(avg_est_fare),}
+\CommentTok{# fillOpacity = 0.6, weight = 1, opacity = 0.8) %>%}
+\CommentTok{# setView(lat = 40.7128, lng = -74.0060, zoom = 10)}
 \end{Highlighting}
 \end{Shaded}
+\includegraphics{figure/from_jkf_fare.png} As we expected, the red
+shades are smoothly distributed, since taxi zones that are futher away
+should cost more to get there.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{from_jkf_zone_above <-}\StringTok{ }\NormalTok{from_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ }
-\StringTok{    "Manhattan"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# filter(avg_fare >= 52) %>%}
-\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_fare))}
-
-\KeywordTok{kable}\NormalTok{(to_jkf_zone_above[}\DecValTok{1}\OperatorTok{:}\DecValTok{67}\NormalTok{, ], }\DataTypeTok{caption =} \StringTok{"Drop-off Zones with average fare amount from JFK Airport"}\NormalTok{)}
+\CommentTok{# leaflet(data = from_jkf_fare) %>% addTiles() %>%}
+\CommentTok{# addPolygons(fillColor = ~reds(num_trips),}
+\CommentTok{# fillOpacity = 0.6, weight = 1, opacity = 0.8) %>%}
+\CommentTok{# setView(lat = 40.7128, lng = -74.0060, zoom = 10)}
 \end{Highlighting}
 \end{Shaded}
-how much time it would take for a cb driver to do a round trip
+\includegraphics{figure/from_jkf_num.png} According to the map above,
+Manhattan is still the most popular destination for passengers depart
+from the JFK Airport.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{from_jkf_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Manhattan =} \KeywordTok{ifelse}\NormalTok{(Borough }\OperatorTok{==}\StringTok{ }
+\StringTok{    "Manhattan"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(Manhattan) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{all_trips =} \KeywordTok{sum}\NormalTok{(num_trips))}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+# A tibble: 2 x 2
+  Manhattan all_trips
+      <dbl>     <int>
+1         0    116248
+2         1    131231
+\end{verbatim}
+According to the summary, the total amount of trips from JFK Airport to
+Manhattan is 10\% more than the total number of trips travelling from
+JFK Airport to all other Borough. Therefore, it is very likely for taxi
+drivers to get passengers who want to go to Manhattan with a flat rate
+of \$52. In this case, a round trip to and from JFK Airport is worthy.
+Therefore, taxi drivers should be pretty happy when their passengers are
+going to JFK Airport from Manhattan.
+
+\section{How does weather affect the number of taxi and Lyft
+trips?}\label{how-does-weather-affect-the-number-of-taxi-and-lyft-trips}
+
+According to Schneider (2015), there are lots of confounding variables
+between weather and taxi rides, including seasonal trends, annual growth
+due to boro taxis, and whether weather events happen to fall on weekdays
+or weekends, but it would appear that snowfall has a significant
+negative impact on daily taxi ridership. In this section, we use New
+York City Yellow Taxi and Lyft data to calculate the number of trips
+occurred on and before snow days.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxi_summary_}\DecValTok{2017}\NormalTok{ <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year =} \KeywordTok{year}\NormalTok{(tpep_pickup_datetime), }
+    \DataTypeTok{month =} \KeywordTok{month}\NormalTok{(tpep_pickup_datetime)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(year, }
+\NormalTok{    month) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{N =} \KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{()}
+
+\NormalTok{taxi_sum <-}\StringTok{ }\NormalTok{taxi_summary_}\DecValTok{2017} \OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year_month =} \KeywordTok{paste0}\NormalTok{(year, }
+    \StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }\DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{"-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{time =} \KeywordTok{as.POSIXct}\NormalTok{(year_month))}
+
+\KeywordTok{library}\NormalTok{(plotly)}
+\NormalTok{p <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{taxi_sum}\OperatorTok{$}\NormalTok{time, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{taxi_sum}\OperatorTok{$}\NormalTok{N, }\DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+I downloaded daily Central Park weather data from the National Climatic
+Data Center, and joined it to the taxi data to see if we could learn
+anything else about the relationship between weather and taxi rides.
 
 \chapter{Conclusion}\label{chapter5}
 

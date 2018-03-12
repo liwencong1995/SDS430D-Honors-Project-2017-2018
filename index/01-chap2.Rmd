@@ -45,6 +45,7 @@ etl is the parent package of nyctaxi. etl package provides a CRAN-friendly frame
 nyctaxi was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiled three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services. 
 
 This package inherits functions from many packages: etl, dplyr, DBI, rlang, and stringr. 
+
 Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert R code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in R.
 
 In general, extract.nyctaxi function download data of the four types of hail service data (yellow taxi, green taxi, uber, and lyft) from the corresponding sources. transform.nyctaxi uses different techniques to clean all four types of data to get then ready for the next step. extract.load loads the data user selected to a SQL database. 
@@ -59,6 +60,7 @@ install.packages("nyctaxi")
 ```{r, message=FALSE}
 # load the package
 library(nyctaxi)
+library(RMySQL)
 ```
 
 Users need to create an etl object in order to apply the etl operations to it, and only the name of the SQL database, working directory, and type of SQL database need to be specified during initialization. If the type of SQL database is not specified, a local RSQLite database will be generated as default. 
