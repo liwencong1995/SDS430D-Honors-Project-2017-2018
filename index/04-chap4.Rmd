@@ -1,13 +1,87 @@
 # New York City Taxi Consumer {#chapter4}
+
 ## How long does it take for passengers to get to JFK, LaGuardia, and Newark Airports? When is the best time to travel?
-```{r, eval=FALSE}
+
+We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. 
+
+```{r, message=FALSE}
 library(dplyr)
 library(readr)
-yellow_2015.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_tripdata_2015-08.csv")
-yellow_2016.08_tip <- yellow_2015.08_cleaned %>%
+library(lubridate)
+
+# yellow_2015.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_tripdata_2015-08.csv")
+
+to_jfk_trip <- yellow_2016.08_cleaned %>%
+  filter(DOLocationID == 132) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
   filter(fare_amount > 0) %>%
-  filter(tip_amount > 0) %>%
-  filter(PULocationID != DOLocationID)
+  filter(PULocationID != DOLocationID) %>%
+  mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
+  mutate(min = round(as.numeric(duration)/60, 2)) %>%
+  mutate(hour = hour(tpep_pickup_datetime))
+
+to_lg_trip <- yellow_2016.08_cleaned %>%
+  filter(DOLocationID == 138) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
+  mutate(min = round(as.numeric(duration)/60, 2)) %>%
+  mutate(hour = hour(tpep_pickup_datetime))
+
+to_newark_trip <- yellow_2016.08_cleaned %>%
+  filter(DOLocationID == 1) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
+  mutate(min = round(as.numeric(duration)/60, 2)) %>%
+  mutate(hour = hour(tpep_pickup_datetime))
+```
+
+Now we need to calculate the average amount of time it take for each zone at during each hour.
+```{r}
+to_jfk_zone <- to_jfk_trip %>%
+  group_by(PULocationID, hour) %>%
+  summarise(jfk_avg_min = mean(min)) %>%
+  arrange(PULocationID)
+
+to_lg_zone <- to_lg_trip %>%
+  group_by(PULocationID, hour) %>%
+  summarise(lg_avg_min = mean(min)) %>%
+  arrange(PULocationID)
+
+to_newark_zone <- to_newark_trip %>%
+  group_by(PULocationID, hour) %>%
+  summarise(newark_avg_min = mean(min)) %>%
+  arrange(PULocationID)
+```
+
+So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour. 
+```{r}
+head(to_jfk_zone)
+```
+
+It woul be easier if we combine the three tables and put all information related to trip duration to airports into one table.
+```{r}
+two_transp <- full_join(to_jfk_zone, to_lg_zone, by = c("PULocationID", "hour"))
+three_transp <- full_join(two_transp, to_newark_zone, by = c("PULocationID", "hour"))
+```
+
+
+
+```{r}
+data("taxi_zone_lookup")
+to_jfk <- jfk_trip %>%
+  filter(DOLocationID == 132) %>%
+  mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + improvement_surcharge + mta_tax + tolls_amount) %>%
+  mutate(est_diff = est_fare - fare_amount) %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup , by = "LocationID") %>%
+  filter(Borough == "Manhattan")
 ```
 
 ```{r, eval=FALSE}
@@ -15,6 +89,8 @@ dataset %>%
   group_by()
 ```
 
+
+**A Shiny app will be added here. This app will allow users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York.**
 
 ## How does weather affect New York City taxi and Uber trips? How does snowfall affect taxi and Uber trips?
 
