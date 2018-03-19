@@ -1,5 +1,5 @@
 ```{r, message=FALSE, echo=FALSE}
-library(knitr)
+#library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
                fig.width=6, fig.height=6)
 ```
@@ -11,9 +11,9 @@ opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
 We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. 
 
 ```{r, message=FALSE}
-library(dplyr)
-library(readr)
-library(lubridate)
+#library(dplyr)
+#library(readr)
+#library(lubridate)
 
 to_jfk_trip <- yellow_2016.08_cleaned %>%
   filter(DOLocationID == 132) %>%
@@ -195,7 +195,7 @@ taxi_sum <- taxi_summary_2017 %>%
   mutate(year_month = paste0(year, "-", stringr::str_pad(month, 2, "left", "0"), "-01")) %>%
   mutate(time = as.POSIXct(year_month))
 
-library(plotly)
+#library(plotly)
 p <- plot_ly(x = ~taxi_sum$time, y = ~taxi_sum$N, mode = 'lines')
 p
 ```

@@ -1,5 +1,5 @@
 ```{r, message=FALSE, echo=FALSE}
-library(knitr)
+#library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
                fig.width=6, fig.height=6)
 ```
@@ -12,8 +12,8 @@ In the following analysis, I will focus on trip data collected in August 2016. T
 
 ```{r, message=FALSE, echo=FALSE}
 library(dplyr)
-library(readr)
-yellow_2016.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
+#library(readr)
+#yellow_2016.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
 ```
 
 ```{r}
@@ -64,7 +64,7 @@ tip_pickup <- yellow_2016.08_tip %>%
   arrange(desc(avg_tip)) %>%
   filter(Zone != "Unknown")
 
-library(knitr)
+#library(knitr)
 kable(tip_pickup[1:10,], caption = "Ten taxi pick-up zones with the highest average tip without any threshold")
 ```
 
@@ -118,7 +118,6 @@ pick_up_zones <- merge(taxi_zones, tip_pickup, by.x = "LocationID", by.y = "Loca
 We can create a heat map to visulizae the number of trip for each pick-up zones on a map of New York City Taxi Zones.
 ```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone"}
 library(leaflet)
-library(webshot)
 
 reds = colorNumeric("Reds", domain = NULL)
 #create visulization

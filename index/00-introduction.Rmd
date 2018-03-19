@@ -19,8 +19,14 @@ Similar to Uber, Lyft is also an on-demand transportation company, and it operat
 
 
 ## Literature Review 
+### etl R package
+in `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that R Markdown replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reprodicible statistical analysis straight-forward.@baumer2014r
+
+Loading medium-sized data into R environment takes a long time and might crush an R session. `etl` R package creates a user-friendly platform that allows R users to easily work with medium data with the extract, transform, load framework, which is commonly konwn as ETL in computing.@wikipedia The `ETL` process has been set up by Benjamin Baumer @pkgetl in R to facilitate etl operations for medium data, and it is designed to work with any general data set. Packages that are specific to  perticular data sets are needed to be written in order to better work with complex medium-sized data sets.
 
 ### New York City Taxi
+New York City is the most famous and popular city in the United States, and the New York City yellow cabs are recognized as the icon of New York City. In 2009, New York City was voted to be the U.S. city with the `angriest and most aggressive drivers`.
+
 https://www.reuters.com/article/us-driving-roadrage-life/new-york-drivers-named-most-aggressive-angry-in-u-s-idUSTRE55F1J720090616
 
 https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers
@@ -44,6 +50,11 @@ https://nycdatascience.com/blog/student-works/finding-fare-uber-recommendation-s
 ## Contribution
 ### nyctaxi Package
 nyctaxi is an etl-dependent R package that help users to easily get access to New York City Taxi, Uber and Lyft trip data through Extract, Transform, and Load functions (ETL). This package facilitates ETL to deal with medium data that are too big to store on a laptop. Users are given the option to choose specific years and months as the input parameters of the three ETL functions, and a populated SQL database will be returned as the output. Users do not need to learn SQL queries, since all user interaction is in R.
+
+```{r}
+library(webshot)
+webshot("https://github.com/beanumber/nyctaxi","r-nyctaxi.png")
+```
 
 ### Social Impact of NYC Taxi
 New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs: taxi drivers want to maxmize their profit, and in order to do that, they need to maximize the revenue while minimizing the cost. Taxi passengers want the cheapest and most convenient way of transportantion. Since Uber and Lyft launched their services in New York City, many consumers started to demand the cheaper e-hail services. TLC wants to protect both taxi drivers and passengers, and it creates policies to make NYC taxi more accessible to consumers who really need this service. In this section, I think about what each party wants and try to find a way for them to be better-off. 
