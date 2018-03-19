@@ -1353,9 +1353,6 @@ offer the most tips, we need to filter out the trips that are not paid
 by credit or debit card.
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(dplyr)}
-\KeywordTok{library}\NormalTok{(readr)}
-\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv"}\NormalTok{)}
 \NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }
 \StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{==}\StringTok{ }
 \StringTok{    }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{<}\StringTok{ }\NormalTok{fare_amount)}
@@ -1422,7 +1419,7 @@ Here is a list of pick-up zones with their average percent tip:
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-11}Ten taxi pick-up zones with the highest average tip without any threshold}
+\caption{\label{tab:unnamed-chunk-13}Ten taxi pick-up zones with the highest average tip without any threshold}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1582,7 +1579,7 @@ are in Brooklyn.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-14}Ten taxi pick-up zones with the highest percent tip with threshold equals to 900}
+\caption{\label{tab:unnamed-chunk-16}Ten taxi pick-up zones with the highest percent tip with threshold equals to 900}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1631,7 +1628,7 @@ Airport.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-15}Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000}
+\caption{\label{tab:unnamed-chunk-17}Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -1801,27 +1798,279 @@ tips to taxi drivers during rush hours.
 
 \chapter{New York City Taxi Consumer}\label{chapter4}
 
-\section{How long does it take for passengers to get to JFK, LaGuardia,
+\section{How long does it take for passengers to get to JFK, La Guardia,
 and Newark Airports? When is the best time to
-travel?}\label{how-long-does-it-take-for-passengers-to-get-to-jfk-laguardia-and-newark-airports-when-is-the-best-time-to-travel}
+travel?}\label{how-long-does-it-take-for-passengers-to-get-to-jfk-la-guardia-and-newark-airports-when-is-the-best-time-to-travel}
+
+We want to calculate the average number of minutes it takes to go to all
+three airport from a specific taxi zone at every hour. First, we want to
+focus on trips going to any of the three airports, JFK, LaGuardia, or
+Newark Airport.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(dplyr)}
 \KeywordTok{library}\NormalTok{(readr)}
-\NormalTok{yellow_}\FloatTok{2015.}\NormalTok{08_cleaned <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"~/Desktop/Honors Thesis/thesis/index/data/yellow_tripdata_2015-08.csv"}\NormalTok{)}
-\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_tip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2015.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }
-\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
-\StringTok{    }\NormalTok{DOLocationID)}
+\KeywordTok{library}\NormalTok{(lubridate)}
+
+\NormalTok{to_jfk_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =}\NormalTok{ tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{tpep_pickup_datetime) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(duration)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }
+    \DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{hour =} \KeywordTok{hour}\NormalTok{(tpep_pickup_datetime))}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+Warning in as.POSIXlt.POSIXct(x): unknown timezone 'zone/tz/2018c.1.0/
+zoneinfo/America/New_York'
+\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_lg_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{138}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =}\NormalTok{ tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{tpep_pickup_datetime) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(duration)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }
+    \DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{hour =} \KeywordTok{hour}\NormalTok{(tpep_pickup_datetime))}
+
+\NormalTok{to_newark_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =}\NormalTok{ tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{tpep_pickup_datetime) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(duration)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }
+    \DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{hour =} \KeywordTok{hour}\NormalTok{(tpep_pickup_datetime))}
+\end{Highlighting}
+\end{Shaded}
+Now we need to calculate the average amount of time it take for each
+zone at during each hour.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jfk_zone <-}\StringTok{ }\NormalTok{to_jfk_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID, }
+\NormalTok{    hour) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{jfk_avg_min =} \KeywordTok{mean}\NormalTok{(min)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(PULocationID)}
+
+\NormalTok{to_lg_zone <-}\StringTok{ }\NormalTok{to_lg_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID, }
+\NormalTok{    hour) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{lg_avg_min =} \KeywordTok{mean}\NormalTok{(min)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(PULocationID)}
+
+\NormalTok{to_newark_zone <-}\StringTok{ }\NormalTok{to_newark_trip }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(PULocationID, }
+\NormalTok{    hour) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{newark_avg_min =} \KeywordTok{mean}\NormalTok{(min)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(PULocationID)}
+\end{Highlighting}
+\end{Shaded}
+So far, we have created three tables summarsing the average number of
+minutes it takes to go to all three airports for every hour from
+different taxi zones.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(to_jfk_zone)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+# A tibble: 6 x 3
+# Groups:   PULocationID [3]
+  PULocationID  hour jfk_avg_min
+         <int> <int>       <dbl>
+1            1    14       59.32
+2            1    19       68.58
+3            3    14       54.15
+4            3    19       37.82
+5            4     2       28.52
+6            4     3       25.98
+\end{verbatim}
+It would be easier if we combine all three tables and put all
+information related to trip duration to airports into one table.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{two_transp <-}\StringTok{ }\KeywordTok{full_join}\NormalTok{(to_jfk_zone, to_lg_zone, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"PULocationID"}\NormalTok{, }
+    \StringTok{"hour"}\NormalTok{))}
+\NormalTok{three_transp <-}\StringTok{ }\KeywordTok{full_join}\NormalTok{(two_transp, to_newark_zone, }
+    \DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"PULocationID"}\NormalTok{, }\StringTok{"hour"}\NormalTok{))}
+
+\NormalTok{three_transp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+# A tibble: 5 x 5
+# Groups:   PULocationID [1]
+  PULocationID  hour jfk_avg_min lg_avg_min newark_avg_min
+         <int> <int>       <dbl>      <dbl>          <dbl>
+1            4     2    28.52000   16.89000         32.830
+2            4     3    25.98000   19.40667         44.830
+3            4     4    26.90800   23.36909         32.450
+4            4     5    28.95812   18.01286         28.238
+5            4     6    29.88083   21.97208         27.415
+\end{verbatim}
+\textbf{From Alphabet City, Manhattan to all three airport} Alphabet
+City, Manhattan has pick-up zone ID number 4. Let's take a look at how
+much time is needed to travel to all three airports from taxi zone No.4.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{alphabet <-}\StringTok{ }\NormalTok{three_transp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{4}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{dataset }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{()}
+\KeywordTok{library}\NormalTok{(plotly)}
+\NormalTok{jfk <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{hour, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{jfk_avg_min, }
+    \DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
+\NormalTok{jfk}
 \end{Highlighting}
 \end{Shaded}
-\section{How does weather affect New York City taxi and Uber trips? How
-does snowfall affect taxi and Uber
-trips?}\label{how-does-weather-affect-new-york-city-taxi-and-uber-trips-how-does-snowfall-affect-taxi-and-uber-trips}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-27-1.pdf} As
+shown in the graph, there is a huge peak at 7pm, and it takes on average
+506 minutes to go to JFK from Alphabet City if you depart from 6-7pm.
+This is caused by a huge outlier in the original dataset.
+
+Let's filter out trips that took less than one minute and trips that
+took more than 5 hours out of the dataset, and then regenerate the
+visulization.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{to_jfk_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =}\NormalTok{ tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{tpep_pickup_datetime) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(duration)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }
+    \DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{hour =} \KeywordTok{hour}\NormalTok{(tpep_pickup_datetime)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(min }\OperatorTok{<=}\StringTok{ }\DecValTok{300}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(min }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+
+\NormalTok{to_lg_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{138}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =}\NormalTok{ tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{tpep_pickup_datetime) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(duration)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }
+    \DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{hour =} \KeywordTok{hour}\NormalTok{(tpep_pickup_datetime)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(min }\OperatorTok{<=}\StringTok{ }\DecValTok{300}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(min }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+
+\NormalTok{to_newark_trip <-}\StringTok{ }\NormalTok{yellow_}\FloatTok{2016.}\NormalTok{08_cleaned }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
+\StringTok{    }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(trip_distance }\OperatorTok{>}\StringTok{ }
+\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{!=}\StringTok{ }
+\StringTok{    }\NormalTok{DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =}\NormalTok{ tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\NormalTok{tpep_pickup_datetime) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{round}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(duration)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }
+    \DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{hour =} \KeywordTok{hour}\NormalTok{(tpep_pickup_datetime)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(min }\OperatorTok{<=}\StringTok{ }\DecValTok{300}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(min }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jfk <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{hour, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{jfk_avg_min, }
+    \DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
+\NormalTok{jfk}
+\end{Highlighting}
+\end{Shaded}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-30-1.pdf}
+According to the plot above, it takes the least time to travel to JFK
+Airport around 2am in the morning, and it takes the most time around 3pm
+in the afternoon.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lg <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{hour, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{lg_avg_min, }
+    \DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
+\NormalTok{lg}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+No trace type specified:
+  Based on info supplied, a 'scatter' trace seems appropriate.
+  Read more about this trace type -> https://plot.ly/r/reference/#scatter
+\end{verbatim}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-31-1.pdf}
+According to the plot above, it takes the least time to travel to La
+Guardia Airport around 1am in the morning, and it takes the most time
+around 2pm in the afternoon.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{newark <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{hour, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{alphabet}\OperatorTok{$}\NormalTok{newark_avg_min, }
+    \DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
+\NormalTok{newark}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+No trace type specified:
+  Based on info supplied, a 'scatter' trace seems appropriate.
+  Read more about this trace type -> https://plot.ly/r/reference/#scatter
+\end{verbatim}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-32-1.pdf} As
+shown in the plot, not a lot of passengers take yellow taxi to travel to
+Newark Airport. Therefore, we are only able to capture the average
+amount of time it takes to travel to Newark for certain hours of
+departure. It takes the least time to travel to Newark at 6am in the
+morning, and it takes the most time around 6pm in the evening.
+
+\textbf{A Shiny app will be added here. This app will allow users to
+choose a pick up zone of their interest, and output the best time to
+travel from that zone to all three airports in New York.}
+
+\section{How does weather affect the number of taxi and Lyft
+trips?}\label{how-does-weather-affect-the-number-of-taxi-and-lyft-trips}
+
+According to Schneider (2015), there are lots of confounding variables
+between weather and taxi rides, including seasonal trends, annual growth
+due to boro taxis, and whether weather events happen to fall on weekdays
+or weekends, but it would appear that snowfall has a significant
+negative impact on daily taxi ridership. In this section, we use New
+York City Yellow Taxi and Lyft data to calculate the number of trips
+occurred on and before snow days.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxi_summary_}\DecValTok{2017}\NormalTok{ <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year =} \KeywordTok{year}\NormalTok{(tpep_pickup_datetime), }
+    \DataTypeTok{month =} \KeywordTok{month}\NormalTok{(tpep_pickup_datetime)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(year, }
+\NormalTok{    month) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{N =} \KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 10 imported
+as numeric
+\end{verbatim}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 11 imported
+as numeric
+\end{verbatim}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 12 imported
+as numeric
+\end{verbatim}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 13 imported
+as numeric
+\end{verbatim}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 14 imported
+as numeric
+\end{verbatim}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 15 imported
+as numeric
+\end{verbatim}
+\begin{verbatim}
+Warning in .local(conn, statement, ...): Decimal MySQL column 16 imported
+as numeric
+\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxi_sum <-}\StringTok{ }\NormalTok{taxi_summary_}\DecValTok{2017} \OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year_month =} \KeywordTok{paste0}\NormalTok{(year, }
+    \StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }\DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{"-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{time =} \KeywordTok{as.POSIXct}\NormalTok{(year_month))}
+
+\KeywordTok{library}\NormalTok{(plotly)}
+\NormalTok{p <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{taxi_sum}\OperatorTok{$}\NormalTok{time, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{taxi_sum}\OperatorTok{$}\NormalTok{N, }\DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+\begin{verbatim}
+No trace type specified:
+  Based on info supplied, a 'scatter' trace seems appropriate.
+  Read more about this trace type -> https://plot.ly/r/reference/#scatter
+\end{verbatim}
+\includegraphics{thesis_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+I downloaded daily Central Park weather data from the National Climatic
+Data Center, and joined it to the taxi data to see if we could learn
+anything else about the relationship between weather and taxi rides.
+
+\textbf{More analysis needed here}
 
 \chapter{New York City Taxi Fare \& Limousine
 Commission}\label{chapter5}
@@ -1918,7 +2167,7 @@ Manhattan.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-25}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-39}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -2070,37 +2319,6 @@ drivers to get passengers who want to go to Manhattan with a flat rate
 of \$52. In this case, a round trip to and from JFK Airport is worthy.
 Therefore, taxi drivers should be pretty happy when their passengers are
 going to JFK Airport from Manhattan.
-
-\section{How does weather affect the number of taxi and Lyft
-trips?}\label{how-does-weather-affect-the-number-of-taxi-and-lyft-trips}
-
-According to Schneider (2015), there are lots of confounding variables
-between weather and taxi rides, including seasonal trends, annual growth
-due to boro taxis, and whether weather events happen to fall on weekdays
-or weekends, but it would appear that snowfall has a significant
-negative impact on daily taxi ridership. In this section, we use New
-York City Yellow Taxi and Lyft data to calculate the number of trips
-occurred on and before snow days.
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{taxi_summary_}\DecValTok{2017}\NormalTok{ <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year =} \KeywordTok{year}\NormalTok{(tpep_pickup_datetime), }
-    \DataTypeTok{month =} \KeywordTok{month}\NormalTok{(tpep_pickup_datetime)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(year, }
-\NormalTok{    month) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{N =} \KeywordTok{n}\NormalTok{()) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{()}
-
-\NormalTok{taxi_sum <-}\StringTok{ }\NormalTok{taxi_summary_}\DecValTok{2017} \OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year_month =} \KeywordTok{paste0}\NormalTok{(year, }
-    \StringTok{"-"}\NormalTok{, stringr}\OperatorTok{::}\KeywordTok{str_pad}\NormalTok{(month, }\DecValTok{2}\NormalTok{, }\StringTok{"left"}\NormalTok{, }\StringTok{"0"}\NormalTok{), }\StringTok{"-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{time =} \KeywordTok{as.POSIXct}\NormalTok{(year_month))}
-
-\KeywordTok{library}\NormalTok{(plotly)}
-\NormalTok{p <-}\StringTok{ }\KeywordTok{plot_ly}\NormalTok{(}\DataTypeTok{x =} \OperatorTok{~}\NormalTok{taxi_sum}\OperatorTok{$}\NormalTok{time, }\DataTypeTok{y =} \OperatorTok{~}\NormalTok{taxi_sum}\OperatorTok{$}\NormalTok{N, }\DataTypeTok{mode =} \StringTok{"lines"}\NormalTok{)}
-\NormalTok{p}
-\end{Highlighting}
-\end{Shaded}
-\includegraphics{thesis_files/figure-latex/unnamed-chunk-34-1.pdf}
-
-I downloaded daily Central Park weather data from the National Climatic
-Data Center, and joined it to the taxi data to see if we could learn
-anything else about the relationship between weather and taxi rides.
 
 \chapter{Conclusion}\label{chapter5}
 

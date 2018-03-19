@@ -1,13 +1,22 @@
+```{r, message=FALSE, echo=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
+               fig.width=6, fig.height=6)
+```
+
 # New York City Taxi Driver {#chapter3}
 ## Trip-level Tip Inofrmation
 The income of Taxi drivers in New York City has two parts: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers?
 
 In the following analysis, I will focus on trip data collected in August 2016. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
 
-```{r, message=FALSE}
+```{r, message=FALSE, echo=FALSE}
 library(dplyr)
 library(readr)
 yellow_2016.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
+```
+
+```{r}
 yellow_2016.08_tip <- yellow_2016.08_cleaned %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%

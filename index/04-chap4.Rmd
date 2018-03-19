@@ -1,6 +1,12 @@
+```{r, message=FALSE, echo=FALSE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
+               fig.width=6, fig.height=6)
+```
+
 # New York City Taxi Consumer {#chapter4}
 
-## How long does it take for passengers to get to JFK, LaGuardia, and Newark Airports? When is the best time to travel?
+## How long does it take for passengers to get to JFK, La Guardia, and Newark Airports? When is the best time to travel?
 
 We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. 
 
@@ -8,8 +14,6 @@ We want to calculate the average number of minutes it takes to go to all three a
 library(dplyr)
 library(readr)
 library(lubridate)
-
-# yellow_2015.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_tripdata_2015-08.csv")
 
 to_jfk_trip <- yellow_2016.08_cleaned %>%
   filter(DOLocationID == 132) %>%
@@ -19,7 +23,7 @@ to_jfk_trip <- yellow_2016.08_cleaned %>%
   filter(PULocationID != DOLocationID) %>%
   mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
   mutate(min = round(as.numeric(duration)/60, 2)) %>%
-  mutate(hour = hour(tpep_pickup_datetime))
+  mutate(hour = hour(tpep_pickup_datetime)) 
 
 to_lg_trip <- yellow_2016.08_cleaned %>%
   filter(DOLocationID == 138) %>%
@@ -29,7 +33,7 @@ to_lg_trip <- yellow_2016.08_cleaned %>%
   filter(PULocationID != DOLocationID) %>%
   mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
   mutate(min = round(as.numeric(duration)/60, 2)) %>%
-  mutate(hour = hour(tpep_pickup_datetime))
+  mutate(hour = hour(tpep_pickup_datetime)) 
 
 to_newark_trip <- yellow_2016.08_cleaned %>%
   filter(DOLocationID == 1) %>%
@@ -39,7 +43,7 @@ to_newark_trip <- yellow_2016.08_cleaned %>%
   filter(PULocationID != DOLocationID) %>%
   mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
   mutate(min = round(as.numeric(duration)/60, 2)) %>%
-  mutate(hour = hour(tpep_pickup_datetime))
+  mutate(hour = hour(tpep_pickup_datetime)) 
 ```
 
 Now we need to calculate the average amount of time it take for each zone at during each hour.
@@ -60,37 +64,143 @@ to_newark_zone <- to_newark_trip %>%
   arrange(PULocationID)
 ```
 
-So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour. 
+So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. 
 ```{r}
 head(to_jfk_zone)
 ```
 
-It woul be easier if we combine the three tables and put all information related to trip duration to airports into one table.
+It would be easier if we combine all three tables and put all information related to trip duration to airports into one table.
 ```{r}
 two_transp <- full_join(to_jfk_zone, to_lg_zone, by = c("PULocationID", "hour"))
 three_transp <- full_join(two_transp, to_newark_zone, by = c("PULocationID", "hour"))
+
+three_transp%>%
+  filter(PULocationID ==4) %>%
+  head(5)
 ```
 
+**From Alphabet City, Manhattan to all three airport**
+Alphabet City, Manhattan has pick-up zone ID number 4. Let's take a look at how much time is needed to travel to all three airports from taxi zone No.4.
+```{r}
+alphabet <- three_transp%>%
+  filter(PULocationID ==4)
+```
 
+```{r, message=FALSE}
+library(plotly)
+jfk <- plot_ly(x = ~alphabet$hour, y = ~alphabet$jfk_avg_min, mode = 'lines')
+jfk
+```
+As shown in the graph, there is a huge peak at 7pm, and it takes on average 506 minutes to go to JFK from Alphabet City if you depart from 6-7pm. This is caused by a huge outlier in the original dataset. 
+
+Let's filter out trips that took less than one minute and trips that took more than 5 hours out of the dataset, and then regenerate the visulization.
 
 ```{r}
-data("taxi_zone_lookup")
-to_jfk <- jfk_trip %>%
+to_jfk_trip <- yellow_2016.08_cleaned %>%
   filter(DOLocationID == 132) %>%
-  mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + improvement_surcharge + mta_tax + tolls_amount) %>%
-  mutate(est_diff = est_fare - fare_amount) %>%
-  rename(LocationID = PULocationID) %>%
-  left_join(taxi_zone_lookup , by = "LocationID") %>%
-  filter(Borough == "Manhattan")
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
+  mutate(min = round(as.numeric(duration)/60, 2)) %>%
+  mutate(hour = hour(tpep_pickup_datetime)) %>%
+  filter(min <= 300) %>%
+  filter(min > 1)
+
+to_lg_trip <- yellow_2016.08_cleaned %>%
+  filter(DOLocationID == 138) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
+  mutate(min = round(as.numeric(duration)/60, 2)) %>%
+  mutate(hour = hour(tpep_pickup_datetime)) %>%
+  filter(min <= 300) %>%
+  filter(min > 1)
+
+to_newark_trip <- yellow_2016.08_cleaned %>%
+  filter(DOLocationID == 1) %>%
+  filter(payment_type != 3) %>%
+  filter(trip_distance > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(PULocationID != DOLocationID) %>%
+  mutate(duration = tpep_dropoff_datetime - tpep_pickup_datetime) %>%
+  mutate(min = round(as.numeric(duration)/60, 2)) %>%
+  mutate(hour = hour(tpep_pickup_datetime)) %>%
+  filter(min <= 300) %>%
+  filter(min > 1)
 ```
 
-```{r, eval=FALSE}
-dataset %>%
-  group_by()
+```{r, echo=FALSE}
+to_jfk_zone <- to_jfk_trip %>%
+  group_by(PULocationID, hour) %>%
+  summarise(jfk_avg_min = mean(min)) %>%
+  arrange(PULocationID)
+
+to_lg_zone <- to_lg_trip %>%
+  group_by(PULocationID, hour) %>%
+  summarise(lg_avg_min = mean(min)) %>%
+  arrange(PULocationID)
+
+to_newark_zone <- to_newark_trip %>%
+  group_by(PULocationID, hour) %>%
+  summarise(newark_avg_min = mean(min)) %>%
+  arrange(PULocationID)
+
+two_transp <- full_join(to_jfk_zone, to_lg_zone, by = c("PULocationID", "hour"))
+three_transp <- full_join(two_transp, to_newark_zone, by = c("PULocationID", "hour"))
+alphabet <- three_transp%>%
+  filter(PULocationID ==4)
 ```
 
+```{r, message=FALSE}
+jfk <- plot_ly(x = ~alphabet$hour, y = ~alphabet$jfk_avg_min, mode = 'lines')
+jfk
+```
+According to the plot above, it takes the least time to travel to JFK Airport around 2am in the morning, and it takes the most time around 3pm in the afternoon.
+
+```{r}
+lg  <- plot_ly(x = ~alphabet$hour, y = ~alphabet$lg_avg_min, mode = 'lines')
+lg
+```
+According to the plot above, it takes the least time to travel to La Guardia Airport around 1am in the morning, and it takes the most time around 2pm in the afternoon.
+
+```{r}
+newark <- plot_ly(x = ~alphabet$hour, y = ~alphabet$newark_avg_min, mode = 'lines')
+newark
+```
+As shown in the plot, not a lot of passengers take yellow taxi to travel to Newark Airport. Therefore, we are only able to capture the average amount of time it takes to travel to Newark for certain hours of departure. It takes the least time to travel to Newark at 6am in the morning, and it takes the most time around 6pm in the evening.
 
 **A Shiny app will be added here. This app will allow users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York.**
 
-## How does weather affect New York City taxi and Uber trips? How does snowfall affect taxi and Uber trips?
+## How does weather affect the number of taxi and Lyft trips?
+According to Schneider (2015), there are lots of confounding variables between weather and taxi rides, including seasonal trends, annual growth due to boro taxis, and whether weather events happen to fall on weekdays or weekends, but it would appear that snowfall has a significant negative impact on daily taxi ridership. In this section, we use New York City Yellow Taxi and Lyft data to calculate the number of trips occurred on and before snow days.
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", db)
+```
+
+```{r}
+taxi_summary_2017 <- taxi %>%
+  tbl("yellow") %>%
+  mutate(year = year(tpep_pickup_datetime),
+         month = month(tpep_pickup_datetime)) %>%
+  group_by(year, month) %>%
+  summarise(N = n()) %>%
+  collect()
+
+taxi_sum <- taxi_summary_2017 %>%
+  mutate(year_month = paste0(year, "-", stringr::str_pad(month, 2, "left", "0"), "-01")) %>%
+  mutate(time = as.POSIXct(year_month))
+
+library(plotly)
+p <- plot_ly(x = ~taxi_sum$time, y = ~taxi_sum$N, mode = 'lines')
+p
+```
+
+I downloaded daily Central Park weather data from the National Climatic Data Center, and joined it to the taxi data to see if we could learn anything else about the relationship between weather and taxi rides. 
+
+**More analysis needed here**
 

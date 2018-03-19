@@ -165,27 +165,3 @@ from_jkf_zone %>%
 ```
 According to the summary, the total amount of trips from JFK Airport to Manhattan is 10% more than the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthy. Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
 
-## How does weather affect the number of taxi and Lyft trips?
-According to Schneider (2015), there are lots of confounding variables between weather and taxi rides, including seasonal trends, annual growth due to boro taxis, and whether weather events happen to fall on weekdays or weekends, but it would appear that snowfall has a significant negative impact on daily taxi ridership. In this section, we use New York City Yellow Taxi and Lyft data to calculate the number of trips occurred on and before snow days.
-```{r, message=FALSE, warning=FALSE}
-taxi_summary_2017 <- taxi %>%
-  tbl("yellow") %>%
-  mutate(year = year(tpep_pickup_datetime),
-         month = month(tpep_pickup_datetime)) %>%
-  group_by(year, month) %>%
-  summarise(N = n()) %>%
-  collect()
-
-taxi_sum <- taxi_summary_2017 %>%
-  mutate(year_month = paste0(year, "-", stringr::str_pad(month, 2, "left", "0"), "-01")) %>%
-  mutate(time = as.POSIXct(year_month))
-
-library(plotly)
-p <- plot_ly(x = ~taxi_sum$time, y = ~taxi_sum$N, mode = 'lines')
-p
-```
-
-I downloaded daily Central Park weather data from the National Climatic Data Center, and joined it to the taxi data to see if we could learn anything else about the relationship between weather and taxi rides. 
-
-**More analysis needed here**
-
