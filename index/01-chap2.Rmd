@@ -27,7 +27,7 @@ The total size of green taxi trip data `csv` files (from Aug 2013 to Dec 2016) i
 The green taxi trip records include the following fields: pick-up and drop-off dates/times, pick-up and drop-off locations, trip distances, itemized fares, rate types, payment types, and driver-reported passenger counts. 
 
 ### TLC Summary Report
-The New York City TLC publishes summary reports that include aggregate statistics about taxi, Uber, and Lyft usage. These are in addition to the trip-level data; although the summary reports contain much less detail, they’re updated more frequently, which provides a more current glimpse into the state of the cutthroat NYC taxi market.
+The New York City TLC publishes summary reports that include aggregate statistics about taxi, Uber, and Lyft usage. These are in addition to the trip-level data; although the summary reports contain much less detail, they’re updated more frequently, which provides a more current glimpse into the state of the cutthroat NYC taxi market. [@datayellowmonth]
 
 In addition, the trip level NYC Uber data only covers two periods, from April to September 2014 and from January to June 2015. However, the summary reports cover weekly-aggreagated data from 2015 to the most recent week.
 
@@ -106,8 +106,6 @@ data("taxi_zones")
 #plot(taxi_zones)
 ```
 
-
-
 ## Extract-Transform-Load 
 ### Extract
 `etl_extract.nyctaxi` allows users to download New York City yellow taxi, green taxi, Uber, and Lyft data from the corresponding data sources. It takes the `years`, `months`, and `type` parameters and download the New York City taxi data specified by users. New York City Yellow and Green Taxi data are updated on NYC Taxi & Limousine Commission (TLC) website on a monthly basis. 
@@ -160,9 +158,11 @@ In order to increase the query speed at the data analysis stage, `KEY`s are crea
 Due to the large size of Yellow Taxi datasets, `yellow_old` and `yellow` are partitioned into subgroups by `year`. When we need to run query on data from a specific year, having partitions allows MySQL to directly find the data specified without filtering on every single row. It speeds up the query process. A `VIEW` called `yellow_old_sum` is also created to generate a summary table for the number of Yellow Taxi trips in each month. 
 
 ## New Yoek City Street-hail and E-hail Services Summary
-Below is a summary of data that are available to users from 2014 to 2016.
+Below is a summary of data that are available to users from 2014 to 2016.The Uber data used to create the summary below is the trip-level data from Uber TLC FOIL Response.
+
 ![](figure/Num_trips_summary.png)
 
+I have also created a summary of data from 2015 to 2018. In this summary, I used monthly yellow taxi data from TLC Aggregated Reports and weekly Uber and Lyft data from NYC OpenData.
 ```{r}
 
 ```
