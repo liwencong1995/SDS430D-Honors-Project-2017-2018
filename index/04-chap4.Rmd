@@ -182,7 +182,7 @@ db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = 
 taxi <- etl("nyctaxi", db)
 ```
 
-```{r}
+```{r, eval=FALSE}
 taxi_summary_2017 <- taxi %>%
   tbl("yellow") %>%
   mutate(year = year(tpep_pickup_datetime),

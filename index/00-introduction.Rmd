@@ -12,7 +12,7 @@ New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are 
 
 ## Background
 ### Yellow Taxi
-The Yellow Cabs are widely recognized as the icons of New York City. NYC Taxicabs are operated by private firms and licensed by the New York City Taxi and Limousine Commission (TLC).  TLC issues medallions to taxicabs, and every taxicab must have a medallion to operate. There were 13,437 yellow medallion taxicabs licenses in 2014, and taxi patronage has declined since 2011 because of the competition caused by rideshare services.
+The Yellow Cabs are widely recognized as the icons of New York City. NYC Taxicabs are operated by private firms and licensed by the New York City Taxi and Limousine Commission (TLC). TLC issues medallions to taxicabs, and every taxicab must have a medallion to operate. There were 13,437 yellow medallion taxicabs licenses in 2014, and taxi patronage has declined since 2011 because of the competition caused by rideshare services.
 
 ### Green Taxi
 The apple green taxicabs in New York City are called Boro taxis and they are allowed to only pick up passengers in outer boroughs and in Manhattan above East 96th and West 110th Streets. Historically, only the yellow medallion taxicabs were allowed to pick up passengers on the street. However, since 95% of yellow taxi pick-ups occurred in Manhattan to the South of 96th Street and at the two airports, Five Borough Taxi Plan was started to allow green taxis to fill in the gap in outer boroughs.
@@ -26,7 +26,7 @@ Similar to Uber, Lyft is also an on-demand transportation company, and it operat
 
 ## Literature Review 
 ### etl R package
-in `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that R Markdown replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reprodicible statistical analysis straight-forward. [@baumer2014r]
+in `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that R Markdown replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reprodicible statistical analysis straight-forward. [@baumer2014]
 
 Loading medium-sized data into R environment takes a long time and might crush an R session. `etl` R package creates a user-friendly platform that allows R users to easily work with medium data with the extract, transform, load framework, which is commonly konwn as ETL in computing. [@wikipedia] The `ETL` process has been set up by Benjamin Baumer [@pkgetl] in R to facilitate etl operations for medium data, and it is designed to work with any general data set. Packages that are specific to  perticular data sets are needed to be written in order to better work with complex medium-sized data sets.
 

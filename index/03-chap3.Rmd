@@ -12,8 +12,8 @@ In the following analysis, I will focus on trip data collected in August 2016. T
 
 ```{r, message=FALSE, echo=FALSE}
 library(dplyr)
-#library(readr)
-#yellow_2016.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
+library(readr)
+yellow_2016.08_cleaned <- read_csv("~/Desktop/Honors Thesis/thesis/index/data/yellow_2016.08_cleaned.csv")
 ```
 
 ```{r}

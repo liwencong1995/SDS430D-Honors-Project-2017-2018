@@ -1,0 +1,56 @@
+\BOOKMARK [0][-]{chapter*.2}{Acknowledgements}{}% 1
+\BOOKMARK [0][-]{chapter*.7}{Abstract}{}% 2
+\BOOKMARK [0][-]{chapter.1}{Chapter 1: Introduction}{}% 3
+\BOOKMARK [1][-]{section.1.1}{Motivation}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Background}{chapter.1}% 5
+\BOOKMARK [2][-]{subsection.1.2.1}{Yellow Taxi}{section.1.2}% 6
+\BOOKMARK [2][-]{subsection.1.2.2}{Green Taxi}{section.1.2}% 7
+\BOOKMARK [2][-]{subsection.1.2.3}{Uber}{section.1.2}% 8
+\BOOKMARK [2][-]{subsection.1.2.4}{Lyft}{section.1.2}% 9
+\BOOKMARK [1][-]{section.1.3}{Literature Review}{chapter.1}% 10
+\BOOKMARK [2][-]{subsection.1.3.1}{etl R package}{section.1.3}% 11
+\BOOKMARK [2][-]{subsection.1.3.2}{New York City Traffic and Taxi}{section.1.3}% 12
+\BOOKMARK [2][-]{subsection.1.3.3}{Competition between New York City taxi and e-hail services}{section.1.3}% 13
+\BOOKMARK [1][-]{section.1.4}{Contribution}{chapter.1}% 14
+\BOOKMARK [2][-]{subsection.1.4.1}{nyctaxi Package}{section.1.4}% 15
+\BOOKMARK [2][-]{subsection.1.4.2}{Social Impact of NYC Taxi}{section.1.4}% 16
+\BOOKMARK [2][-]{subsection.1.4.3}{Reproducible Research}{section.1.4}% 17
+\BOOKMARK [0][-]{chapter.2}{Chapter 2: Data and nyctaxi Package}{}% 18
+\BOOKMARK [1][-]{section.2.1}{Data and Storage}{chapter.2}% 19
+\BOOKMARK [2][-]{subsection.2.1.1}{Yellow Taxi}{section.2.1}% 20
+\BOOKMARK [2][-]{subsection.2.1.2}{Green Taxi}{section.2.1}% 21
+\BOOKMARK [2][-]{subsection.2.1.3}{TLC Summary Report}{section.2.1}% 22
+\BOOKMARK [2][-]{subsection.2.1.4}{Uber}{section.2.1}% 23
+\BOOKMARK [2][-]{subsection.2.1.5}{Lyft}{section.2.1}% 24
+\BOOKMARK [2][-]{subsection.2.1.6}{Data Storage}{section.2.1}% 25
+\BOOKMARK [1][-]{section.2.2}{ETL nyctaxi Package}{chapter.2}% 26
+\BOOKMARK [2][-]{subsection.2.2.1}{Taxi zone shapefile attached to nyctaxi R package}{section.2.2}% 27
+\BOOKMARK [1][-]{section.2.3}{Extract-Transform-Load}{chapter.2}% 28
+\BOOKMARK [2][-]{subsection.2.3.1}{Extract}{section.2.3}% 29
+\BOOKMARK [2][-]{subsection.2.3.2}{Transform}{section.2.3}% 30
+\BOOKMARK [2][-]{subsection.2.3.3}{Load}{section.2.3}% 31
+\BOOKMARK [2][-]{subsection.2.3.4}{SQL Database Initialization}{section.2.3}% 32
+\BOOKMARK [1][-]{section.2.4}{New Yoek City Street-hail and E-hail Services Summary}{chapter.2}% 33
+\BOOKMARK [1][-]{section.2.5}{Source Code}{chapter.2}% 34
+\BOOKMARK [2][-]{subsection.2.5.1}{ETL Extract}{section.2.5}% 35
+\BOOKMARK [2][-]{subsection.2.5.2}{ETL Transform}{section.2.5}% 36
+\BOOKMARK [2][-]{subsection.2.5.3}{ETL Load}{section.2.5}% 37
+\BOOKMARK [2][-]{subsection.2.5.4}{utility function}{section.2.5}% 38
+\BOOKMARK [2][-]{subsection.2.5.5}{ETL Init}{section.2.5}% 39
+\BOOKMARK [0][-]{chapter.3}{Chapter 3: New York City Taxi Driver}{}% 40
+\BOOKMARK [1][-]{section.3.1}{Trip-level Tip Inofrmation}{chapter.3}% 41
+\BOOKMARK [1][-]{section.3.2}{Aggregated Zone-level Tip Information}{chapter.3}% 42
+\BOOKMARK [1][-]{section.3.3}{Which zones have the highest percent tip?}{chapter.3}% 43
+\BOOKMARK [1][-]{section.3.4}{Do taxi drivers tend to go to zones that offer high tips?}{chapter.3}% 44
+\BOOKMARK [2][-]{subsection.3.4.1}{Which pick-up zone has the highest price per minute?}{section.3.4}% 45
+\BOOKMARK [0][-]{chapter.4}{Chapter 4: New York City Taxi Consumer}{}% 46
+\BOOKMARK [1][-]{section.4.1}{How long does it take for passengers to get to JFK, La Guardia, and Newark Airports? When is the best time to travel?}{chapter.4}% 47
+\BOOKMARK [1][-]{section.4.2}{How does weather affect the number of taxi and Lyft trips?}{chapter.4}% 48
+\BOOKMARK [0][-]{chapter.5}{Chapter 5: New York City Taxi Fare \046 Limousine Commission}{}% 49
+\BOOKMARK [1][-]{section.5.1}{Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{chapter.5}% 50
+\BOOKMARK [2][-]{subsection.5.1.1}{People in Manhattan benefit from the \04452 flat rate.}{section.5.1}% 51
+\BOOKMARK [1][-]{section.5.2}{However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?}{chapter.5}% 52
+\BOOKMARK [0][-]{chapter.6}{Chapter 6: Conclusion}{}% 53
+\BOOKMARK [1][-]{section.6.1}{Future Research}{chapter.6}% 54
+\BOOKMARK [0][-]{appendix.A}{Appendix A: The First Appendix}{}% 55
+\BOOKMARK [0][-]{appendix*.19}{References}{}% 56

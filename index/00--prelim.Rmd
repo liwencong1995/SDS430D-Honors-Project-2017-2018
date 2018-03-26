@@ -1,3 +1,3 @@
 # Acknowledgements {-}
-I would love to thank my thesis advisor Benjamin Baumer, Assistant Professor of Statistical and Data Sciences at Smith College, for encouraging me to chanllenge myself and and guiding me through this project. I also want to thank all my friedns and my roommates for their love and support.
+I would love to thank my thesis advisor Benjamin Baumer, Assistant Professor of Statistical and Data Sciences at Smith College, for encouraging me to chanllenge myself and guiding me through this project. I want to thank Jordan Crouser for being my second reader and help me to revise my paper. I also want to thank all my friedns and my roommates for their love and support.
 
