@@ -8,8 +8,7 @@ The {#rmd-basics} text after the chapter declaration will allow us to link throu
 
 ```{r, message=FALSE, echo=FALSE}
 library(knitr)
-opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
-               fig.width=6, fig.height=6)
+opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 ```
 
 # Data and nyctaxi Package {#chapter2}
@@ -31,11 +30,11 @@ The New York City TLC publishes summary reports that include aggregate statistic
 
 In addition, the trip level NYC Uber data only covers two periods, from April to September 2014 and from January to June 2015. However, the summary reports cover weekly-aggreagated data from 2015 to the most recent week.
 
-```{r, message=FALSE}
-webshot("http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml","figure/a-report.png")
+```{r, message=FALSE, , echo=FALSE}
+webshot("http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml","figure/a-report.png", cliprect = "viewport")
 ```
 
-```{r, fig.align='center', echo=FALSE}
+```{r, fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
 knitr::include_graphics("figure/a-report.png")
 ```
 
@@ -77,17 +76,27 @@ Since SQL databases are good tools for medium data analysis, ETL functions build
 
 In general, extract.nyctaxi function download data of the four types of hail service data (yellow taxi, green taxi, uber, and lyft) from the corresponding sources. transform.nyctaxi uses different techniques to clean all four types of data to get then ready for the next step. extract.load loads the data user selected to a SQL database. 
  
-nyctaxi lives on the Comprehensive R Archive Network (CRAN), and Packages can be installed with the install.packages() function in R. 
+`nyctaxi` R package lives on the Comprehensive R Archive Network (CRAN), and it can be installed with the install.packages() function in R. 
 
 ```{r, eval = FALSE}
 #install the package
 install.packages("nyctaxi")
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, , echo=FALSE}
+webshot("https://github.com/beanumber/nyctaxi","figure/nyctaxi-page.png", cliprect = c(1425, 0, 1000, 500))
+```
+
+```{r, fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
+knitr::include_graphics("figure/nyctaxi-page.png")
+```
+
+```{r, message=FALSE, echo=FALSE}
 # load the package
 library(nyctaxi)
 library(RMySQL)
+library(leaflet)
+library(htmlwidgets)
 ```
 
 Users need to create an etl object in order to apply the etl operations to it, and only the name of the SQL database, working directory, and type of SQL database need to be specified during initialization. If the type of SQL database is not specified, a local RSQLite database will be generated as default. 
@@ -103,11 +112,22 @@ In the example above, a folder called nyctaxi is created on the desktop and a co
 After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) obj: an etl object (2) years: a numeric vector giving the years. The default is the most recent year. (3) months: a numeric vector giving the months. The default is January to December. (4) type: a character variable giving the type of data the user wants to download. There are four types: yellow, green, uber, and lyft. The default is yellow.
 
 ### Taxi zone shapefile attached to nyctaxi R package
-Two datasets are attached to `nyctaxi`. The first one is called `taxi_zones`, and this dataset contains information, such as taxi zone location IDs, location names, and corresponding boroughs for each ID. A shapefile containing the boundaries for the taxi zones, `taxi_zone_lookup`, is also included in the package for users to do spatial analysis.
+Two datasets are attached to `nyctaxi`. The first one is called `taxi_zone_lookup`, and this dataset contains information, such as taxi zone location IDs, location names, and corresponding boroughs for each ID. A shapefile containing the boundaries for the taxi zones, `taxi_zones`, is also included in the package for users to do spatial analysis. Visulizations similar to one shown below can be generated with the shapefile. 
 
-```{r, message=FALSE}
+```{r, message=FALSE, echo=FALSE}
 data("taxi_zones")
-#plot(taxi_zones)
+map <- leaflet(data = taxi_zones) %>%
+  addTiles() %>%
+  addPolygons(fillOpacity = 0.2,
+              weight = 1,
+              opacity = 0.8) %>%
+  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+saveWidget(map, file = "zonemap.html")
+webshot("zonemap.html","figure/zonemap.png", cliprect = "viewport")
+```
+
+```{r map, fig.cap="NYC Taxi Zone Map", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
+knitr::include_graphics("figure/zonemap.png")
 ```
 
 ## Extract-Transform-Load 
@@ -151,8 +171,6 @@ Meking the file inout and output processes more efficient is an important pasrt 
 `etl_init()` can be run after a database connection is built to process to process `init.mysql()` to initialize a MySQL database, and default columns with the correct variable names and typed defined will be automatically generated.
 
 ```{r, eval=FALSE}
-db <- src_mysql("nyctaxi", user = "urname", host = "host", password = "pw")
-taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 taxi %>%
   etl_init()
 ```
@@ -164,11 +182,25 @@ Due to the large size of Yellow Taxi datasets, `yellow_old` and `yellow` are par
 ## New Yoek City Street-hail and E-hail Services Summary
 Below is a summary of data that are available to users from 2014 to 2016.The Uber data used to create the summary below is the trip-level data from Uber TLC FOIL Response.
 
-![](figure/Num_trips_summary.png)
+```{r num-trips-summary, fig.cap="Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC, ", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
+knitr::include_graphics("figure/Num_trips_summary.png")
+```
 
-I have also created a summary of data from 2015 to 2018. In this summary, I used monthly yellow taxi data from TLC Aggregated Reports and weekly Uber and Lyft data from NYC OpenData.
-```{r}
+A similar summary of data can also be created by combining monthly yellow taxi data from TLC Aggregated Reports and weekly Uber and Lyft data from NYC OpenData. These data can be downloaded by running the code below:
 
+* Yellow taxi monthly data
+```{r, eval=FALSE}
+download.file("http://www.nyc.gov/html/tlc/downloads/csv/data_reports_monthly_indicators_yellow.csv", destfile = "~/Desktop/yellow_monthly_data.csv")
+```
+
+* Uber weekly data
+```{r, eval=FALSE}
+download.file("https://data.cityofnewyork.us/resource/gt3n-7ri6.csv", destfile = "~/Desktop/uber_weekly_data.csv")
+```
+
+* Lyft weekly data
+```{r, eval=FALSE}
+download.file("https://data.cityofnewyork.us/resource/juxc-sutg.csv", destfile = "~/Desktop/lyft_weekly_data.csv")
 ```
 
 ## Source Code

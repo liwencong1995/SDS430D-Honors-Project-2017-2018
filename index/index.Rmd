@@ -6,7 +6,7 @@ date: 'May 2018'
 institution: 'Smith College'
 #division: 'Statistical and Data Sciences'
 advisor: 'Benjamin Baumer'
-#altadvisor: 'Jordan Crouser'
+altadvisor: 'Jordan Crouser'
 # Delete line 6 if you only have one advisor
 department: 'Statistical and Data Sciences'
 degree: 'Bachelor of Arts'

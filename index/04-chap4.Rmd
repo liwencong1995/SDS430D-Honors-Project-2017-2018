@@ -1,7 +1,6 @@
 ```{r, message=FALSE, echo=FALSE}
 #library(knitr)
-opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE,
-               fig.width=6, fig.height=6)
+opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 ```
 
 # New York City Taxi Consumer {#chapter4}
@@ -177,10 +176,6 @@ As shown in the plot, not a lot of passengers take yellow taxi to travel to Newa
 
 ## How does weather affect the number of taxi and Lyft trips?
 According to Schneider (2015), there are lots of confounding variables between weather and taxi rides, including seasonal trends, annual growth due to boro taxis, and whether weather events happen to fall on weekdays or weekends, but it would appear that snowfall has a significant negative impact on daily taxi ridership. In this section, we use New York City Yellow Taxi and Lyft data to calculate the number of trips occurred on and before snow days.
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
-taxi <- etl("nyctaxi", db)
-```
 
 ```{r, eval=FALSE}
 taxi_summary_2017 <- taxi %>%
