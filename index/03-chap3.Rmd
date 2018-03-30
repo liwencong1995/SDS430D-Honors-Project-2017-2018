@@ -11,23 +11,43 @@ In the following analysis, I will focus on trip data collected in 2017. Taxi dri
 
 ```{r, message=FALSE, echo=FALSE}
 library(dplyr)
-library(readr)
+library(lubridate)
+library(stringr)
+library(etl)
+#library(readr)
 
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", db)
 ```
 
 As mentioned in the previous chapter, that we can utlize the connection to a MySQL database to run data analysis in MySQL for medium-sized data.
-Since we are using all 12 month data from 2017 in this analysis, it is impossible to load all data needed into R environment. Instead, we want to only load a summary table from MySQL database. 
-```{r}
-yellow_2017 <- taxi %>%
+Since we are using all 12 month data from 2017 in this analysis, it is impossible to load all data needed into R environment. Instead, we want to only load a fraction of the 2017 Yellow Taxi data from MySQL database. 
+```{r, eval=FALSE}
+yellow_2017_2 <- taxi %>%
   tbl("yellow") %>%
+  filter(payment_type == 1) %>%
+  filter(month(tpep_pickup_datetime)) %>%
+  collect(n = Inf)
+```
+
+```{r, echo=FALSE}
+#second half
+yellow_2017_2 <- taxi %>%
+  tbl("yellow") %>%
+  filter(payment_type == 1) %>%
+  filter(month(tpep_pickup_datetime) > 6) %>%
+  collect(n = Inf)
+
+yellow_2017_summary_2 <- yellow_2017_2 %>%
+  mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
+                                         tz= "America/New_York"),
+         tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
+                                        tz= "America/New_York")) %>%
   mutate(duration = round((tpep_dropoff_datetime - tpep_pickup_datetime)/60, 2) ) %>%
-  #mutate(duration = as.numeric(duration)) %>%
+  mutate(duration = as.numeric(duration)) %>%
   filter(duration > 0) %>%
   filter(fare_amount > 0) %>%
   filter(tip_amount > 0) %>%
-  filter(payment_type == 1) %>%
   filter(tip_amount < fare_amount) %>%
   mutate(year = year(tpep_pickup_datetime),
          month = month(tpep_pickup_datetime),
@@ -37,17 +57,74 @@ yellow_2017 <- taxi %>%
             trips = n(),
             avg_dis = mean(trip_distance),
             avg_duration = mean(duration))
-  collect()
+
+db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
+taxi <- etl("nyctaxi", db)
+
+#first half
+yellow_2017_1 <- taxi %>%
+  tbl("yellow") %>%
+  filter(payment_type == 1) %>%
+  filter(month(tpep_pickup_datetime) < 7) %>%
+  collect(n = Inf)
+
+yellow_2017_summary_1 <- yellow_2017_1 %>%
+  mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
+                                         tz= "America/New_York"),
+         tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
+                                        tz= "America/New_York")) %>%
+  mutate(duration = round((tpep_dropoff_datetime - tpep_pickup_datetime)/60, 2) ) %>%
+  mutate(duration = as.numeric(duration)) %>%
+  filter(duration > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(tip_amount > 0) %>%
+  filter(tip_amount < fare_amount) %>%
+  mutate(year = year(tpep_pickup_datetime),
+         month = month(tpep_pickup_datetime),
+         tip_perct = tip_amount/fare_amount) %>%
+  group_by(year, month, PULocationID, DOLocationID) %>%
+  summarise(avg_tip = mean(tip_perct), 
+            trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_duration = mean(duration))
+
+#Combine summary_2 and summary_1
+yellow_2017_summary <- bind_rows(yellow_2017_summary_1, yellow_2017_summary_2)
 ```
 
 
+```{r, eval=FALSE}
+yellow_2017_summary <- yellow_2017 %>%
+  mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
+                                         tz= "America/New_York"),
+         tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
+                                        tz= "America/New_York")) %>%
+  mutate(duration = round((tpep_dropoff_datetime - tpep_pickup_datetime)/60, 2) ) %>%
+  mutate(duration = as.numeric(duration)) %>%
+  filter(duration > 0) %>%
+  filter(fare_amount > 0) %>%
+  filter(tip_amount > 0) %>%
+  filter(tip_amount < fare_amount) %>%
+  mutate(year = year(tpep_pickup_datetime),
+         month = month(tpep_pickup_datetime),
+         tip_perct = tip_amount/fare_amount) %>%
+  group_by(year, month, PULocationID, DOLocationID) %>%
+  summarise(avg_tip = mean(tip_perct), 
+            trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_duration = mean(duration))
+
+yellow_2017_summary %>%
+  group_by(month) %>%
+  summarise(N = n())
+```
 
 
 ## Aggregated Zone-level Tip Information
 Comparing to studying factors that affect individual trips' percent tip, it is more meaningful to study the aggregated effect of each zone on percent tip, since the results are more concise and comprehensible. Instead of the absolute amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. Therefore, we use tip amount over fare amount to calculate the percent tip.
 ```{r}
 yelloe_2017_tip <- yellow_2017 %>%
-  
+
 ```
 
 ```{r, echo=FALSE}
@@ -57,7 +134,7 @@ data(taxi_zone_lookup)
 Taxi drivers are required to be indifferent to where passengers are going. Therefore, it makes sense to investigate the average amount of tips paid for each pick-up zone. What are the taxi pick-up zones that have the highest tip percents?
 
 We first calculate the average percent tip paid for each pick-up zone. Here is a list of pick-up zones with their average percent tip:
-```{r, message=FALSE}
+```{r, message=FALSE, echo=FALSE}
 tip_pickup <- yelloe_2017_tip %>%
   group_by(PULocationID) %>%
   summarise(avg_tip = mean(tip_perct), 
@@ -74,7 +151,7 @@ kable(tip_pickup[1:10,], caption = "Ten taxi pick-up zones with the highest aver
 
 Below is a histogram of average percent tips paid for all pick-up zones. As show on the plot, the first peak is around 20%, which is the cheapest default option on the touch panel for passengers to chose. 
 
-```{r pickup-vis, fig.cap = "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC"}
+```{r pickup-vis, fig.cap = "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC", echo=FALSE}
 pickup_vis <- ggplot(data = tip_pickup, aes(x = avg_tip) ) +
   xlab("Tips, percent") +
   geom_histogram(binwidth = 0.005) + 
@@ -85,7 +162,7 @@ pickup_vis <- ggplot(data = tip_pickup, aes(x = avg_tip) ) +
 pickup_vis
 ```
 
-```{r tip-region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC"}
+```{r tip-region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC", echo=FALSE}
 tip_region <- yellow_2016.08_tip  %>%
   group_by(PULocationID, DOLocationID) %>%
   summarise(avg_tip = mean(tip_perct), 
@@ -104,7 +181,7 @@ The 20% peak is more clearly shown when we calculate the percent tips for each p
 **Does trip distance increase the percent tips paid?** 
 One of the questions that I always wonder is whether longer trips result in higher tip percent. It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. I personally pay higher percent of tips for longer rides, so I believe trip distance has an impact on percentage of tips paid.
 
-```{r}
+```{r, echo=FALSE}
 tip_distance <- lm(avg_tip ~ avg_dis + LocationID + DOLocationID, data = tip_region)
 summary(tip_distance)$coef[1:2,]
 ```
@@ -138,7 +215,7 @@ URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/num_trip.html"
 webshot(URL, "figure/num_trip.png", cliprect = "viewport")
 ```
 
-```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
+```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE, fig.width=6, fig.height=6, echo=FALSE}
 knitr::include_graphics("figure/num_trip.png")
 ```
 It's obivous that Manhattan, La Guardia Airport, and JKF Airport have the most number of pick-ups.
@@ -170,7 +247,7 @@ There are more than 100 times more yellow cab pick-ups that happen in Manhattan 
 So far, we have learned what pick-up zones offer the highest percent tip. Now, we want to dig into the relationships between percent tip and taxi-zone-specific variables. 
 
 It is not easy to find an available taxi on the street on New York City, because the demand for taxi trips is much higher than the supply. Does paying more tips help customers to more easily get taxis? If customers from certain regions keep paying higher tips, taxi drivers might be able to learn from their experiences in those regions, and be more willing to wonder around those regions more often and pick up passengers. Pick-up zones with higher tips should attract more taxi drivers with the control of taxi zones. Let's test it out and see whether it is true:
-```{r}
+```{r, echo=FALSE}
 tip_region$LocationID <- as.character(tip_region$LocationID)
 tip_pickup$LocationID <- as.character(tip_pickup$LocationID)
 tip_and_trip_1 <- lm(trips ~ avg_tip + LocationID, data = tip_region)
@@ -208,8 +285,8 @@ In taxi fare calculation, the only unknown variable is slow-trafice time, and al
 
 New York CIty has the worst traffic jam, and it has overtaken Miami to be voted the U.S. city with the angriest and most aggressive drivers in 2009, according to a survey on road rage released on Tuesday. Bad traffic also cause slow-traffic, and taxi drivers tend to suck in traffic during rush hours. Does fare per minute ratio have an impact on the percent tip that passengers pay? Do passengers compensate taxi drivers more during rush hours? Are passengers sympathetic to taxi drivers for the time they spend in slow traffic?
 
-```{r, message=FALSE}
-library(lubridate)
+```{r, message=FALSE, echo=FALSE}
+#library(lubridate)
 yellow_2016.08_time <- yellow_2016.08_tip %>%
   mutate(duration = round((tpep_dropoff_datetime - tpep_pickup_datetime)/60, 2)) %>%
   mutate(duration = as.numeric(duration)) %>%

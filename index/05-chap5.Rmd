@@ -76,20 +76,29 @@ kable(to_jkf_zone_above[1:10,], caption = "Ten pick-up zones with the highest av
 
 Let's visualize the taxi zones that would have costed more than the \$52 flat rate.
 
-```{r}
+```{r, echo=FALSE}
 to_jkf_fare_above <- merge(taxi_zones, to_jkf_zone_above, by.x = "LocationID", by.y = "LocationID")
 
-# leaflet(data = to_jkf_fare_above) %>%
-#   addTiles() %>%
-#   addPolygons(fillColor = ~reds(avg_est_fare),
-#               fillOpacity = 0.6,
-#               weight = 1,
-#               opacity = 0.8) %>%
-#   setView(lat = 40.7128, lng = -74.0060, zoom = 10)
+to_jfk_fare_above <- leaflet(data = to_jkf_fare_above) %>%
+  addTiles() %>%
+  addPolygons(fillColor = ~reds(avg_est_fare),
+              fillOpacity = 0.6,
+              weight = 1,
+              opacity = 0.8) %>%
+  setView(lat = 40.7128, lng = -74.0060, zoom = 10)
+
+saveWidget(num_trip, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/to_jfk_fare_above.html")
+URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/to_jfk_fare_above.html"
+webshot(URL, "figure/to_jfk_fare_above.png", cliprect = "viewport")
+
 
 #add t test to test average fare vs 52
 ```
-![](figure/to_jfk_fare_above.png)
+
+```{r num-to_jfk_fare_above, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE, fig.width=6, fig.height=6, echo=FALSE}
+knitr::include_graphics("figure/to_jfk_fare_above.png")
+```
+
 Therefore, passengers from places in Manhattan besides Midtown, East Village, and some parts of Lower Manhattan benefit from the $52 flat rate. However, people living in Midtown, East Village, and some parts of Lower Manhattan might be relatively more indifferent to the price of taxi. Instead, they probably put more emphasis on convenience and time.
 
 ```{r}
