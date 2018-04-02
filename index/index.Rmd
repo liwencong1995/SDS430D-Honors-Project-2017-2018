@@ -6,11 +6,11 @@ date: 'May 2018'
 institution: 'Smith College'
 #division: 'Statistical and Data Sciences'
 advisor: 'Benjamin Baumer'
-altadvisor: 'Jordan Crouser'
+#altadvisor: 'Jordan Crouser'
 # Delete line 6 if you only have one advisor
 department: 'Statistical and Data Sciences'
 degree: 'Bachelor of Arts'
-title: 'Developing A Tool to Uncover The Mysterious New York City Through Taxi Trip Records'
+title: 'Tools to Uncover New York City Through Taxi Trips'
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 output: 

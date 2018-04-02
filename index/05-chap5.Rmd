@@ -46,7 +46,7 @@ jfk_trip_flat <- jfk_trip_raw %>%
 
 fwrite(jfk_trip_flat, "/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
 ```
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 jfk_trip_flat <- fread("/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
 ```
 
@@ -89,13 +89,13 @@ URL <- "/Users/priscilla/Desktop/Honors Thesis/figure/to_jkf_fare_vis.html"
 webshot(URL, "figure/to_jkf_fare_vis.png", cliprect = "viewport")
 ```
 
-```{r to_jkf_fare_vis, fig.cap="Estmated fare amount from the each pick-up zone to JFK Airport", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/to_jkf_fare_vis.png")
+```{r to-jkf-fare-vis, fig.cap="Estmated fare amount from the each pick-up zone to JFK Airport", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/to_jkf_fare_vis.png", dpi = 200 )
 ```
 According to the map, trips from Midtown on average cost less than trips from other taxi zones in Manhattan.
 
-### Taxi zones pays on average more than \$52
-```{r to_jkf_zone_above}
+### Taxi zones pays on average more than $52
+```{r, echo=FALSE}
 to_jkf_zone_above <- to_jkf_zone %>%
   filter(avg_est_fare > 52) %>%
   arrange(desc(avg_est_fare))
@@ -122,8 +122,8 @@ webshot(URL, "figure/to_jfk_fare_above_vis.png", cliprect = "viewport")
 #add t test to test average fare vs 52
 ```
 
-```{r num-to_jfk_fare_above_vis, fig.cap="Zones that cost more than the \$52 flat rate", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/to_jfk_fare_above_vis.png")
+```{r num-to_jfk_fare_above_vis, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/to_jfk_fare_above_vis.png", dpi = 200 )
 ```
 
 Therefore, passengers from places in Manhattan besides Midtown, East Village, and some parts of Lower Manhattan benefit from the $52 flat rate. However, people living in Midtown, East Village, and some parts of Lower Manhattan might be relatively more indifferent to the price of taxi. Instead, they probably put more emphasis on convenience and time.
@@ -161,7 +161,7 @@ from_jkf_zone <- from_jfk %>%
   arrange(desc(num_trips))
 ```
 
-```{r from_jkf_zone, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE}
 kable(from_jkf_zone[1:10,], caption = "Ten most popular destinations in Manhattan")
 ```
 Table \@ref(tab:from_jkf_zone) shows that Times Square is the most popular destination for passengers coming from the JFK Airport in 2017!

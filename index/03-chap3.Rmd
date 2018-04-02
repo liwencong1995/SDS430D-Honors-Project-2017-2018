@@ -17,7 +17,6 @@ library(etl)
 library(ggplot2)
 library(htmlwidgets)
 library(webshot)
-library(data.table)
 library(sp)
 
 data("taxi_zone_lookup")
@@ -136,7 +135,8 @@ fwrite(yellow_2017_summary, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-yellow_2017_summary <- fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary.csv")
+library(data.table)
+yellow_2017_summary <- data.table::fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary.csv")
 ```
 
 Each taxi trip has pick-up and drop-off locations associated with it, and there are 263 known taxi zones. 
@@ -182,8 +182,9 @@ tip_pickup <- yellow_2017_summary %>%
   filter(Zone != "Unknown")
 ```
 
-```{r tip_pickup, message=FALSE, echo=FALSE}
-kable(tip_pickup[1:10,], caption = "Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017")
+```{r, message=FALSE, echo=FALSE}
+kable(tip_pickup[1:10,], caption = "Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017",
+      booktabs = TRUE)
 ```
 Table \@ref(tab:tip_pickup) is a list of pick-up zones with their average percent tip.
 
@@ -239,18 +240,18 @@ URL <- "/Users/priscilla/Desktop/Honors Thesis/figure/num_trip.html"
 webshot(URL, "figure/num_trip.png", cliprect = "viewport")
 ```
 
-```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE, fig.width=6, fig.height=6, echo=FALSE}
-knitr::include_graphics("figure/num_trip.png")
+```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/num_trip.png", dpi = 200 )
 ```
 According to Figure \@ref(fig:num-trip), It's obivous that Upper East Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most popular location for pick-ups.
 
-```{r tip_pickup_zone, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE}
 kable(tip_pickup_zone[1:10,], caption = "Ten taxi zones with the highest number of pick-ups")
 ```
 Table \@ref(tab:tip_pickup_zone) gives you a better idea of which taxi zones have the highest number of pick-ups.
 
 ### Which taxi zones have the highest percent tips? 
-Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up zones that have more than 30 trips per day or 10950 per year, we will observe that many taxi pick-up zones with highest percent tips are not necessarily the ones with the highest number of pick-ups. 
+Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up zones that have at least 30 trips per day or 10950 per year, we will observe that many taxi pick-up zones with highest percent tips are not necessarily the ones with the highest number of pick-ups. 
 ```{r}
 #pick a threshold for the cutoff number of trips
 pickup_zone_30 <- tip_pickup_zone %>%
@@ -258,8 +259,8 @@ pickup_zone_30 <- tip_pickup_zone %>%
   arrange(desc(avg_tip))
 ```
 
-```{r pickup_zone_30, echo=FALSE}
-kable(pickup_zone_30[1:10, ], caption = "Ten taxi pick-up zones with the highest percent tip with threshold equals to 900")
+```{r, echo=FALSE}
+kable(pickup_zone_30[1:10, ], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)")
 ```
 People might think it is more reasonable to ses a list that is populated with Zones in Manhattan, since that's where all the wealthy people live. However, Table \@ref(tab:pickup_zone_30) shows that passengers who get on taxis from certain zones in Brooklyn and Queens also pay a lot of tips. Taxi drivers who would love to get more tips compensation can drive to the zones listed above to pick-up passengers.
 
@@ -270,8 +271,8 @@ pickup_zone_3000 <- tip_pickup_zone %>%
   arrange(desc(avg_tip))
 ```
 
-```{r pickup_zone_3000, echo=FALSE}
-kable(pickup_zone_3000[1:10,], caption = "Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000")
+```{r, echo=FALSE}
+kable(pickup_zone_3000[1:10,], caption = "Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)")
 ```
 There are more than 100 times more yellow cab pick-ups that happen in Manhattan everyday than in Brooklyn. By comparing the average tip percent in Table \@ref(tab:pickup_zone_30) and Table \@ref(tab:pickup_zone_3000), we can observe that percent tips paid in taxi zones with low pick-up numbers seem to be higher than percent tips paid in taxi zones with high pick-up numbers. 
 

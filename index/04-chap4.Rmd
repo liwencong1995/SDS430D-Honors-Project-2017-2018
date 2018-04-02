@@ -109,7 +109,6 @@ fwrite(to_newark_zone, "/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zo
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(plotly)
 to_jfk_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_jfk_zone.csv")
 to_lg_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_lg_zone.csv")
 to_newark_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zone.csv")
@@ -134,7 +133,7 @@ to_newark_zone <- to_newark_zone %>%
 three_air <- bind_rows(to_jfk_zone, to_lg_zone, to_newark_zone)
 ```
 
-```{r three_air, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE}
 kable(three_air[10:20,], caption = "Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours")
 ```
 Table \@ref(tab:three_air) displays the average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours.
@@ -201,8 +200,8 @@ server <- function(input,output) {
 shinyApp(ui, server)
 ```
 
-```{r shinyapp, fig.caption = "Shiny App: Average Number of Minutes Takes to Go to All Three Airports",fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/shinyapp.png")
+```{r shinyapp, fig.caption = "Shiny App: Average Number of Minutes Takes to Go to All Three Airports",fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/shinyapp.png", dpi = 200 )
 ```
 This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the these three airports from any New York City taxi zones.
 
@@ -214,7 +213,9 @@ In this section, we want to study the number of pickups of yellow cab, Uber, and
 **Uber Weekly Data**
 ```{r, eval=FALSE, echo=FALSE}
 download.file("https://data.cityofnewyork.us/resource/gt3n-7ri6.csv?years=2017&$limit=50000", destfile = "/Users/priscilla/Desktop/Honors Thesis/data/uber_weekly_data.csv")
+```
 
+```{r, echo=FALSE, message=FALSE}
 uber_weekly_data <- fread("/Users/priscilla/Desktop/Honors Thesis/data/uber_weekly_data.csv")
 
 uber_weekly <- uber_weekly_data %>%
@@ -222,7 +223,7 @@ uber_weekly <- uber_weekly_data %>%
   summarise(`Total Dispatched Trips` = sum(`Total Dispatched Trips`))
 ```
 
-```{r uber-weekly-data, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE}
 kable(uber_weekly[1:10,], caption = "Uber 2017 Weekly Total Dispatched Trips")
 ```
 
@@ -245,11 +246,11 @@ yellow_weekly <- yellow_weekly %>%
 fwrite(yellow_weekly, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_weekly_data.csv")
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,message=FALSE}
 yellow_weekly_data <- fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_weekly_data.csv")
 ```
 
-```{r yellow-weekly-data, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE}
 kable(yellow_weekly_data[1:10,], caption = "Yellow Taxi 2017 Weekly Total Dispatched Trips")
 ```
 

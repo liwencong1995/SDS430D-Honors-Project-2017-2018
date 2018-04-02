@@ -34,8 +34,8 @@ In addition, the trip level NYC Uber data only covers two periods, from April to
 webshot("http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml","figure/a-report.png", cliprect = "viewport")
 ```
 
-```{r, fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/a-report.png")
+```{r, fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/a-report.png", dpi = 200 )
 ```
 
 The data can be accessed by using the following commands:
@@ -87,8 +87,8 @@ install.packages("nyctaxi")
 webshot("https://github.com/beanumber/nyctaxi","figure/nyctaxi-page.png", cliprect = c(1425, 0, 1000, 500))
 ```
 
-```{r, fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/nyctaxi-page.png")
+```{r, fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/nyctaxi-page.png", dpi = 200 )
 ```
 
 ```{r, message=FALSE, echo=FALSE}
@@ -126,8 +126,8 @@ saveWidget(map, file = "zonemap.html")
 webshot("zonemap.html","figure/zonemap.png", cliprect = "viewport")
 ```
 
-```{r map, fig.cap="NYC Taxi Zone Map", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/zonemap.png")
+```{r map, fig.cap="NYC Taxi Zone Map", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/zonemap.png", dpi = 200 )
 ```
 
 ## Extract-Transform-Load 
@@ -182,8 +182,8 @@ Due to the large size of Yellow Taxi datasets, `yellow_old` and `yellow` are par
 ## New Yoek City Street-hail and E-hail Services Summary
 Below is a summary of data that are available to users from 2014 to 2016.The Uber data used to create the summary below is the trip-level data from Uber TLC FOIL Response.
 
-```{r num-trips-summary, fig.cap="Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC, ", fig.align='center', echo=FALSE, fig.width=6, fig.height=6}
-knitr::include_graphics("figure/Num_trips_summary.png")
+```{r num-trips-summary, fig.cap="Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC, ", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/Num_trips_summary.png", dpi = 200 )
 ```
 
 A similar summary of data can also be created by combining monthly yellow taxi data from TLC Aggregated Reports and weekly Uber and Lyft data from NYC OpenData. These data can be downloaded by running the code below:
