@@ -224,60 +224,59 @@
 \section{Motivation}\label{motivation}
 
 Working with medium data in R is not an easy task. Loading medium-sized
-data into R environment takes a long time and might crush an R session.
-Creating a user-friendly platform that allows R users to easily work
-with medium data is my motivation. There are a lot of interesting data
-that are needed to be explored. In my study, I focus on New York City
-taxicab data, because there is so much that could be learned from
+data into the R environment takes a long time and might crash an R
+session. Creating a user-friendly platform that allows R users to easily
+work with medium data is my motivation. There are a lot of interesting
+data that are needed to be explored. In my study, I focus on New York
+City taxicab data, because there is so much that could be learned from
 taxicab trip records.
 
 New York City taxi drivers, passengers, and NYC Taxi \& Limousine
 Commission are the three parties who are closely involved in the NYC
 taxi industry. Each party has its own needs. Better understanding the
-needs of the three parties and provide solutions to better satisfy their
-needs are what I am hooping to be the result of this thiesis.
+needs of the three parties and providing solutions to better satisfy
+their needs are what we am hooping to be the result of this thesis.
 
 \section{Background}\label{background}
 
 \subsection{Yellow Taxi}\label{yellow-taxi}
 
-The Yellow Cabs are widely recognized as the icons of New York City. NYC
-Taxicabs are operated by private firms and licensed by the New York City
-Taxi and Limousine Commission (TLC). TLC issues medallions to taxicabs,
-and every taxicab must have a medallion to operate. There were 13,437
-yellow medallion taxicabs licenses in 2014, and taxi patronage has
-declined since 2011 because of the competition caused by rideshare
-services.
+NYC Taxicabs are operated by private firms and licensed by the New York
+City Taxi and Limousine Commission (TLC). TLC issues medallions to
+taxicabs, and every taxicab must have a medallion to operate. There were
+13,437 yellow medallion taxicabs licenses in 2014, and taxi patronage
+has declined since 2011 because of the competition caused by rideshare
+services. (``Taxicabs of New York City,'' 2018)
 
 \subsection{Green Taxi}\label{green-taxi}
 
 The apple green taxicabs in New York City are called Boro taxis and they
-are allowed to only pick up passengers in outer boroughs and in
+are only allowed to pick up passengers in the outer boroughs and in
 Manhattan above East 96th and West 110th Streets. Historically, only the
 yellow medallion taxicabs were allowed to pick up passengers on the
 street. However, since 95\% of yellow taxi pick-ups occurred in
-Manhattan to the South of 96th Street and at the two airports, Five
+Manhattan to the South of 96th Street and at the two airports, the Five
 Borough Taxi Plan was started to allow green taxis to fill in the gap in
-outer boroughs.
+outer boroughs in the summer of 2013.(``Your guide to Boro Taxis,''
+2009)
 
 \subsection{Uber}\label{uber}
 
-Uber Technologies Inc., famously known as Uber, is an American
-technology company that operates private cars worldwide. Uber drivers
-use their own cars, instead of corporate-owned vehicles, to drive with
-Uber. In NYC, Uber uses `upfront pricing'', meaning that riders are
-informed about the fares that they will pay before requesting a ride,
-and gratuity is not required. Riders are given the opportunity to
-compare different transportation fares before making their decisions on
-which one to choose. Uber NYC was launched in May 2011, and it only took
-5 years to have its growth to plateau.
+Uber Technologies Inc. is an American technology company that operates
+private cars worldwide. Uber drivers use their own cars, instead of
+corporate-owned vehicles, to drive with Uber. In NYC, Uber uses `upfront
+pricing'', meaning that riders are informed about the fares that they
+will pay before requesting a ride, and gratuity is not required. Riders
+are given the opportunity to compare different transportation fares
+before making their decisions on which one to choose. Uber NYC was
+launched in May 2011. (``Uber Won New York,'' 2015)
 
 \subsection{Lyft}\label{lyft}
 
 Similar to Uber, Lyft is also an on-demand transportation company, and
 it operates the Lyft car transportation mobile app. Lyft is the main
 competitor of Uber, and it came into market in July 2014 in New York
-City.
+City. (``Uber Won New York,'' 2015)
 
 \section{Literature Review}\label{literature-review}
 
@@ -288,19 +287,19 @@ in
 the authors have presented experimental and statistical evidence that R
 Markdown replaced the antiquated and hard-to-reproduce
 \texttt{copy-and-paste\ workflow}, and makes creating fully-reprodicible
-statistical analysis straight-forward. (Baumer, Cetinkaya-Rundel, Bray,
-Loi, \& Horton, 2014)
+statistical analysis straight-forward. (B. Baumer, Cetinkaya-Rundel,
+Bray, Loi, \& Horton, 2014)
 
 Loading medium-sized data into R environment takes a long time and might
 crush an R session. \texttt{etl} R package creates a user-friendly
 platform that allows R users to easily work with medium data with the
 extract, transform, load framework, which is commonly konwn as ETL in
 computing. (``Extract, transform, load,'' 2018) The \texttt{ETL} process
-has been set up by Benjamin Baumer (Baumer, 2016) in R to facilitate etl
-operations for medium data, and it is designed to work with any general
-data set. Packages that are specific to perticular data sets are needed
-to be written in order to better work with complex medium-sized data
-sets.
+has been set up by Benjamin Baumer (B. S. Baumer, 2017) in R to
+facilitate etl operations for medium data, and it is designed to work
+with any general data set. Packages that are specific to perticular data
+sets are needed to be written in order to better work with complex
+medium-sized data sets.
 
 \subsection{New York City Traffic and
 Taxi}\label{new-york-city-traffic-and-taxi}
@@ -364,14 +363,14 @@ transportations. (``OpenStreetCab,'' 2015)
 \subsection{\texorpdfstring{`nyctaxi'
 Package}{nyctaxi Package}}\label{nyctaxi-package}
 
-nyctaxi is an etl-dependent R package that help users to easily get
-access to New York City Taxi, Uber and Lyft trip data through Extract,
-Transform, and Load functions (ETL). This package facilitates ETL to
-deal with medium data that are too big to store on a laptop. Users are
-given the option to choose specific years and months as the input
-parameters of the three ETL functions, and a populated SQL database will
-be returned as the output. Users do not need to learn SQL queries, since
-all user interaction is in R.
+\texttt{nyctaxi} is an R package that help users to easily get access to
+New York City Taxi, Uber and Lyft trip data through Extract, Transform,
+and Load functions (ETL). (B. S. Baumer, 2017) This package facilitates
+ETL to deal with medium data that are too big to store in memory on a
+laptop. Users are given the option to choose specific years and months
+as the input parameters of the three ETL functions, and a connection to
+a populated SQL database will be returned as the output. Users do not
+need to learn SQL queries, since all user interaction is in R.
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(webshot)}
@@ -389,44 +388,40 @@ Warning: package 'webshot' was built under R version 3.4.3
 
 \subsection{Social Impact of NYC Taxi}\label{social-impact-of-nyc-taxi}
 
-New York City taxi drivers, passengers, and NYC Taxi \& Limousine
-Commission are the three parties who are closely involved in the NYC
-taxi industry. Each party has its own needs: taxi drivers want to
-maxmize their profit, and in order to do that, they need to maximize the
-revenue while minimizing the cost. Taxi passengers want the cheapest and
-most convenient way of transportantion. Since Uber and Lyft launched
-their services in New York City, many consumers started to demand the
-cheaper e-hail services. TLC wants to protect both taxi drivers and
-passengers, and it creates policies to make NYC taxi more accessible to
-consumers who really need this service. In this section, I think about
-what each party wants and try to find a way for them to be better-off.
+NYC Taxi drivers wants to make the most profit. Taxi passengers want the
+cheapest and most convenient way of transportantion. Since Uber and Lyft
+launched their services in New York City, many consumers started to
+demand the cheaper e-hail services.(Sugar, 2017) TLC wants to protect
+both taxi drivers and passengers, and it creates policies to make NYC
+taxi more accessible to consumers who really need this service. In these
+sections, we analyze what each party wants and try to find a way for
+them to be achieve their goals.
 
 \subsection{Reproducible Research}\label{reproducible-research}
 
-Reproducible research and open sources are the very first things that
-Ben mentioned to me in the beginning of my honors project. As scholars
-place more emphasis on the reproducibility of research studies, it is
-essential for me to make my dat and code openly available for people to
-eith redo my analysis or test my result.
+Reproducible research and open source are two main emphasis of my honors
+project. As scholars place more emphasis on the reproducibility of
+research studies, it is essential for me to make my data and code openly
+available for people to redo the analysis.
 
 \texttt{Knitr} and Github are used in my project to make my study
 reproducible, ranging from the initial source to raw data to the package
 I wrote to utlize the raw data to the statistical data analysis. I used
-an Github Ripository called \texttt{thesisdown} to layout the basic
-structure of my paper, this tool allows students to create reproducible
-and dynamic techinical report in R Markdown. It also allows users to
-embed R code and interactive applicationis, and output into PDF, Word,
-ePub, or gitbook doocuments. \texttt{thesisdown} helps users to
-efficiently put together any paper with similar format.
+an R package called \texttt{thesisdown} to layout the basic structure of
+my paper, this tool allows students to create reproducible and dynamic
+techinical report in R Markdown. It also allows users to embed R code
+and interactive applicationis, and output into PDF, Word, ePub, or
+gitbook doocuments. \texttt{thesisdown} helps users to efficiently put
+together any paper with similar format.
 
 Github is used to store the scripts for \texttt{nyctaxi} and this
 thesis. \texttt{nyctaxi} is available on CRAN for people to download and
-install, and the source code for data analysis in this thesis is
-available under the Github account of the author so that scholars can
-easyil access the information that thery are interested in. In terms of
-tables, figures, and anything included in the Appendix attached to this
-thesis, scripts that are used to generate them are included in the
-Github repository.
+install (B. Baumer, Li, \& Le, 2017), and the source code for data
+analysis in this thesis is available under the Github account of the
+author so that scholars can easily access the information that thery are
+interested in. In terms of tables, figures, and anything included in the
+Appendix attached to this thesis, scripts that are used to generate them
+are included in the Github repository.
 
 \chapter{Data and nyctaxi Package}\label{chapter2}
 
@@ -434,18 +429,22 @@ Github repository.
 
 The \texttt{nyctaxi} R package allows users to download, clean, and load
 data into SQL databasses. There are four types of data that are
-available for users to get access to, and they are New York City yellow
-taxi trip data, NYC green taxi data, NYC uber trip data, and NYC lyft
-data. (Ben Baumer \& Le, 2017)
+available for users to get access to, and they are trip level yellow
+taxi data from 2009 to the most recent month, trip level green taxi data
+from August 2013 to the most recent month, uber pick-up data from April
+to September 2014 and from Janaury to June 2015, and weekly-aggregated
+lyft trip data from 2016 to the most recent week. (B. Baumer et al.,
+2017)
 
 \subsection{Yellow Taxi}\label{yellow-taxi-1}
 
 The total size of all yellow taxi trip data \texttt{csv} files (from Jan
 2010 to Dec 2016) is 191.38 GB, and NYC yellow taxi trip data from Jan
-2009 to the most recent month can be found on NYC Taxi \& Limousine
-Commission (TLC). (``TLC Trip Record Data,'' 2009a) The data were
-collected and provided to the NYC TLC by technology providers authorized
-under the Taxicab \& Livery Passenger Enhancement Programs (TPEP/LPEP).
+2009 to the most recent month can be found on the NYC Taxi \& Limousine
+Commission (TLC) website. (``TLC Trip Record Data,'' 2009a) The data
+were collected and provided to the NYC TLC by technology providers
+authorized under the Taxicab \& Livery Passenger Enhancement Programs
+(TPEP/LPEP).
 
 The yellow taxi trip records include the following fields: pick-up and
 drop-off dates/times, pick-up and drop-off locations, trip distances,
@@ -457,14 +456,8 @@ counts.
 The total size of green taxi trip data \texttt{csv} files (from Aug 2013
 to Dec 2016) is 7.8 GB, and green taxi trip data from Aug 2013 to the
 most recent month can be downloaded from NYC Taxi \& Limousine
-Commission (TLC). (``TLC Trip Record Data,'' 2009a) The data were
-collected and provided to the NYC TLC by technology providers authorized
-under the Taxicab \& Livery Passenger Enhancement Programs (TPEP/LPEP).
-
-The green taxi trip records include the following fields: pick-up and
-drop-off dates/times, pick-up and drop-off locations, trip distances,
-itemized fares, rate types, payment types, and driver-reported passenger
-counts.
+Commission (TLC). (``TLC Trip Record Data,'' 2009a) Green taxi trip
+records include the same variables as yellow taxi trip records do.
 
 \subsection{TLC Summary Report}\label{tlc-summary-report}
 
@@ -500,13 +493,13 @@ data
 \end{Shaded}
 \subsection{Uber}\label{uber-1}
 
-The total size of Uber pick-up data (over 4.5 million from Apr to Sep
-2014 and 14.3 million from Jan to June 2015) is 4.3 MB, and thanks to
-FiveThirtyEight who obtained the data from NYC TLC by submitting a
-Freedom of Information Law request on July 20, 2015, these data are now
-open to public. (``TLC Trip Record Data,'' 2009b)
+The total size of Uber pick-up data (from Apr to Sep 2014 and from Jan
+to June 2015) is 4.3 MB, and thanks to FiveThirtyEight who obtained the
+data from NYC TLC by submitting a Freedom of Information Law request on
+July 20, 2015, these data are now open to public. (``TLC Trip Record
+Data,'' 2009b)
 
-The 2014 Uber data contains four variables: Data/Time (the date and time
+The 2014 Uber data contains four variables: Date/Time (the date and time
 of the Uber pick-up), Lat (the latitude of the Uber pick-up), Lon (the
 longitude of the Uber pick-up), and Base (the TLC base company code
 affiliated with the Uber pickup).
@@ -522,7 +515,7 @@ NYC Open Data also provides weekly-aggreagated Uber pick-up data from
 
 \subsection{Lyft}\label{lyft-1}
 
-The total size of weely-aggregated Lyft trip data (from Jan 2015 to Dec
+The total size of weekly-aggregated Lyft trip data (from Jan 2015 to Dec
 2016) is 914.9 MB, and these data are open to public and
 weekly-aggregated Lyft data from 2015 to the most recent week can be
 found on NYC OpenData website. (``LYFT Data,'' 2015)
@@ -530,39 +523,43 @@ found on NYC OpenData website. (``LYFT Data,'' 2015)
 \subsection{Data Storage}\label{data-storage}
 
 The total size of all \texttt{csv} files of the four services is about
-200 GB, and a laptop usually has memory less than or equal to 8GB.
+200 GB, and a laptop usually has memory less than or equal to 8 GB.
 Limited memory constrains the amount of data that can be loaded by a
-personal computer. When users load data into R environment, R keeps them
-in memory; when the amount of data loaded into R environment gets close
-to the limit of a computer's memory, R becomes unresponsive or force
-quit the current session. Therefore, better ways to work with data that
-takes more space than 8 GB is needed. According to Weijia Zhang (2016),
-comparing to RAM, hard disk is often used to store medium-sized data,
-because it is affordable and are designed for storing large items
-permanently. However, retrieving data from hard drives usually takes
-about 1,000,000 times more time.
+personal computer at one time. When users load data into R environment,
+R keeps them in memory; when the amount of data loaded into R
+environment gets close to the limit of a computer's memory, R becomes
+unresponsive or force quit the current session. Therefore, better ways
+to work with data that takes more space than 8 GB is needed. According
+to Weijia Zhang (2016), comparing to RAM, hard disk is often used to
+store medium-sized data, because it is affordable and are designed for
+storing large items permanently. However, retrieving data from hard
+drives usually takes about 1,000,000 times more time.
 
 \section{ETL nyctaxi Package}\label{etl-nyctaxi-package}
 
-etl is the parent package of nyctaxi. etl package provides a
-CRAN-friendly framework that allows R users to work with medium data
-without any knowledge in SQL database. The end result is a populated SQL
-database, but the user interaction takes place solely within R. It has
-three operations -extract, transfer, and load- which bring real-time
-data into local or remote databases. etl-dependent packages make medium
-data - too big to store in memory on a laptop- more accessible to a
-wider audience. Additionally, etl-dependent packages use SQL translation
-supported by dyplr.
+\texttt{etl} is the parent package of \texttt{nyctax}. \texttt{etl}
+provides a framework that allows R users to work with medium data
+without any knowledge in SQL database. Users can run SQL queries by
+using \texttt{dplyr} commands in R and choose to only return the final
+result, which could be a summary table, from SQL database into R
+Environment in order to aovid R from crashing. The user interaction
+takes place solely within R.
 
-nyctaxi was initially designed to work with New York City taxi data, but
-later on Uber and Lyft data were added and the ETL functions are
-modified to be specialized in working with these data. This package
+\texttt{etl} framework has three operations -Extract, Transfer, and
+Load- which bring real-time data into local or remote SQL databases.
+Users can specify which type of SQL database they prefer to connect to.
+\texttt{etl}-dependent packages, such as \texttt{nyctaxi}, make medium
+data more accessible to a wider audience. (B. Baumer et al., 2014)
+
+\texttt{nyctaxi} was initially designed to work with New York City taxi
+data, but later on Uber and Lyft data were added and the ETL functions
+are modified to be specialized in working with these data. This package
 compiled three major sources of hail service in New York City so that it
 is convenient for users to compare and contrast the performance of these
-three services.
+three services. (B. Baumer et al., 2017)
 
-This package inherits functions from many packages: etl, dplyr, DBI,
-rlang, and stringr.
+This package inherits functions from many packages: \texttt{etl},
+\texttt{dplyr}, \texttt{DBI}, \texttt{rlang}, and \texttt{stringr}.
 
 Since SQL databases are good tools for medium data analysis, ETL
 functions build connection to a SQL database at the back end and convert
@@ -571,15 +568,18 @@ to get data tables containing data of each hail service. Thus, users do
 not need to have any knowledge of SQL queries and they can draw in any
 subsets of the data from the SQL database in R.
 
-In general, extract.nyctaxi function download data of the four types of
-hail service data (yellow taxi, green taxi, uber, and lyft) from the
-corresponding sources. transform.nyctaxi uses different techniques to
-clean all four types of data to get then ready for the next step.
-extract.load loads the data user selected to a SQL database.
+In general, \texttt{etl\_extract.etl\_nyctaxi()} function download data
+of the four types of hail service data (yellow taxi, green taxi, uber,
+and lyft) from the corresponding sources. transform.nyctaxi uses
+different techniques to clean all four types of data to get then ready
+for the next step. \texttt{etl\_load.etl\_nyctaxi()} loads the data user
+selected to a SQL database.
 
-\texttt{nyctaxi} R package lives on the Comprehensive R Archive Network
-(CRAN), and it can be installed with the install.packages() function in
-R.
+The Comprehensive R Archive Network (CRAN) is a collection of sites that
+carry identical material, consisting of the R distributions, the
+contributed extensions, documentation for R, and binaries. (Studio,
+n.d.) \texttt{nyctaxi} R package lives on CRAN, and it can be installed
+with the \texttt{install.packages()} function in R.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# install the package}
@@ -619,12 +619,13 @@ original data is always available to users in case data corruption
 happens in later stages.
 
 After an etl object is created (nyctaxi is the etl object in this case),
-four parameters are needed to specify the data that users want: (1) obj:
-an etl object (2) years: a numeric vector giving the years. The default
-is the most recent year. (3) months: a numeric vector giving the months.
-The default is January to December. (4) type: a character variable
-giving the type of data the user wants to download. There are four
-types: yellow, green, uber, and lyft. The default is yellow.
+four parameters are needed to specify the data that users want: (1)
+\texttt{obj}: an etl object; (2) \texttt{years}: a numeric vector giving
+the years, and the default is the most recent year; (3) \texttt{months}:
+a numeric vector giving the months, and the default is \texttt{1:12};
+(4) \texttt{type}: a character variable giving the type of data the user
+wants to download. There are four types: yellow, green, uber, and lyft.
+The default is yellow.
 
 \subsection{Taxi zone shapefile attached to nyctaxi R
 package}\label{taxi-zone-shapefile-attached-to-nyctaxi-r-package}
@@ -632,10 +633,10 @@ package}\label{taxi-zone-shapefile-attached-to-nyctaxi-r-package}
 Two datasets are attached to \texttt{nyctaxi}. The first one is called
 \texttt{taxi\_zone\_lookup}, and this dataset contains information, such
 as taxi zone location IDs, location names, and corresponding boroughs
-for each ID. A shapefile containing the boundaries for the taxi zones,
-\texttt{taxi\_zones}, is also included in the package for users to do
-spatial analysis. Visulizations similar to one shown below can be
-generated with the shapefile.
+for each ID. (``TLC Trip Record Data,'' 2009a) A shapefile containing
+the boundaries for the taxi zones, \texttt{taxi\_zones}, is also
+included in the package for users to do spatial analysis. Visulizations
+similar to one shown below can be generated with the shapefile.
 \begin{verbatim}
 Warning: package 'sp' was built under R version 3.4.3
 \end{verbatim}
@@ -1637,7 +1638,7 @@ zones have the highest number of pick-ups.
 tips?}\label{which-taxi-zones-have-the-highest-percent-tips}
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up
-zones that have more than 30 trips per day or 10950 per year, we will
+zones that have at least 30 trips per day or 10950 per year, we will
 observe that many taxi pick-up zones with highest percent tips are not
 necessarily the ones with the highest number of pick-ups.
 \begin{Shaded}
@@ -1649,7 +1650,7 @@ necessarily the ones with the highest number of pick-ups.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-34}Ten taxi pick-up zones with the highest percent tip with threshold equals to 900}
+\caption{\label{tab:unnamed-chunk-34}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)}
 \centering
 \begin{tabular}[t]{r|r|r|r|r|l|l}
 \hline
@@ -1695,7 +1696,7 @@ tips are in Manhattan besides La Guardia Airport.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-36}Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000}
+\caption{\label{tab:unnamed-chunk-36}Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)}
 \centering
 \begin{tabular}[t]{r|r|r|r|r|l|l}
 \hline
@@ -2108,9 +2109,9 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 16.4% of 1581568 rows
-Read 37.3% of 1581568 rows
-Read 50.0% of 1581568 rows
+Read 17.1% of 1581568 rows
+Read 41.1% of 1581568 rows
+Read 53.1% of 1581568 rows
 Read 62.6% of 1581568 rows
 Read 82.8% of 1581568 rows
 Read 85.4% of 1581568 rows
@@ -2354,9 +2355,10 @@ chunk tag) to help with readibility and/or setup.
 
 \hypertarget{refs}{}
 \hypertarget{ref-pkgetl}{}
-Baumer, B. (2016). \emph{Etl: Extract-transform-load framework for
-medium data}. Retrieved from
-\url{https://CRAN.R-project.org/package=etl}
+Baumer, B. S. (2017). A grammar for reproducible and painless
+extract-transform-load operations on medium data. \emph{arXiv},
+\emph{8}(23), 1--24. Retrieved from
+\url{https://arxiv.org/abs/1708.07073}
 
 \hypertarget{ref-baumer2014}{}
 Baumer, B., Cetinkaya-Rundel, M., Bray, A., Loi, L., \& Horton, N. J.
@@ -2364,9 +2366,9 @@ Baumer, B., Cetinkaya-Rundel, M., Bray, A., Loi, L., \& Horton, N. J.
 introductory statistics. \emph{arXiv Preprint arXiv:1402.1894}.
 
 \hypertarget{ref-pkgnyctaxi}{}
-Ben Baumer, Wencong Priscilla Li, \& Le, T. (2017). \emph{Nyctaxi:
-Accessing new york city taxi data}. Retrieved from
-\url{https://CRAN.R-project.org/package=nyctaxi}
+Baumer, B., Li, W. P., \& Le, T. (2017). \emph{Nyctaxi: Accessing new
+york city taxi data}. Retrieved from
+\url{http://github.com/beanumber/nyctaxi}
 
 \hypertarget{ref-furfaro2016}{}
 Danielle Furfaro, S. C., \& Fears, D. (2016, December). NYC is already
@@ -2407,10 +2409,19 @@ Schneider, T. W. (2015, November). Analyzing 1.1 Billion NYC Taxi and
 Uber Trips, with a Vengeance. Todd W. Schneider. Retrieved from
 \url{http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/}
 
+\hypertarget{ref-cran}{}
+Studio, R. (n.d.). The Comprehensive R Archive Network. Retrieved from
+\url{https://cran.r-project.org/index.html}
+
 \hypertarget{ref-sugar2017}{}
 Sugar, R. (2017, January). Uber and Lyft cars now outnumber yellow cabs
 in NYC 4 to 1. Curbed New York. Retrieved from
 \url{https://ny.curbed.com/2017/1/17/14296892/yellow-taxi-nyc-uber-lyft-via-numbers}
+
+\hypertarget{ref-wikipediataxi}{}
+Taxicabs of New York City. (2018, April). \emph{Wikipedia}. Wikimedia
+Foundation. Retrieved from
+\url{https://en.wikipedia.org/wiki/Taxicabs_of_New_York_City}
 
 \hypertarget{ref-datayellowmonth}{}
 TLC Aggregated Reports. (2009). NYC Taxi \& Limousine Commission.
@@ -2430,6 +2441,15 @@ Retrieved from
 \hypertarget{ref-datauberweek}{}
 Uber Trips NYC 2016. (2015). NYC OpenData. Retrieved from
 \url{https://data.cityofnewyork.us/Transportation/Uber-Trips-NYC-2016/gt3n-7ri6/data}
+
+\hypertarget{ref-ubernyc}{}
+Uber Won New York. (2015, November). Slate Business. Retrieved from
+\url{http://www.slate.com/articles/business/moneybox/2015/11/uber_won_new_york_city_it_only_took_five_years.html}
+
+\hypertarget{ref-greentaxi}{}
+Your guide to Boro Taxis. (2009). NYC Taxi \& Limousine Commission.
+Retrieved from
+\url{http://www.nyc.gov/html/tlc/html/passenger/shl_passenger.shtml}
 
 
 % Index?

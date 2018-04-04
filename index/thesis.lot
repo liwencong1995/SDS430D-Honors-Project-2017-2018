@@ -3,8 +3,8 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {3.1}{\ignorespaces Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017\relax }}{54}{table.caption.10}
 \contentsline {table}{\numberline {3.2}{\ignorespaces Ten taxi zones with the highest number of pick-ups\relax }}{57}{table.caption.12}
-\contentsline {table}{\numberline {3.3}{\ignorespaces Ten taxi pick-up zones with the highest percent tip with threshold equals to 900\relax }}{58}{table.caption.13}
-\contentsline {table}{\numberline {3.4}{\ignorespaces Ten taxi pick-up zones with the highest percent tip with threshold equals to 90000\relax }}{58}{table.caption.14}
+\contentsline {table}{\numberline {3.3}{\ignorespaces Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)\relax }}{58}{table.caption.13}
+\contentsline {table}{\numberline {3.4}{\ignorespaces Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 3000 pick-up per day)\relax }}{58}{table.caption.14}
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {4.1}{\ignorespaces Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours\relax }}{64}{table.caption.15}
 \contentsline {table}{\numberline {4.2}{\ignorespaces Uber 2017 Weekly Total Dispatched Trips\relax }}{67}{table.caption.17}

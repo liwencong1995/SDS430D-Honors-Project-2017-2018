@@ -56,17 +56,19 @@ The total size of weekly-aggregated Lyft trip data (from Jan 2015 to Dec 2016) i
 The total size of all `csv` files of the four services is about 200 GB, and a laptop usually has memory less than or equal to 8 GB. Limited memory constrains the amount of data that can be loaded by a personal computer at one time. When users load data into R environment, R keeps them in memory; when the amount of data loaded into R environment gets close to the limit of a computer’s memory, R becomes unresponsive or force quit the current session. Therefore, better ways to work with data that takes more space than 8 GB is needed. According to Weijia Zhang (2016), comparing to RAM, hard disk is often used to store medium-sized data, because it is affordable and are designed for storing large items permanently.  However, retrieving data from hard drives usually takes about 1,000,000 times more time.
 
 ## ETL nyctaxi Package
-etl is the parent package of nyctaxi. etl package provides a CRAN-friendly framework that allows R users to work with medium data without any knowledge in SQL database. The end result is a populated SQL database, but the user interaction takes place solely within R. It has three operations -extract, transfer, and load- which bring real-time data into local or remote databases. etl-dependent packages make medium data - too big to store in memory on a laptop- more accessible to a wider audience. Additionally, etl-dependent packages use SQL translation supported by dyplr.  
+`etl` is the parent package of `nyctax`. `etl` provides a framework that allows R users to work with medium data without any knowledge in SQL database. Users can run SQL queries by using `dplyr` commands in R and choose to only return the final result, which could be a summary table, from SQL database into R Environment in order to aovid R from crashing. The user interaction takes place solely within R. 
 
-nyctaxi was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiled three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services. 
+`etl` framework has three operations -Extract, Transfer, and Load- which bring real-time data into local or remote SQL databases. Users can  specify which type of SQL database they prefer to connect to. `etl`-dependent packages, such as `nyctaxi`, make medium data more accessible to a wider audience. [@baumer2014]
 
-This package inherits functions from many packages: etl, dplyr, DBI, rlang, and stringr. 
+`nyctaxi` was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiled three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services. [@pkgnyctaxi]
+
+This package inherits functions from many packages: `etl`, `dplyr`, `DBI`, `rlang`, and `stringr`. 
 
 Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert R code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in R.
 
-In general, extract.nyctaxi function download data of the four types of hail service data (yellow taxi, green taxi, uber, and lyft) from the corresponding sources. transform.nyctaxi uses different techniques to clean all four types of data to get then ready for the next step. extract.load loads the data user selected to a SQL database. 
+In general, `etl_extract.etl_nyctaxi()` function download data of the four types of hail service data (yellow taxi, green taxi, uber, and lyft) from the corresponding sources. transform.nyctaxi uses different techniques to clean all four types of data to get then ready for the next step. `etl_load.etl_nyctaxi()` loads the data user selected to a SQL database. 
  
-`nyctaxi` R package lives on the Comprehensive R Archive Network (CRAN), and it can be installed with the install.packages() function in R. 
+The Comprehensive R Archive Network (CRAN) is a collection of sites that carry identical material, consisting of the R distributions, the contributed extensions, documentation for R, and binaries. [@cran] `nyctaxi` R package lives on CRAN, and it can be installed with the `install.packages()` function in R. 
 
 ```{r, eval = FALSE}
 #install the package
@@ -99,10 +101,10 @@ taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 
 In the example above, a folder called nyctaxi is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, a local folder contains two subfolders, `raw` and `load`, are also created under the directory the user specifies. `raw` folder stores data downloaded from online open sources, and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
 
-After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) obj: an etl object (2) years: a numeric vector giving the years. The default is the most recent year. (3) months: a numeric vector giving the months. The default is January to December. (4) type: a character variable giving the type of data the user wants to download. There are four types: yellow, green, uber, and lyft. The default is yellow.
+After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) `obj`: an etl object; (2) `years`: a numeric vector giving the years, and the default is the most recent year; (3) `months`: a numeric vector giving the months, and the default is `1:12`; (4) `type`: a character variable giving the type of data the user wants to download. There are four types: yellow, green, uber, and lyft. The default is yellow.
 
 ### Taxi zone shapefile attached to nyctaxi R package
-Two datasets are attached to `nyctaxi`. The first one is called `taxi_zone_lookup`, and this dataset contains information, such as taxi zone location IDs, location names, and corresponding boroughs for each ID. A shapefile containing the boundaries for the taxi zones, `taxi_zones`, is also included in the package for users to do spatial analysis. Visulizations similar to one shown below can be generated with the shapefile. 
+Two datasets are attached to `nyctaxi`. The first one is called `taxi_zone_lookup`, and this dataset contains information, such as taxi zone location IDs, location names, and corresponding boroughs for each ID. [@datayellow] A shapefile containing the boundaries for the taxi zones, `taxi_zones`, is also included in the package for users to do spatial analysis. Visulizations similar to one shown below can be generated with the shapefile. 
 
 ```{r, message=FALSE, echo=FALSE}
 data("taxi_zones")
