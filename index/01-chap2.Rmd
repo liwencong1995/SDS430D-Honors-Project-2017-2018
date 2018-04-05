@@ -25,7 +25,7 @@ webshot("http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml","fig
 ```
 
 ```{r, fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/a-report.png", dpi = 200 )
+knitr::include_graphics("figure/a-report.png", dpi = 170 )
 ```
 
 The data can be accessed by using the following commands:
@@ -79,7 +79,7 @@ webshot("https://github.com/beanumber/nyctaxi","figure/nyctaxi-page.png", clipre
 ```
 
 ```{r, fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/nyctaxi-page.png", dpi = 200 )
+knitr::include_graphics("figure/nyctaxi-page.png", dpi = 170 )
 ```
 
 ```{r, message=FALSE, echo=FALSE}
@@ -120,7 +120,7 @@ webshot("zonemap.html","figure/zonemap.png", cliprect = "viewport")
 ```
 
 ```{r zonemap, fig.cap="NYC Taxi Zone Map", fig.align='center', echo=FALSE, echo=FALSE}
-knitr::include_graphics("figure/zonemap.png", dpi = 200 )
+knitr::include_graphics("figure/zonemap.png", dpi = 170 )
 ```
 
 ## Extract-Transform-Load 
@@ -248,7 +248,7 @@ num_trips <- ggplot(data = combined, aes(x = date, y = num_trips, colour = type)
 
 
 ```{r num-trips-summary, fig.cap="Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC", fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/Num_trips_summary.jpeg", dpi = 200 )
+knitr::include_graphics("figure/Num_trips_summary.jpeg", dpi = 130 )
 ```
 Data used in Figure \@ref(fig:num-trips-summary) can be accessed by running the code below:
 

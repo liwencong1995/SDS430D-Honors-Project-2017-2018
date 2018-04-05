@@ -11,55 +11,54 @@
 \contentsline {subsection}{\numberline {1.3.3}Competition between New York City taxi and e-hail services}{5}{subsection.1.3.3}
 \contentsline {section}{\numberline {1.4}Contribution}{6}{section.1.4}
 \contentsline {subsection}{\numberline {1.4.1}`nyctaxi' Package}{6}{subsection.1.4.1}
-\contentsline {subsection}{\numberline {1.4.2}Social Impact of NYC Taxi}{9}{subsection.1.4.2}
-\contentsline {subsection}{\numberline {1.4.3}Reproducible Research}{9}{subsection.1.4.3}
+\contentsline {subsection}{\numberline {1.4.2}Social Impact of NYC Taxi}{8}{subsection.1.4.2}
+\contentsline {subsection}{\numberline {1.4.3}Reproducible Research}{8}{subsection.1.4.3}
 \contentsline {chapter}{Chapter 2: Data and nyctaxi Package}{11}{chapter.2}
 \contentsline {section}{\numberline {2.1}Data and Storage}{11}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}Yellow Taxi}{11}{subsection.2.1.1}
 \contentsline {subsection}{\numberline {2.1.2}Green Taxi}{12}{subsection.2.1.2}
 \contentsline {subsection}{\numberline {2.1.3}TLC Summary Report}{12}{subsection.2.1.3}
-\contentsline {subsection}{\numberline {2.1.4}Uber}{14}{subsection.2.1.4}
-\contentsline {subsection}{\numberline {2.1.5}Lyft}{15}{subsection.2.1.5}
-\contentsline {subsection}{\numberline {2.1.6}Data Storage}{15}{subsection.2.1.6}
-\contentsline {section}{\numberline {2.2}ETL nyctaxi Package}{16}{section.2.2}
-\contentsline {subsection}{\numberline {2.2.1}Taxi zone shapefile attached to nyctaxi R package}{20}{subsection.2.2.1}
-\contentsline {section}{\numberline {2.3}Extract-Transform-Load}{22}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Extract}{22}{subsection.2.3.1}
-\contentsline {subsection}{\numberline {2.3.2}Transform}{23}{subsection.2.3.2}
-\contentsline {subsubsection}{Green Taxi -- Extra Blank Row and Column}{24}{section*.5}
-\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Filenames}{24}{section*.6}
-\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Data Formats}{24}{section*.7}
-\contentsline {subsubsection}{Optimizing I/O Process}{24}{section*.8}
-\contentsline {subsection}{\numberline {2.3.3}Load}{25}{subsection.2.3.3}
-\contentsline {subsection}{\numberline {2.3.4}SQL Database Initialization}{25}{subsection.2.3.4}
-\contentsline {section}{\numberline {2.4}New Yoek City Street-hail and E-hail Services Summary}{26}{section.2.4}
-\contentsline {section}{\numberline {2.5}Source Code}{27}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}ETL Extract}{27}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}ETL Transform}{32}{subsection.2.5.2}
-\contentsline {subsection}{\numberline {2.5.3}ETL Load}{39}{subsection.2.5.3}
-\contentsline {subsection}{\numberline {2.5.4}utility function}{44}{subsection.2.5.4}
-\contentsline {subsection}{\numberline {2.5.5}ETL Init}{45}{subsection.2.5.5}
-\contentsline {chapter}{Chapter 3: New York City Taxi Driver}{51}{chapter.3}
-\contentsline {section}{\numberline {3.1}Get Yellow Taxi Trip Data Ready for Data Analysis}{51}{section.3.1}
-\contentsline {section}{\numberline {3.2}Aggregated Zone-level Tip Information}{52}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Pick-up Zone Tip Information}{53}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Which taxi zones have the highest number of pick-ups?}{56}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Which taxi zones have the highest percent tips?}{57}{subsection.3.2.3}
-\contentsline {section}{\numberline {3.3}What features of taxi trips are attractive to taxi drivers?}{59}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Do taxi drivers tend to go to zones that offer high tips?}{59}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Do passengers pay more tips during rush hours?}{60}{subsection.3.3.2}
-\contentsline {chapter}{Chapter 4: New York City Taxi Passengers}{63}{chapter.4}
-\contentsline {section}{\numberline {4.1}How long does it take to get to JFK, La Guardia, and Newark Airports? When is the best time to depart?}{63}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Case Study: From Alphabet City, Manhattan to all three airport}{64}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{66}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}How does weather affect the number of taxi and Lyft trips?}{66}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Case Study: March 14th, 2017 Snow Storm}{68}{subsection.4.2.1}
-\contentsline {chapter}{Chapter 5: New York City Taxi Fare \& Limousine Commission}{71}{chapter.5}
-\contentsline {section}{\numberline {5.1}Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{71}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}People in Manhattan benefit from the \$52 flat rate.}{72}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Taxi zones pays on average more than \$52}{73}{subsection.5.1.2}
-\contentsline {section}{\numberline {5.2}However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?}{75}{section.5.2}
-\contentsline {chapter}{Chapter 6: Conclusion}{81}{chapter.6}
-\contentsline {section}{\numberline {6.1}Future Research}{81}{section.6.1}
-\contentsline {chapter}{Appendix A: The First Appendix}{83}{appendix.A}
-\contentsline {chapter}{References}{85}{appendix*.22}
+\contentsline {subsection}{\numberline {2.1.4}Uber}{13}{subsection.2.1.4}
+\contentsline {subsection}{\numberline {2.1.5}Lyft}{14}{subsection.2.1.5}
+\contentsline {subsection}{\numberline {2.1.6}Data Storage}{14}{subsection.2.1.6}
+\contentsline {section}{\numberline {2.2}ETL nyctaxi Package}{15}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Taxi zone shapefile attached to nyctaxi R package}{17}{subsection.2.2.1}
+\contentsline {section}{\numberline {2.3}Extract-Transform-Load}{18}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Extract}{18}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Transform}{19}{subsection.2.3.2}
+\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Filenames}{20}{section*.6}
+\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Data Formats}{21}{section*.7}
+\contentsline {subsubsection}{Optimizing I/O Process}{21}{section*.8}
+\contentsline {subsection}{\numberline {2.3.3}Load}{21}{subsection.2.3.3}
+\contentsline {subsection}{\numberline {2.3.4}SQL Database Initialization}{21}{subsection.2.3.4}
+\contentsline {section}{\numberline {2.4}New Yoek City Taxicab and E-hail Services Summary}{22}{section.2.4}
+\contentsline {section}{\numberline {2.5}Source Code}{24}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}ETL Extract}{24}{subsection.2.5.1}
+\contentsline {subsection}{\numberline {2.5.2}ETL Transform}{28}{subsection.2.5.2}
+\contentsline {subsection}{\numberline {2.5.3}ETL Load}{36}{subsection.2.5.3}
+\contentsline {subsection}{\numberline {2.5.4}utility function}{41}{subsection.2.5.4}
+\contentsline {subsection}{\numberline {2.5.5}ETL Init}{41}{subsection.2.5.5}
+\contentsline {chapter}{Chapter 3: New York City Taxi Driver}{47}{chapter.3}
+\contentsline {section}{\numberline {3.1}Get Yellow Taxi Trip Data Ready for Data Analysis}{47}{section.3.1}
+\contentsline {section}{\numberline {3.2}Aggregated Zone-level Tip Information}{48}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Pick-up Zone Tip Information}{49}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Which taxi zones have the highest number of pick-ups?}{52}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Which taxi zones have the highest percent tips?}{53}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.3}What features of taxi trips are attractive to taxi drivers?}{55}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Do taxi drivers tend to go to zones that offer high tips?}{55}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Do passengers pay more tips during rush hours?}{56}{subsection.3.3.2}
+\contentsline {chapter}{Chapter 4: New York City Taxi Passengers}{59}{chapter.4}
+\contentsline {section}{\numberline {4.1}How long does it take to get to JFK, La Guardia, and Newark Airports? When is the best time to depart?}{59}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Case Study: From Alphabet City, Manhattan to all three airport}{60}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{62}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}How does weather affect the number of taxi and Lyft trips?}{62}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Case Study: March 14th, 2017 Snow Storm}{64}{subsection.4.2.1}
+\contentsline {chapter}{Chapter 5: New York City Taxi Fare \& Limousine Commission}{67}{chapter.5}
+\contentsline {section}{\numberline {5.1}Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{67}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}People in Manhattan benefit from the \$52 flat rate.}{68}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Taxi zones pays on average more than \$52}{69}{subsection.5.1.2}
+\contentsline {section}{\numberline {5.2}However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?}{71}{section.5.2}
+\contentsline {chapter}{Chapter 6: Conclusion}{77}{chapter.6}
+\contentsline {section}{\numberline {6.1}Future Research}{77}{section.6.1}
+\contentsline {chapter}{Appendix A: The First Appendix}{79}{appendix.A}
+\contentsline {chapter}{References}{81}{appendix*.22}
