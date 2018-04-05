@@ -129,58 +129,57 @@ knitr::include_graphics("figure/zonemap.png", dpi = 170 )
 
 ```{r, eval=FALSE}
 taxi %>% 
-   etl_extract(years = 2017, months = 1:12, type = c("yellow"))
+   etl_extract(years = 2014:2016, months = 1:12, type = c("yellow", "green"))
 ```
 
-Uber trip record data is static and small, so we decided to only give users the options to either download all data from April to Sepetember, 2014 or download all Uber trip records from Janaury to June, 2015 at onc. Users do not have the lesuire to download Uber data from a specific month. 
-
+Uber trip record data is static and small, so we decided to only give users the options to either download all data from April to Sepetember, 2014 or download all Uber trip records from Janaury to June, 2015 at onc. Users do not have the ability to download Uber data from a specific month. 
 ```{r, eval=FALSE}
 taxi %>% 
-   etl_extract(years = 2017, months = 1:12, type = c("uber"))
+   etl_extract(years = 2014:2016, months = 1:12, type = c("uber"))
 ```
 
 Lyft data is updated on NYC Open Data webiste on a weekly basis. Since the weekly-aggregated data is tiny and only data later then 2014 is available, we decided to only allow users to download Lyft data by year. 
 
 ```{r, eval=FALSE}
 taxi %>% 
-   etl_extract(years = 2017, months = 1:12, type = c("lyft"))
+   etl_extract(years = 2014:2016, months = 1:12, type = c("lyft"))
 ```
 
 The default `years` is the current year, and the default `months` are the all twelve months. The default type of transportation is `yellow`. When an invalid month is entered, warning message will suggest users to reconsider their choice and select a new set of month. 
 
 ### Transform
-`etl_transform.etl_nyctaxi()` allows users to transform New York City yellow taxi, green taxi, Uber, and Lyft data into cleaned formats, and it utlizes different data cleaning techiniques when it transforms data for each transportation type. In general, it cleans the data and creates a new `csv` file in the `load` directory to store the cleaned data. It helps us to retain and protect raw data from being mondified or destroyed. Users are allows to specify the month of interest in order to only transform the data that they are interested in. This functionality helps people to be more efficient with their use of time.
+`etl_transform.etl_nyctaxi()` allows users to transform New York City yellow taxi, green taxi, Uber, and Lyft data into cleaned formats, and it utlizes different data cleaning techniques when it transforms data for each transportation type. In general, it cleans the data and creates a new `csv` file in the `load` directory to store the cleaned data. It helps us to retain and protect raw data from being modified or destroyed. Users are allowed to specify the month of interest in order to only transform the data that they are interested in. This functionality helps people to be more efficient with their use of time.
 
 By default, it takes the current year Yellow taxi trip records data files, and save copies of them in the `load` diectory. It skips the cleaning step, because the raw Yellow Taxi data downloaded from TLC is already in a desired format with all variables correctly labelled. 
 
 ```{r, eval=FALSE}
 taxi %>% 
-   etl_transform(years = 2017, months = 1:12, type = c("yellow"))
+   etl_transform(years = 2014:2016, months = 1:12, type = c("yellow", "green", "uber", "lyft"))
 ```
 
 There are a few main transformations that are done by this fucntion:
 #### Green Taxi -- Extra Blank Row and Column
-Green Taxi monthly data from August 2013 to the most recent month besides 2015 all have a blank second row in the `csv` files. Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all have an extra blank columns attanched to the right-most column. These blank row and solumn causes problems in the later stage when users want to load data into SQL database. In order to get Green Taxi data ready for the `load` phase, we used `system()` to invoke the OS command specified to remove the blank rows and columns.
+Green Taxi monthly data from August 2013 to the most recent month besides 2015 all have a blank second row in the `csv` files. Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all have an extra blank columns attanched to the right-most column. These blank rows and columns cause problems in the later stage when users want to load data into SQL database. In order to get Green Taxi data ready for the `load` phase, we used the `system()` function in R to invoke the Terminal command specified to remove the blank rows and columns.
 
 #### Uber Data -- Reconciling Inconsistent Filenames
-Uber only released over 4.5 million data records from April to Sepetmber 2014 and 14.3 million records from Janaury to June 2015. Information of different sets of variables are released for 2014 and 2015, and variables have different naming convention. When users want to download data from both years, variables are renamed so that data from both years can be cosolidated into one big dataset with consistent variable names. 
+Uber only released over 4.5 million data records from April to September 2014 and 14.3 million records from Janaury to June 2015. Information of different sets of variables are released for 2014 and 2015, and variables have different naming convention. When users want to download data from both years, variables are renamed so that data from both years can be cosolidated into one big dataset with consistent variable names. 
 
 #### Uber Data -- Reconciling Inconsistent Data Formats
-The data type of `Date/Time` variable in Uber datasets is originally encoded as `character`. In order to enable it to be recognized as `timestamp` by R, we use `ymd_hms` in `lubridate` to transform date time to POSIXct objects.
+The data type of `Date/Time` variable in Uber datasets is originally encoded as `character`. In order to enable it to be recognized as `timestamp` by R, we use `ymd_hms` in `lubridate` [@pkglubridate] to transform date time to POSIXct objects.
 
 #### Optimizing I/O Process
-Improving file input and output processes is an important part of `etl_transform`. `data.table` only takes half of the time to read from and write into datasets comparing to `readr`. Therefore, `etl_transform` uses `fread()` and `fwrite()` from `data.table` instead of `read_csv` or `write_csv` from `readr` to reduce the data processing time.
+Improving file input and output processes is an important part of `etl_transform`. `data.table` [@pkgdatatable] only takes half of the time to read from and write into datasets comparing to `readr`. [@pkgreadr] Therefore, `etl_transform` uses `fread()` and `fwrite()` from `data.table` instead of `read_csv` or `write_csv` from `readr` to reduce the data processing time.
 
 ### Load
-`etl_load.etl_nyctaxi()` allows users to load New York City yellow taxi, green taxi, Uber, and Lyft data into different data tables in a SQL database. It populates a SQL database with data cleaned by `etl_transform`. In order to reduce the data processing complexity, `init.mysql()` is written under `nyctaxi` to help users to set up five basic table structures for MySQL database.
+`etl_load.etl_nyctaxi()` allows users to load New York City yellow taxi, green taxi, Uber, and Lyft data into different data tables in a SQL database. It populates a SQL database with data cleaned by `etl_transform`. 
 
 ```{r, eval=FALSE}
 taxi %>% 
-   etl_load(years = 2017, months = 1:12, type = c("yellow"))
+   etl_load(years = 2014:2016, months = 1:12, type = c("yellow", "green", "uber", "lyft"))
 ```
 
 ### SQL Database Initialization
-`init.mysql()` helps users to set up five basic table structures for MySQL database. `yellow_old` is created for Yellow Taxi data that are prior to August 2016, and `yellow` is created for data later than July 2016. `green`, `uber`, and `lyft` are also initiated for the three transportations. 
+`init.mysql()` is written under `nyctaxi` to help users to set up five basic table structures for MySQL database. `yellow_old` is created for Yellow Taxi data that are prior to August 2016, and `yellow` is created for data later than July 2016. `green`, `uber`, and `lyft` are also initiated for the three transportations. 
 
 `etl_init()` can be run after a database connection is built to process to process `init.mysql()` to initialize a MySQL database, and default columns with the correct variable names and typed defined will be automatically generated.
 
@@ -189,13 +188,15 @@ taxi %>%
   etl_init()
 ```
 
-In order to increase the query speed at the data analysis stage, `KEY`s are created for multiple variables for each transportation. Since there is no variable containing unique value for each observation, no primary variable is needed. Using `KEY` in data analysis query can spped up the query process. 
+In order to increase the query speed at the data analysis stage, `KEY`s are created for multiple variables for each transportation. Since there is no variable containing unique value for each observation, no primary variable is needed. Using `KEY`s in data analysis query can speed up the query process. 
 
-Due to the large size of Yellow Taxi datasets, `yellow_old` and `yellow` are partitioned into subgroups by `year`. When we need to run query on data from a specific year, having partitions allows MySQL to directly find the data specified without filtering on every single row. It speeds up the query process. A `VIEW` called `yellow_old_sum` is also created to generate a summary table for the number of Yellow Taxi trips in each month. 
+Due to the large size of Yellow Taxi datasets, `yellow_old` and `yellow` are partitioned into subgroups by `year`. When we need to run a query on data from a specific year, having partitions allows MySQL to directly find the data specified without filtering on every single row. It speeds up the query process. A `VIEW` called `yellow_old_sum` is also created to generate a summary table for the number of Yellow Taxi trips in each month. 
 
-## New Yoek City Taxicab and E-hail Services Summary
-Below is a summary of total number of trips made by all 4 types of transporations that are available to users from 2014 to 2016. In order to generate this summary, I combined trip-level yellow and green taxi data from TLC trip data website and weekly Uber and Lyft data from NYC OpenData.
+```{r, fig.cap="MySQL View", fig.align='center', echo=FALSE, echo=FALSE}
+knitr::include_graphics("figure/mysql_view.png", dpi = 250 )
+```
 
+## New York City Taxicab and E-hail Services Summary
 ```{r, eval=FALSE, echo=FALSE}
 library(data.table)
 library(lubridate)
@@ -246,11 +247,10 @@ num_trips <- ggplot(data = combined, aes(x = date, y = num_trips, colour = type)
 #save(num_trips,file = "figure/Num_trips_summary.png")
 ```
 
-
 ```{r num-trips-summary, fig.cap="Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/Num_trips_summary.jpeg", dpi = 130 )
 ```
-Data used in Figure \@ref(fig:num-trips-summary) can be accessed by running the code below:
+Figure \@ref(fig:num-trips-summary) is a summary of total number of trips made by all 4 types of transporations that are available to users from 2014 to 2016. In order to generate this summary, I combined trip-level yellow and green taxi data from TLC trip data website and weekly Uber and Lyft data from NYC OpenData.Data used in Figure \@ref(fig:num-trips-summary) can be accessed by running the code below:
 
 * Yellow taxi monthly data
 ```{r, eval=FALSE}
@@ -270,8 +270,6 @@ download.file("https://data.cityofnewyork.us/resource/juxc-sutg.csv", destfile =
 ## Source Code
 ### ETL Extract
 ```{r}
-opts_chunk$set(tidy.opts=list(width.cutoff=60))
-
 etl_extract.etl_nyctaxi <- 
   function(obj, 
 years = as.numeric(format(Sys.Date(),'%Y')), 

@@ -649,18 +649,18 @@ on NYC Taxi \& Limousine Commission (TLC) website on a monthly basis.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }
-\StringTok{   }\KeywordTok{etl_extract}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2017}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{))}
+\StringTok{   }\KeywordTok{etl_extract}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\OperatorTok{:}\DecValTok{2016}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"green"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 Uber trip record data is static and small, so we decided to only give
 users the options to either download all data from April to Sepetember,
 2014 or download all Uber trip records from Janaury to June, 2015 at
-onc. Users do not have the lesuire to download Uber data from a specific
+onc. Users do not have the ability to download Uber data from a specific
 month.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }
-\StringTok{   }\KeywordTok{etl_extract}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2017}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"uber"}\NormalTok{))}
+\StringTok{   }\KeywordTok{etl_extract}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\OperatorTok{:}\DecValTok{2016}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"uber"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 Lyft data is updated on NYC Open Data webiste on a weekly basis. Since
@@ -669,7 +669,7 @@ available, we decided to only allow users to download Lyft data by year.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }
-\StringTok{   }\KeywordTok{etl_extract}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2017}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"lyft"}\NormalTok{))}
+\StringTok{   }\KeywordTok{etl_extract}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\OperatorTok{:}\DecValTok{2016}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"lyft"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 The default \texttt{years} is the current year, and the default
@@ -682,11 +682,11 @@ a new set of month.
 
 \texttt{etl\_transform.etl\_nyctaxi()} allows users to transform New
 York City yellow taxi, green taxi, Uber, and Lyft data into cleaned
-formats, and it utlizes different data cleaning techiniques when it
+formats, and it utlizes different data cleaning techniques when it
 transforms data for each transportation type. In general, it cleans the
 data and creates a new \texttt{csv} file in the \texttt{load} directory
 to store the cleaned data. It helps us to retain and protect raw data
-from being mondified or destroyed. Users are allows to specify the month
+from being modified or destroyed. Users are allowed to specify the month
 of interest in order to only transform the data that they are interested
 in. This functionality helps people to be more efficient with their use
 of time.
@@ -698,7 +698,7 @@ is already in a desired format with all variables correctly labelled.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }
-\StringTok{   }\KeywordTok{etl_transform}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2017}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{))}
+\StringTok{   }\KeywordTok{etl_transform}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\OperatorTok{:}\DecValTok{2016}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"uber"}\NormalTok{, }\StringTok{"lyft"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 There are a few main transformations that are done by this fucntion:
@@ -706,16 +706,16 @@ There are a few main transformations that are done by this fucntion:
 data from August 2013 to the most recent month besides 2015 all have a
 blank second row in the \texttt{csv} files. Similar to this problem,
 Green Taxi data from 2013, 2014, and 2015 all have an extra blank
-columns attanched to the right-most column. These blank row and solumn
-causes problems in the later stage when users want to load data into SQL
+columns attanched to the right-most column. These blank rows and columns
+cause problems in the later stage when users want to load data into SQL
 database. In order to get Green Taxi data ready for the \texttt{load}
-phase, we used \texttt{system()} to invoke the OS command specified to
-remove the blank rows and columns.
+phase, we used the \texttt{system()} function in R to invoke the
+Terminal command specified to remove the blank rows and columns.
 
 \subsubsection{Uber Data -- Reconciling Inconsistent
 Filenames}\label{uber-data-reconciling-inconsistent-filenames}
 
-Uber only released over 4.5 million data records from April to Sepetmber
+Uber only released over 4.5 million data records from April to September
 2014 and 14.3 million records from Janaury to June 2015. Information of
 different sets of variables are released for 2014 and 2015, and
 variables have different naming convention. When users want to download
@@ -728,13 +728,15 @@ Formats}\label{uber-data-reconciling-inconsistent-data-formats}
 The data type of \texttt{Date/Time} variable in Uber datasets is
 originally encoded as \texttt{character}. In order to enable it to be
 recognized as \texttt{timestamp} by R, we use \texttt{ymd\_hms} in
-\texttt{lubridate} to transform date time to POSIXct objects.
+\texttt{lubridate} (Grolemund \& Wickham, 2011) to transform date time
+to POSIXct objects.
 
 \subsubsection{Optimizing I/O Process}\label{optimizing-io-process}
 
 Improving file input and output processes is an important part of
-\texttt{etl\_transform}. \texttt{data.table} only takes half of the time
-to read from and write into datasets comparing to \texttt{readr}.
+\texttt{etl\_transform}. \texttt{data.table} (Dowle \& Srinivasan, 2017)
+only takes half of the time to read from and write into datasets
+comparing to \texttt{readr}. (Wickham, Hester, \& Francois, 2017)
 Therefore, \texttt{etl\_transform} uses \texttt{fread()} and
 \texttt{fwrite()} from \texttt{data.table} instead of \texttt{read\_csv}
 or \texttt{write\_csv} from \texttt{readr} to reduce the data processing
@@ -745,23 +747,22 @@ time.
 \texttt{etl\_load.etl\_nyctaxi()} allows users to load New York City
 yellow taxi, green taxi, Uber, and Lyft data into different data tables
 in a SQL database. It populates a SQL database with data cleaned by
-\texttt{etl\_transform}. In order to reduce the data processing
-complexity, \texttt{init.mysql()} is written under \texttt{nyctaxi} to
-help users to set up five basic table structures for MySQL database.
+\texttt{etl\_transform}.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }
-\StringTok{   }\KeywordTok{etl_load}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2017}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{))}
+\StringTok{   }\KeywordTok{etl_load}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\OperatorTok{:}\DecValTok{2016}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"uber"}\NormalTok{, }\StringTok{"lyft"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 \subsection{SQL Database
 Initialization}\label{sql-database-initialization}
 
-\texttt{init.mysql()} helps users to set up five basic table structures
-for MySQL database. \texttt{yellow\_old} is created for Yellow Taxi data
-that are prior to August 2016, and \texttt{yellow} is created for data
-later than July 2016. \texttt{green}, \texttt{uber}, and \texttt{lyft}
-are also initiated for the three transportations.
+\texttt{init.mysql()} is written under \texttt{nyctaxi} to help users to
+set up five basic table structures for MySQL database.
+\texttt{yellow\_old} is created for Yellow Taxi data that are prior to
+August 2016, and \texttt{yellow} is created for data later than July
+2016. \texttt{green}, \texttt{uber}, and \texttt{lyft} are also
+initiated for the three transportations.
 
 \texttt{etl\_init()} can be run after a database connection is built to
 process to process \texttt{init.mysql()} to initialize a MySQL database,
@@ -776,25 +777,26 @@ will be automatically generated.
 In order to increase the query speed at the data analysis stage,
 \texttt{KEY}s are created for multiple variables for each
 transportation. Since there is no variable containing unique value for
-each observation, no primary variable is needed. Using \texttt{KEY} in
-data analysis query can spped up the query process.
+each observation, no primary variable is needed. Using \texttt{KEY}s in
+data analysis query can speed up the query process.
 
 Due to the large size of Yellow Taxi datasets, \texttt{yellow\_old} and
 \texttt{yellow} are partitioned into subgroups by \texttt{year}. When we
-need to run query on data from a specific year, having partitions allows
-MySQL to directly find the data specified without filtering on every
-single row. It speeds up the query process. A \texttt{VIEW} called
+need to run a query on data from a specific year, having partitions
+allows MySQL to directly find the data specified without filtering on
+every single row. It speeds up the query process. A \texttt{VIEW} called
 \texttt{yellow\_old\_sum} is also created to generate a summary table
 for the number of Yellow Taxi trips in each month.
+\begin{figure}
 
-\section{New Yoek City Taxicab and E-hail Services
-Summary}\label{new-yoek-city-taxicab-and-e-hail-services-summary}
+{\centering \includegraphics[width=5.76in]{figure/mysql_view} 
 
-Below is a summary of total number of trips made by all 4 types of
-transporations that are available to users from 2014 to 2016. In order
-to generate this summary, I combined trip-level yellow and green taxi
-data from TLC trip data website and weekly Uber and Lyft data from NYC
-OpenData.
+}
+
+\caption{MySQL View}\label{fig:unnamed-chunk-21}
+\end{figure}
+\section{New York City Taxicab and E-hail Services
+Summary}\label{new-york-city-taxicab-and-e-hail-services-summary}
 \begin{figure}
 
 {\centering \includegraphics[width=5.75in]{figure/Num_trips_summary} 
@@ -803,6 +805,12 @@ OpenData.
 
 \caption{Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC}\label{fig:num-trips-summary}
 \end{figure}
+Figure \ref{fig:num-trips-summary} is a summary of total number of trips
+made by all 4 types of transporations that are available to users from
+2014 to 2016. In order to generate this summary, I combined trip-level
+yellow and green taxi data from TLC trip data website and weekly Uber
+and Lyft data from NYC OpenData.
+
 Data used in Figure \ref{fig:num-trips-summary} can be accessed by
 running the code below:
 \begin{itemize}
@@ -840,8 +848,6 @@ running the code below:
 \subsection{ETL Extract}\label{etl-extract}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{opts_chunk}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\DataTypeTok{tidy.opts=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{width.cutoff=}\DecValTok{60}\NormalTok{))}
-
 \NormalTok{etl_extract.etl_nyctaxi <-}\StringTok{ }
 \StringTok{  }\ControlFlowTok{function}\NormalTok{(obj, }
 \DataTypeTok{years =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{format}\NormalTok{(}\KeywordTok{Sys.Date}\NormalTok{(),}\StringTok{'%Y'}\NormalTok{)), }
@@ -1538,7 +1544,7 @@ have the highest tip percents?
 We first calculate the average percent tip paid for each pick-up zone.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-37}Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017}
+\caption{\label{tab:unnamed-chunk-38}Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017}
 \centering
 \begin{tabular}[t]{rrrrrrrll}
 \toprule
@@ -1614,7 +1620,7 @@ Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most
 popular location for pick-ups.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-41}Ten taxi zones with the highest number of pick-ups}
+\caption{\label{tab:unnamed-chunk-42}Ten taxi zones with the highest number of pick-ups}
 \centering
 \begin{tabular}[t]{r|r|r|r|r|l|l}
 \hline
@@ -1661,7 +1667,7 @@ necessarily the ones with the highest number of pick-ups.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-43}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)}
+\caption{\label{tab:unnamed-chunk-44}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)}
 \centering
 \begin{tabular}[t]{r|r|r|r|r|l|l}
 \hline
@@ -1707,7 +1713,7 @@ tips are in Manhattan besides La Guardia Airport.
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-45}Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)}
+\caption{\label{tab:unnamed-chunk-46}Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)}
 \centering
 \begin{tabular}[t]{r|r|r|r|r|l|l}
 \hline
@@ -1867,7 +1873,7 @@ It would be easier if we combine all three tables and put information
 related to trip duration to all three airports in the same table.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-55}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
+\caption{\label{tab:unnamed-chunk-56}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
 \centering
 \begin{tabular}[t]{l|r|r|r|l}
 \hline
@@ -1965,7 +1971,7 @@ when weather gets bad.
 \textbf{Uber Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-60}Uber 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-61}Uber 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{l|l|r}
 \hline
@@ -1996,7 +2002,7 @@ Pickup Start Date & Pickup End Date & Total Dispatched Trips\\
 \textbf{Yellow Cab Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-63}Yellow Taxi 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-64}Yellow Taxi 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{l|r}
 \hline
@@ -2120,9 +2126,8 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 26.6% of 1581568 rows
-Read 37.3% of 1581568 rows
-Read 46.2% of 1581568 rows
+Read 27.8% of 1581568 rows
+Read 44.3% of 1581568 rows
 Read 63.2% of 1581568 rows
 Read 82.8% of 1581568 rows
 Read 86.0% of 1581568 rows
@@ -2152,7 +2157,7 @@ from other taxi zones in Manhattan.
 \$52}\label{taxi-zones-pays-on-average-more-than-52}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-74}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-75}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -2246,7 +2251,7 @@ JFK Airport to any taxi zone in Manhattan. What are the most popular
 drop-off zones for yellow taxis from JFK Airport?
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-80}Ten most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-81}Ten most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -2386,10 +2391,20 @@ Danielle Furfaro, S. C., \& Fears, D. (2016, December). NYC is already
 tired of christmas and donald trump. New York Post. Retrieved from
 \url{https://nypost.com/2016/12/01/nyc-is-already-tired-of-christmas-and-donald-trump/}
 
+\hypertarget{ref-pkgdatatable}{}
+Dowle, M., \& Srinivasan, A. (2017). \emph{Data.table: Extension of
+`data.frame`}. Retrieved from
+\url{https://CRAN.R-project.org/package=data.table}
+
 \hypertarget{ref-wikipedia}{}
 Extract, transform, load. (2018, March). \emph{Wikipedia}. Wikimedia
 Foundation. Retrieved from
 \url{https://en.wikipedia.org/wiki/Extract,_transform,_load}
+
+\hypertarget{ref-pkglubridate}{}
+Grolemund, G., \& Wickham, H. (2011). Dates and times made easy with
+lubridate. \emph{Journal of Statistical Software}, \emph{40}(3), 1--25.
+Retrieved from \url{http://www.jstatsoft.org/v40/i03/}
 
 \hypertarget{ref-guerrini2015}{}
 Guerrini, F. (2015, April). Which Is Cheaper To Use In NYC: Uber Or A
@@ -2456,6 +2471,11 @@ Uber Trips NYC 2016. (2015). NYC OpenData. Retrieved from
 \hypertarget{ref-ubernyc}{}
 Uber Won New York. (2015, November). Slate Business. Retrieved from
 \url{http://www.slate.com/articles/business/moneybox/2015/11/uber_won_new_york_city_it_only_took_five_years.html}
+
+\hypertarget{ref-pkgreadr}{}
+Wickham, H., Hester, J., \& Francois, R. (2017). \emph{Readr: Read
+rectangular text data}. Retrieved from
+\url{https://CRAN.R-project.org/package=readr}
 
 \hypertarget{ref-greentaxi}{}
 Your guide to Boro Taxis. (2009). NYC Taxi \& Limousine Commission.

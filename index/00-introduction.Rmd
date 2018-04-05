@@ -1,5 +1,6 @@
 ```{r, message=FALSE, echo=FALSE}
 library(knitr)
+library(formatR)
 opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 ```
 
