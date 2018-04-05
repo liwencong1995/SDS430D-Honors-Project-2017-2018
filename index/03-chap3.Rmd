@@ -243,7 +243,7 @@ webshot(URL, "figure/num_trip.png", cliprect = "viewport")
 ```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/num_trip.png", dpi = 200 )
 ```
-According to Figure \@ref(fig:num-trip), It's obivous that Upper East Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most popular location for pick-ups.
+According to Figure \@ref(fig:num-trip), It's obvious that Upper East Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most popular location for pick-ups.
 
 ```{r, message=FALSE, echo=FALSE}
 kable(tip_pickup_zone[1:10,], caption = "Ten taxi zones with the highest number of pick-ups")
