@@ -17,14 +17,29 @@ taxi <- etl("nyctaxi", db)
 
 In this study, we are only interested in yellow taxi trip between Manhattan and JFK Airport.
 ```{r, message=FALSE, eval=FALSE}
-jfk_trip_raw <- taxi %>%
+to_jkf <- taxi %>%
   tbl("yellow") %>%
-  filter(RatecodeID == 2) %>%
+  filter(DOLocationID == 132) %>%
+  collect(n = Inf)
+
+from_jfk <- taxi %>%
+  tbl("yellow") %>%
+  filter(PULocationID == 132) %>%
   collect(n = Inf)
 ```
 
+```{r, message=FALSE, eval=FALSE, echo=FALSE}
+fwrite(to_jkf, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/to_jkf.csv")
+fwrite(from_jfk, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.csv")
+```
+
+```{r, message=FALSE, echo=FALSE}
+to_jfk_1 <- fread("/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/to_jkf.csv")
+from_jfk_1 <- fread("/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.csv")
+```
+
 ```{r, echo=FALSE, eval=FALSE}
-jfk_trip_flat <- jfk_trip_raw %>%
+to_jfk <- to_jfk_1 %>%
   mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
                                          tz= "America/New_York"),
          tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
@@ -42,12 +57,32 @@ jfk_trip_flat <- jfk_trip_raw %>%
   filter(payment_type < 3) %>%
   filter(PULocationID <264) %>%
   filter(1 < min_dis) %>% 
-  filter(min_dis < 30)
+  filter(min_dis < 30) %>%
+  filter(PULocationID <= 263)
 
-fwrite(jfk_trip_flat, "/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
-```
-```{r, echo=FALSE, message=FALSE}
-jfk_trip_flat <- fread("/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
+from_jfk <- from_jfk_1 %>%
+  mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
+                                         tz= "America/New_York"),
+         tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
+                                        tz= "America/New_York")) %>%
+  mutate(min = round((tpep_dropoff_datetime - tpep_pickup_datetime)/60, 2),
+         hour = hour(tpep_pickup_datetime)) %>%
+  mutate(min = as.numeric(min),
+         min_dis = min/trip_distance) %>%
+  filter(PULocationID != DOLocationID) %>%
+  filter(min > 3) %>%
+  filter(fare_amount > 0) %>%
+  filter(tip_amount > 0) %>%
+  filter(tip_amount < fare_amount) %>%
+  filter(trip_distance > 1) %>%
+  filter(payment_type < 3) %>%
+  filter(PULocationID <264) %>%
+  filter(1 < min_dis) %>% 
+  filter(min_dis < 30) %>%
+  filter(DOLocationID <= 263)
+
+#fwrite(jfk_trip_flat, "/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
+#jfk_trip_flat <- fread("/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
 ```
 
 **Trips from Manhattan to JFK Airport**
@@ -56,7 +91,7 @@ We first focus on all the trips that departed in Manhattan and went to JFK Airpo
 ```{r, message=FALSE, echo=FALSE}
 data("taxi_zone_lookup")
 data(taxi_zones)
-to_jfk <- jfk_trip_flat %>%
+to_jfk <- to_jfk %>%
   filter(DOLocationID == 132) %>%
   mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + improvement_surcharge + mta_tax + tolls_amount) %>%
   mutate(est_diff = est_fare - fare_amount) %>%
@@ -77,12 +112,12 @@ Here is a map of estmated fare amount calculated by taking the average of all es
 to_jkf_fare <- merge(taxi_zones, to_jkf_zone, by.x = "LocationID", by.y = "LocationID")
 
 to_jkf_fare_vis <- leaflet(data = to_jkf_fare) %>%
-  addTiles() %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
   addPolygons(fillColor = ~reds(avg_est_fare),
               fillOpacity = 0.6,
               weight = 1,
               opacity = 0.8) %>%
-  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+  setView(lat = 40.78, lng = -74.0060, zoom = 12)
 
 saveWidget(to_jkf_fare_vis, file = "/Users/priscilla/Desktop/Honors Thesis/figure/to_jkf_fare_vis.html")
 URL <- "/Users/priscilla/Desktop/Honors Thesis/figure/to_jkf_fare_vis.html"
@@ -109,7 +144,7 @@ Let's visualize the taxi zones that would have costed more than the \$52 flat ra
 to_jkf_fare_above <- merge(taxi_zones, to_jkf_zone_above, by.x = "LocationID", by.y = "LocationID")
 
 to_jfk_fare_above_vis <- leaflet(data = to_jkf_fare_above) %>%
-  addTiles() %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
   addPolygons(fillColor = ~reds(avg_est_fare),
               fillOpacity = 0.6,
               weight = 1,
@@ -137,8 +172,7 @@ On average people travel from Manhattan pay \$2.14 less with the \$52 flat rate 
 Everytime I travel to New York City, I always take Yellow cabs to go around the city. It seemed to me that the cab drivers were always happy whenever they heard me telling them that I need to go to the JFK Airport from Manhattan. Are taxi drivers happy when their passengers are going to JFK Airport from Manhattan? How much on average would taxi driver make on their way bavk to the city from Manhattan? 
 
 ```{r}
-from_jfk <- jfk_trip_flat %>%
-  filter(PULocationID == 132) %>%
+from_jfk <- from_jfk %>%
   mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + improvement_surcharge + mta_tax + tolls_amount) %>%
   mutate(est_diff = est_fare - fare_amount) %>%
   rename(LocationID = DOLocationID) %>%
@@ -150,11 +184,12 @@ Since a taxi driver coming from Manhattan to JFK Airport could be directed back 
 ```{r}
 mean(from_jfk$est_fare)
 ```
-On average, taxi drivers would get paid for \$55.77 for a trip from the JFK Airport to any taxi zone in Manhattan. What are the most popular drop-off zones for yellow taxis from JFK Airport?
-```{r, echo=FALSE}
+On average, taxi drivers would get paid for \$50.18 for a trip from the JFK Airport to any taxi zone in New York City. What are the most popular drop-off zones for yellow taxis from JFK Airport?
+```{r, echo=FALSE,eval= False, message=FALSE}
 from_jkf_zone <- from_jfk %>%
   group_by(LocationID) %>%
   summarise(num_trips = n(), 
+            avg_fare = mean(fare_amount),
             avg_est_fare = mean(est_fare),
             avg_est_diff = mean(est_diff)) %>%
   left_join(taxi_zone_lookup , by = "LocationID") %>%
@@ -162,7 +197,7 @@ from_jkf_zone <- from_jfk %>%
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(from_jkf_zone[1:10,], caption = "Ten most popular destinations in Manhattan")
+kable(from_jkf_zone[,3:7], caption = "Ten most popular destinations in Manhattan")
 ```
 Table \@ref(tab:from_jkf_zone) shows that Times Square is the most popular destination for passengers coming from the JFK Airport in 2017!
 
@@ -171,29 +206,61 @@ Table \@ref(tab:from_jkf_zone) shows that Times Square is the most popular desti
 ```{r, eval=FALSE, echo=FALSE}
 from_jkf_fare <- merge(taxi_zones, from_jkf_zone, by.x = "LocationID", by.y = "LocationID")
 
-# leaflet(data = from_jkf_fare) %>%
-#   addTiles() %>%
-#   addPolygons(fillColor = ~reds(avg_est_fare),
-#               fillOpacity = 0.6,
-#               weight = 1,
-#               opacity = 0.8) %>%
-#   setView(lat = 40.7128, lng = -74.0060, zoom = 10)
+from_jkf_fare_vis <- leaflet(data = from_jkf_fare) %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  addPolygons(fillColor = ~reds(avg_fare),
+              fillOpacity = 0.6,
+              weight = 1,
+              opacity = 0.8) %>%
+  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+
+saveWidget(from_jkf_fare_vis, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_vis.html")
+URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_vis.html"
+webshot(URL, "figure/from_jkf_fare_vis.png", cliprect = "viewport")
+
+from_jkf_fare_est <- leaflet(data = from_jkf_fare) %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  addPolygons(fillColor = ~reds(avg_est_fare),
+              fillOpacity = 0.6,
+              weight = 1,
+              opacity = 0.8) %>%
+  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+
+saveWidget(from_jkf_fare_est, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_est.html")
+URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_est.html"
+webshot(URL, "figure/from_jkf_fare_est.png", cliprect = "viewport")
 ```
-![](figure/from_jkf_fare.png)
+
+```{r from-jkf-fare-vis, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/from_jkf_fare_vis.png", dpi = 200 )
+```
+
 As we expected, the red shades are smoothly distributed, since taxi zones that are futher away should cost more to get there.
+
+```{r from-jkf-fare-est, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/from_jkf_fare_est.png", dpi = 200 )
+```
 
 **What's the most popular dropp-off locations for passengers from JFK Airport? **
 
 ```{r, eval=FALSE, echo=FALSE}
-# leaflet(data = from_jkf_fare) %>%
-#   addTiles() %>%
-#   addPolygons(fillColor = ~reds(num_trips),
-#               fillOpacity = 0.6,
-#               weight = 1,
-#               opacity = 0.8) %>%
-#   setView(lat = 40.7128, lng = -74.0060, zoom = 10)
+from_jkf_num_trips <- leaflet(data = from_jkf_fare) %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  addPolygons(fillColor = ~reds(num_trips),
+              fillOpacity = 0.6,
+              weight = 1,
+              opacity = 0.8) %>%
+  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+
+saveWidget(from_jkf_num_trips, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_num_trips.html")
+URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_num_trips.html"
+webshot(URL, "figure/from_jkf_num_trips.png", cliprect = "viewport")
 ```
-![](figure/from_jkf_num.png)
+
+```{r from-jkf-num-trips, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/from_jkf_num_trips.png", dpi = 200 )
+```
+
 According to the map above, Manhattan is still the most popular destination for passengers depart from the JFK Airport. 
 
 ```{r, echo=FALSE}
@@ -203,7 +270,7 @@ from_jkf_zone %>%
   summarise(all_trips = sum(num_trips))
 ```
 ```{r}
-964292/(3691 + 964292)
+970366/(521476 + 970366)
 ```
-According to the summary, the total amount of trips from JFK Airport to Manhattan is about 99.6% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthy. Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
+According to the summary, the total amount of trips from JFK Airport to Manhattan is about 65.05% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthy. Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
 

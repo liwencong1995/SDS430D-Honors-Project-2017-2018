@@ -9,12 +9,12 @@ The income of Taxi drivers in New York City has two parts: taxi fare and tips. T
 In the following analysis, I will focus on trip data collected in 2017. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
 
 ```{r, message=FALSE, echo=FALSE, eval=FALSE}
-library(knitr)
+#library(knitr)
 library(dplyr)
-library(lubridate)
+#library(lubridate)
 library(stringr)
 library(etl)
-library(ggplot2)
+#library(ggplot2)
 library(htmlwidgets)
 library(webshot)
 library(sp)
@@ -228,7 +228,7 @@ We can create a heat map to visulizae the number of trip for each pick-up zones 
 reds = colorNumeric("Reds", domain = NULL)
 #create visulization
 num_trip <- leaflet(data = pick_up_zones) %>%
-  addTiles() %>%
+  addProviderTiles(providers$OpenStreetMap)%>%
   addPolygons(fillColor = ~reds(num_trips),
               fillOpacity = 0.6,
               weight = 1,
