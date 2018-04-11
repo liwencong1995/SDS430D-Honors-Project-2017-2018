@@ -109,6 +109,7 @@ fwrite(to_newark_zone, "/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zo
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(data.table)
 to_jfk_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_jfk_zone.csv")
 to_lg_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_lg_zone.csv")
 to_newark_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zone.csv")

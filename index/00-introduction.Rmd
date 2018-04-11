@@ -6,7 +6,7 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 
 # Introduction
 ## Motivation
-Working with medium data in R is not an easy task. Loading medium-sized data into the R environment takes a long time and might crash an R session. Creating a user-friendly platform that allows R users to easily work with medium data is my motivation. There are a lot of interesting data that are needed to be explored. In my study, I focus on New York City taxicab data, because there is so much that could be learned from taxicab trip records. 
+Working with medium data in **R** is not an easy task. Loading medium-sized data into the R environment takes a long time and might crash an **R** session. Creating a user-friendly platform that allows **R** users to easily work with medium data is my motivation. There are a lot of interesting data that are needed to be explored. In my study, I focus on New York City taxicab data, because there is so much that could be learned from taxicab trip records. 
 
 New York City taxi drivers, passengers, and NYC Taxi & Limousine Commission are the three parties who are closely involved in the NYC taxi industry. Each party has its own needs. Better understanding the needs of the three parties and providing solutions to better satisfy their needs are what we am hooping to be the result of this thesis.
 
@@ -25,7 +25,7 @@ Similar to Uber, Lyft is also an on-demand transportation company, and it operat
 
 ## Literature Review 
 ### etl R package
-in `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that R Markdown replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reprodicible statistical analysis straight-forward. [@baumer2014]
+in `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that _R Markdown_ replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reprodicible statistical analysis straight-forward. [@baumer2014]
 
 Loading medium-sized data into R environment takes a long time and might crush an R session. `etl` R package creates a user-friendly platform that allows R users to easily work with medium data with the extract, transform, load framework, which is commonly konwn as ETL in computing. [@wikipedia] The `ETL` process has been set up by Benjamin Baumer [@pkgetl] in R to facilitate etl operations for medium data, and it is designed to work with any general data set. Packages that are specific to  perticular data sets are needed to be written in order to better work with complex medium-sized data sets.
 

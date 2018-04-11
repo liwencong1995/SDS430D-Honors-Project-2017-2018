@@ -34,11 +34,12 @@ fwrite(from_jfk, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.
 ```
 
 ```{r, message=FALSE, echo=FALSE}
+library(lubridate)
 to_jfk_1 <- fread("/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/to_jkf.csv")
 from_jfk_1 <- fread("/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.csv")
 ```
 
-```{r, echo=FALSE, eval=FALSE}
+```{r, echo=FALSE, message=FALSE}
 to_jfk <- to_jfk_1 %>%
   mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
                                          tz= "America/New_York"),
@@ -181,11 +182,11 @@ from_jfk <- from_jfk %>%
 
 Since a taxi driver coming from Manhattan to JFK Airport could be directed back to anywhere in the city. We can calculate the average taxi fare amount that the taxi drivers would get paid for a random trip from JFK Airport to any part of the city.
 
-```{r}
+```{r, message=FALSE}
 mean(from_jfk$est_fare)
 ```
 On average, taxi drivers would get paid for \$50.18 for a trip from the JFK Airport to any taxi zone in New York City. What are the most popular drop-off zones for yellow taxis from JFK Airport?
-```{r, echo=FALSE,eval= False, message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 from_jkf_zone <- from_jfk %>%
   group_by(LocationID) %>%
   summarise(num_trips = n(), 
@@ -237,6 +238,10 @@ knitr::include_graphics("figure/from_jkf_fare_vis.png", dpi = 200 )
 
 As we expected, the red shades are smoothly distributed, since taxi zones that are futher away should cost more to get there.
 
+By comparing the distribution of the true average fare and estimated average fare calculated by distance travelled, 
+
+****** add sentences *******
+
 ```{r from-jkf-fare-est, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/from_jkf_fare_est.png", dpi = 200 )
 ```
@@ -261,7 +266,7 @@ webshot(URL, "figure/from_jkf_num_trips.png", cliprect = "viewport")
 knitr::include_graphics("figure/from_jkf_num_trips.png", dpi = 200 )
 ```
 
-According to the map above, Manhattan is still the most popular destination for passengers depart from the JFK Airport. 
+According to the map above, Manhattan is still the most popular destination for passengers departing from the JFK Airport. 
 
 ```{r, echo=FALSE}
 from_jkf_zone %>%
@@ -270,7 +275,7 @@ from_jkf_zone %>%
   summarise(all_trips = sum(num_trips))
 ```
 ```{r}
-970366/(521476 + 970366)
+from_jkf_zone[2,2]/(from_jkf_zone[1,2] + from_jkf_zone[2,2])
 ```
 According to the summary, the total amount of trips from JFK Airport to Manhattan is about 65.05% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthy. Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
 

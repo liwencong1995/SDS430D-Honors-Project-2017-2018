@@ -135,7 +135,8 @@ fwrite(yellow_2017_summary, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(data.table)
+#library(data.table)
+data(taxi_zone_lookup)
 yellow_2017_summary <- data.table::fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary.csv")
 ```
 
