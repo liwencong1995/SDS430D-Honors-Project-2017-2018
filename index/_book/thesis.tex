@@ -160,7 +160,12 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 \Acknowledgements{
-
+I would love to thank my thesis advisor Benjamin Baumer, Assistant
+Professor of Statistical and Data Sciences at Smith College, for
+encouraging me to challenge myself and guiding me through this project.
+I want to thank Jordan Crouser for being my second reader and help me to
+revise my paper. I also want to thank all my friends and my roommates
+for their love and support.
 }
 
 \Dedication{
@@ -172,7 +177,18 @@
 }
 
 \Abstract{
-
+Yellow Taxi Cabs are widely recognized as the icons of New York City.
+The New York City Taxi \& Limousine Commission (TLC) provides publicly
+accessible yellow and green taxi trip records. (``TLC Aggregated
+Reports,'' 2009) Each taxi trip record is like a little piece of a
+gigantic puzzle, and all together they tell a story of what happens in
+New York City. This thesis presents a more efficient and easy-to-use way
+for users to retrieve trip records information of both New York City
+taxi and other ride-sharing services, such as Uber and Lyft, in New York
+City. By analyzing trip records of New York City's iconic yellow taxi,
+we seek answers to questions that are commonly asked by taxi drivers,
+passengers, and TLC officials to help all three parties to improve their
+services or experiences.
 }
 
 	\usepackage{setspace}\doublespacing
@@ -203,8 +219,14 @@
 
 \frontmatter % this stuff will be roman-numbered
 \pagestyle{empty} % this removes page numbers from the frontmatter
-
-
+  \begin{acknowledgements}
+    I would love to thank my thesis advisor Benjamin Baumer, Assistant
+    Professor of Statistical and Data Sciences at Smith College, for
+    encouraging me to challenge myself and guiding me through this project.
+    I want to thank Jordan Crouser for being my second reader and help me to
+    revise my paper. I also want to thank all my friends and my roommates
+    for their love and support.
+  \end{acknowledgements}
 
   \hypersetup{linkcolor=black}
   \setcounter{tocdepth}{2}
@@ -213,16 +235,25 @@
   \listoftables
 
   \listoffigures
-
-
+  \begin{abstract}
+    Yellow Taxi Cabs are widely recognized as the icons of New York City.
+    The New York City Taxi \& Limousine Commission (TLC) provides publicly
+    accessible yellow and green taxi trip records. (``TLC Aggregated
+    Reports,'' 2009) Each taxi trip record is like a little piece of a
+    gigantic puzzle, and all together they tell a story of what happens in
+    New York City. This thesis presents a more efficient and easy-to-use way
+    for users to retrieve trip records information of both New York City
+    taxi and other ride-sharing services, such as Uber and Lyft, in New York
+    City. By analyzing trip records of New York City's iconic yellow taxi,
+    we seek answers to questions that are commonly asked by taxi drivers,
+    passengers, and TLC officials to help all three parties to improve their
+    services or experiences.
+  \end{abstract}
 
 \mainmatter % here the regular arabic numbering starts
 \pagestyle{fancyplain} % turns page numbering back on
 
-\chapter*{Introduction}\label{introduction}
-\addcontentsline{toc}{chapter}{Introduction}
-
-\chapter{Introduction}\label{introduction-1}
+\chapter{Introduction}\label{introduction}
 
 \section{Motivation}\label{motivation}
 
@@ -2130,19 +2161,19 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 58.1% of 998023 rows
+Read 57.1% of 998023 rows
 Read 68.1% of 998023 rows
 Read 98.2% of 998023 rows
 Read 998023 rows and 17 (of 17) columns from 0.083 GB file in 00:00:05
 \end{verbatim}
 \begin{verbatim}
 
-Read 5.9% of 2726868 rows
-Read 8.8% of 2726868 rows
-Read 20.5% of 2726868 rows
-Read 42.5% of 2726868 rows
+Read 0.0% of 2726868 rows
+Read 7.3% of 2726868 rows
+Read 19.1% of 2726868 rows
+Read 41.4% of 2726868 rows
 Read 56.5% of 2726868 rows
-Read 75.9% of 2726868 rows
+Read 74.4% of 2726868 rows
 Read 83.6% of 2726868 rows
 Read 92.0% of 2726868 rows
 Read 2726868 rows and 17 (of 17) columns from 0.227 GB file in 00:00:14
