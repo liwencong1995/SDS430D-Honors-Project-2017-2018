@@ -10,7 +10,7 @@ Additionally, people who are native to Manhattan would have paid more than $52 t
 ### People in Manhattan benefit from the $52 flat rate.
 If there is no flat rate between JFK and Manhattan, how much would passengers pay for the distance they travelled between JFK Airport AND Manhattan? And how much more or less should they have paid comparing to the \$52 flat rate?
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", db)
 ```
@@ -86,7 +86,7 @@ from_jfk <- from_jfk_1 %>%
 #jfk_trip_flat <- fread("/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
 ```
 
-**Trips from Manhattan to JFK Airport**
+#### Trips from Manhattan to JFK Airport
 We first focus on all the trips that departed in Manhattan and went to JFK Airport, and then we calculate the estmated fare amount that the passengers should have paid based on the distance travelled from each pick-up point to JFK Airport based on the fare rate suggested by TLC for each pick-up zone. 
 
 ```{r, message=FALSE, echo=FALSE}
@@ -158,7 +158,7 @@ webshot(URL, "figure/to_jfk_fare_above_vis.png", cliprect = "viewport")
 #add t test to test average fare vs 52
 ```
 
-```{r num-to_jfk_fare_above_vis, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
+```{r num-to-jfk-fare-above-vis, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/to_jfk_fare_above_vis.png", dpi = 200 )
 ```
 
@@ -182,7 +182,7 @@ from_jfk <- from_jfk %>%
 
 Since a taxi driver coming from Manhattan to JFK Airport could be directed back to anywhere in the city. We can calculate the average taxi fare amount that the taxi drivers would get paid for a random trip from JFK Airport to any part of the city.
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 mean(from_jfk$est_fare)
 ```
 On average, taxi drivers would get paid for \$50.18 for a trip from the JFK Airport to any taxi zone in New York City. What are the most popular drop-off zones for yellow taxis from JFK Airport?

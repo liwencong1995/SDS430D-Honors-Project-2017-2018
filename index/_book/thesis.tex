@@ -439,7 +439,7 @@ Users do not need to learn SQL queries, since all user interaction is in
 NYC Taxi drivers wants to make the most profit. Taxi passengers want the
 cheapest and most convenient way of transportantion. Since Uber and Lyft
 launched their services in New York City, many consumers started to
-demand the cheaper e-hail services.(Sugar, 2017) TLC wants to protect
+demand the cheaper e-hail services (Sugar, 2017). TLC wants to protect
 both taxi drivers and passengers, and it creates policies to make NYC
 taxi more accessible to consumers who really need this service. In these
 sections, we analyze what each party wants and try to find a way for
@@ -447,24 +447,24 @@ them to be achieve their goals.
 
 \subsection{Reproducible Research}\label{reproducible-research}
 
-Reproducible research and open source are two main emphasis of my honors
-project. As scholars place more emphasis on the reproducibility of
-research studies, it is essential for me to make my data and code openly
-available for people to redo the analysis.
+Reproducible research and open source are two main emphasis of this
+honors project. As scholars place more emphasis on the reproducibility
+of research studies, it is essential for us to make our data and code
+openly available for people to redo the analysis.
 
 \texttt{Knitr} and Github are used in my project to make my study
 reproducible, ranging from the initial source to raw data to the package
 I wrote to utlize the raw data to the statistical data analysis. I used
-an \textbf{R} package called \texttt{thesisdown} to layout the basic
-structure of my paper, this tool allows students to create reproducible
-and dynamic techinical report in \textbf{R} Markdown. It also allows
-users to embed \textbf{R} code and interactive applicationis, and output
-into PDF, Word, ePub, or gitbook doocuments. \texttt{thesisdown} helps
-users to efficiently put together any paper with similar format.
+an \textbf{R} package called \texttt{thesisdown} to typeset this paper,
+this tool allows authors to create reproducible and dynamic techinical
+report in \textbf{R} Markdown. It also allows users to embed \textbf{R}
+code and interactive applicationis, and output into PDF, Word, ePub, or
+gitbook doocuments. \texttt{thesisdown} helps users to efficiently put
+together any paper with similar format.
 
 Github is used to store the scripts for \texttt{nyctaxi} and this
 thesis. \texttt{nyctaxi} is available on CRAN for people to download and
-install (B. Baumer, Li, \& Le, 2017), and the source code for data
+install (Li, Baumer, \& Trang Le, 2017), and the source code for data
 analysis in this thesis is available under the Github account of the
 author so that scholars can easily access the information that thery are
 interested in. In terms of tables, figures, and anything included in the
@@ -475,21 +475,20 @@ are included in the Github repository.
 
 \section{Data and Storage}\label{data-and-storage}
 
-The \texttt{nyctaxi} R package allows users to download, clean, and load
-data into SQL databasses. There are four types of data that are
-available for users to get access to, and they are trip level yellow
-taxi data from 2009 to the most recent month, trip level green taxi data
-from August 2013 to the most recent month, uber pick-up data from April
-to September 2014 and from Janaury to June 2015, and weekly-aggregated
-lyft trip data from 2016 to the most recent week. (B. Baumer et al.,
-2017)
+The \texttt{nyctaxi} \textbf{R} package allows users to download, clean,
+and load data into SQL databases. There are four types of data that are
+available for users to get access to: trip level yellow taxi data from
+2009 to the most recent month, trip level green taxi data from August
+2013 to the most recent month, Uber pick-up data from April to September
+2014 and from Janaury to June 2015, and weekly-aggregated Lyft trip data
+from 2016 to the most recent week (Li et al., 2017).
 
 \subsection{Yellow Taxi}\label{yellow-taxi-1}
 
 The total size of all yellow taxi trip data \texttt{csv} files (from Jan
 2010 to Dec 2016) is 191.38 GB, and NYC yellow taxi trip data from Jan
 2009 to the most recent month can be found on the NYC Taxi \& Limousine
-Commission (TLC) website. (``TLC Trip Record Data,'' 2009a) The data
+Commission (TLC) website (``TLC Trip Record Data,'' 2009a). The data
 were collected and provided to the NYC TLC by technology providers
 authorized under the Taxicab \& Livery Passenger Enhancement Programs
 (TPEP/LPEP).
@@ -505,7 +504,7 @@ The total size of green taxi trip data \texttt{csv} files (from Aug 2013
 to Dec 2016) is 7.8 GB, and green taxi trip data from Aug 2013 to the
 most recent month can be downloaded from NYC Taxi \& Limousine
 Commission (TLC). (``TLC Trip Record Data,'' 2009a) Green taxi trip
-records include the same variables as yellow taxi trip records do.
+records include the same variables as yellow taxi trip records.
 
 \subsection{TLC Summary Report}\label{tlc-summary-report}
 
@@ -522,8 +521,12 @@ summary reports cover weekly-aggreagated data from 2015 to the most
 recent week.
 \begin{center}\includegraphics[width=5.84in]{figure/a-report} \end{center}
 
-The data can be accessed by using the following commands: * Yellow taxi
-data
+The data can be accessed by using the following commands:
+\begin{itemize}
+\tightlist
+\item
+  Yellow taxi data
+\end{itemize}
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{download.file}\NormalTok{(}\StringTok{"http://www.nyc.gov/html/tlc/downloads/csv/data_reports_monthly_indicators_yellow.csv"}\NormalTok{, }\DataTypeTok{destfile =} \StringTok{"~/Desktop/yellow_monthly_data.csv"}\NormalTok{)}
@@ -543,16 +546,18 @@ data from NYC TLC by submitting a Freedom of Information Law request on
 July 20, 2015, these data are now open to public. (``TLC Trip Record
 Data,'' 2009b)
 
-The 2014 Uber data contains four variables: Date/Time (the date and time
-of the Uber pick-up), Lat (the latitude of the Uber pick-up), Lon (the
-longitude of the Uber pick-up), and Base (the TLC base company code
-affiliated with the Uber pickup).
+The 2014 Uber data contains 4 variables: \texttt{Date/Time} (the date
+and time of the Uber pick-up), \texttt{Lat} (the latitude of the Uber
+pick-up), \texttt{Lon} (the longitude of the Uber pick-up), and
+\texttt{Base} (the TLC base company code affiliated with the Uber
+pickup).
 
-The 2015 Uber data contains four variables: Dispatching\_base\_num (the
-TLC base company code of the base that dispatched the Uber),
-Pickup\_date (the date of the Uber pick-up), Affiliated\_base\_num (the
-TLC base company code affiliated with the Uber pickup), and locationID
-(the pick-up location ID affiliated with the Uber pickup).
+The 2015 Uber data contains 4 variables: \texttt{Dispatching\_base\_num}
+(the TLC base company code of the base that dispatched the Uber),
+\texttt{Pickup\_date} (the date of the Uber pick-up),
+\texttt{Affiliated\_base\_num} (the TLC base company code affiliated
+with the Uber pickup), and \texttt{locationID} (the pick-up location ID
+affiliated with the Uber pickup).
 
 NYC Open Data also provides weekly-aggreagated Uber pick-up data from
 2015 to the most recent month. (``Uber Trips NYC 2016,'' 2015)
@@ -569,25 +574,26 @@ found on NYC OpenData website. (``LYFT Data,'' 2015)
 The total size of all \texttt{csv} files of the four services is about
 200 GB, and a laptop usually has memory less than or equal to 8 GB.
 Limited memory constrains the amount of data that can be loaded by a
-personal computer at one time. When users load data into R environment,
-R keeps them in memory; when the amount of data loaded into R
-environment gets close to the limit of a computer's memory, R becomes
-unresponsive or force quit the current session. Therefore, better ways
-to work with data that takes more space than 8 GB is needed. According
-to Weijia Zhang (2016), comparing to RAM, hard disk is often used to
-store medium-sized data, because it is affordable and are designed for
-storing large items permanently. However, retrieving data from hard
-drives usually takes about 1,000,000 times more time.
+personal computer at one time. When users load data into \textbf{R}
+environment, \textbf{R} keeps them in memory; when the amount of data
+loaded into \textbf{R} environment gets close to the limit of a
+computer's memory, \textbf{R} becomes unresponsive or force quit the
+current session. Therefore, better ways to work with data that takes
+more space than 8 GB is needed. According to Zhang (2016), comparing to
+RAM, hard disk is often used to store medium-sized data, because it is
+affordable and are designed for storing large items permanently.
+However, retrieving data from hard drives is about 1,000,000 times
+slower.
 
 \section{ETL nyctaxi Package}\label{etl-nyctaxi-package}
 
-\texttt{etl} is the parent package of \texttt{nyctax}. \texttt{etl}
-provides a framework that allows R users to work with medium data
-without any knowledge in SQL database. Users can run SQL queries by
-using \texttt{dplyr} commands in R and choose to only return the final
-result, which could be a summary table, from SQL database into R
-Environment in order to aovid R from crashing. The user interaction
-takes place solely within R.
+\texttt{etl} is the parent package of \texttt{nyctaxi}. \texttt{etl}
+provides a framework that allows \textbf{R} users to work with medium
+data without any knowledge in SQL database. Users can run SQL queries by
+using \texttt{dplyr} commands in \textbf{R} and choose to only return
+the final result, which could be a summary table, from SQL database into
+\textbf{R} Environment in order to aovid \textbf{R} from crashing. The
+user interaction takes place solely within \textbf{R}.
 
 \texttt{etl} framework has three operations -Extract, Transfer, and
 Load- which bring real-time data into local or remote SQL databases.
@@ -598,45 +604,41 @@ data more accessible to a wider audience. (B. Baumer et al., 2014)
 \texttt{nyctaxi} was initially designed to work with New York City taxi
 data, but later on Uber and Lyft data were added and the ETL functions
 are modified to be specialized in working with these data. This package
-compiled three major sources of hail service in New York City so that it
+compiles three major sources of hail service in New York City so that it
 is convenient for users to compare and contrast the performance of these
-three services. (B. Baumer et al., 2017)
+three services. (Li et al., 2017)
 
 This package inherits functions from many packages: \texttt{etl},
 \texttt{dplyr}, \texttt{DBI}, \texttt{rlang}, and \texttt{stringr}.
 
 Since SQL databases are good tools for medium data analysis, ETL
 functions build connection to a SQL database at the back end and convert
-R code automatically into SQL queries and send them to the SQL database
-to get data tables containing data of each hail service. Thus, users do
-not need to have any knowledge of SQL queries and they can draw in any
-subsets of the data from the SQL database in R.
+\textbf{R} code automatically into SQL queries and send them to the SQL
+database to get data tables containing data of each hail service. Thus,
+users do not need to have any knowledge of SQL queries and they can draw
+in any subsets of the data from the SQL database in \textbf{R}.
 
 In general, \texttt{etl\_extract.etl\_nyctaxi()} function download data
-of the four types of hail service data (yellow taxi, green taxi, uber,
-and lyft) from the corresponding sources. transform.nyctaxi uses
-different techniques to clean all four types of data to get then ready
-for the next step. \texttt{etl\_load.etl\_nyctaxi()} loads the data user
-selected to a SQL database.
+of the four types of hail service data (yellow taxi, green taxi, Uber,
+and Lyft) from the corresponding sources.
+\texttt{etl\_transform.etl\_nyctaxi()} uses different techniques to
+clean all four types of data to get then ready for the next step.
+\texttt{etl\_load.etl\_nyctaxi()} loads the data user selected to a SQL
+database.
 
-The Comprehensive R Archive Network (CRAN) is a collection of sites that
-carry identical material, consisting of the R distributions, the
-contributed extensions, documentation for R, and binaries. (Studio,
-n.d.) \texttt{nyctaxi} R package lives on CRAN, and it can be installed
-with the \texttt{install.packages()} function in R.
+The Comprehensive \textbf{R} Archive Network (CRAN) is a collection of
+sites that carry identical material, consisting of the \textbf{R}
+distributions, the contributed extensions, documentation for \textbf{R},
+and binaries. (Studio, n.d.) \texttt{nyctaxi} \textbf{R} package lives
+on CRAN, and it can be installed with the \texttt{install.packages()}
+function in \textbf{R}.
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#install the package}
 \KeywordTok{install.packages}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \begin{center}\includegraphics[width=5.88in]{figure/nyctaxi-page} \end{center}
-\begin{verbatim}
-Warning: package 'RMySQL' was built under R version 3.4.3
-\end{verbatim}
-\begin{verbatim}
-Warning: package 'DBI' was built under R version 3.4.3
-\end{verbatim}
+
 Users need to create an \texttt{etl} object in order to apply the etl
 operations to it, and only the name of the SQL database, working
 directory, and type of SQL database need to be specified during
@@ -644,21 +646,20 @@ initialization. If the type of SQL database is not specified, a local
 RSQLite database will be generated as default.
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# initializing an etl object}
 \NormalTok{db <-}\StringTok{ }\KeywordTok{src_mysql}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{user =} \StringTok{"urname"}\NormalTok{, }\DataTypeTok{host =} \StringTok{"host"}\NormalTok{, }\DataTypeTok{password =} \StringTok{"pw"}\NormalTok{)}
 \NormalTok{taxi <-}\StringTok{ }\KeywordTok{etl}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{dir =} \StringTok{"~/Desktop/nyctaxi"}\NormalTok{, db)}
 \end{Highlighting}
 \end{Shaded}
-In the example above, a folder called nyctaxi is created on the desktop
-and a connection to a MySQL database is generated. In the procession of
-initialization, a local folder contains two subfolders, \texttt{raw} and
-\texttt{load}, are also created under the directory the user specifies.
-\texttt{raw} folder stores data downloaded from online open sources, and
-\texttt{load} folder stores cleaned CSV data files that are ready to be
-loaded into SQL database. The ETL framework keeps data directly scraped
-from online data sources in their original forms. In this way, the
-original data is always available to users in case data corruption
-happens in later stages.
+In the example above, a folder called \texttt{nyctaxi} is created on the
+desktop and a connection to a MySQL database is generated. In the
+procession of initialization, a local folder contains two subfolders,
+\texttt{raw} and \texttt{load}, are also created under the directory the
+user specifies. \texttt{raw} folder stores data downloaded from online
+open sources, and \texttt{load} folder stores cleaned CSV data files
+that are ready to be loaded into SQL database. The ETL framework keeps
+data directly scraped from online data sources in their original forms.
+In this way, the original data is always available to users in case data
+corruption happens in later stages.
 
 After an etl object is created (nyctaxi is the etl object in this case),
 four parameters are needed to specify the data that users want: (1)
@@ -666,11 +667,13 @@ four parameters are needed to specify the data that users want: (1)
 the years, and the default is the most recent year; (3) \texttt{months}:
 a numeric vector giving the months, and the default is \texttt{1:12};
 (4) \texttt{type}: a character variable giving the type of data the user
-wants to download. There are four types: yellow, green, uber, and lyft.
-The default is yellow.
+wants to download. There are four types: \texttt{yellow},
+\texttt{green}, \texttt{uber}, and \texttt{lyft}. The default is
+\texttt{yellow}.
 
-\subsection{Taxi zone shapefile attached to nyctaxi R
-package}\label{taxi-zone-shapefile-attached-to-nyctaxi-r-package}
+\subsection{\texorpdfstring{Taxi zone shapefile attached to nyctaxi
+\textbf{R}
+package}{Taxi zone shapefile attached to nyctaxi R package}}\label{taxi-zone-shapefile-attached-to-nyctaxi-r-package}
 
 Two datasets are attached to \texttt{nyctaxi}. The first one is called
 \texttt{taxi\_zone\_lookup}, and this dataset contains information, such
@@ -752,7 +755,7 @@ is already in a desired format with all variables correctly labelled.
 \StringTok{   }\KeywordTok{etl_transform}\NormalTok{(}\DataTypeTok{years =} \DecValTok{2014}\OperatorTok{:}\DecValTok{2016}\NormalTok{, }\DataTypeTok{months =} \DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{type =} \KeywordTok{c}\NormalTok{(}\StringTok{"yellow"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"uber"}\NormalTok{, }\StringTok{"lyft"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-There are a few main transformations that are done by this fucntion:
+There are a few main transformations that are done by this function:
 
 \subsubsection{Green Taxi -- Extra Blank Row and
 Column}\label{green-taxi-extra-blank-row-and-column}
@@ -763,9 +766,9 @@ Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all
 have an extra blank columns attanched to the right-most column. These
 blank rows and columns cause problems in the later stage when users want
 to load data into SQL database. In order to get Green Taxi data ready
-for the \texttt{load} phase, we used the \texttt{system()} function in R
-to invoke the Terminal command specified to remove the blank rows and
-columns.
+for the \texttt{load} phase, we used the \texttt{system()} function in
+\textbf{R} to invoke the Terminal command specified to remove the blank
+rows and columns.
 
 \subsubsection{Uber Data -- Reconciling Inconsistent
 Filenames}\label{uber-data-reconciling-inconsistent-filenames}
@@ -782,20 +785,20 @@ Formats}\label{uber-data-reconciling-inconsistent-data-formats}
 
 The data type of \texttt{Date/Time} variable in Uber datasets is
 originally encoded as \texttt{character}. In order to enable it to be
-recognized as \texttt{timestamp} by R, we use \texttt{ymd\_hms} in
-\texttt{lubridate} (Grolemund \& Wickham, 2011) to transform date time
-to POSIXct objects.
+recognized as \texttt{timestamp} by \textbf{R}, we use \texttt{ymd\_hms}
+in \texttt{lubridate} (Grolemund \& Wickham, 2011) to transform date
+time to \texttt{POSIXct} objects.
 
 \subsubsection{Optimizing I/O Process}\label{optimizing-io-process}
 
 Improving file input and output processes is an important part of
 \texttt{etl\_transform}. \texttt{data.table} (Dowle \& Srinivasan, 2017)
 only takes half of the time to read from and write into datasets
-comparing to \texttt{readr}. (Wickham, Hester, \& Francois, 2017)
+comparing to \texttt{readr} (Wickham, Hester, \& Francois, 2017).
 Therefore, \texttt{etl\_transform} uses \texttt{fread()} and
 \texttt{fwrite()} from \texttt{data.table} instead of \texttt{read\_csv}
 or \texttt{write\_csv} from \texttt{readr} to reduce the data processing
-time.
+time (Zhang, 2017).
 
 \subsection{Load}\label{load}
 
@@ -1357,20 +1360,6 @@ and Lyft data from NYC OpenData.Data used in Figure
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
-\subsection{utility function}\label{utility-function}
-
-This utility function below was written to shortened the source code in
-ETL extract.
-\begin{verbatim}
-opts_chunk$set(tidy.opts=list(width.cutoff=60))
-download_nyc_data <- function(obj, url, years, n, names, ...) {
-  url <- paste0(url,"?years=",
-                years,"&$limit=", n)
-  lcl <- file.path(attr(obj, "raw"), names)
-  downloader::download(url, destfile = lcl, ...)
-  lcl
-}
-\end{verbatim}
 \subsection{ETL Init}\label{etl-init}
 \begin{verbatim}
 DROP TABLE IF EXISTS `yellow_old`;
@@ -1539,14 +1528,14 @@ credit or debit card.
 As mentioned in the previous chapter, that we can utlize the connection
 to a MySQL database to run data analysis in MySQL for medium-sized data.
 Since we are using all 12 month data from 2017 in this analysis, it is
-impossible to load all data needed into R environment. Instead, we want
-to only load a fraction of the 2017 Yellow Taxi data from MySQL
+impossible to load all data needed into \textbf{R} environment. Instead,
+we want to only load a fraction of the 2017 Yellow Taxi data from MySQL
 database.
 
 In this section, we only want to load trip records with payment type
 equals to 1, which represents credit card. Only trip records with
 payment type credit card have accurate information on tip amount. Let's
-load the 2017 trip record into R environment by using the MySQL
+load the 2017 trip record into \textbf{R} environment by using the MySQL
 connection we just generated, \texttt{taxi}.
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2182,18 +2171,18 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 44.1% of 998023 rows
+Read 48.1% of 998023 rows
 Read 69.1% of 998023 rows
 Read 99.2% of 998023 rows
 Read 998023 rows and 17 (of 17) columns from 0.083 GB file in 00:00:05
 \end{verbatim}
 \begin{verbatim}
 
-Read 0.0% of 2726868 rows
+Read 5.1% of 2726868 rows
 Read 18.3% of 2726868 rows
-Read 40.7% of 2726868 rows
-Read 61.6% of 2726868 rows
-Read 80.7% of 2726868 rows
+Read 40.0% of 2726868 rows
+Read 60.5% of 2726868 rows
+Read 78.5% of 2726868 rows
 Read 83.6% of 2726868 rows
 Read 92.0% of 2726868 rows
 Read 2726868 rows and 17 (of 17) columns from 0.227 GB file in 00:00:12
@@ -2218,11 +2207,14 @@ zoneinfo/America/New_York'
 Warning in as.POSIXlt.POSIXct(x, tz = tz(x)): unknown timezone 'zone/tz/
 2018c.1.0/zoneinfo/America/New_York'
 \end{verbatim}
-\textbf{Trips from Manhattan to JFK Airport} We first focus on all the
-trips that departed in Manhattan and went to JFK Airport, and then we
-calculate the estmated fare amount that the passengers should have paid
-based on the distance travelled from each pick-up point to JFK Airport
-based on the fare rate suggested by TLC for each pick-up zone.
+\subsubsection{Trips from Manhattan to JFK
+Airport}\label{trips-from-manhattan-to-jfk-airport}
+
+We first focus on all the trips that departed in Manhattan and went to
+JFK Airport, and then we calculate the estmated fare amount that the
+passengers should have paid based on the distance travelled from each
+pick-up point to JFK Airport based on the fare rate suggested by TLC for
+each pick-up zone.
 
 Here is a map of estmated fare amount calculated by taking the average
 of all estimated fare amounts from the same pick-up zone to JFK Airport
@@ -2280,8 +2272,7 @@ flat rate.
 \}
 
 \textbackslash{}caption\{Zones that cost more than the \$52 flat
-rate\}(\#fig:num-to\_jfk\_fare\_above\_vis)
-\textbackslash{}end\{figure\}
+rate\}\label{fig:num-to-jfk-fare-above-vis} \textbackslash{}end\{figure\}
 
 Therefore, passengers from places in Manhattan besides Midtown, East
 Village, and some parts of Lower Manhattan benefit from the \$52 flat
@@ -2947,8 +2938,22 @@ affect market share distribution the most.
 
 \appendix
 
-\chapter{The First Appendix}\label{the-first-appendix}
+\chapter{Appendix A}\label{appendix-a}
 
+\section{utility function}\label{utility-function}
+
+This utility function was written to shortened the source code in ETL
+\texttt{etl\_extract.etl\_nyctaxi()} function.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{download_nyc_data <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, url, years, n, names, ...) \{}
+\NormalTok{    url <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(url, }\StringTok{"?years="}\NormalTok{, years, }\StringTok{"&$limit="}\NormalTok{, n)}
+\NormalTok{    lcl <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw"}\NormalTok{), names)}
+\NormalTok{    downloader}\OperatorTok{::}\KeywordTok{download}\NormalTok{(url, }\DataTypeTok{destfile =}\NormalTok{ lcl, ...)}
+\NormalTok{    lcl}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 \backmatter
 
 \chapter*{References}\label{references}
@@ -2972,11 +2977,6 @@ extract-transform-load operations on medium data. \emph{arXiv},
 Baumer, B., Cetinkaya-Rundel, M., Bray, A., Loi, L., \& Horton, N. J.
 (2014). R markdown: Integrating a reproducible analysis tool into
 introductory statistics. \emph{arXiv Preprint arXiv:1402.1894}.
-
-\hypertarget{ref-pkgnyctaxi}{}
-Baumer, B., Li, W. P., \& Le, T. (2017). \emph{Nyctaxi: Accessing new
-york city taxi data}. Retrieved from
-\url{http://github.com/beanumber/nyctaxi}
 
 \hypertarget{ref-furfaro2016}{}
 Danielle Furfaro, S. C., \& Fears, D. (2016, December). NYC is already
@@ -3012,6 +3012,11 @@ Many a Thing of the Past. The New York Times. Retrieved from
 HyreCar. (2018, January). Uber's 4 Basic Level of Service. HyreCar.
 Retrieved from
 \url{https://hyrecar.com/blog/difference-between-uber-cars/}
+
+\hypertarget{ref-pkgnyctaxi}{}
+Li, W. P., Baumer, B., \& Trang Le. (2017). \emph{Nyctaxi: Accessing new
+york city taxi data}. Retrieved from
+\url{http://github.com/beanumber/nyctaxi}
 
 \hypertarget{ref-datalyft}{}
 LYFT Data. (2015). NYC OpenData. Retrieved from
@@ -3083,6 +3088,10 @@ rectangular text data}. Retrieved from
 Your guide to Boro Taxis. (2009). NYC Taxi \& Limousine Commission.
 Retrieved from
 \url{http://www.nyc.gov/html/tlc/html/passenger/shl_passenger.shtml}
+
+\hypertarget{ref-zhang2017}{}
+Zhang, W. (2017, May). Improving access to open-source data about the
+nyc bike sharing system (Citi Bike). Smith College.
 
 
 % Index?
