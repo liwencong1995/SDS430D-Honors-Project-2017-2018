@@ -6,4 +6,17 @@
 If you feel it necessary to include an appendix, it goes here.
 -->
 
-# The First Appendix
+# Appendix A
+
+## utility function
+
+This utility function was written to shortened the source code in ETL `etl_extract.etl_nyctaxi()` function.
+
+```{r, eval=FALSE}
+download_nyc_data <- function(obj, url, years, n, names, ...) {
+  url <- paste0(url, "?years=", years, "&$limit=", n)
+  lcl <- file.path(attr(obj, "raw"), names)
+  downloader::download(url, destfile = lcl, ...)
+  lcl
+}
+```

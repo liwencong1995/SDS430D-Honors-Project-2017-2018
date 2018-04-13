@@ -5,22 +5,22 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 
 # Data and nyctaxi Package {#chapter2}
 ## Data and Storage
-The `nyctaxi` R package allows users to download, clean, and load data into SQL databasses. There are four types of data that are available for users to get access to, and they are trip level yellow taxi data from 2009 to the most recent month, trip level green taxi data from August 2013 to the most recent month, uber pick-up data from April to September 2014 and from Janaury to June 2015, and weekly-aggregated lyft trip data from 2016 to the most recent week. [@pkgnyctaxi]
+The `nyctaxi` **R** package allows users to download, clean, and load data into SQL databases. There are four types of data that are available for users to get access to: trip level yellow taxi data from 2009 to the most recent month, trip level green taxi data from August 2013 to the most recent month, Uber pick-up data from April to September 2014 and from Janaury to June 2015, and weekly-aggregated Lyft trip data from 2016 to the most recent week [@pkgnyctaxi].
 
 ### Yellow Taxi
-The total size of all yellow taxi trip data `csv` files (from Jan 2010 to Dec 2016) is 191.38 GB, and NYC yellow taxi trip data from Jan 2009 to the most recent month can be found on the NYC Taxi & Limousine Commission (TLC) website. [@datayellow] The data were collected and provided to the NYC TLC by technology providers authorized under the Taxicab & Livery Passenger Enhancement Programs (TPEP/LPEP).
+The total size of all yellow taxi trip data `csv` files (from Jan 2010 to Dec 2016) is 191.38 GB, and NYC yellow taxi trip data from Jan 2009 to the most recent month can be found on the NYC Taxi & Limousine Commission (TLC) website [@datayellow]. The data were collected and provided to the NYC TLC by technology providers authorized under the Taxicab & Livery Passenger Enhancement Programs (TPEP/LPEP).
 
 The yellow taxi trip records include the following fields: pick-up and drop-off dates/times, pick-up and drop-off locations, trip distances, itemized fares, rate types, payment types, and driver-reported passenger counts. 
 
 ### Green Taxi
-The total size of green taxi trip data `csv` files (from Aug 2013 to Dec 2016) is 7.8 GB, and green taxi trip data from Aug 2013 to the most recent month can be downloaded from NYC Taxi & Limousine Commission (TLC). [@datayellow] Green taxi trip records include the same variables as yellow taxi trip records do.
+The total size of green taxi trip data `csv` files (from Aug 2013 to Dec 2016) is 7.8 GB, and green taxi trip data from Aug 2013 to the most recent month can be downloaded from NYC Taxi & Limousine Commission (TLC). [@datayellow] Green taxi trip records include the same variables as yellow taxi trip records.
 
 ### TLC Summary Report
 The New York City TLC publishes summary reports that include aggregate statistics about taxi, Uber, and Lyft usage. These are in addition to the trip-level data; although the summary reports contain much less detail, they’re updated more frequently, which provides a more current glimpse into the state of the cutthroat NYC taxi market. [@datayellowmonth]
 
 In addition, the trip level NYC Uber data only covers two periods, from April to September 2014 and from January to June 2015. However, the summary reports cover weekly-aggreagated data from 2015 to the most recent week.
 
-```{r, message=FALSE, eval=FALSE, echo=FALSE}
+```{r, message=FALSE, eval=FALSE, echo=FALSE, eval=FALSE}
 webshot("http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml","figure/a-report.png", cliprect = "viewport")
 ```
 
@@ -29,6 +29,7 @@ knitr::include_graphics("figure/a-report.png", dpi = 170 )
 ```
 
 The data can be accessed by using the following commands:
+
 * Yellow taxi data
 ```{r, eval=FALSE}
 download.file("http://www.nyc.gov/html/tlc/downloads/csv/data_reports_monthly_indicators_yellow.csv", destfile = "~/Desktop/yellow_monthly_data.csv")
@@ -42,9 +43,9 @@ download.file("http://data.cityofnewyork.us/api/views/2v9c-2k7f/rows.csv?accessT
 ### Uber
 The total size of Uber pick-up data (from Apr to Sep 2014 and from Jan to June 2015) is 900 MB, and thanks to FiveThirtyEight who obtained the data from NYC TLC by submitting a Freedom of Information Law request on July 20, 2015, these data are now open to public. [@datauber]
 
-The 2014 Uber data contains four variables: Date/Time (the date and time of the Uber pick-up), Lat (the latitude of the Uber pick-up), Lon (the longitude of the Uber pick-up), and Base (the TLC base company code affiliated with the Uber pickup).
+The 2014 Uber data contains 4 variables: `Date/Time` (the date and time of the Uber pick-up), `Lat` (the latitude of the Uber pick-up), `Lon` (the longitude of the Uber pick-up), and `Base` (the TLC base company code affiliated with the Uber pickup).
 
-The 2015 Uber data contains four variables: Dispatching_base_num (the TLC base company code of the base that dispatched the Uber), Pickup_date (the date of the Uber pick-up), Affiliated_base_num (the TLC base company code affiliated with the Uber pickup), and locationID (the pick-up location ID affiliated with the Uber pickup).
+The 2015 Uber data contains 4 variables: `Dispatching_base_num` (the TLC base company code of the base that dispatched the Uber), `Pickup_date` (the date of the Uber pick-up), `Affiliated_base_num` (the TLC base company code affiliated with the Uber pickup), and `locationID` (the pick-up location ID affiliated with the Uber pickup).
 
 NYC Open Data also provides weekly-aggreagated Uber pick-up data from 2015 to the most recent month. [@datauberweek]
 
@@ -52,25 +53,24 @@ NYC Open Data also provides weekly-aggreagated Uber pick-up data from 2015 to th
 The total size of weekly-aggregated Lyft trip data (from Jan 2015 to Dec 2016) is 914.9 MB, and these data are open to public and weekly-aggregated Lyft data from 2015 to the most recent week can be found on NYC OpenData website. [@datalyft]
 
 ### Data Storage
-The total size of all `csv` files of the four services is about 200 GB, and a laptop usually has memory less than or equal to 8 GB. Limited memory constrains the amount of data that can be loaded by a personal computer at one time. When users load data into R environment, R keeps them in memory; when the amount of data loaded into R environment gets close to the limit of a computer’s memory, R becomes unresponsive or force quit the current session. Therefore, better ways to work with data that takes more space than 8 GB is needed. According to Weijia Zhang (2016), comparing to RAM, hard disk is often used to store medium-sized data, because it is affordable and are designed for storing large items permanently.  However, retrieving data from hard drives usually takes about 1,000,000 times more time.
+The total size of all `csv` files of the four services is about 200 GB, and a laptop usually has memory less than or equal to 8 GB. Limited memory constrains the amount of data that can be loaded by a personal computer at one time. When users load data into **R** environment, **R** keeps them in memory; when the amount of data loaded into **R** environment gets close to the limit of a computer’s memory, **R** becomes unresponsive or force quit the current session. Therefore, better ways to work with data that takes more space than 8 GB is needed. According to Zhang (2016), comparing to RAM, hard disk is often used to store medium-sized data, because it is affordable and are designed for storing large items permanently.  However, retrieving data from hard drives is about 1,000,000 times slower.
 
 ## ETL nyctaxi Package
-`etl` is the parent package of `nyctax`. `etl` provides a framework that allows R users to work with medium data without any knowledge in SQL database. Users can run SQL queries by using `dplyr` commands in R and choose to only return the final result, which could be a summary table, from SQL database into R Environment in order to aovid R from crashing. The user interaction takes place solely within R. 
+`etl` is the parent package of `nyctaxi`. `etl` provides a framework that allows **R** users to work with medium data without any knowledge in SQL database. Users can run SQL queries by using `dplyr` commands in **R** and choose to only return the final result, which could be a summary table, from SQL database into **R** Environment in order to aovid **R** from crashing. The user interaction takes place solely within **R**. 
 
 `etl` framework has three operations -Extract, Transfer, and Load- which bring real-time data into local or remote SQL databases. Users can  specify which type of SQL database they prefer to connect to. `etl`-dependent packages, such as `nyctaxi`, make medium data more accessible to a wider audience. [@baumer2014]
 
-`nyctaxi` was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiled three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services. [@pkgnyctaxi]
+`nyctaxi` was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiles three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services. [@pkgnyctaxi]
 
 This package inherits functions from many packages: `etl`, `dplyr`, `DBI`, `rlang`, and `stringr`. 
 
-Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert R code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in R.
+Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert **R** code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in **R**.
 
-In general, `etl_extract.etl_nyctaxi()` function download data of the four types of hail service data (yellow taxi, green taxi, uber, and lyft) from the corresponding sources. transform.nyctaxi uses different techniques to clean all four types of data to get then ready for the next step. `etl_load.etl_nyctaxi()` loads the data user selected to a SQL database. 
+In general, `etl_extract.etl_nyctaxi()` function download data of the four types of hail service data (yellow taxi, green taxi, Uber, and Lyft) from the corresponding sources. `etl_transform.etl_nyctaxi()` uses different techniques to clean all four types of data to get then ready for the next step. `etl_load.etl_nyctaxi()` loads the data user selected to a SQL database. 
  
-The Comprehensive R Archive Network (CRAN) is a collection of sites that carry identical material, consisting of the R distributions, the contributed extensions, documentation for R, and binaries. [@cran] `nyctaxi` R package lives on CRAN, and it can be installed with the `install.packages()` function in R. 
+The Comprehensive **R** Archive Network (CRAN) is a collection of sites that carry identical material, consisting of the **R** distributions, the contributed extensions, documentation for **R**, and binaries. [@cran] `nyctaxi` **R** package lives on CRAN, and it can be installed with the `install.packages()` function in **R**. 
 
 ```{r, eval = FALSE}
-#install the package
 install.packages("nyctaxi")
 ```
 
@@ -82,8 +82,8 @@ webshot("https://github.com/beanumber/nyctaxi","figure/nyctaxi-page.png", clipre
 knitr::include_graphics("figure/nyctaxi-page.png", dpi = 170 )
 ```
 
-```{r, message=FALSE, echo=FALSE}
-# load the package
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
+# load packages and data
 library(nyctaxi)
 library(RMySQL)
 library(leaflet)
@@ -94,19 +94,18 @@ data("taxi_zones")
 Users need to create an `etl` object in order to apply the etl operations to it, and only the name of the SQL database, working directory, and type of SQL database need to be specified during initialization. If the type of SQL database is not specified, a local RSQLite database will be generated as default. 
 
 ```{r, eval = FALSE}
-# initializing an etl object
 db <- src_mysql("nyctaxi", user = "urname", host = "host", password = "pw")
 taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 ```
 
-In the example above, a folder called nyctaxi is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, a local folder contains two subfolders, `raw` and `load`, are also created under the directory the user specifies. `raw` folder stores data downloaded from online open sources, and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
+In the example above, a folder called `nyctaxi` is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, a local folder contains two subfolders, `raw` and `load`, are also created under the directory the user specifies. `raw` folder stores data downloaded from online open sources, and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
 
-After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) `obj`: an etl object; (2) `years`: a numeric vector giving the years, and the default is the most recent year; (3) `months`: a numeric vector giving the months, and the default is `1:12`; (4) `type`: a character variable giving the type of data the user wants to download. There are four types: yellow, green, uber, and lyft. The default is yellow.
+After an etl object is created (nyctaxi is the etl object in this case), four parameters are needed to specify the data that users want: (1) `obj`: an etl object; (2) `years`: a numeric vector giving the years, and the default is the most recent year; (3) `months`: a numeric vector giving the months, and the default is `1:12`; (4) `type`: a character variable giving the type of data the user wants to download. There are four types: `yellow`, `green`, `uber`, and `lyft`. The default is `yellow`.
 
-### Taxi zone shapefile attached to nyctaxi R package
+### Taxi zone shapefile attached to nyctaxi **R** package
 Two datasets are attached to `nyctaxi`. The first one is called `taxi_zone_lookup`, and this dataset contains information, such as taxi zone location IDs, location names, and corresponding boroughs for each ID. [@datayellow] A shapefile containing the boundaries for the taxi zones, `taxi_zones`, is also included in the package for users to do spatial analysis. Visulizations similar to one shown below can be generated with the shapefile. 
 
-```{r, message=FALSE, echo=FALSE, eval=FALSE}
+```{r, message=FALSE, echo=FALSE, eval=FALSE, warning=FALSE}
 map <- leaflet(data = taxi_zones) %>%
   addProviderTiles(providers$OpenStreetMap)%>%
   #addTiles() %>%
@@ -119,7 +118,7 @@ saveWidget(map, file = "zonemap.html")
 webshot("zonemap.html","figure/zonemap.png", cliprect = "viewport")
 ```
 
-```{r zonemap, fig.cap="NYC Taxi Zone Map", fig.align='center', echo=FALSE, echo=FALSE}
+```{r zonemap, fig.cap="NYC Taxi Zone Map", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/zonemap.png", dpi = 170 )
 ```
 
@@ -157,19 +156,19 @@ taxi %>%
    etl_transform(years = 2014:2016, months = 1:12, type = c("yellow", "green", "uber", "lyft"))
 ```
 
-There are a few main transformations that are done by this fucntion:
+There are a few main transformations that are done by this function:
 
 #### Green Taxi -- Extra Blank Row and Column
-Green Taxi monthly data from August 2013 to the most recent month besides 2015 all have a blank second row in the `csv` files. Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all have an extra blank columns attanched to the right-most column. These blank rows and columns cause problems in the later stage when users want to load data into SQL database. In order to get Green Taxi data ready for the `load` phase, we used the `system()` function in R to invoke the Terminal command specified to remove the blank rows and columns.
+Green Taxi monthly data from August 2013 to the most recent month besides 2015 all have a blank second row in the `csv` files. Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all have an extra blank columns attanched to the right-most column. These blank rows and columns cause problems in the later stage when users want to load data into SQL database. In order to get Green Taxi data ready for the `load` phase, we used the `system()` function in **R** to invoke the Terminal command specified to remove the blank rows and columns.
 
 #### Uber Data -- Reconciling Inconsistent Filenames
 Uber only released over 4.5 million data records from April to September 2014 and 14.3 million records from Janaury to June 2015. Information of different sets of variables are released for 2014 and 2015, and variables have different naming convention. When users want to download data from both years, variables are renamed so that data from both years can be cosolidated into one big dataset with consistent variable names. 
 
 #### Uber Data -- Reconciling Inconsistent Data Formats
-The data type of `Date/Time` variable in Uber datasets is originally encoded as `character`. In order to enable it to be recognized as `timestamp` by R, we use `ymd_hms` in `lubridate` [@pkglubridate] to transform date time to POSIXct objects.
+The data type of `Date/Time` variable in Uber datasets is originally encoded as `character`. In order to enable it to be recognized as `timestamp` by **R**, we use `ymd_hms` in `lubridate` [@pkglubridate] to transform date time to `POSIXct` objects.
 
 #### Optimizing I/O Process
-Improving file input and output processes is an important part of `etl_transform`. `data.table` [@pkgdatatable] only takes half of the time to read from and write into datasets comparing to `readr`. [@pkgreadr] Therefore, `etl_transform` uses `fread()` and `fwrite()` from `data.table` instead of `read_csv` or `write_csv` from `readr` to reduce the data processing time.
+Improving file input and output processes is an important part of `etl_transform`. `data.table` [@pkgdatatable] only takes half of the time to read from and write into datasets comparing to `readr` [@pkgreadr]. Therefore, `etl_transform` uses `fread()` and `fwrite()` from `data.table` instead of `read_csv` or `write_csv` from `readr` to reduce the data processing time [@zhang2017].
 
 ### Load
 `etl_load.etl_nyctaxi()` allows users to load New York City yellow taxi, green taxi, Uber, and Lyft data into different data tables in a SQL database. It populates a SQL database with data cleaned by `etl_transform`. 
@@ -728,23 +727,6 @@ etl_load.etl_nyctaxi <- function(obj,
 }
 
 ```
-
-### utility function
-
-This utility function below was written to shortened the source code in ETL extract.
-
-```
-opts_chunk$set(tidy.opts=list(width.cutoff=60))
-download_nyc_data <- function(obj, url, years, n, names, ...) {
-  url <- paste0(url,"?years=",
-                years,"&$limit=", n)
-  lcl <- file.path(attr(obj, "raw"), names)
-  downloader::download(url, destfile = lcl, ...)
-  lcl
-}
-
-```
-
 
 ### ETL Init
 

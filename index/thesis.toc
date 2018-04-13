@@ -3,14 +3,14 @@
 \contentsline {section}{\numberline {1.2}Background}{2}{section.1.2}
 \contentsline {subsection}{\numberline {1.2.1}Yellow Taxi}{2}{subsection.1.2.1}
 \contentsline {subsection}{\numberline {1.2.2}Green Taxi}{2}{subsection.1.2.2}
-\contentsline {subsection}{\numberline {1.2.3}Uber}{2}{subsection.1.2.3}
+\contentsline {subsection}{\numberline {1.2.3}Uber}{3}{subsection.1.2.3}
 \contentsline {subsection}{\numberline {1.2.4}Lyft}{3}{subsection.1.2.4}
 \contentsline {section}{\numberline {1.3}Literature Review}{3}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}etl R package}{3}{subsection.1.3.1}
-\contentsline {subsection}{\numberline {1.3.2}New York City Traffic and Taxi}{4}{subsection.1.3.2}
-\contentsline {subsection}{\numberline {1.3.3}Competition between New York City taxi and e-hail services}{5}{subsection.1.3.3}
-\contentsline {section}{\numberline {1.4}Contribution}{6}{section.1.4}
-\contentsline {subsection}{\numberline {1.4.1}`nyctaxi' Package}{6}{subsection.1.4.1}
+\contentsline {subsection}{\numberline {1.3.1}New York City Traffic and Taxi}{3}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}Competition between New York City taxi and e-hail services}{5}{subsection.1.3.2}
+\contentsline {subsection}{\numberline {1.3.3}etl R package}{6}{subsection.1.3.3}
+\contentsline {section}{\numberline {1.4}Contribution}{7}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}`nyctaxi' Package}{7}{subsection.1.4.1}
 \contentsline {subsection}{\numberline {1.4.2}Social Impact of NYC Taxi}{8}{subsection.1.4.2}
 \contentsline {subsection}{\numberline {1.4.3}Reproducible Research}{8}{subsection.1.4.3}
 \contentsline {chapter}{Chapter 2: Data and nyctaxi Package}{11}{chapter.2}
@@ -26,9 +26,10 @@
 \contentsline {section}{\numberline {2.3}Extract-Transform-Load}{18}{section.2.3}
 \contentsline {subsection}{\numberline {2.3.1}Extract}{18}{subsection.2.3.1}
 \contentsline {subsection}{\numberline {2.3.2}Transform}{19}{subsection.2.3.2}
-\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Filenames}{20}{section*.8}
-\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Data Formats}{21}{section*.9}
-\contentsline {subsubsection}{Optimizing I/O Process}{21}{section*.10}
+\contentsline {subsubsection}{Green Taxi -- Extra Blank Row and Column}{20}{section*.8}
+\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Filenames}{20}{section*.9}
+\contentsline {subsubsection}{Uber Data -- Reconciling Inconsistent Data Formats}{21}{section*.10}
+\contentsline {subsubsection}{Optimizing I/O Process}{21}{section*.11}
 \contentsline {subsection}{\numberline {2.3.3}Load}{21}{subsection.2.3.3}
 \contentsline {subsection}{\numberline {2.3.4}SQL Database Initialization}{22}{subsection.2.3.4}
 \contentsline {section}{\numberline {2.4}New York City Taxicab and E-hail Services Summary}{24}{section.2.4}
@@ -61,4 +62,4 @@
 \contentsline {chapter}{Chapter 6: Conclusion}{81}{chapter.6}
 \contentsline {section}{\numberline {6.1}Future Research}{81}{section.6.1}
 \contentsline {chapter}{Appendix A: The First Appendix}{83}{appendix.A}
-\contentsline {chapter}{References}{85}{appendix*.25}
+\contentsline {chapter}{References}{85}{appendix*.26}
