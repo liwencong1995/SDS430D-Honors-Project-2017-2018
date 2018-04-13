@@ -158,6 +158,7 @@ taxi %>%
 ```
 
 There are a few main transformations that are done by this fucntion:
+
 #### Green Taxi -- Extra Blank Row and Column
 Green Taxi monthly data from August 2013 to the most recent month besides 2015 all have a blank second row in the `csv` files. Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all have an extra blank columns attanched to the right-most column. These blank rows and columns cause problems in the later stage when users want to load data into SQL database. In order to get Green Taxi data ready for the `load` phase, we used the `system()` function in R to invoke the Terminal command specified to remove the blank rows and columns.
 
