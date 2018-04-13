@@ -29,9 +29,9 @@ taxi <- etl("nyctaxi", db)
 ```
 
 As mentioned in the previous chapter, that we can utlize the connection to a MySQL database to run data analysis in MySQL for medium-sized data.
-Since we are using all 12 month data from 2017 in this analysis, it is impossible to load all data needed into R environment. Instead, we want to only load a fraction of the 2017 Yellow Taxi data from MySQL database. 
+Since we are using all 12 month data from 2017 in this analysis, it is impossible to load all data needed into **R** environment. Instead, we want to only load a fraction of the 2017 Yellow Taxi data from MySQL database. 
 
-In this section, we only want to load trip records with payment type equals to 1, which represents credit card. Only trip records with payment type credit card have accurate information on tip amount. Let's load the 2017 trip record into R environment by using the MySQL connection we just generated, `taxi`.
+In this section, we only want to load trip records with payment type equals to 1, which represents credit card. Only trip records with payment type credit card have accurate information on tip amount. Let's load the 2017 trip record into **R** environment by using the MySQL connection we just generated, `taxi`.
 ```{r, eval=FALSE}
 yellow_2017 <- taxi %>%
   tbl("yellow") %>%
