@@ -111,7 +111,7 @@
   \newcommand{\NormalTok}[1]{#1}
 
 % To pass between YAML and LaTeX the dollar signs are added by CII
-\title{Tools to Uncover New York City Through Taxi Trips}
+\title{Tools for Understanding Taxicab and E-Hail Service Use in New York City}
 \author{Wencong (Priscilla) Li}
 % The month and year that you submit your FINAL draft TO THE LIBRARY (May or December)
 \date{May 2018}
@@ -464,12 +464,12 @@ together any paper with similar format.
 
 Github is used to store the scripts for \texttt{nyctaxi} and this
 thesis. \texttt{nyctaxi} is available on CRAN for people to download and
-install (Li, Baumer, \& Trang Le, 2017), and the source code for data
-analysis in this thesis is available under the Github account of the
-author so that scholars can easily access the information that thery are
-interested in. In terms of tables, figures, and anything included in the
-Appendix attached to this thesis, scripts that are used to generate them
-are included in the Github repository.
+install (W. P. Li, Baumer, \& Trang Le, 2017), and the source code for
+data analysis in this thesis is available under the Github account of
+the author so that scholars can easily access the information that thery
+are interested in. In terms of tables, figures, and anything included in
+the Appendix attached to this thesis, scripts that are used to generate
+them are included in the Github repository.
 
 \chapter{Data and nyctaxi Package}\label{chapter2}
 
@@ -481,7 +481,7 @@ available for users to get access to: trip level yellow taxi data from
 2009 to the most recent month, trip level green taxi data from August
 2013 to the most recent month, Uber pick-up data from April to September
 2014 and from Janaury to June 2015, and weekly-aggregated Lyft trip data
-from 2016 to the most recent week (Li et al., 2017).
+from 2016 to the most recent week (W. P. Li et al., 2017).
 
 \subsection{Yellow Taxi}\label{yellow-taxi-1}
 
@@ -606,7 +606,7 @@ data, but later on Uber and Lyft data were added and the ETL functions
 are modified to be specialized in working with these data. This package
 compiles three major sources of hail service in New York City so that it
 is convenient for users to compare and contrast the performance of these
-three services. (Li et al., 2017)
+three services. (W. P. Li et al., 2017)
 
 This package inherits functions from many packages: \texttt{etl},
 \texttt{dplyr}, \texttt{DBI}, \texttt{rlang}, and \texttt{stringr}.
@@ -1503,9 +1503,6 @@ CREATE VIEW yellow_old_sum AS SELECT YEAR(tpep_pickup_datetime) as the_year, MON
 \end{verbatim}
 \chapter{New York City Taxi Driver}\label{chapter3}
 
-\section{Get Yellow Taxi Trip Data Ready for Data
-Analysis}\label{get-yellow-taxi-trip-data-ready-for-data-analysis}
-
 The income of Taxi drivers in New York City has two parts: taxi fare and
 tips. Taxi fare is usually calculated by the meters installed in the
 taxis, and the rate of fare cannot be changed by taxi drivers.
@@ -1513,24 +1510,18 @@ Therefore, in order to make more profit, taxi drivers prefer to pick up
 passengers who offer big amount of tips. What are the regions that
 provide the most tips to yellow taxicab drivers?
 
-In the following analysis, I will focus on trip data collected in 2017.
-Taxi drivers usually does not correctly record the amount of tips paid
-by cash or check. Therefore, in order to find out the regions that offer
-the most tips, we need to filter out the trips that are not paid by
-credit or debit card.
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{db <-}\StringTok{ }\KeywordTok{src_mysql}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, }\DataTypeTok{user =} \StringTok{"wli37"}\NormalTok{, }\DataTypeTok{host =} \StringTok{"scidb.smith.edu"}\NormalTok{, }
-    \DataTypeTok{password =} \StringTok{"Calculati0n"}\NormalTok{)}
-\NormalTok{taxi <-}\StringTok{ }\KeywordTok{etl}\NormalTok{(}\StringTok{"nyctaxi"}\NormalTok{, db)}
-\end{Highlighting}
-\end{Shaded}
+In the following analysis, we will focus on trip data collected in 2017.
+Taxi drivers usually do not correctly record the amount of tips paid by
+cash or check (W. Li, 2018). Therefore, in order to find out the regions
+that offer the most tips, we need to filter out the trips that are not
+paid by credit or debit card.
+
 As mentioned in the previous chapter, that we can utlize the connection
 to a MySQL database to run data analysis in MySQL for medium-sized data.
 Since we are using all 12 month data from 2017 in this analysis, it is
-impossible to load all data needed into \textbf{R} environment. Instead,
-we want to only load a fraction of the 2017 Yellow Taxi data from MySQL
-database.
+impractical to load all data needed into \textbf{R} environment.
+Instead, we want to only load a fraction of the 2017 Yellow Taxi data
+from MySQL database.
 
 In this section, we only want to load trip records with payment type
 equals to 1, which represents credit card. Only trip records with
@@ -1539,38 +1530,39 @@ load the 2017 trip record into \textbf{R} environment by using the MySQL
 connection we just generated, \texttt{taxi}.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{yellow_}\DecValTok{2017}\NormalTok{ <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{==}\StringTok{ }
-\StringTok{    }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
+\NormalTok{yellow_}\DecValTok{2017}\NormalTok{ <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(payment_type }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \section{Aggregated Zone-level Tip
 Information}\label{aggregated-zone-level-tip-information}
 
-Comparing to studying factors that affect individual trips' percent tip,
-it is more meaningful to study the aggregated effect of each zone on
-percent tip, since the results are more concise and comprehensible.
 Instead of the absolute amount of tips, we want to focus on the
 percentage of tips that passengers pay in addition to the total fare
 amount. Therefore, we use tip amount over fare amount to calculate the
-percent tip.
+percent tip. We then calculated the mean percent tip, mean distances
+travelled, mean number of minutes spent travelling, and total number of
+trips of each pick-up and drop-off pair in 2017 to get the aggregated
+zone-level information in order to compare the percent tip passengers
+pay in each zone.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{yellow_2017_summary <-}\StringTok{ }\NormalTok{yellow_}\DecValTok{2017} \OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{tpep_dropoff_datetime =} \KeywordTok{ymd_hms}\NormalTok{(tpep_dropoff_datetime, }
-    \DataTypeTok{tz =} \StringTok{"America/New_York"}\NormalTok{), }\DataTypeTok{tpep_pickup_datetime =} \KeywordTok{ymd_hms}\NormalTok{(tpep_pickup_datetime, }
-    \DataTypeTok{tz =} \StringTok{"America/New_York"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =} \KeywordTok{round}\NormalTok{((tpep_dropoff_datetime }\OperatorTok{-}\StringTok{ }
-\StringTok{    }\NormalTok{tpep_pickup_datetime)}\OperatorTok{/}\DecValTok{60}\NormalTok{, }\DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{duration =} \KeywordTok{as.numeric}\NormalTok{(duration)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{filter}\NormalTok{(duration }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(fare_amount }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{>}\StringTok{ }
-\StringTok{    }\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(tip_amount }\OperatorTok{<}\StringTok{ }\NormalTok{fare_amount) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year =} \KeywordTok{year}\NormalTok{(tpep_pickup_datetime), }
-    \DataTypeTok{month =} \KeywordTok{month}\NormalTok{(tpep_pickup_datetime), }\DataTypeTok{tip_perct =}\NormalTok{ tip_amount}\OperatorTok{/}\NormalTok{fare_amount) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{group_by}\NormalTok{(year, month, PULocationID, DOLocationID) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }
-    \DataTypeTok{trips =} \KeywordTok{n}\NormalTok{(), }\DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance), }\DataTypeTok{avg_duration =} \KeywordTok{mean}\NormalTok{(duration))}
+\NormalTok{yellow_2017_summary <-}\StringTok{ }\NormalTok{yellow_}\DecValTok{2017} \OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year =} \KeywordTok{year}\NormalTok{(tpep_pickup_datetime),}
+         \DataTypeTok{month =} \KeywordTok{month}\NormalTok{(tpep_pickup_datetime),}
+         \DataTypeTok{tip_perct =}\NormalTok{ tip_amount}\OperatorTok{/}\NormalTok{fare_amount) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(year, month, PULocationID, DOLocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{avg_tip =} \KeywordTok{mean}\NormalTok{(tip_perct), }
+            \DataTypeTok{trips =} \KeywordTok{n}\NormalTok{(),}
+            \DataTypeTok{avg_dis =} \KeywordTok{mean}\NormalTok{(trip_distance),}
+            \DataTypeTok{avg_duration =} \KeywordTok{mean}\NormalTok{(duration))}
 \end{Highlighting}
 \end{Shaded}
 Each taxi trip has pick-up and drop-off locations associated with it,
 and there are 263 known taxi zones.
-\begin{verbatim}
-Warning: Removed 526 rows containing non-finite values (stat_bin).
-\end{verbatim}
+
 \includegraphics{thesis_files/figure-latex/tip-region-1.pdf} Figure
 \ref{fig:tip-region} is a histogram of mean tip percents for all known
 pick-up and drop-off zone pairs.
@@ -1586,33 +1578,31 @@ have the highest tip percents?
 We first calculate the average percent tip paid for each pick-up zone.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-38}Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017}
+\caption{\label{tab:unnamed-chunk-40}Ten taxi pick-up zones with the highest average tip in January, 2017}
 \centering
-\begin{tabular}[t]{rrrrrrrll}
+\begin{tabular}[t]{rrrrll}
 \toprule
-year & month & PULocationID & avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
+avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
 \midrule
-2017 & 1 & 176 & 0.58 & 1 & 4.32 & 17.55 & Staten Island & Oakwood\\
-2017 & 1 & 30 & 0.46 & 2 & 33.70 & 136.47 & Queens & Broad Channel\\
-2017 & 1 & 122 & 0.45 & 1 & 1.26 & 25.00 & Queens & Hollis\\
-2017 & 1 & 86 & 0.41 & 2 & 0.28 & 1.75 & Queens & Far Rockaway\\
-2017 & 1 & 15 & 0.37 & 7 & 6.57 & 14.45 & Queens & Bay Terrace/Fort Totten\\
+0.29 & 11 & 7.37 & 15.74 & Queens & Douglaston\\
+0.29 & 25 & 7.05 & 20.78 & Bronx & East Tremont\\
+0.29 & 12 & 10.40 & 17.87 & Queens & Oakland Gardens\\
+0.28 & 19 & 7.97 & 22.29 & Queens & Glendale\\
+0.28 & 33 & 8.33 & 25.23 & Queens & Saint Michaels Cemetery/Woodside\\
 \addlinespace
-2017 & 1 & 182 & 0.36 & 7 & 5.79 & 13.76 & Bronx & Parkchester\\
-2017 & 1 & 23 & 0.34 & 2 & 5.50 & 15.33 & Staten Island & Bloomfield/Emerson Hill\\
-2017 & 1 & 139 & 0.33 & 5 & 25.28 & 34.98 & Queens & Laurelton\\
-2017 & 1 & 117 & 0.31 & 6 & 13.42 & 82.98 & Queens & Hammels/Arverne\\
-2017 & 1 & 118 & 0.30 & 1 & 0.10 & 0.70 & Staten Island & Heartland Village/Todt Hill\\
+0.27 & 34 & 7.60 & 19.70 & Queens & Bayside\\
+0.27 & 56 & 9.56 & 24.35 & Brooklyn & Coney Island\\
+0.27 & 29 & 10.63 & 25.94 & Queens & Howard Beach\\
+0.27 & 20 & 11.20 & 23.28 & Brooklyn & Marine Park/Mill Basin\\
+0.26 & 21 & 6.22 & 18.80 & Bronx & Norwood\\
 \bottomrule
 \end{tabular}
 \end{table}
-Table @ref(tab:tip\_pickup) is a list of pick-up zones with their
+Table @ref(tab:tip\_pickup\_1) is a list of pick-up zones with their
 average percent tip.
 
-Below is a histogram of average percent tips paid for all pick-up zones.
-\begin{verbatim}
-Warning: Removed 3 rows containing non-finite values (stat_bin).
-\end{verbatim}
+We created a histogram to visualize the distribution of average percent
+tips paid for all pick-up zones.
 \includegraphics{thesis_files/figure-latex/pickup-vis-1.pdf} As show in
 Figure \ref{fig:pickup-vis}, the first peak is around 20\%, which is the
 cheapest default option on the touch panel for passengers to chose.
@@ -1662,31 +1652,31 @@ Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most
 popular location for pick-ups.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-42}Ten taxi zones with the highest number of pick-ups}
+\caption{\label{tab:unnamed-chunk-44}Ten taxi zones with the highest number of pick-ups}
 \centering
-\begin{tabular}[t]{r|r|r|r|r|l|l}
+\begin{tabular}[t]{r|r|r|r|l|l}
 \hline
-PULocationID & avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
+avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
 \hline
-237 & 0.20 & 2519900 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
+0.20 & 2519900 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
 \hline
-161 & 0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
+0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
 \hline
-234 & 0.20 & 2382970 & 9.63 & 33.22 & Manhattan & Union Sq\\
+0.20 & 2382970 & 9.63 & 33.22 & Manhattan & Union Sq\\
 \hline
-236 & 0.20 & 2372509 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
+0.20 & 2372509 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
 \hline
-162 & 0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
+0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
 \hline
-170 & 0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
+0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
 \hline
-186 & 0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
+0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
 \hline
-79 & 0.20 & 2097416 & 9.48 & 30.39 & Manhattan & East Village\\
+0.20 & 2097416 & 9.48 & 30.39 & Manhattan & East Village\\
 \hline
-138 & 0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
+0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
 \hline
-230 & 0.20 & 1972303 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
+0.20 & 1972303 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
 \hline
 \end{tabular}
 \end{table}
@@ -1702,38 +1692,39 @@ observe that many taxi pick-up zones with highest percent tips are not
 necessarily the ones with the highest number of pick-ups.
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# pick a threshold for the cutoff number of trips}
-\NormalTok{pickup_zone_}\DecValTok{30}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{30} \OperatorTok{*}\StringTok{ }
-\StringTok{    }\DecValTok{365}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
+\CommentTok{#pick a threshold for the cutoff number of trips}
+\NormalTok{pickup_zone_}\DecValTok{30}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{30}\OperatorTok{*}\DecValTok{365}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 \end{Highlighting}
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-44}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)}
+\caption{\label{tab:unnamed-chunk-46}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)}
 \centering
-\begin{tabular}[t]{r|r|r|r|r|l|l}
+\begin{tabular}[t]{r|r|r|r|l|l}
 \hline
-PULocationID & avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
+avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
 \hline
-10 & 0.22 & 13329 & 14.27 & 42.94 & Queens & Baisley Park\\
+0.22 & 13329 & 14.27 & 42.94 & Queens & Baisley Park\\
 \hline
-161 & 0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
+0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
 \hline
-162 & 0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
+0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
 \hline
-170 & 0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
+0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
 \hline
-186 & 0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
+0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
 \hline
-138 & 0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
+0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
 \hline
-13 & 0.21 & 704925 & 10.22 & 32.82 & Manhattan & Battery Park City\\
+0.21 & 704925 & 10.22 & 32.82 & Manhattan & Battery Park City\\
 \hline
-261 & 0.21 & 363915 & 10.02 & 33.07 & Manhattan & World Trade Center\\
+0.21 & 363915 & 10.02 & 33.07 & Manhattan & World Trade Center\\
 \hline
-88 & 0.21 & 268535 & 10.26 & 33.44 & Manhattan & Financial District South\\
+0.21 & 268535 & 10.26 & 33.44 & Manhattan & Financial District South\\
 \hline
-33 & 0.21 & 72911 & 7.33 & 26.85 & Brooklyn & Brooklyn Heights\\
+0.21 & 72911 & 7.33 & 26.85 & Brooklyn & Brooklyn Heights\\
 \hline
 \end{tabular}
 \end{table}
@@ -1749,40 +1740,36 @@ then we observe that all pick-up zones that have the highest percent
 tips are in Manhattan besides La Guardia Airport.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{pickup_zone_}\DecValTok{3000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{365} \OperatorTok{*}\StringTok{ }
-\StringTok{    }\DecValTok{3000}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
+\NormalTok{pickup_zone_}\DecValTok{3000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{365}\OperatorTok{*}\DecValTok{3000}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 \end{Highlighting}
 \end{Shaded}
-\begin{table}
-
-\caption{\label{tab:unnamed-chunk-46}Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)}
-\centering
-\begin{tabular}[t]{r|r|r|r|r|l|l}
+\begin{tabular}{r|r|r|r|l|l}
 \hline
-PULocationID & avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
+avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
 \hline
-161 & 0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
+0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
 \hline
-162 & 0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
+0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
 \hline
-170 & 0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
+0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
 \hline
-186 & 0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
+0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
 \hline
-138 & 0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
+0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
 \hline
-237 & 0.20 & 2519900 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
+0.20 & 2519900 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
 \hline
-234 & 0.20 & 2382970 & 9.63 & 33.22 & Manhattan & Union Sq\\
+0.20 & 2382970 & 9.63 & 33.22 & Manhattan & Union Sq\\
 \hline
-236 & 0.20 & 2372509 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
+0.20 & 2372509 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
 \hline
-79 & 0.20 & 2097416 & 9.48 & 30.39 & Manhattan & East Village\\
+0.20 & 2097416 & 9.48 & 30.39 & Manhattan & East Village\\
 \hline
-230 & 0.20 & 1972303 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
+0.20 & 1972303 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
 \hline
 \end{tabular}
-\end{table}
 There are more than 100 times more yellow cab pick-ups that happen in
 Manhattan everyday than in Brooklyn. By comparing the average tip
 percent in Table @ref(tab:pickup\_zone\_30) and Table
@@ -1894,14 +1881,20 @@ Newark Airport. We need to load trip records with destination as one of
 the three airports from the MySQL connection we built.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{to_jfk_trip <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
-\StringTok{    }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
+\NormalTok{to_jfk_trip <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
 
-\NormalTok{to_lg_trip <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
-\StringTok{    }\DecValTok{138}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
+\NormalTok{to_lg_trip <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{138}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
 
-\NormalTok{to_newark_trip <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }
-\StringTok{    }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
+\NormalTok{to_newark_trip <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 Now we want to calculate the average amount of time it take from each
@@ -1915,7 +1908,7 @@ It would be easier if we combine all three tables and put information
 related to trip duration to all three airports in the same table.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-56}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
+\caption{\label{tab:unnamed-chunk-57}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
 \centering
 \begin{tabular}[t]{l|r|r|r|l}
 \hline
@@ -1957,7 +1950,8 @@ at how much time is needed to travel to all three airports from taxi
 zone No.4.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{alphabet <-}\StringTok{ }\NormalTok{three_air }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{)}
+\NormalTok{alphabet <-}\StringTok{ }\NormalTok{three_air}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\DecValTok{4}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \begin{figure}
@@ -2013,7 +2007,7 @@ when weather gets bad.
 \textbf{Uber Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-61}Uber 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-62}Uber 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{l|l|r}
 \hline
@@ -2044,7 +2038,7 @@ Pickup Start Date & Pickup End Date & Total Dispatched Trips\\
 \textbf{Yellow Cab Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-64}Yellow Taxi 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-65}Yellow Taxi 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{l|r}
 \hline
@@ -2093,7 +2087,7 @@ York City. \textbf{Yellow Taxi}
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{(}\DecValTok{2066285} \OperatorTok{-}\StringTok{ }\DecValTok{2456285}\NormalTok{)}\OperatorTok{/}\DecValTok{2456285}
+\NormalTok{(}\DecValTok{2066285}\OperatorTok{-}\DecValTok{2456285}\NormalTok{)}\OperatorTok{/}\DecValTok{2456285}
 \end{Highlighting}
 \end{Shaded}
 \begin{verbatim}
@@ -2110,7 +2104,7 @@ York City. \textbf{Yellow Taxi}
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{(}\DecValTok{3430189} \OperatorTok{-}\StringTok{ }\DecValTok{3614559}\NormalTok{)}\OperatorTok{/}\DecValTok{3614559}
+\NormalTok{(}\DecValTok{3430189}\OperatorTok{-}\DecValTok{3614559}\NormalTok{)}\OperatorTok{/}\DecValTok{3614559}
 \end{Highlighting}
 \end{Shaded}
 \begin{verbatim}
@@ -2162,28 +2156,32 @@ In this study, we are only interested in yellow taxi trip between
 Manhattan and JFK Airport.
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{to_jkf <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
+\NormalTok{to_jkf <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
 
-\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }
-\StringTok{    }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
+\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{taxi }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tbl}\NormalTok{(}\StringTok{"yellow"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{collect}\NormalTok{(}\DataTypeTok{n =} \OtherTok{Inf}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \begin{verbatim}
 
-Read 48.1% of 998023 rows
+Read 54.1% of 998023 rows
 Read 69.1% of 998023 rows
 Read 99.2% of 998023 rows
 Read 998023 rows and 17 (of 17) columns from 0.083 GB file in 00:00:05
 \end{verbatim}
 \begin{verbatim}
 
-Read 5.1% of 2726868 rows
+Read 3.7% of 2726868 rows
 Read 18.3% of 2726868 rows
 Read 40.0% of 2726868 rows
 Read 60.5% of 2726868 rows
-Read 78.5% of 2726868 rows
-Read 83.6% of 2726868 rows
+Read 80.3% of 2726868 rows
+Read 84.0% of 2726868 rows
 Read 92.0% of 2726868 rows
 Read 2726868 rows and 17 (of 17) columns from 0.227 GB file in 00:00:12
 \end{verbatim}
@@ -2234,7 +2232,7 @@ from other taxi zones in Manhattan.
 \$52}\label{taxi-zones-pays-on-average-more-than-52}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-76}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-78}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{r|r|r|r|l|l}
 \hline
@@ -2303,10 +2301,11 @@ to JFK Airport from Manhattan? How much on average would taxi driver
 make on their way bavk to the city from Manhattan?
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{from_jfk }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }
-\StringTok{    }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup, }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
+\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{from_jfk }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup , }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 Since a taxi driver coming from Manhattan to JFK Airport could be
@@ -2326,7 +2325,7 @@ JFK Airport to any taxi zone in New York City. What are the most popular
 drop-off zones for yellow taxis from JFK Airport?
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-82}Ten most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-84}Ten most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{r|r|r|l|l}
 \hline
@@ -2903,7 +2902,7 @@ destination for passengers departing from the JFK Airport.
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{from_jkf_zone[}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{]}\OperatorTok{/}\NormalTok{(from_jkf_zone[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{from_jkf_zone[}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{])}
+\NormalTok{from_jkf_zone[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{]}\OperatorTok{/}\NormalTok{(from_jkf_zone[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{from_jkf_zone[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{])}
 \end{Highlighting}
 \end{Shaded}
 \begin{verbatim}
@@ -2947,10 +2946,10 @@ This utility function was written to shortened the source code in ETL
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{download_nyc_data <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obj, url, years, n, names, ...) \{}
-\NormalTok{    url <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(url, }\StringTok{"?years="}\NormalTok{, years, }\StringTok{"&$limit="}\NormalTok{, n)}
-\NormalTok{    lcl <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw"}\NormalTok{), names)}
-\NormalTok{    downloader}\OperatorTok{::}\KeywordTok{download}\NormalTok{(url, }\DataTypeTok{destfile =}\NormalTok{ lcl, ...)}
-\NormalTok{    lcl}
+\NormalTok{  url <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(url, }\StringTok{"?years="}\NormalTok{, years, }\StringTok{"&$limit="}\NormalTok{, n)}
+\NormalTok{  lcl <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\KeywordTok{attr}\NormalTok{(obj, }\StringTok{"raw"}\NormalTok{), names)}
+\NormalTok{  downloader}\OperatorTok{::}\KeywordTok{download}\NormalTok{(url, }\DataTypeTok{destfile =}\NormalTok{ lcl, ...)}
+\NormalTok{  lcl}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -3012,6 +3011,9 @@ Many a Thing of the Past. The New York Times. Retrieved from
 HyreCar. (2018, January). Uber's 4 Basic Level of Service. HyreCar.
 Retrieved from
 \url{https://hyrecar.com/blog/difference-between-uber-cars/}
+
+\hypertarget{ref-foirequest}{}
+Li, W. (2018, February). FOIL request. NYC TLC.
 
 \hypertarget{ref-pkgnyctaxi}{}
 Li, W. P., Baumer, B., \& Trang Le. (2017). \emph{Nyctaxi: Accessing new

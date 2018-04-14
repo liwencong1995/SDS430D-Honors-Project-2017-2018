@@ -1,35 +1,31 @@
 ```{r, message=FALSE, echo=FALSE}
-opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 ```
 
 # New York City Taxi Driver {#chapter3}
-## Get Yellow Taxi Trip Data Ready for Data Analysis
+
 The income of Taxi drivers in New York City has two parts: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers?
 
-In the following analysis, I will focus on trip data collected in 2017. Taxi drivers usually does not correctly record the amount of tips paid by cash or check. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
+In the following analysis, we will focus on trip data collected in 2017. Taxi drivers usually do not correctly record the amount of tips paid by cash or check [@foirequest]. Therefore, in order to find out the regions that offer the most tips, we need to filter out the trips that are not paid by credit or debit card.
 
 ```{r, message=FALSE, echo=FALSE, eval=FALSE}
-#library(knitr)
 library(dplyr)
-#library(lubridate)
 library(stringr)
 library(etl)
-#library(ggplot2)
 library(htmlwidgets)
 library(webshot)
 library(sp)
-
 data("taxi_zone_lookup")
 data("taxi_zones")
 ```
 
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", db)
 ```
 
 As mentioned in the previous chapter, that we can utlize the connection to a MySQL database to run data analysis in MySQL for medium-sized data.
-Since we are using all 12 month data from 2017 in this analysis, it is impossible to load all data needed into **R** environment. Instead, we want to only load a fraction of the 2017 Yellow Taxi data from MySQL database. 
+Since we are using all 12 month data from 2017 in this analysis, it is impractical to load all data needed into **R** environment. Instead, we want to only load a fraction of the 2017 Yellow Taxi data from MySQL database. 
 
 In this section, we only want to load trip records with payment type equals to 1, which represents credit card. Only trip records with payment type credit card have accurate information on tip amount. Let's load the 2017 trip record into **R** environment by using the MySQL connection we just generated, `taxi`.
 ```{r, eval=FALSE}
@@ -106,9 +102,22 @@ yellow_2017_summary <- bind_rows(yellow_2017_summary_1, yellow_2017_summary_2)
 ```
 
 ## Aggregated Zone-level Tip Information
-Comparing to studying factors that affect individual trips' percent tip, it is more meaningful to study the aggregated effect of each zone on percent tip, since the results are more concise and comprehensible. Instead of the absolute amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. Therefore, we use tip amount over fare amount to calculate the percent tip.
+Instead of the absolute amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. Therefore, we use tip amount over fare amount to calculate the percent tip. We then calculated the mean percent tip, mean distances travelled, mean number of minutes spent travelling, and total number of trips of each pick-up and drop-off pair in 2017 to get the aggregated zone-level information in order to compare the percent tip passengers pay in each zone. 
 
 ```{r, eval=FALSE}
+yellow_2017_summary <- yellow_2017 %>%
+  mutate(year = year(tpep_pickup_datetime),
+         month = month(tpep_pickup_datetime),
+         tip_perct = tip_amount/fare_amount) %>%
+  group_by(year, month, PULocationID, DOLocationID) %>%
+  summarise(avg_tip = mean(tip_perct), 
+            trips = n(),
+            avg_dis = mean(trip_distance),
+            avg_duration = mean(duration))
+```
+
+
+```{r, eval=FALSE, echo=FALSE}
 yellow_2017_summary <- yellow_2017 %>%
   mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
                                          tz= "America/New_York"),
@@ -135,13 +144,12 @@ fwrite(yellow_2017_summary, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-#library(data.table)
 data(taxi_zone_lookup)
 yellow_2017_summary <- data.table::fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary.csv")
 ```
 
 Each taxi trip has pick-up and drop-off locations associated with it, and there are 263 known taxi zones. 
-```{r tip-region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC", echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 tip_region <- yellow_2017_summary %>%
   rename(LocationID = PULocationID)%>%
   left_join(taxi_zone_lookup, by = "LocationID") %>%
@@ -153,9 +161,12 @@ tip_region <- yellow_2017_summary %>%
   arrange(year, month, desc(avg_tip)) %>%
   filter(Zone.x != "Unknown") %>%
   filter(Zone.y != "Unknown")
+```
 
+```{r tip-region, fig.cap="Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC", echo=FALSE, message=FALSE, warning=FALSE}
 region_vis <- ggplot(data = tip_region, aes(x = avg_tip) ) +
-  xlab("Tips, percent") +
+  xlab("Percent Tip") +
+  ylab("Count") +
   geom_histogram(binwidth = 0.005) + 
   geom_vline(xintercept = c(0.20), col = "red",linetype = "longdash") +
   geom_vline(xintercept = c(0.25), col = "green",linetype = "longdash") +
@@ -184,14 +195,14 @@ tip_pickup <- yellow_2017_summary %>%
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(tip_pickup[1:10,], caption = "Ten taxi pick-up zones with the highest average tip without any threshold in Janaury, 2017",
-      booktabs = TRUE)
+tip_pickup_1 <- tip_pickup %>%
+  filter(num_trips > 10)
+kable(tip_pickup_1[1:10,4:9], caption = "Ten taxi pick-up zones with the highest average tip in January, 2017", booktabs = TRUE)
 ```
-Table \@ref(tab:tip_pickup) is a list of pick-up zones with their average percent tip.
+Table \@ref(tab:tip_pickup_1) is a list of pick-up zones with their average percent tip.
 
-Below is a histogram of average percent tips paid for all pick-up zones. 
-
-```{r pickup-vis, fig.cap = "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC", echo=FALSE, message=FALSE}
+We created a histogram to visualize the distribution of average percent tips paid for all pick-up zones. 
+```{r pickup-vis, fig.cap = "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC", echo=FALSE, message=FALSE, warning=FALSE}
 pickup_vis <- region_vis %+% tip_pickup
 pickup_vis
 ```
@@ -247,7 +258,7 @@ knitr::include_graphics("figure/num_trip.png", dpi = 200 )
 According to Figure \@ref(fig:num-trip), It's obvious that Upper East Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most popular location for pick-ups.
 
 ```{r, message=FALSE, echo=FALSE}
-kable(tip_pickup_zone[1:10,], caption = "Ten taxi zones with the highest number of pick-ups")
+kable(tip_pickup_zone[1:10,2:7], caption = "Ten taxi zones with the highest number of pick-ups")
 ```
 Table \@ref(tab:tip_pickup_zone) gives you a better idea of which taxi zones have the highest number of pick-ups.
 
@@ -261,7 +272,7 @@ pickup_zone_30 <- tip_pickup_zone %>%
 ```
 
 ```{r, echo=FALSE}
-kable(pickup_zone_30[1:10, ], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)")
+kable(pickup_zone_30[1:10, 2:7], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)")
 ```
 People might think it is more reasonable to ses a list that is populated with Zones in Manhattan, since that's where all the wealthy people live. However, Table \@ref(tab:pickup_zone_30) shows that passengers who get on taxis from certain zones in Brooklyn and Queens also pay a lot of tips. Taxi drivers who would love to get more tips compensation can drive to the zones listed above to pick-up passengers.
 
@@ -272,8 +283,8 @@ pickup_zone_3000 <- tip_pickup_zone %>%
   arrange(desc(avg_tip))
 ```
 
-```{r, echo=FALSE}
-kable(pickup_zone_3000[1:10,], caption = "Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)")
+```{r pickup_zone_3000, fig.cap = "Ten taxi pick-up zones with the highest percent tip  (taxi zones has at least 3000 pick-up per day)", echo=FALSE}
+kable(pickup_zone_3000[1:10,2:7])
 ```
 There are more than 100 times more yellow cab pick-ups that happen in Manhattan everyday than in Brooklyn. By comparing the average tip percent in Table \@ref(tab:pickup_zone_30) and Table \@ref(tab:pickup_zone_3000), we can observe that percent tips paid in taxi zones with low pick-up numbers seem to be higher than percent tips paid in taxi zones with high pick-up numbers. 
 

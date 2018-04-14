@@ -1,3 +1,7 @@
+```{r, message=FALSE, echo=FALSE}
+opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
+```
+
 # New York City Taxi Fare & Limousine Commission {#chapter5}
 
 ## Should there be a flat rate between Manhattan and John F. Kennedy International Airport?
@@ -33,13 +37,13 @@ fwrite(to_jkf, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/to_jkf.csv"
 fwrite(from_jfk, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.csv")
 ```
 
-```{r, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 library(lubridate)
 to_jfk_1 <- fread("/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/to_jkf.csv")
 from_jfk_1 <- fread("/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.csv")
 ```
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 to_jfk <- to_jfk_1 %>%
   mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
                                          tz= "America/New_York"),
@@ -61,6 +65,9 @@ to_jfk <- to_jfk_1 %>%
   filter(min_dis < 30) %>%
   filter(PULocationID <= 263)
 
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 from_jfk <- from_jfk_1 %>%
   mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
                                          tz= "America/New_York"),
@@ -81,9 +88,6 @@ from_jfk <- from_jfk_1 %>%
   filter(1 < min_dis) %>% 
   filter(min_dis < 30) %>%
   filter(DOLocationID <= 263)
-
-#fwrite(jfk_trip_flat, "/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
-#jfk_trip_flat <- fread("/Users/priscilla/Desktop/Honors Thesis/data/jfk_trip_flat.csv")
 ```
 
 #### Trips from Manhattan to JFK Airport
@@ -131,12 +135,19 @@ knitr::include_graphics("figure/to_jkf_fare_vis.png", dpi = 200 )
 According to the map, trips from Midtown on average cost less than trips from other taxi zones in Manhattan.
 
 ### Taxi zones pays on average more than $52
+We computed the average fare paid by passengers for trips going from each taxi zone in Manhattan to JFK Airport:
+
 ```{r, echo=FALSE}
 to_jkf_zone_above <- to_jkf_zone %>%
   filter(avg_est_fare > 52) %>%
   arrange(desc(avg_est_fare))
 
-kable(to_jkf_zone_above[1:10,], caption = "Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport")
+to_jkf_zone_above_1 <- to_jkf_zone_above %>%
+  filter(num_trips > 10)
+```
+
+```{r to_jkf_zone_above, fig.cap = "Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport"}
+kable(to_jkf_zone_above[1:10, 2:6])
 ```
 
 Let's visualize the taxi zones that would have costed more than the \$52 flat rate.
@@ -158,7 +169,7 @@ webshot(URL, "figure/to_jfk_fare_above_vis.png", cliprect = "viewport")
 #add t test to test average fare vs 52
 ```
 
-```{r num-to-jfk-fare-above-vis, fig.cap="Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
+```{r above52, fig.cap= "Zones that cost more than the $52 flat rate", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/to_jfk_fare_above_vis.png", dpi = 200 )
 ```
 
@@ -166,13 +177,14 @@ Therefore, passengers from places in Manhattan besides Midtown, East Village, an
 
 ```{r}
 mean(to_jkf_zone$avg_est_diff)
+meanfare <- mean(to_jkf_zone$avg_est_diff)
 ```
-On average people travel from Manhattan pay \$2.14 less with the \$52 flat rate policy. Therefore, passengers overall benefit from the $52 flat rate policy.
+On average people travel from Manhattan pay `meanfare` less with the \$52 flat rate policy. Therefore, passengers overall benefit from the $52 flat rate policy.
 
 ## However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?
 Everytime I travel to New York City, I always take Yellow cabs to go around the city. It seemed to me that the cab drivers were always happy whenever they heard me telling them that I need to go to the JFK Airport from Manhattan. Are taxi drivers happy when their passengers are going to JFK Airport from Manhattan? How much on average would taxi driver make on their way bavk to the city from Manhattan? 
 
-```{r}
+```{r, echo=FALSE}
 from_jfk <- from_jfk %>%
   mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + improvement_surcharge + mta_tax + tolls_amount) %>%
   mutate(est_diff = est_fare - fare_amount) %>%

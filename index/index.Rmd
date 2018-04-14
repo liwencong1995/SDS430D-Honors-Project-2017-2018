@@ -10,7 +10,7 @@ advisor: 'Benjamin Baumer'
 # Delete line 6 if you only have one advisor
 department: 'Statistical and Data Sciences'
 degree: 'Bachelor of Arts'
-title: 'Tools to Uncover New York City Through Taxi Trips'
+title: 'Tools for Understanding Taxicab and E-Hail Service Use in New York City'
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 output: 
