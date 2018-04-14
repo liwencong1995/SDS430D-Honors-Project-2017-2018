@@ -108,7 +108,6 @@ Two datasets are attached to `nyctaxi`. The first one is called `taxi_zone_looku
 ```{r, message=FALSE, echo=FALSE, eval=FALSE, warning=FALSE}
 map <- leaflet(data = taxi_zones) %>%
   addProviderTiles(providers$OpenStreetMap)%>%
-  #addTiles() %>%
   addPolygons(fillOpacity = 0.2,
               weight = 1,
               opacity = 0.8) %>%

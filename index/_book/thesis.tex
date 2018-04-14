@@ -1561,58 +1561,91 @@ pay in each zone.
 \end{Highlighting}
 \end{Shaded}
 Each taxi trip has pick-up and drop-off locations associated with it,
-and there are 263 known taxi zones.
+and there are 263 known taxi zones and 2 taxi zones that are labelled as
+``Unknown''. We only want to include trips coming from and going to
+known taxi zones in this analysis.
+\begin{figure}
 
-\includegraphics{thesis_files/figure-latex/tip-region-1.pdf} Figure
-\ref{fig:tip-region} is a histogram of mean tip percents for all known
-pick-up and drop-off zone pairs.
+{\centering \includegraphics[width=5.96in]{figure/region_vis} 
 
+}
+
+\caption{Percent Tip Paid by Passengers on Each Pick-up And Drop-off Pair in NYC}\label{fig:region-vis}
+\end{figure}
+Figure \ref{fig:region-vis} is a histogram of mean tip percents for all
+known pick-up and drop-off zone pairs. The red, green, and yellow dash
+lines are drawn at 20\%, 25\%, and 30\%, which are the default
+percentage of tips that are shown on the touch panel for credit and
+debit car payments.
+\begin{figure}
+
+{\centering \includegraphics[width=4.8in]{figure/taxi-screen} 
+
+}
+
+\caption{Tip Payment Page on New York City Touch Panel}\label{fig:taxi-screen}
+\end{figure}
 \subsection{Pick-up Zone Tip
 Information}\label{pick-up-zone-tip-information}
 
 Taxi drivers are required to be indifferent to where passengers are
-going. Therefore, it makes sense to investigate the average amount of
-tips paid for each pick-up zone. What are the taxi pick-up zones that
-have the highest tip percents?
+going. It is illegal for New York city taxi drivers to refuse service
+because of passengers' race, ethnicity, cultural background, disbility,
+gender, or destination (Harshbarger, 2015). Taxi drivers cannot choose
+where the passengers want to go, and instead they can only choose which
+pick-up zone they would prefer to driver around to get hailed.
+Therefore, it makes sense to investigate the average amount of tips paid
+by passengers departed from each pick-up zone. What are the taxi pick-up
+zones that have the highest percent tips paid by passengers?
 
 We first calculate the average percent tip paid for each pick-up zone.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-40}Ten taxi pick-up zones with the highest average tip in January, 2017}
+\caption{\label{tab:unnamed-chunk-41}Ten taxi pick-up zones with the highest average tip in January, 2017}
 \centering
-\begin{tabular}[t]{rrrrll}
+\begin{tabular}[t]{ccccc}
 \toprule
-avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
+avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
 \midrule
-0.29 & 11 & 7.37 & 15.74 & Queens & Douglaston\\
-0.29 & 25 & 7.05 & 20.78 & Bronx & East Tremont\\
-0.29 & 12 & 10.40 & 17.87 & Queens & Oakland Gardens\\
-0.28 & 19 & 7.97 & 22.29 & Queens & Glendale\\
-0.28 & 33 & 8.33 & 25.23 & Queens & Saint Michaels Cemetery/Woodside\\
+29 & 7.37 & 15.74 & Queens & Douglaston\\
+29 & 7.05 & 20.78 & Bronx & East Tremont\\
+29 & 10.40 & 17.87 & Queens & Oakland Gardens\\
+28 & 7.97 & 22.29 & Queens & Glendale\\
+28 & 8.33 & 25.23 & Queens & Saint Michaels Cemetery/Woodside\\
 \addlinespace
-0.27 & 34 & 7.60 & 19.70 & Queens & Bayside\\
-0.27 & 56 & 9.56 & 24.35 & Brooklyn & Coney Island\\
-0.27 & 29 & 10.63 & 25.94 & Queens & Howard Beach\\
-0.27 & 20 & 11.20 & 23.28 & Brooklyn & Marine Park/Mill Basin\\
-0.26 & 21 & 6.22 & 18.80 & Bronx & Norwood\\
+27 & 7.60 & 19.70 & Queens & Bayside\\
+27 & 9.56 & 24.35 & Brooklyn & Coney Island\\
+27 & 10.63 & 25.94 & Queens & Howard Beach\\
+27 & 11.20 & 23.28 & Brooklyn & Marine Park/Mill Basin\\
+26 & 6.22 & 18.80 & Bronx & Norwood\\
 \bottomrule
 \end{tabular}
 \end{table}
 Table @ref(tab:tip\_pickup\_1) is a list of pick-up zones with their
-average percent tip.
+average percent tips.
 
 We created a histogram to visualize the distribution of average percent
 tips paid for all pick-up zones.
-\includegraphics{thesis_files/figure-latex/pickup-vis-1.pdf} As show in
-Figure \ref{fig:pickup-vis}, the first peak is around 20\%, which is the
-cheapest default option on the touch panel for passengers to chose.
+\begin{figure}
 
-\textbf{Does trip distance increase the percent tips paid?} One of the
-questions that I always wonder is whether longer trips result in higher
-tip percent. It takes taxi drivers more time to complete longer trips,
-so passengers might want to compensate taxi drivers more. I personally
-pay higher percent of tips for longer rides, so I believe trip distance
-has an impact on percentage of tips paid.
+{\centering \includegraphics[width=4.77in]{figure/pickup_vis} 
+
+}
+
+\caption{Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC}\label{fig:pickup-vis}
+\end{figure}
+As show in Figure \ref{fig:pickup-vis}, the first peak is around 20\%,
+which is the cheapest default option on the touch panel for passengers
+to chose.
+
+\subsection{Does trip distance increase the percent tips
+paid?}\label{does-trip-distance-increase-the-percent-tips-paid}
+
+Will longer trips result in higher tip percent. It takes taxi drivers
+more time to complete longer trips, so passengers might want to
+compensate taxi drivers more. I personally pay higher percent of tips
+for longer rides, so I believe trip distance has an impact on percentage
+of tips paid.
 \begin{verbatim}
                 Estimate   Std. Error   t value Pr(>|t|)
 (Intercept)  0.211325482 3.733048e-04 566.09360        0
@@ -1621,8 +1654,8 @@ avg_dis     -0.001052903 2.105014e-05 -50.01881        0
 Acoording to the simple linear regression result, trip distance does
 have a negative significant impact on the percent of tips paid,
 controlling for both pick-up and drop-off locations. This could be
-caused by a psycological reason. Long trips cost more than short trips.
-For a constant tip percent, the absolute value of tip amount cost more
+caused by a psychological reason. Long trips cost more than short trips.
+For a constant tip percent, the nominal value of tip amount cost more
 for longer trips. For example, for a \$100 trip, 20\% tip costs \$20;
 for a \$50 trip, 20\% tip costs \$10. Even though consumers are paying
 the same percent amount of tips, \$20 is more expensive than \$10.
@@ -1632,13 +1665,12 @@ trips.
 \subsection{Which taxi zones have the highest number of
 pick-ups?}\label{which-taxi-zones-have-the-highest-number-of-pick-ups}
 
-Let's fist take a look at which pick-up zones have the highest number of
-pick-ups.
+Which pick-up zones have the highest number of taxi trip pick-ups? We
+can create a heat map to visualizae the number of trips for each pick-up
+zones on a map of New York City Taxi Zones.
 \begin{verbatim}
 Warning: package 'sp' was built under R version 3.4.3
 \end{verbatim}
-We can create a heat map to visulizae the number of trip for each
-pick-up zones on a map of New York City Taxi Zones.
 \begin{figure}
 
 {\centering \includegraphics[width=4.96in]{figure/num_trip} 
@@ -1652,32 +1684,24 @@ Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most
 popular location for pick-ups.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-44}Ten taxi zones with the highest number of pick-ups}
+\caption{\label{tab:unnamed-chunk-46}Ten taxi zones with the highest number of pick-ups}
 \centering
-\begin{tabular}[t]{r|r|r|r|l|l}
-\hline
-avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
-\hline
-0.20 & 2519900 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
-\hline
-0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
-\hline
-0.20 & 2382970 & 9.63 & 33.22 & Manhattan & Union Sq\\
-\hline
-0.20 & 2372509 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
-\hline
-0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
-\hline
-0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
-\hline
-0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
-\hline
-0.20 & 2097416 & 9.48 & 30.39 & Manhattan & East Village\\
-\hline
-0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
-\hline
-0.20 & 1972303 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
-\hline
+\begin{tabular}[t]{ccccc}
+\toprule
+avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
+\midrule
+19.64 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
+20.82 & 10.04 & 34.48 & Manhattan & Midtown Center\\
+20.18 & 9.63 & 33.22 & Manhattan & Union Sq\\
+19.73 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
+20.55 & 9.70 & 32.83 & Manhattan & Midtown East\\
+\addlinespace
+20.55 & 9.66 & 31.90 & Manhattan & Murray Hill\\
+20.55 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
+20.00 & 9.48 & 30.39 & Manhattan & East Village\\
+21.00 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
+20.36 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
+\bottomrule
 \end{tabular}
 \end{table}
 Table @ref(tab:tip\_pickup\_zone) gives you a better idea of which taxi
@@ -1687,95 +1711,86 @@ zones have the highest number of pick-ups.
 tips?}\label{which-taxi-zones-have-the-highest-percent-tips}
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up
-zones that have at least 30 trips per day or 10950 per year, we will
-observe that many taxi pick-up zones with highest percent tips are not
-necessarily the ones with the highest number of pick-ups.
+zones that have at least 24 trips per day or 8760 per year, we will
+observe that many taxi pick-up zones with the highest percent tips are
+not necessarily the ones with the highest number of pick-ups.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#pick a threshold for the cutoff number of trips}
 \NormalTok{pickup_zone_}\DecValTok{30}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{30}\OperatorTok{*}\DecValTok{365}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{24}\OperatorTok{*}\DecValTok{365}\NormalTok{)) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 \end{Highlighting}
 \end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-46}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 30 pick-up per day)}
+\caption{\label{tab:unnamed-chunk-48}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per hour)}
 \centering
-\begin{tabular}[t]{r|r|r|r|l|l}
-\hline
-avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
-\hline
-0.22 & 13329 & 14.27 & 42.94 & Queens & Baisley Park\\
-\hline
-0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
-\hline
-0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
-\hline
-0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
-\hline
-0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
-\hline
-0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
-\hline
-0.21 & 704925 & 10.22 & 32.82 & Manhattan & Battery Park City\\
-\hline
-0.21 & 363915 & 10.02 & 33.07 & Manhattan & World Trade Center\\
-\hline
-0.21 & 268535 & 10.26 & 33.44 & Manhattan & Financial District South\\
-\hline
-0.21 & 72911 & 7.33 & 26.85 & Brooklyn & Brooklyn Heights\\
-\hline
+\begin{tabular}[t]{ccccc}
+\toprule
+avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
+\midrule
+21.55 & 14.27 & 42.94 & Queens & Baisley Park\\
+21.45 & 6.89 & 24.04 & Brooklyn & Gowanus\\
+21.36 & 8.18 & 26.10 & Queens & Steinway\\
+21.18 & 7.11 & 25.85 & Brooklyn & Carroll Gardens\\
+21.00 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
+\addlinespace
+21.00 & 6.74 & 25.06 & Brooklyn & Greenpoint\\
+21.00 & 6.45 & 25.44 & Brooklyn & Prospect Heights\\
+20.82 & 10.04 & 34.48 & Manhattan & Midtown Center\\
+20.82 & 6.91 & 26.12 & Brooklyn & Cobble Hill\\
+20.82 & 6.83 & 23.07 & Brooklyn & East Williamsburg\\
+\bottomrule
 \end{tabular}
 \end{table}
-People might think it is more reasonable to ses a list that is populated
-with Zones in Manhattan, since that's where all the wealthy people live.
-However, Table @ref(tab:pickup\_zone\_30) shows that passengers who get
-on taxis from certain zones in Brooklyn and Queens also pay a lot of
-tips. Taxi drivers who would love to get more tips compensation can
-drive to the zones listed above to pick-up passengers.
+People might think it is more reasonable to see a list that is populated
+with Zones in Manhattan, since that's where most of the wealthy people
+live. However, Table @ref(tab:pickup\_zone\_30) shows that passengers
+who get on taxis from certain zones in Brooklyn and Queens also pay a
+lot of tips. Taxi drivers who would love to get more tips compensation
+can drive to the zones listed above to pick-up passengers.
 
-If we focus on the pick-up zones that have more than 3000 trips per day,
+If we focus on the pick-up zones that have more than 2400 trips per day,
 then we observe that all pick-up zones that have the highest percent
 tips are in Manhattan besides La Guardia Airport.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{pickup_zone_}\DecValTok{3000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{365}\OperatorTok{*}\DecValTok{3000}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{365}\OperatorTok{*}\DecValTok{24}\OperatorTok{*}\DecValTok{60}\NormalTok{)) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
 \end{Highlighting}
 \end{Shaded}
-\begin{tabular}{r|r|r|r|l|l}
-\hline
-avg\_tip & num\_trips & avg\_dis & avg\_duration & Borough & Zone\\
-\hline
-0.21 & 2461602 & 10.04 & 34.48 & Manhattan & Midtown Center\\
-\hline
-0.21 & 2349386 & 9.70 & 32.83 & Manhattan & Midtown East\\
-\hline
-0.21 & 2231723 & 9.66 & 31.90 & Manhattan & Murray Hill\\
-\hline
-0.21 & 2193036 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
-\hline
-0.21 & 2059444 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
-\hline
-0.20 & 2519900 & 9.21 & 33.32 & Manhattan & Upper East Side South\\
-\hline
-0.20 & 2382970 & 9.63 & 33.22 & Manhattan & Union Sq\\
-\hline
-0.20 & 2372509 & 9.21 & 31.94 & Manhattan & Upper East Side North\\
-\hline
-0.20 & 2097416 & 9.48 & 30.39 & Manhattan & East Village\\
-\hline
-0.20 & 1972303 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
-\hline
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-50}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per minute)}
+\centering
+\begin{tabular}[t]{ccccc}
+\toprule
+avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
+\midrule
+21.00 & 11.90 & 36.10 & Queens & LaGuardia Airport\\
+20.82 & 10.04 & 34.48 & Manhattan & Midtown Center\\
+20.73 & 10.22 & 32.82 & Manhattan & Battery Park City\\
+20.55 & 9.70 & 32.83 & Manhattan & Midtown East\\
+20.55 & 9.66 & 31.90 & Manhattan & Murray Hill\\
+\addlinespace
+20.55 & 9.99 & 36.77 & Manhattan & Penn Station/Madison Sq West\\
+20.45 & 9.07 & 30.18 & Manhattan & UN/Turtle Bay South\\
+20.36 & 10.32 & 35.97 & Manhattan & Times Sq/Theatre District\\
+20.18 & 9.63 & 33.22 & Manhattan & Union Sq\\
+20.18 & 9.84 & 35.49 & Manhattan & Midtown North\\
+\bottomrule
 \end{tabular}
+\end{table}
 There are more than 100 times more yellow cab pick-ups that happen in
 Manhattan everyday than in Brooklyn. By comparing the average tip
 percent in Table @ref(tab:pickup\_zone\_30) and Table
 @ref(tab:pickup\_zone\_3000), we can observe that percent tips paid in
 taxi zones with low pick-up numbers seem to be higher than percent tips
 paid in taxi zones with high pick-up numbers.
+
+\section{add median income variable}\label{add-median-income-variable}
 
 \section{What features of taxi trips are attractive to taxi
 drivers?}\label{what-features-of-taxi-trips-are-attractive-to-taxi-drivers}
@@ -1788,13 +1803,15 @@ taxi-zone-specific variables.
 tips?}\label{do-taxi-drivers-tend-to-go-to-zones-that-offer-high-tips}
 
 It is not easy to find an available taxi on the street on New York City,
-because the demand for taxi trips is much higher than the supply. Does
-paying high percent tips help customers to attract more taxis? If
-customers from certain regions keep paying higher tips, taxi drivers
+because the demand for taxi trips is much higher than the supply. Do
+passengers departing from the same taxi zone paying high percent tips
+help customers to attract more taxis?
+
+If customers from certain regions keep paying higher tips, taxi drivers
 might be able to learn from their experiences in those regions, and be
 willing to wonder around those regions more often and pick up
 passengers. Pick-up zones with higher tips should attract more taxi
-drivers with the control of taxi zones. However, conflivting to what I
+drivers with the control of taxi zones. However, conflicting to what I
 assumed, Table @ref(tab:pickup\_zone\_30) and Table
 @ref(tab:pickup\_zone\_3000) show that percent tips seem to have a
 inverse relationship with number of pick-ups.
@@ -1803,8 +1820,8 @@ Let's test the relationship between number of trips and average percent
 tips in each pick-up zone:
 \begin{verbatim}
              Estimate Std. Error   t value     Pr(>|t|)
-(Intercept)   61203.5   6818.591  8.975975 5.106658e-19
-avg_tip     -166807.7  27124.605 -6.149682 8.900927e-10
+(Intercept) 61203.500   6818.591  8.975975 5.106658e-19
+avg_tip     -1668.077    271.246 -6.149682 8.900927e-10
 \end{verbatim}
 Each one percent increase in average tips in pick-up zones is associated
 with a significant decline in the number of trips per month. Therefore,
@@ -1821,40 +1838,45 @@ New York City taxi fare amount is calculated on their
 \href{http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml}{official
 website}.
 
-\textbf{Metered Fare Information} \textbf{Onscreen rate is `Rate \#01 --
-Standard City Rate.'} \emph{The initial charge is \$2.50. }Plus 50 cents
-per 1/5 mile or 50 cents per 60 seconds in slow traffic or when the
-vehicle is stopped. \emph{In moving traffic on Manhattan streets, the
-meter should ``click'' approximately every four downtown blocks, or one
-block going cross-town (East-West). }There is a 50-cent MTA State
-Surcharge for all trips that end in New York City or Nassau, Suffolk,
-Westchester, Rockland, Dutchess, Orange or Putnam Counties. \emph{There
-is a 30-cent Improvement Surcharge. }There is a daily 50-cent surcharge
-from 8pm to 6am. \emph{There is a \$1 surcharge from 4pm to 8pm on
-weekdays, excluding holidays. }Passengers must pay all bridge and tunnel
-tolls. \emph{Your receipt will show your total fare including tolls.
-Please take your receipt. }The driver is not required to accept bills
-over \$20. \emph{Please tip your driver for safety and good service.
-}There are no charges for extra passengers or bags.
+\subsubsection{Metered Fare Information}\label{metered-fare-information}
 
-In taxi fare calculation, the only unknown variable is slow-trafice
+\emph{Onscreen rate is `Rate \#01 -- Standard City Rate.' }The initial
+charge is \$2.50. \emph{Plus 50 cents per 1/5 mile or 50 cents per 60
+seconds in slow traffic or when the vehicle is stopped. }In moving
+traffic on Manhattan streets, the meter should ``click'' approximately
+every four downtown blocks, or one block going cross-town (East-West).
+\emph{There is a 50-cent MTA State Surcharge for all trips that end in
+New York City or Nassau, Suffolk, Westchester, Rockland, Dutchess,
+Orange or Putnam Counties. }There is a 30-cent Improvement Surcharge.
+\emph{There is a daily 50-cent surcharge from 8pm to 6am. }There is a
+\$1 surcharge from 4pm to 8pm on weekdays, excluding holidays.
+\emph{Passengers must pay all bridge and tunnel tolls. }Your receipt
+will show your total fare including tolls. Please take your receipt.
+\emph{The driver is not required to accept bills over \$20. }Please tip
+your driver for safety and good service. *There are no charges for extra
+passengers or bags.
+
+The metered fare rate information is collected from TLC rate of fare
+webpage (TLC, n.d.).
+
+In taxi fare calculation, the only unknown variable is slow-traffic
 time, and all other variables were collected by the meters installed on
 each medallion taxi for each trip. It is reasonable to assume that for
 trips with the same pick-up and drop-off locations, the longer the total
 slow traffic time is, the longer the trip would take. Taxi drivers are
 compensated for both the normal-speed trip distance and the time spent
-in slow-traffice. According to the fare calculation algorithm, in moving
+in slow-traffic. According to the fare calculation algorithm, in moving
 traffic on Manhattan streets, the meter should ``click'' approximately
 every four downtown blocks, or one block going cross-town (East-West);
 in slow traffic, the meter should ``click'' every 60 seconds. Therefore,
-slow traffic increase the minute per mile ratio.
+slow traffic increases the minute per mile ratio.
 
-New York City has the worst traffic jam, and it has overtaken Miami to
+New York City has the worst traffic jams, and it has overtaken Miami to
 be voted the U.S. city with the angriest and most aggressive drivers in
 2009, according to a survey on road rage released on Tuesday. Bad
-traffic also cause slow-traffic, and taxi drivers tend to suck in
-traffic during rush hours.(Reaney, 2009) Does minute per mile ratio have
-an impact on the percent tip that passengers pay? Do passengers
+traffic also causes slow-traffic, and taxi drivers tend to get stuck in
+traffic during rush hours (Reaney, 2009). Does minute per mile ratio
+have an impact on the percent tip that passengers pay? Do passengers
 compensate taxi drivers more during rush hours? Are passengers
 sympathetic to taxi drivers for the time they spend in slow traffic?
 \begin{verbatim}
@@ -1862,11 +1884,11 @@ sympathetic to taxi drivers for the time they spend in slow traffic?
 (Intercept)  0.193453599 1.870711e-04 1034.1180        0
 min_per_mile 0.002841351 3.134322e-05   90.6528        0
 \end{verbatim}
-As shown in the regression result, fare per minute ratio has a
-significant positive impact on percent tip. \texttt{min\_per\_mile}
-ratio does have an positive impact on percent tips. Since trips with
-slow traffice can be depicted by high minute per mile ratio, passengers
-do pay more tips during rush hours.
+As shown in the regression result, fare per minute ratio has a positive
+impact on percent tip. \texttt{min\_per\_mile} ratio does have an
+positive impact on percent tips. Since trips with slow traffic can be
+depicted by high minute per mile ratio, passengers do pay more tips
+during rush hours.
 
 \chapter{New York City Taxi Passengers}\label{chapter4}
 
@@ -1908,34 +1930,25 @@ It would be easier if we combine all three tables and put information
 related to trip duration to all three airports in the same table.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-57}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
+\caption{\label{tab:unnamed-chunk-60}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
 \centering
-\begin{tabular}[t]{l|r|r|r|l}
-\hline
+\begin{tabular}[t]{lcccc}
+\toprule
   & PULocationID & hour & avg\_min & airport\\
-\hline
+\midrule
 10 & 4 & 0 & 45.37000 & JFK\\
-\hline
 11 & 4 & 1 & 36.77500 & JFK\\
-\hline
 12 & 4 & 2 & 28.66000 & JFK\\
-\hline
 13 & 4 & 3 & 27.83350 & JFK\\
-\hline
 14 & 4 & 4 & 27.19490 & JFK\\
-\hline
+\addlinespace
 15 & 4 & 5 & 28.68889 & JFK\\
-\hline
 16 & 4 & 6 & 34.25271 & JFK\\
-\hline
 17 & 4 & 7 & 38.13817 & JFK\\
-\hline
 18 & 4 & 8 & 41.59687 & JFK\\
-\hline
 19 & 4 & 9 & 35.39226 & JFK\\
-\hline
 20 & 4 & 10 & 36.22867 & JFK\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 Table @ref(tab:three\_air) displays the average number of minutes it
@@ -2007,63 +2020,47 @@ when weather gets bad.
 \textbf{Uber Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-62}Uber 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-65}Uber 2017 Weekly Total Dispatched Trips}
 \centering
-\begin{tabular}[t]{l|l|r}
-\hline
+\begin{tabular}[t]{ccc}
+\toprule
 Pickup Start Date & Pickup End Date & Total Dispatched Trips\\
-\hline
+\midrule
 01/01/2017 & 01/07/2017 & 2866569\\
-\hline
 01/08/2017 & 01/14/2017 & 3114792\\
-\hline
 01/15/2017 & 01/21/2017 & 3089595\\
-\hline
 01/22/2017 & 01/28/2017 & 3299763\\
-\hline
 01/29/2017 & 02/04/2017 & 3224451\\
-\hline
+\addlinespace
 02/05/2017 & 02/11/2017 & 3310481\\
-\hline
 02/12/2017 & 02/18/2017 & 3456042\\
-\hline
 02/19/2017 & 02/25/2017 & 3194805\\
-\hline
 02/26/2017 & 03/04/2017 & 3533347\\
-\hline
 03/05/2017 & 03/11/2017 & 3614559\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 \textbf{Yellow Cab Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-65}Yellow Taxi 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-68}Yellow Taxi 2017 Weekly Total Dispatched Trips}
 \centering
-\begin{tabular}[t]{l|r}
-\hline
+\begin{tabular}[t]{cc}
+\toprule
 Pickup Start Date & Total Dispatched Trips\\
-\hline
+\midrule
 2017-01-01 & 2044643\\
-\hline
 2017-01-08 & 2230950\\
-\hline
 2017-01-15 & 2219214\\
-\hline
 2017-01-22 & 2307122\\
-\hline
 2017-01-29 & 2331749\\
-\hline
+\addlinespace
 2017-02-05 & 2181622\\
-\hline
 2017-02-12 & 2387399\\
-\hline
 2017-02-19 & 2225850\\
-\hline
 2017-02-26 & 2464800\\
-\hline
 2017-03-05 & 2456285\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 In this section, we use New York City Yellow Taxi and Uber data to
@@ -2169,43 +2166,19 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 54.1% of 998023 rows
-Read 69.1% of 998023 rows
-Read 99.2% of 998023 rows
-Read 998023 rows and 17 (of 17) columns from 0.083 GB file in 00:00:05
+Read 77.9% of 577783 rows
+Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:03
 \end{verbatim}
 \begin{verbatim}
 
-Read 3.7% of 2726868 rows
-Read 18.3% of 2726868 rows
-Read 40.0% of 2726868 rows
-Read 60.5% of 2726868 rows
-Read 80.3% of 2726868 rows
-Read 84.0% of 2726868 rows
-Read 92.0% of 2726868 rows
-Read 2726868 rows and 17 (of 17) columns from 0.227 GB file in 00:00:12
+Read 12.1% of 1491842 rows
+Read 20.8% of 1491842 rows
+Read 44.2% of 1491842 rows
+Read 61.7% of 1491842 rows
+Read 85.1% of 1491842 rows
+Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:08
 \end{verbatim}
-\begin{verbatim}
-Warning in as.POSIXlt.POSIXct(x, tz): unknown timezone 'zone/tz/2018c.1.0/
-zoneinfo/America/New_York'
-\end{verbatim}
-\begin{verbatim}
-Warning in as.POSIXlt.POSIXct(x): unknown timezone 'zone/tz/2018c.1.0/
-zoneinfo/America/New_York'
-\end{verbatim}
-\begin{verbatim}
-Warning in as.POSIXlt.POSIXct(x, tz = tz(x)): unknown timezone 'zone/tz/
-2018c.1.0/zoneinfo/America/New_York'
-\end{verbatim}
-\begin{verbatim}
-Warning in as.POSIXlt.POSIXct(x): unknown timezone 'zone/tz/2018c.1.0/
-zoneinfo/America/New_York'
-\end{verbatim}
-\begin{verbatim}
-Warning in as.POSIXlt.POSIXct(x, tz = tz(x)): unknown timezone 'zone/tz/
-2018c.1.0/zoneinfo/America/New_York'
-\end{verbatim}
-\subsubsection{Trips from Manhattan to JFK
+\subsection{Trips from Manhattan to JFK
 Airport}\label{trips-from-manhattan-to-jfk-airport}
 
 We first focus on all the trips that departed in Manhattan and went to
@@ -2232,46 +2205,40 @@ from other taxi zones in Manhattan.
 \$52}\label{taxi-zones-pays-on-average-more-than-52}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-78}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-83}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
-\begin{tabular}[t]{r|r|r|r|l|l}
-\hline
+\begin{tabular}[t]{cccccc}
+\toprule
 LocationID & num\_trips & avg\_est\_fare & avg\_est\_diff & Borough & Zone\\
-\hline
-105 & 3 & 66.38167 & 14.381667 & Manhattan & Governor's Island/Ellis Island/Liberty Island\\
-\hline
-128 & 3 & 64.53667 & 12.536667 & Manhattan & Inwood Hill Park\\
-\hline
-153 & 1 & 64.51000 & 12.510000 & Manhattan & Marble Hill\\
-\hline
+\midrule
 13 & 10327 & 64.03150 & 11.844558 & Manhattan & Battery Park City\\
-\hline
 127 & 41 & 63.98256 & 9.970366 & Manhattan & Inwood\\
-\hline
 243 & 127 & 62.97567 & 10.892992 & Manhattan & Washington Heights North\\
-\hline
 12 & 275 & 61.99327 & 9.889636 & Manhattan & Battery Park\\
-\hline
-120 & 8 & 61.45063 & 8.700625 & Manhattan & Highbridge Park\\
-\hline
 244 & 542 & 60.49388 & 8.278941 & Manhattan & Washington Heights South\\
-\hline
+\addlinespace
 239 & 12601 & 60.18006 & 8.107309 & Manhattan & Upper West Side South\\
-\hline
+261 & 6740 & 59.74384 & 7.511991 & Manhattan & World Trade Center\\
+158 & 5826 & 59.31411 & 7.058534 & Manhattan & Meatpacking/West Village West\\
+143 & 5506 & 59.24692 & 7.200516 & Manhattan & Lincoln Square West\\
+238 & 9982 & 59.13439 & 7.083517 & Manhattan & Upper West Side North\\
+\bottomrule
 \end{tabular}
 \end{table}
+We computed the average fare paid by passengers for trips going from
+each taxi zone in Manhattan to JFK Airport in Table
+@ref(tab:to\_jkf\_zone\_above).
+
 Let's visualize the taxi zones that would have costed more than the \$52
 flat rate.
+\begin{figure}
 
-\textbackslash{}begin\{figure\}
+{\centering \includegraphics[width=4.96in]{figure/to_jfk_fare_above_vis} 
 
-\{\centering \includegraphics[width=4.96in]{figure/to_jfk_fare_above_vis}
+}
 
-\}
-
-\textbackslash{}caption\{Zones that cost more than the \$52 flat
-rate\}\label{fig:num-to-jfk-fare-above-vis} \textbackslash{}end\{figure\}
-
+\caption{Pick-up Zones that cost more than the 52 US Dollar flat rate}\label{fig:to-jkf-fare-above-vis}
+\end{figure}
 Therefore, passengers from places in Manhattan besides Midtown, East
 Village, and some parts of Lower Manhattan benefit from the \$52 flat
 rate. However, people living in Midtown, East Village, and some parts of
@@ -2285,9 +2252,14 @@ taxi. Instead, they probably put more emphasis on convenience and time.
 \begin{verbatim}
 [1] 2.825257
 \end{verbatim}
-On average people travel from Manhattan pay \$2.14 less with the \$52
-flat rate policy. Therefore, passengers overall benefit from the \$52
-flat rate policy.
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{meanfare <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(to_jkf_zone}\OperatorTok{$}\NormalTok{avg_est_diff)}
+\end{Highlighting}
+\end{Shaded}
+On average people travel from Manhattan pay \texttt{meanfare} less with
+the \$52 flat rate policy. Therefore, passengers overall benefit from
+the \$52 flat rate policy.
 
 \section{However, are taxi drivers happy when their passengers are going
 to JFK Airport from
@@ -2299,15 +2271,7 @@ whenever they heard me telling them that I need to go to the JFK Airport
 from Manhattan. Are taxi drivers happy when their passengers are going
 to JFK Airport from Manhattan? How much on average would taxi driver
 make on their way bavk to the city from Manhattan?
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{from_jfk <-}\StringTok{ }\NormalTok{from_jfk }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_fare =} \FloatTok{2.5} \OperatorTok{+}\StringTok{ }\FloatTok{0.5} \OperatorTok{*}\StringTok{ }\NormalTok{trip_distance }\OperatorTok{*}\StringTok{ }\DecValTok{5} \OperatorTok{+}\StringTok{ }\NormalTok{extra }\OperatorTok{+}\StringTok{ }\NormalTok{improvement_surcharge }\OperatorTok{+}\StringTok{ }\NormalTok{mta_tax }\OperatorTok{+}\StringTok{ }\NormalTok{tolls_amount) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{est_diff =}\NormalTok{ est_fare }\OperatorTok{-}\StringTok{ }\NormalTok{fare_amount) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{LocationID =}\NormalTok{ DOLocationID) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{left_join}\NormalTok{(taxi_zone_lookup , }\DataTypeTok{by =} \StringTok{"LocationID"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+
 Since a taxi driver coming from Manhattan to JFK Airport could be
 directed back to anywhere in the city. We can calculate the average taxi
 fare amount that the taxi drivers would get paid for a random trip from
@@ -2325,543 +2289,39 @@ JFK Airport to any taxi zone in New York City. What are the most popular
 drop-off zones for yellow taxis from JFK Airport?
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-84}Ten most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-89}Ten most popular destinations in Manhattan}
 \centering
-\begin{tabular}[t]{r|r|r|l|l}
-\hline
-avg\_fare & avg\_est\_fare & avg\_est\_diff & Borough & Zone\\
-\hline
-52.04228 & 55.66633 & 3.6240464 & Manhattan & Times Sq/Theatre District\\
-\hline
-52.02081 & 53.52208 & 1.5012669 & Manhattan & Midtown East\\
-\hline
-52.02929 & 52.63605 & 0.6067620 & Manhattan & Murray Hill\\
-\hline
-52.03004 & 53.80791 & 1.7778762 & Manhattan & Midtown South\\
-\hline
-52.02521 & 54.58522 & 2.5600104 & Manhattan & Midtown Center\\
-\hline
-52.05343 & 55.98649 & 3.9330603 & Manhattan & Clinton East\\
-\hline
-52.03455 & 54.83727 & 2.8027265 & Manhattan & Midtown North\\
-\hline
-50.00658 & 44.76501 & -5.2415700 & Brooklyn & Park Slope\\
-\hline
-52.02256 & 53.21899 & 1.1964270 & Manhattan & East Village\\
-\hline
-52.03064 & 61.17181 & 9.1411702 & Manhattan & Upper West Side South\\
-\hline
-52.01959 & 54.14923 & 2.1296414 & Manhattan & Gramercy\\
-\hline
-52.01070 & 57.84099 & 5.8302851 & Manhattan & Lincoln Square East\\
-\hline
-47.63555 & 44.90296 & -2.7325867 & Brooklyn & Williamsburg (North Side)\\
-\hline
-52.03112 & 56.25001 & 4.2188859 & Manhattan & East Chelsea\\
-\hline
-52.03906 & 60.29511 & 8.2560483 & Manhattan & Upper West Side North\\
-\hline
-52.02476 & 52.97979 & 0.9550299 & Manhattan & UN/Turtle Bay South\\
-\hline
-51.99849 & 57.81879 & 5.8203015 & Manhattan & Upper East Side North\\
-\hline
-51.99713 & 54.47645 & 2.4793268 & Manhattan & Lenox Hill West\\
-\hline
-52.00822 & 57.15378 & 5.1455658 & Manhattan & Yorkville West\\
-\hline
-52.02406 & 54.81988 & 2.7958225 & Manhattan & Union Sq\\
-\hline
-52.07553 & 56.69429 & 4.6187540 & Manhattan & TriBeCa/Civic Center\\
-\hline
-52.01202 & 52.43096 & 0.4189478 & Manhattan & Sutton Place/Turtle Bay North\\
-\hline
-52.05171 & 54.83581 & 2.7840969 & Manhattan & Penn Station/Madison Sq West\\
-\hline
-52.06783 & 58.98586 & 6.9180264 & Manhattan & Financial District North\\
-\hline
-52.03343 & 55.09034 & 3.0569088 & Manhattan & Upper East Side South\\
-\hline
-52.03268 & 57.17143 & 5.1387500 & Manhattan & Yorkville East\\
-\hline
-52.03140 & 55.81486 & 3.7834609 & Manhattan & Flatiron\\
-\hline
-46.04130 & 43.71681 & -2.3244880 & Brooklyn & Greenpoint\\
-\hline
-33.85242 & 33.24060 & -0.6118174 & Queens & LaGuardia Airport\\
-\hline
-36.97857 & 33.03031 & -3.9482525 & Brooklyn & Crown Heights North\\
-\hline
-52.06251 & 51.01663 & -1.0458781 & Manhattan & Lower East Side\\
-\hline
-52.02719 & 55.27376 & 3.2465709 & Manhattan & Greenwich Village North\\
-\hline
-52.04350 & 55.88538 & 3.8418807 & Manhattan & West Village\\
-\hline
-52.03693 & 54.29060 & 2.2536722 & Manhattan & Garment District\\
-\hline
-52.01163 & 56.00767 & 3.9960410 & Manhattan & Lenox Hill East\\
-\hline
-46.25439 & 43.92609 & -2.3282967 & Queens & Long Island City/Hunters Point\\
-\hline
-41.90473 & 40.38467 & -1.5200572 & Queens & Astoria\\
-\hline
-43.36798 & 39.15502 & -4.2129655 & Brooklyn & Clinton Hill\\
-\hline
-52.07690 & 64.38598 & 12.3090860 & Manhattan & Battery Park City\\
-\hline
-54.41380 & 50.55337 & -3.8604301 & Brooklyn & Brooklyn Heights\\
-\hline
-45.65715 & 43.06496 & -2.5921825 & Brooklyn & East Williamsburg\\
-\hline
-52.05255 & 51.83931 & -0.2132436 & Manhattan & Little Italy/NoLiTa\\
-\hline
-48.20942 & 45.35472 & -2.8546965 & Brooklyn & Williamsburg (South Side)\\
-\hline
-25.38152 & 24.34936 & -1.0321571 & Queens & Forest Hills\\
-\hline
-50.59733 & 45.43951 & -5.1578123 & Brooklyn & Boerum Hill\\
-\hline
-52.03612 & 59.26893 & 7.2328054 & Manhattan & Lincoln Square West\\
-\hline
-52.07503 & 62.82377 & 10.7487425 & Manhattan & World Trade Center\\
-\hline
-51.99709 & 53.25138 & 1.2542890 & Manhattan & Kips Bay\\
-\hline
-53.05667 & 48.81111 & -4.2455553 & Brooklyn & Downtown Brooklyn/MetroTech\\
-\hline
-47.21725 & 42.81678 & -4.4004693 & Brooklyn & Fort Greene\\
-\hline
-42.09191 & 37.12901 & -4.9628997 & Brooklyn & Prospect Heights\\
-\hline
-52.06847 & 58.03413 & 5.9656579 & Manhattan & Meatpacking/West Village West\\
-\hline
-52.03100 & 57.67785 & 5.6468516 & Manhattan & Morningside Heights\\
-\hline
-40.59416 & 36.60252 & -3.9916406 & Brooklyn & Bedford\\
-\hline
-37.75044 & 34.67308 & -3.0773596 & Brooklyn & Bushwick South\\
-\hline
-52.04243 & 53.67822 & 1.6357868 & Manhattan & SoHo\\
-\hline
-52.01945 & 59.80856 & 7.7891102 & Manhattan & Manhattan Valley\\
-\hline
-52.05336 & 57.42575 & 5.3723939 & Manhattan & Clinton West\\
-\hline
-52.02183 & 55.97084 & 3.9490151 & Manhattan & Central Harlem\\
-\hline
-52.03561 & 56.88496 & 4.8493444 & Manhattan & West Chelsea/Hudson Yards\\
-\hline
-51.98865 & 56.32105 & 4.3323962 & Manhattan & East Harlem South\\
-\hline
-52.02020 & 53.87068 & 1.8504750 & Manhattan & Greenwich Village South\\
-\hline
-12.79155 & 12.96559 & 0.1740392 & Queens & Baisley Park\\
-\hline
-47.05843 & 43.29512 & -3.7633085 & Brooklyn & Flatbush/Ditmas Park\\
-\hline
-52.08870 & 56.40347 & 4.3147702 & Manhattan & Hudson Sq\\
-\hline
-57.81575 & 53.89669 & -3.9190607 & Brooklyn & Carroll Gardens\\
-\hline
-36.28557 & 33.61914 & -2.6664335 & Brooklyn & Bushwick North\\
-\hline
-35.24128 & 31.97408 & -3.2672024 & Brooklyn & Stuyvesant Heights\\
-\hline
-40.19683 & 39.33397 & -0.8628551 & Queens & Steinway\\
-\hline
-51.99586 & 55.58516 & 3.5892971 & Manhattan & Central Park\\
-\hline
-42.60485 & 40.69257 & -1.9122844 & Queens & Sunnyside\\
-\hline
-52.03526 & 55.68928 & 3.6540194 & Manhattan & Central Harlem North\\
-\hline
-36.95059 & 35.47108 & -1.4795122 & Queens & Jackson Heights\\
-\hline
-40.85151 & 36.03708 & -4.8144315 & Brooklyn & Prospect-Lefferts Gardens\\
-\hline
-52.03734 & 54.76601 & 2.7286702 & Manhattan & Stuy Town/Peter Cooper Village\\
-\hline
-52.04875 & 51.42667 & -0.6220865 & Manhattan & Two Bridges/Seward Park\\
-\hline
-57.91568 & 56.83334 & -1.0823385 & Brooklyn & Bay Ridge\\
-\hline
-52.09171 & 61.64921 & 9.5575002 & Manhattan & Washington Heights South\\
-\hline
-52.09570 & 52.47581 & 0.3801152 & Manhattan & Alphabet City\\
-\hline
-41.61813 & 40.41233 & -1.2058027 & Queens & Old Astoria\\
-\hline
-46.14414 & 43.18760 & -2.9565409 & Queens & Long Island City/Queens Plaza\\
-\hline
-52.11735 & 63.12404 & 11.0066886 & Manhattan & Washington Heights North\\
-\hline
-52.03485 & 54.03962 & 2.0047653 & Manhattan & East Harlem North\\
-\hline
-54.31551 & 50.98861 & -3.3269010 & Brooklyn & DUMBO/Vinegar Hill\\
-\hline
-55.99540 & 52.07246 & -3.9229362 & Brooklyn & Cobble Hill\\
-\hline
-52.06064 & 56.78462 & 4.7239781 & Manhattan & Seaport\\
-\hline
-14.74449 & 14.68681 & -0.0576811 & Queens & South Ozone Park\\
-\hline
-52.06541 & 58.53763 & 6.4722120 & Manhattan & Hamilton Heights\\
-\hline
-52.07947 & 61.63529 & 9.5558195 & Manhattan & Financial District South\\
-\hline
-33.63091 & 31.36015 & -2.2707582 & Queens & Ridgewood\\
-\hline
-57.78132 & 54.20130 & -3.5800192 & Brooklyn & Windsor Terrace\\
-\hline
-38.71207 & 34.07486 & -4.6372087 & Brooklyn & Crown Heights South\\
-\hline
-52.03472 & 58.78118 & 6.7464627 & Manhattan & Bloomingdale\\
-\hline
-13.46696 & 13.62979 & 0.1628336 & Queens & Springfield Gardens South\\
-\hline
-62.85706 & 60.51715 & -2.3399085 & Brooklyn & Sunset Park West\\
-\hline
-21.47448 & 20.58139 & -0.8930931 & Queens & Kew Gardens\\
-\hline
-34.07076 & 33.54656 & -0.5242071 & Queens & East Elmhurst\\
-\hline
-31.99010 & 30.70742 & -1.2826737 & Queens & Flushing\\
-\hline
-30.12719 & 28.36433 & -1.7628579 & Queens & Rego Park\\
-\hline
-56.07957 & 51.35334 & -4.7262245 & Brooklyn & Gowanus\\
-\hline
-35.13431 & 32.94232 & -2.1919896 & Queens & Elmhurst\\
-\hline
-21.22569 & 20.66462 & -0.5610711 & Queens & Briarwood/Jamaica Hills\\
-\hline
-52.12540 & 53.25997 & 1.1345735 & Manhattan & Chinatown\\
-\hline
-45.71384 & 43.14163 & -2.5722140 & Brooklyn & Midwood\\
-\hline
-40.94575 & 39.72703 & -1.2187152 & Queens & Woodside\\
-\hline
-51.50000 & 45.88723 & -5.6127748 & Manhattan & Roosevelt Island\\
-\hline
-14.00347 & 13.81787 & -0.1856047 & Queens & Springfield Gardens North\\
-\hline
-23.29870 & 22.61451 & -0.6841956 & Queens & Kew Gardens Hills\\
-\hline
-55.47563 & 52.07700 & -3.3986340 & Brooklyn & Kensington\\
-\hline
-21.73049 & 20.27550 & -1.4549828 & Queens & Jamaica\\
-\hline
-32.94315 & 31.83806 & -1.1050940 & Queens & Fresh Meadows\\
-\hline
-20.52882 & 19.53437 & -0.9944536 & Queens & Richmond Hill\\
-\hline
-28.81404 & 28.18974 & -0.6242977 & Brooklyn & Canarsie\\
-\hline
-52.26297 & 64.94564 & 12.6826729 & Manhattan & Inwood\\
-\hline
-38.11166 & 37.09110 & -1.0205608 & Brooklyn & Marine Park/Mill Basin\\
-\hline
-23.51133 & 22.79860 & -0.7127325 & Brooklyn & East New York\\
-\hline
-39.70190 & 39.29936 & -0.4025341 & Queens & Bayside\\
-\hline
-67.22631 & 70.74048 & 3.5141712 & Bronx & Spuyten Duyvil/Kingsbridge\\
-\hline
-38.45996 & 36.76782 & -1.6921385 & Brooklyn & Flatlands\\
-\hline
-70.88953 & 74.57730 & 3.6877774 & Bronx & Riverdale/North Riverdale/Fieldston\\
-\hline
-33.41946 & 31.55001 & -1.8694491 & Queens & Middle Village\\
-\hline
-45.38911 & 44.16998 & -1.2191309 & Brooklyn & Homecrest\\
-\hline
-59.21214 & 56.43227 & -2.7798718 & Brooklyn & Columbia Street\\
-\hline
-18.34922 & 17.34118 & -1.0080414 & Queens & Saint Albans\\
-\hline
-18.09982 & 17.87372 & -0.2261043 & Queens & Rosedale\\
-\hline
-22.86544 & 21.79811 & -1.0673325 & Queens & Woodhaven\\
-\hline
-27.39529 & 26.21328 & -1.1820107 & Queens & Jamaica Estates\\
-\hline
-52.03155 & 57.05431 & 5.0227614 & Manhattan & Manhattanville\\
-\hline
-19.40578 & 19.05271 & -0.3530704 & Queens & Howard Beach\\
-\hline
-40.51543 & 39.93021 & -0.5852166 & Brooklyn & Sheepshead Bay\\
-\hline
-99.69465 & 117.02218 & 17.3275301 & EWR & Newark Airport\\
-\hline
-26.29719 & 25.32037 & -0.9768208 & Queens & Hillcrest/Pomonok\\
-\hline
-42.77340 & 41.27391 & -1.4994872 & Brooklyn & Madison\\
-\hline
-57.66811 & 53.69762 & -3.9704817 & Brooklyn & Borough Park\\
-\hline
-37.34150 & 35.64455 & -1.6969454 & Queens & Maspeth\\
-\hline
-30.56452 & 28.19507 & -2.3694460 & Brooklyn & Ocean Hill\\
-\hline
-38.19263 & 37.67285 & -0.5197782 & Queens & Whitestone\\
-\hline
-52.53919 & 50.87315 & -1.6660452 & Brooklyn & Bensonhurst West\\
-\hline
-21.81590 & 20.97418 & -0.8417211 & Queens & Cambria Heights\\
-\hline
-37.23545 & 36.69572 & -0.5397279 & Queens & Douglaston\\
-\hline
-28.06991 & 27.33266 & -0.7372530 & Queens & Queens Village\\
-\hline
-63.80547 & 61.74015 & -2.0653130 & Brooklyn & Red Hook\\
-\hline
-37.98106 & 34.62224 & -3.3588235 & Brooklyn & East Flatbush/Farragut\\
-\hline
-36.12417 & 34.90159 & -1.2225825 & Queens & Murray Hill-Queens\\
-\hline
-64.30008 & 62.07035 & -2.2297371 & Brooklyn & Sunset Park East\\
-\hline
-30.20531 & 29.15648 & -1.0488280 & Queens & Corona\\
-\hline
-27.11735 & 24.79360 & -2.3237500 & Queens & Far Rockaway\\
-\hline
-17.42241 & 17.11196 & -0.3104526 & Queens & Laurelton\\
-\hline
-36.05977 & 35.34494 & -0.7148342 & Queens & Oakland Gardens\\
-\hline
-28.86643 & 27.04274 & -1.8236866 & Queens & Glendale\\
-\hline
-42.57651 & 42.00846 & -0.5680513 & Queens & Bay Terrace/Fort Totten\\
-\hline
-35.79203 & 34.78038 & -1.0116427 & Queens & College Point\\
-\hline
-41.41319 & 37.46968 & -3.9435063 & Brooklyn & Erasmus\\
-\hline
-33.85917 & 32.99178 & -0.8673935 & Queens & Glen Oaks\\
-\hline
-49.04663 & 47.49868 & -1.5479514 & Brooklyn & Bensonhurst East\\
-\hline
-33.02050 & 30.13410 & -2.8864000 & Brooklyn & East Flatbush/Remsen Village\\
-\hline
-24.09337 & 23.27402 & -0.8193524 & Brooklyn & Cypress Hills\\
-\hline
-44.07681 & 42.94363 & -1.1331740 & Brooklyn & Brighton Beach\\
-\hline
-37.89479 & 36.07118 & -1.8236108 & Queens & Elmhurst/Maspeth\\
-\hline
-20.40420 & 19.80645 & -0.5977459 & Queens & South Jamaica\\
-\hline
-18.94844 & 18.45250 & -0.4959375 & Queens & Ozone Park\\
-\hline
-56.23073 & 54.45763 & -1.7730996 & Brooklyn & Dyker Heights\\
-\hline
-34.69524 & 33.65520 & -1.0400365 & Queens & Hammels/Arverne\\
-\hline
-45.79333 & 44.82560 & -0.9677333 & Brooklyn & Coney Island\\
-\hline
-49.54404 & 47.32688 & -2.2171572 & Brooklyn & Ocean Parkway South\\
-\hline
-49.49163 & 45.66108 & -3.8305525 & Brooklyn & South Williamsburg\\
-\hline
-38.71130 & 39.92256 & 1.2112667 & Queens & Rockaway Park\\
-\hline
-41.40197 & 40.67625 & -0.7257251 & Brooklyn & Manhattan Beach\\
-\hline
-30.68632 & 30.07804 & -0.6082842 & Queens & Bellerose\\
-\hline
-45.46806 & 40.17073 & -5.2973272 & Brooklyn & Prospect Park\\
-\hline
-48.14189 & 52.72596 & 4.5840703 & Bronx & Schuylerville/Edgewater Park\\
-\hline
-30.83451 & 28.51262 & -2.3218883 & Brooklyn & Brownsville\\
-\hline
-37.70043 & 36.72364 & -0.9767960 & Queens & Auburndale\\
-\hline
-53.68241 & 57.57775 & 3.8953343 & Bronx & Pelham Parkway\\
-\hline
-50.64528 & 54.50291 & 3.8576342 & Bronx & Mott Haven/Port Morris\\
-\hline
-54.65699 & 57.83824 & 3.1812500 & Bronx & East Concourse/Concourse Village\\
-\hline
-51.04025 & 49.96146 & -1.0787926 & Brooklyn & Bath Beach\\
-\hline
-36.86692 & 34.91018 & -1.9567417 & Queens & Flushing Meadows-Corona Park\\
-\hline
-46.84671 & 44.02100 & -2.8257143 & Queens & Queensbridge/Ravenswood\\
-\hline
-28.76265 & 28.05454 & -0.7081152 & Queens & Queensboro Hill\\
-\hline
-33.57788 & 32.39128 & -1.1865929 & Queens & East Flushing\\
-\hline
-44.70656 & 44.26418 & -0.4423848 & Brooklyn & Gravesend\\
-\hline
-31.35533 & 30.85099 & -0.5043490 & Queens & Corona\\
-\hline
-32.18091 & 31.01461 & -1.1663000 & Queens & North Corona\\
-\hline
-63.77713 & 67.24202 & 3.4648857 & Bronx & Van Cortlandt Village\\
-\hline
-54.09780 & 58.71331 & 4.6155110 & Bronx & Co-Op City\\
-\hline
-49.78513 & 54.06226 & 4.2771283 & Bronx & Parkchester\\
-\hline
-54.86157 & 58.25428 & 3.3927107 & Bronx & West Concourse\\
-\hline
-50.86458 & 54.64197 & 3.7773843 & Bronx & Soundview/Castle Hill\\
-\hline
-26.48953 & 25.35878 & -1.1307558 & Brooklyn & East New York/Pennsylvania Avenue\\
-\hline
-59.30193 & 62.54333 & 3.2414034 & Bronx & Belmont\\
-\hline
-25.43873 & 23.89755 & -1.5411765 & Queens & Hollis\\
-\hline
-51.53607 & 55.13709 & 3.6010199 & Bronx & Van Nest/Morris Park\\
-\hline
-63.11443 & 66.53647 & 3.4220423 & Bronx & Woodlawn/Wakefield\\
-\hline
-50.12148 & 45.76477 & -4.3567136 & Brooklyn & Brooklyn Navy Yard\\
-\hline
-61.61886 & 64.92280 & 3.3039406 & Bronx & Norwood\\
-\hline
-58.51061 & 61.49367 & 2.9830637 & Bronx & Mount Hope\\
-\hline
-23.91223 & 23.93963 & 0.0273936 & Brooklyn & Starrett City\\
-\hline
-60.99440 & 64.18035 & 3.1859524 & Bronx & Bedford Park\\
-\hline
-59.07692 & 62.78747 & 3.7105473 & Bronx & Williamsbridge/Olinville\\
-\hline
-53.28480 & 57.77707 & 4.4922690 & Bronx & Allerton/Pelham Gardens\\
-\hline
-56.27759 & 60.28084 & 4.0032586 & Bronx & Bronxdale\\
-\hline
-59.83793 & 63.03129 & 3.1933621 & Bronx & University Heights/Morris Heights\\
-\hline
-55.97887 & 59.44820 & 3.4693310 & Bronx & Highbridge\\
-\hline
-49.27612 & 53.70368 & 4.4275597 & Bronx & Pelham Bay\\
-\hline
-48.19349 & 52.30711 & 4.1136207 & Bronx & Westchester Village/Unionport\\
-\hline
-71.44466 & 80.52988 & 9.0852213 & Staten Island & Saint George/New Brighton\\
-\hline
-53.48554 & 57.38043 & 3.8948967 & Bronx & Melrose South\\
-\hline
-62.22407 & 64.67537 & 2.4513071 & Bronx & Kingsbridge Heights\\
-\hline
-77.15196 & 86.28524 & 9.1332775 & Staten Island & Bloomfield/Emerson Hill\\
-\hline
-45.89140 & 47.49145 & 1.6000452 & Queens & Breezy Point/Fort Tilden/Riis Beach\\
-\hline
-55.77143 & 59.70771 & 3.9362857 & Bronx & Eastchester\\
-\hline
-55.55928 & 58.82562 & 3.2663402 & Bronx & Morrisania/Melrose\\
-\hline
-48.78571 & 53.40034 & 4.6146296 & Bronx & Country Club\\
-\hline
-73.23333 & 82.18919 & 8.9558611 & Staten Island & Heartland Village/Todt Hill\\
-\hline
-50.97159 & 54.69980 & 3.7282102 & Bronx & West Farms/Bronx River\\
-\hline
-52.03488 & 65.25192 & 13.2170349 & Manhattan & Battery Park\\
-\hline
-50.52924 & 54.79678 & 4.2675439 & Bronx & Soundview/Bruckner\\
-\hline
-64.51183 & 74.13207 & 9.6202367 & Staten Island & Stapleton\\
-\hline
-55.80357 & 58.73530 & 2.9317262 & Bronx & East Tremont\\
-\hline
-53.25305 & 57.50073 & 4.2476829 & Bronx & Hunts Point\\
-\hline
-53.44479 & 56.94383 & 3.4990491 & Bronx & Longwood\\
-\hline
-57.09877 & 62.05185 & 4.9530864 & Bronx & City Island\\
-\hline
-66.49301 & 76.72815 & 10.2351399 & Staten Island & South Beach/Dongan Hills\\
-\hline
-51.73404 & 52.97447 & 1.2404255 & Manhattan & Randalls Island\\
-\hline
-64.19230 & 74.08631 & 9.8940077 & Staten Island & Arrochar/Fort Wadsworth\\
-\hline
-52.70385 & 66.01354 & 13.3096923 & Manhattan & Inwood Hill Park\\
-\hline
-62.27559 & 67.95724 & 5.6816535 & Manhattan & Marble Hill\\
-\hline
-66.68487 & 76.53332 & 9.8484454 & Staten Island & Grymes Hill/Clifton\\
-\hline
-81.77876 & 89.97142 & 8.1926549 & Staten Island & Great Kills\\
-\hline
-71.98529 & 81.29956 & 9.3142647 & Staten Island & New Dorp/Midland Beach\\
-\hline
-70.11765 & 79.88475 & 9.7671078 & Staten Island & Westerleigh\\
-\hline
-58.19802 & 60.40124 & 2.2032178 & Bronx & Claremont/Bathgate\\
-\hline
-69.68687 & 79.70278 & 10.0159091 & Staten Island & West Brighton\\
-\hline
-54.55670 & 58.15546 & 3.5987629 & Bronx & Crotona Park East\\
-\hline
-60.99479 & 62.97318 & 1.9783854 & Bronx & Fordham South\\
-\hline
-52.05814 & 60.85715 & 8.7990116 & Manhattan & Highbridge Park\\
-\hline
-76.69375 & 85.25031 & 8.5565625 & Staten Island & Oakwood\\
-\hline
-39.15132 & 38.69770 & -0.4536184 & Brooklyn & Marine Park/Floyd Bennett Field\\
-\hline
-28.17143 & 26.47264 & -1.6987857 & Queens & Forest Park/Highland Park\\
-\hline
-90.21424 & 100.32913 & 10.1148889 & Staten Island & Arden Heights\\
-\hline
-90.99990 & 100.21302 & 9.2131111 & Staten Island & Eltingville/Annadale/Prince's Bay\\
-\hline
-76.34831 & 86.50034 & 10.1520339 & Staten Island & Mariners Harbor\\
-\hline
-60.05263 & 62.98456 & 2.9319298 & Bronx & Bronx Park\\
-\hline
-42.56000 & 42.17190 & -0.3881000 & Queens & Astoria Park\\
-\hline
-62.50000 & 60.54720 & -1.9528000 & Brooklyn & Green-Wood Cemetery\\
-\hline
-67.18367 & 70.19439 & 3.0107143 & Bronx & Van Cortlandt Park\\
-\hline
-92.62494 & 104.00979 & 11.3848542 & Staten Island & Rossville/Woodrow\\
-\hline
-28.76596 & 28.26011 & -0.5058511 & Queens & Broad Channel\\
-\hline
-96.77595 & 108.18921 & 11.4132632 & Staten Island & Charleston/Tottenville\\
-\hline
-74.66214 & 85.22446 & 10.5623243 & Staten Island & Port Richmond\\
-\hline
-32.52083 & 31.97812 & -0.5427083 & Queens & Willets Point\\
-\hline
-57.64276 & 61.65095 & 4.0081905 & Bronx & Pelham Bay Park\\
-\hline
-38.41176 & 37.27941 & -1.1323529 & Queens & Saint Michaels Cemetery/Woodside\\
-\hline
-56.00000 & 58.70500 & 2.7050000 & Bronx & Crotona Park\\
-\hline
-28.25000 & 29.34250 & 1.0925000 & Queens & Jamaica Bay\\
-\hline
-77.00000 & 86.03000 & 9.0300000 & Staten Island & Freshkills Park\\
-\hline
+\begin{tabular}[t]{cccc}
+\toprule
+avg\_fare & avg\_est\_diff & Borough & Zone\\
+\midrule
+52.04228 & 3.624046 & Manhattan & Times Sq/Theatre District\\
+52.02081 & 1.501267 & Manhattan & Midtown East\\
+52.02929 & 0.606762 & Manhattan & Murray Hill\\
+52.03004 & 1.777876 & Manhattan & Midtown South\\
+52.02521 & 2.560010 & Manhattan & Midtown Center\\
+\addlinespace
+52.05343 & 3.933060 & Manhattan & Clinton East\\
+52.03455 & 2.802726 & Manhattan & Midtown North\\
+50.00658 & -5.241570 & Brooklyn & Park Slope\\
+52.02256 & 1.196427 & Manhattan & East Village\\
+52.03064 & 9.141170 & Manhattan & Upper West Side South\\
+\bottomrule
 \end{tabular}
 \end{table}
 Table @ref(tab:from\_jkf\_zone) shows that Times Square is the most
 popular destination for passengers coming from the JFK Airport in 2017!
 
-\textbf{What's the average fare to each dropp-off zone from JFK Airport?
+\subsubsection{What's the average fare to each dropp-off zone from JFK
+Airport?}\label{whats-the-average-fare-to-each-dropp-off-zone-from-jfk-airport}
+\begin{figure}
+
+{\centering \includegraphics[width=4.96in]{figure/from_jkf_fare_vis} 
+
 }
 
-\textbackslash{}begin\{figure\}
-
-\{\centering \includegraphics[width=4.96in]{figure/from_jkf_fare_vis}
-
-\}
-
-\textbackslash{}caption\{Zones that cost more than the \$52 flat
-rate\}\label{fig:from-jkf-fare-vis} \textbackslash{}end\{figure\}
-
+\caption{Zones that cost more than the 52 US Dollar flat rate}\label{fig:from-jkf-fare-vis}
+\end{figure}
 As we expected, the red shades are smoothly distributed, since taxi
 zones that are futher away should cost more to get there.
 
@@ -2869,28 +2329,24 @@ By comparing the distribution of the true average fare and estimated
 average fare calculated by distance travelled,
 
 ****** add sentences *******
+\begin{figure}
 
-\textbackslash{}begin\{figure\}
+{\centering \includegraphics[width=4.96in]{figure/from_jkf_fare_est} 
 
-\{\centering \includegraphics[width=4.96in]{figure/from_jkf_fare_est}
+}
 
-\}
-
-\textbackslash{}caption\{Zones that cost more than the \$52 flat
-rate\}\label{fig:from-jkf-fare-est} \textbackslash{}end\{figure\}
-
+\caption{Zones that cost more than the 52 US Dollar flat rate}\label{fig:from-jkf-fare-est}
+\end{figure}
 \textbf{What's the most popular dropp-off locations for passengers from
 JFK Airport? }
+\begin{figure}
 
-\textbackslash{}begin\{figure\}
+{\centering \includegraphics[width=4.96in]{figure/from_jkf_num_trips} 
 
-\{\centering \includegraphics[width=4.96in]{figure/from_jkf_num_trips}
+}
 
-\}
-
-\textbackslash{}caption\{Zones that cost more than the \$52 flat
-rate\}\label{fig:from-jkf-num-trips} \textbackslash{}end\{figure\}
-
+\caption{Zones that cost more than the 52 US Dollar flat rate}\label{fig:from-jkf-num-trips}
+\end{figure}
 According to the map above, Manhattan is still the most popular
 destination for passengers departing from the JFK Airport.
 \begin{verbatim}
@@ -3002,6 +2458,11 @@ Guerrini, F. (2015, April). Which Is Cheaper To Use In NYC: Uber Or A
 Taxi? Big Data Will Solve The Dilemma. Forbes Tech. Retrieved from
 \url{https://www.forbes.com/sites/federicoguerrini/2015/04/09/living-in-new-york-this-app-will-tell-you-which-is-cheaper-uber-or-a-taxi/2/\#26bc29904023}
 
+\hypertarget{ref-Rebecca2015}{}
+Harshbarger, R. (2015, June). City puts biased drivers who refuse rides
+on notice with new video. New York Post. Retrieved from
+\url{https://nypost.com/2015/06/09/city-puts-biased-taxi-drivers-on-notice/}
+
 \hypertarget{ref-hu2017}{}
 Hu, W. (2017, January). Yellow Cab, Long a Fixture of City Life, Is for
 Many a Thing of the Past. The New York Times. Retrieved from
@@ -3057,6 +2518,10 @@ Foundation. Retrieved from
 TLC Aggregated Reports. (2009). NYC Taxi \& Limousine Commission.
 Retrieved from
 \url{http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml}
+
+\hypertarget{ref-tlcfarerate}{}
+TLC, N. (n.d.). Taxicab Rate of Fare. NYC TLC. Retrieved from
+\url{http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml}
 
 \hypertarget{ref-datayellow}{}
 TLC Trip Record Data. (2009a). NYC Taxi \& Limousine Commission.

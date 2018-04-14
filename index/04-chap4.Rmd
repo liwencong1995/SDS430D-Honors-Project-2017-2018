@@ -135,7 +135,12 @@ three_air <- bind_rows(to_jfk_zone, to_lg_zone, to_newark_zone)
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(three_air[10:20,], caption = "Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours")
+kable(three_air[10:20,], 
+      caption = "Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
 ```
 Table \@ref(tab:three_air) displays the average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours.
 
@@ -225,7 +230,12 @@ uber_weekly <- uber_weekly_data %>%
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(uber_weekly[1:10,], caption = "Uber 2017 Weekly Total Dispatched Trips")
+kable(uber_weekly[1:10,], 
+      caption = "Uber 2017 Weekly Total Dispatched Trips",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
 ```
 
 **Yellow Cab Weekly Data**
@@ -252,7 +262,12 @@ yellow_weekly_data <- fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(yellow_weekly_data[1:10,], caption = "Yellow Taxi 2017 Weekly Total Dispatched Trips")
+kable(yellow_weekly_data[1:10,], 
+      caption = "Yellow Taxi 2017 Weekly Total Dispatched Trips",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
 ```
 
 In this section, we use New York City Yellow Taxi and Uber data to calculate the number of trips occurred in each week. 
