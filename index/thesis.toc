@@ -52,18 +52,20 @@
 \contentsline {chapter}{Chapter 4: New York City Taxi Passengers}{61}{chapter.4}
 \contentsline {section}{\numberline {4.1}How long does it take to get to JFK, La Guardia, and Newark Airports? When is the best time to depart?}{61}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Case Study: From Alphabet City, Manhattan to all three airport}{63}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{64}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}How does weather affect the number of taxi and Lyft trips?}{65}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Case Study: March 14th, 2017 Snow Storm}{66}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.1.2}A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{65}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}How does weather affect the number of taxi and Lyft trips?}{66}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Case Study: March 14th, 2017 Snow Storm}{67}{subsection.4.2.1}
 \contentsline {chapter}{Chapter 5: New York City Taxi Fare \& Limousine Commission}{69}{chapter.5}
 \contentsline {section}{\numberline {5.1}Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{69}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}People in Manhattan benefit from the \$52 flat rate.}{70}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.1}People departing from Manhattan benefit from the \$52 flat rate}{70}{subsection.5.1.1}
 \contentsline {subsection}{\numberline {5.1.2}Trips from Manhattan to JFK Airport}{71}{subsection.5.1.2}
-\contentsline {subsection}{\numberline {5.1.3}Taxi zones pays on average more than \$52}{72}{subsection.5.1.3}
+\contentsline {subsection}{\numberline {5.1.3}Which taxi zones would pay more than \$52 without the flat rate?}{72}{subsection.5.1.3}
 \contentsline {section}{\numberline {5.2}However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?}{74}{section.5.2}
 \contentsline {subsubsection}{What's the average fare to each dropp-off zone from JFK Airport?}{76}{section*.31}
+\contentsline {subsubsection}{What are the most popular drop-off locations for passengers departing from JFK Airport?}{78}{section*.34}
+\contentsline {subsubsection}{Hourly fare rate for taxi drivers going from Manhattan to JFK airport}{79}{section*.36}
 \contentsline {chapter}{Chapter 6: Conclusion}{81}{chapter.6}
 \contentsline {section}{\numberline {6.1}Future Research}{81}{section.6.1}
-\contentsline {chapter}{Appendix A: Appendix A}{83}{appendix.A}
-\contentsline {section}{\numberline {A.1}utility function}{83}{section.A.1}
-\contentsline {chapter}{References}{85}{appendix*.35}
+\contentsline {chapter}{Chapter 7: Appendix A}{83}{chapter.7}
+\contentsline {section}{\numberline {7.1}utility function}{83}{section.7.1}
+\contentsline {chapter}{References}{85}{chapter*.37}

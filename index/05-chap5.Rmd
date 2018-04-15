@@ -3,11 +3,11 @@
 ## Should there be a flat rate between Manhattan and John F. Kennedy International Airport?
 Why is there a flat rate to and from JFK airport and any location in Manhattan? Why is the flat rate \$52? Does TLC make profit from the \$52 flat rate? Does \$52 reduce the cogestion on the road to JFK airport and make taking a train a more preferable choice? The New York City taxi trip records can reveal the answers to these questions.
 
-Imagine it's your first time travelling to New York City, and you decided to live in a hotel in Manhattan Since you do not know much about the city, the \$52 flat rate is nice for you, and it incentivizes you to take taxi to the JFK Airport. If there is no flat rate, there is uncertainty in how much someone needs to pay to take a taxi to JFK, and tourists might instead choose to take the train, even though taking a train would cost them more time and inconvenience. 
+Imagine it's your first time travelling to New York City, and you decided to live in a hotel in Manhattan. Since you might not know much about the city, the \$52 flat rate is nice for you, and it incentivizes you to take taxi to the JFK Airport. If there is no flat rate, there is uncertainty in how much someone needs to pay to take a taxi to JFK, and tourists might instead choose to take the train, even though taking a train would cost them more time and inconvenience. 
 
-Additionally, people who are native to Manhattan would have paid more than $52 to take a taxi to go to the JFK Airport. The higher the taxi fare is, the less the demand for taxi will be. Therefore, having a flat rate,helps taxi drivers to get more trips from Manhattan to JFK Airport.
+Additionally, people living in most parts of Manhattan would have paid more than $52 to take a taxi to go to the JFK Airport. The higher the taxi fare is, the less the demand for taxi will be. Therefore, having a flat rate might help taxi drivers to get more trips from Manhattan to JFK Airport.
 
-### People in Manhattan benefit from the $52 flat rate.
+### People departing from Manhattan benefit from the $52 flat rate
 If there is no flat rate between JFK and Manhattan, how much would passengers pay for the distance they travelled between JFK Airport AND Manhattan? And how much more or less should they have paid comparing to the \$52 flat rate?
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
@@ -137,7 +137,7 @@ knitr::include_graphics("figure/to_jkf_fare_vis.png", dpi = 200 )
 ```
 According to the map, trips from Midtown on average cost less than trips from other taxi zones in Manhattan.
 
-### Taxi zones pays on average more than $52
+### Which taxi zones would pay more than $52 without the flat rate?
 
 ```{r, echo=FALSE}
 to_jkf_zone_above <- to_jkf_zone %>%
@@ -149,7 +149,7 @@ to_jkf_zone_above_1 <- to_jkf_zone_above %>%
 ```
 
 ```{r, echo=FALSE}
-kable(to_jkf_zone_above_1[1:10, ],
+kable(to_jkf_zone_above_1[1:10, 3:6],
       caption = "Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport",
       format = "latex",
       align = 'c', 
@@ -270,7 +270,7 @@ By comparing the distribution of the true average fare and estimated average far
 knitr::include_graphics("figure/from_jkf_fare_est.png", dpi = 200 )
 ```
 
-**What's the most popular dropp-off locations for passengers from JFK Airport? **
+#### What are the most popular drop-off locations for passengers departing from JFK Airport?
 
 ```{r, eval=FALSE, echo=FALSE}
 from_jkf_num_trips <- leaflet(data = from_jkf_fare) %>%
@@ -301,5 +301,7 @@ from_jkf_zone %>%
 ```{r}
 from_jkf_zone[2,2]/(from_jkf_zone[1,2] + from_jkf_zone[2,2])
 ```
-According to the summary, the total amount of trips from JFK Airport to Manhattan is about 65.05% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthy. Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
+According to the summary, the total amount of trips from JFK Airport to Manhattan is about 65.05% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthwhile Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
+
+#### Hourly fare rate for taxi drivers going from Manhattan to JFK airport
 

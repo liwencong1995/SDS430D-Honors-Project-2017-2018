@@ -5,7 +5,6 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 # New York City Taxi Passengers {#chapter4}
 
 ## How long does it take to get to JFK, La Guardia, and Newark Airports? When is the best time to depart?
-
 We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. We need to load trip records with destination as one of the three airports from the MySQL connection we built.
 
 ```{r, message=FALSE, echo=FALSE, eval=FALSE}
@@ -115,20 +114,18 @@ to_lg_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_lg_zone.csv"
 to_newark_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zone.csv")
 ```
 
-So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. 
-
-It would be easier if we combine all three tables and put information related to trip duration to all three airports in the same table.
+So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. It would be easier if we combine all three tables and put information related to trip duration to all three airports in the same table.
 ```{r, echo=FALSE}
 to_jfk_zone <- to_jfk_zone %>%
   mutate(airport = "JFK") %>%
   rename(avg_min = jfk_avg_min)
 
 to_lg_zone <- to_lg_zone %>%
-  mutate(airport = "LG") %>%
+  mutate(airport = "LGA") %>%
   rename(avg_min = jfk_avg_min)
 
 to_newark_zone <- to_newark_zone %>%
-  mutate(airport = "Newark") %>%
+  mutate(airport = "EWR") %>%
   rename(avg_min = jfk_avg_min)
 
 three_air <- bind_rows(to_jfk_zone, to_lg_zone, to_newark_zone)
@@ -163,7 +160,7 @@ airport_vis
 
 According to the red line Figure \@ref(fig:airport-vis), it takes the least time, less than 30 minutes, to travel from Alphabet City, Manhattan to JFK Airport around 4 AM in the morning, and it takes the most time, about 70 minutes, around 4 PM in the afternoon.
 
-According to the green line, it takes the least time, about 20 minutes, to travel to JFK Airport around 5 AM in the morning, and it takes the most time, more than 40 minutes, around 5 PM in the afternoon.
+According to the green line, it takes the least time, about 20 minutes, to travel to La Guardia Airport around 5 AM in the morning, and it takes the most time, more than 40 minutes, around 5 PM in the afternoon.
 
 As shown by the blue line, it takes the least time, a little less than 30 minutes, to travel to Newark Airport at 2 AM at midnight, and it takes the most time, a little less than 80 minutes, around 6 PM in the evening.
 
@@ -207,12 +204,12 @@ shinyApp(ui, server)
 ```
 
 ```{r shinyapp, fig.caption = "Shiny App: Average Number of Minutes Takes to Go to All Three Airports",fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/shinyapp.png", dpi = 200 )
+knitr::include_graphics("figure/shinyapp.png", dpi = 100 )
 ```
 This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the these three airports from any New York City taxi zones.
 
 ## How does weather affect the number of taxi and Lyft trips?
-On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes the number of Uber vehicles available on the street into account. When weather is bad, less Uber vehicles are available on the street, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to keep working on ugly days. Lyft has a similar pricing model to the one that Uber uses.
+On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes the number of Uber vehicles available on the street into account. When weather is bad, fewer Uber vehicles are available on the street, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to keep working on ugly days. Lyft has a similar pricing model to the one that Uber uses.
 
 In this section, we want to study the number of pickups of yellow cab, Uber, and Lyft. We compare number of pick-ups in each taxi zone in the weeks of bad weather with previous weeks' total number of pick-ups to see whether Uber drivers have an incentive to drive around the city more when weather gets bad.
 
