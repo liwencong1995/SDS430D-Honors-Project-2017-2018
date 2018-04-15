@@ -64,7 +64,9 @@ yellow_2017_summary_2 <- yellow_2017_2 %>%
   summarise(avg_tip = mean(tip_perct), 
             trips = n(),
             avg_dis = mean(trip_distance),
-            avg_duration = mean(duration))
+            avg_duration = mean(duration),
+            avg_total = mean(total_amount),
+            avg_fare = mean(fare_amount))
 
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", db)
@@ -96,10 +98,14 @@ yellow_2017_summary_1 <- yellow_2017_1 %>%
   summarise(avg_tip = mean(tip_perct), 
             trips = n(),
             avg_dis = mean(trip_distance),
-            avg_duration = mean(duration))
+            avg_duration = mean(duration),
+            avg_total = mean(total_amount),
+            avg_fare = mean(fare_amount))
 
 #Combine summary_2 and summary_1
 yellow_2017_summary <- bind_rows(yellow_2017_summary_1, yellow_2017_summary_2)
+
+fwrite(yellow_2017_summary, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary_1.csv")
 ```
 
 ## Aggregated Zone-level Tip Information
@@ -107,28 +113,6 @@ Instead of the absolute amount of tips, we want to focus on the percentage of ti
 
 ```{r, eval=FALSE}
 yellow_2017_summary <- yellow_2017 %>%
-  mutate(year = year(tpep_pickup_datetime),
-         month = month(tpep_pickup_datetime),
-         tip_perct = tip_amount/fare_amount) %>%
-  group_by(year, month, PULocationID, DOLocationID) %>%
-  summarise(avg_tip = mean(tip_perct), 
-            trips = n(),
-            avg_dis = mean(trip_distance),
-            avg_duration = mean(duration))
-```
-
-```{r, eval=FALSE, echo=FALSE}
-yellow_2017_summary <- yellow_2017 %>%
-  mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
-                                         tz= "America/New_York"),
-         tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
-                                        tz= "America/New_York")) %>%
-  mutate(duration = round((tpep_dropoff_datetime - tpep_pickup_datetime)/60, 2) ) %>%
-  mutate(duration = as.numeric(duration)) %>%
-  filter(duration > 0) %>%
-  filter(fare_amount > 0) %>%
-  filter(tip_amount > 0) %>%
-  filter(tip_amount < fare_amount) %>%
   mutate(year = year(tpep_pickup_datetime),
          month = month(tpep_pickup_datetime),
          tip_perct = tip_amount/fare_amount) %>%

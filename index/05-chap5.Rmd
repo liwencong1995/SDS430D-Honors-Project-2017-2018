@@ -189,7 +189,8 @@ meanfare <- mean(to_jkf_zone$avg_est_diff)
 On average people travel from Manhattan pay `meanfare` less with the \$52 flat rate policy. Therefore, passengers overall benefit from the $52 flat rate policy.
 
 ## However, are taxi drivers happy when a passenger wants to go to JFK Airport from Manhattan?
-Everytime I travel to New York City, I always take Yellow cabs to go around the city. It seemed to me that the cab drivers were always happy whenever they heard me telling them that I need to go to the JFK Airport from Manhattan. Are taxi drivers happy when their passengers are going to JFK Airport from Manhattan? How much on average would taxi driver make on their way bavk to the city from Manhattan? 
+
+Everytime I travel to New York City, I always take Yellow cabs to go around the city. It seemed to me that the cab drivers were always happy when they heard me telling them that I needed to go to the JFK Airport from Manhattan. Are taxi drivers happy when their passengers want to go to JFK Airport from Manhattan? In this section, we study the hourly wage of taxi drivers for different trips they completed, and we investigate whether taxi driver hourly wage from Manhattan to JFK Airport is higher than other trips.
 
 ```{r, echo=FALSE}
 from_jfk <- from_jfk %>%
@@ -226,8 +227,8 @@ kable(from_jkf_zone[1:10,c(3, 5:7)],
 ```
 Table \@ref(tab:from_jkf_zone) shows that Times Square is the most popular destination for passengers coming from the JFK Airport in 2017!
 
+### How much on average would taxi driver make on their way back from JFK Airport?
 #### What's the average fare to each dropp-off zone from JFK Airport?
-
 ```{r, eval=FALSE, echo=FALSE}
 from_jkf_fare <- merge(taxi_zones, from_jkf_zone, by.x = "LocationID", by.y = "LocationID")
 
