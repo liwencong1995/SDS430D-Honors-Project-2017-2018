@@ -28,7 +28,7 @@ from_jfk <- taxi %>%
   collect(n = Inf)
 ```
 
-```{r, message=FALSE, eval=FALSE, echo=FALSE}
+```{r, message=FALSE, eval=FALSE, echo=FALSE, warning=FALSE}
 fwrite(to_jkf, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/to_jkf.csv")
 fwrite(from_jfk, "/Users/priscilla/Desktop/Honors Thesis/mysql/csv sum/from_jfk.csv")
 ```
@@ -188,7 +188,7 @@ meanfare <- mean(to_jkf_zone$avg_est_diff)
 ```
 On average people travel from Manhattan pay `meanfare` less with the \$52 flat rate policy. Therefore, passengers overall benefit from the $52 flat rate policy.
 
-## However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?
+## However, are taxi drivers happy when a passenger wants to go to JFK Airport from Manhattan?
 Everytime I travel to New York City, I always take Yellow cabs to go around the city. It seemed to me that the cab drivers were always happy whenever they heard me telling them that I need to go to the JFK Airport from Manhattan. Are taxi drivers happy when their passengers are going to JFK Airport from Manhattan? How much on average would taxi driver make on their way bavk to the city from Manhattan? 
 
 ```{r, echo=FALSE}

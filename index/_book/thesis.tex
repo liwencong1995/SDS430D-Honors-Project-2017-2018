@@ -2028,19 +2028,19 @@ when weather gets bad.
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
-Pickup Start Date & Pickup End Date & Total Dispatched Trips\\
+Pickup Start Date & Pickup End Date & Uber Total Dispatched Trips\\
 \midrule
-01/01/2017 & 01/07/2017 & 2866569\\
-01/08/2017 & 01/14/2017 & 3114792\\
-01/15/2017 & 01/21/2017 & 3089595\\
-01/22/2017 & 01/28/2017 & 3299763\\
-01/29/2017 & 02/04/2017 & 3224451\\
+2017-01-01 & 01/07/2017 & 2866569\\
+2017-01-08 & 01/14/2017 & 3114792\\
+2017-01-15 & 01/21/2017 & 3089595\\
+2017-01-22 & 01/28/2017 & 3299763\\
+2017-01-29 & 02/04/2017 & 3224451\\
 \addlinespace
-02/05/2017 & 02/11/2017 & 3310481\\
-02/12/2017 & 02/18/2017 & 3456042\\
-02/19/2017 & 02/25/2017 & 3194805\\
-02/26/2017 & 03/04/2017 & 3533347\\
-03/05/2017 & 03/11/2017 & 3614559\\
+2017-02-05 & 02/11/2017 & 3310481\\
+2017-02-12 & 02/18/2017 & 3456042\\
+2017-02-19 & 02/25/2017 & 3194805\\
+2017-02-26 & 03/04/2017 & 3533347\\
+2017-03-05 & 03/11/2017 & 3614559\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2049,21 +2049,21 @@ Pickup Start Date & Pickup End Date & Total Dispatched Trips\\
 
 \caption{\label{tab:unnamed-chunk-68}Yellow Taxi 2017 Weekly Total Dispatched Trips}
 \centering
-\begin{tabular}[t]{cc}
+\begin{tabular}[t]{ccc}
 \toprule
-Pickup Start Date & Total Dispatched Trips\\
+Pickup Start Date & Pickup End Date & Yellow Total Dispatched Trips\\
 \midrule
-2017-01-01 & 2044643\\
-2017-01-08 & 2230950\\
-2017-01-15 & 2219214\\
-2017-01-22 & 2307122\\
-2017-01-29 & 2331749\\
+2017-01-01 & 01/07/2017 & 2044643\\
+2017-01-08 & 01/14/2017 & 2230950\\
+2017-01-15 & 01/21/2017 & 2219214\\
+2017-01-22 & 01/28/2017 & 2307122\\
+2017-01-29 & 02/04/2017 & 2331749\\
 \addlinespace
-2017-02-05 & 2181622\\
-2017-02-12 & 2387399\\
-2017-02-19 & 2225850\\
-2017-02-26 & 2464800\\
-2017-03-05 & 2456285\\
+2017-02-05 & 02/11/2017 & 2181622\\
+2017-02-12 & 02/18/2017 & 2387399\\
+2017-02-19 & 02/25/2017 & 2225850\\
+2017-02-26 & 03/04/2017 & 2464800\\
+2017-03-05 & 03/11/2017 & 2456285\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2077,9 +2077,9 @@ There are two commonly known bad weather consitions, rainy and snowy
 days. Let's first focus on snowstorm. On March 14th, 2017, a snow storm
 brought seven inches of snow to New York City. \textbf{Yellow Taxi}
 \begin{verbatim}
-  Pickup Start Date Total Dispatched Trips
-1        2017-03-05                2456285
-2        2017-03-12                2066285
+  Pickup Start Date Yellow Total Dispatched Trips Pickup End Date
+1        2017-03-05                       2456285      03/11/2017
+2        2017-03-12                       2066285      03/18/2017
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2091,12 +2091,10 @@ brought seven inches of snow to New York City. \textbf{Yellow Taxi}
 \end{verbatim}
 \textbf{Uber}
 \begin{verbatim}
-# A tibble: 2 x 3
-# Groups:   Pickup Start Date [2]
-  `Pickup Start Date` `Pickup End Date` `Total Dispatched Trips`
-                <chr>             <chr>                    <int>
-1          03/05/2017        03/11/2017                  3614559
-2          03/12/2017        03/18/2017                  3430189
+# A tibble: 0 x 3
+# Groups:   Pickup Start Date [0]
+# ... with 3 variables: Pickup Start Date <chr>, Pickup End Date <chr>,
+#   Uber Total Dispatched Trips <int>
 \end{verbatim}
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2128,56 +2126,118 @@ National Climatic Data Center by submitting a Climate Data Online
 request (Appendix D) to National Centers for Environmental Information
 (Environmental Information staff, n.d.), and joined it to the 2017 taxi
 data to study relationship between rainfall and taxi rides.
-\begin{table}
 
-\caption{\label{tab:unnamed-chunk-75}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
-\centering
-\begin{tabular}[t]{cccc}
-\toprule
-Pickup Start Date & Weekly Rainfall.x & Previous Week & Weekly Rainfall.y\\
-\midrule
-2017-06-18 & 7.00 & 2017-06-11 & 3.91\\
-2017-04-30 & 6.71 & 2017-04-23 & 2.88\\
-2017-10-29 & 6.16 & 2017-10-22 & 0.20\\
-2017-07-02 & 5.56 & 2017-06-25 & 0.78\\
-2017-03-26 & 5.11 & 2017-03-19 & 0.01\\
-\addlinespace
-2017-01-22 & 3.99 & 2017-01-15 & 1.03\\
-2017-08-13 & 3.95 & 2017-08-06 & 2.34\\
-2017-06-11 & 3.91 & 2017-06-04 & 0.22\\
-2017-04-02 & 3.17 & 2017-03-26 & 5.11\\
-2017-04-23 & 2.88 & 2017-04-16 & 1.58\\
-\bottomrule
-\end{tabular}
-\end{table}
 First, we generate a list of total amount of daily rainfall in New York
-City and we pick the 10 weeks that have the most rainfall in 2017. We
-then find the weekly total number of dispatched yellow taxi trips of the
-4 weeks with the srtat date listed above. We also need to add the weekly
-total number of dispatched Uber trips of the 10 weeks with the most
-rainfall.
+City and we pick the 10 weeks that have the most rainfall in 2017.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-77}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
+\caption{\label{tab:unnamed-chunk-74}10 weeks that have the most rainfall in 2017}
 \centering
-\begin{tabular}[t]{cccc}
+\begin{tabular}[t]{ccc}
 \toprule
-Pickup Start Date & Weekly Rainfall.x & uber & yellow\\
+Pickup Start Date & Pickup End Date & Weekly Rainfall\\
 \midrule
-2017-06-18 & 7.00 & -0.0898798 & -2.3951884\\
-2017-04-30 & 6.71 & -1.6502570 & -0.3245168\\
-2017-10-29 & 6.16 & 2.9559489 & -0.0660142\\
-2017-07-02 & 5.56 & -5.7012798 & -18.3597870\\
-2017-03-26 & 5.11 & 3.3907414 & 3.0244648\\
+2017-06-18 & 2017-06-25 & 7.00\\
+2017-04-30 & 2017-05-07 & 6.71\\
+2017-10-29 & 2017-11-05 & 6.16\\
+2017-07-02 & 2017-07-09 & 5.56\\
+2017-03-26 & 2017-04-02 & 5.11\\
 \addlinespace
-2017-01-22 & 3.99 & 6.8024450 & 3.9612223\\
-2017-08-13 & 3.95 & 0.4394224 & -3.0153483\\
-2017-06-11 & 3.91 & 0.9929734 & -1.1792139\\
-2017-04-02 & 3.17 & -2.7721746 & 3.1439975\\
-2017-04-23 & 2.88 & 5.2178165 & 2.4460446\\
+2017-01-22 & 2017-01-29 & 3.99\\
+2017-08-13 & 2017-08-20 & 3.95\\
+2017-06-11 & 2017-06-18 & 3.91\\
+2017-04-02 & 2017-04-09 & 3.17\\
+2017-04-23 & 2017-04-30 & 2.88\\
 \bottomrule
 \end{tabular}
 \end{table}
+We then find the weekly total number of dispatched yellow taxi trips of
+the 10 weeks with the srtat date listed above.
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-76}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
+\centering
+\begin{tabular}[t]{ccccc}
+\toprule
+Pickup Date & Dispatched Trips & Last Week Date & Last Week Trips & \%Change Trips\\
+\midrule
+2017-06-18 & 2231205 & 2017-06-11 & 2285958 & -2.3951884\\
+2017-04-30 & 2386559 & 2017-04-23 & 2394329 & -0.3245168\\
+2017-10-29 & 2266196 & 2017-10-22 & 2267693 & -0.0660142\\
+2017-07-02 & 1664159 & 2017-06-25 & 2038406 & -18.3597870\\
+2017-03-26 & 2341096 & 2017-03-19 & 2272369 & 3.0244648\\
+\addlinespace
+2017-01-22 & 2307122 & 2017-01-15 & 2219214 & 3.9612223\\
+2017-08-13 & 1871668 & 2017-08-06 & 1929860 & -3.0153483\\
+2017-06-11 & 2285958 & 2017-06-04 & 2313236 & -1.1792139\\
+2017-04-02 & 2414700 & 2017-03-26 & 2341096 & 3.1439975\\
+2017-04-23 & 2394329 & 2017-04-16 & 2337161 & 2.4460446\\
+\bottomrule
+\end{tabular}
+\end{table}
+We also need to add the weekly total number of dispatched Uber trips of
+the 10 weeks with the most rainfall.
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-78}10 weeks that have the most rainfall in 2017 and the total number of dispatched Uber trips in those weeks}
+\centering
+\begin{tabular}[t]{ccccc}
+\toprule
+Pickup Date & Dispatched Trips & Last Week Date & Last Week Trips & \%Change Trips\\
+\midrule
+2017-06-18 & 3654932 & 2017-06-11 & 3658220 & -0.0898798\\
+2017-04-30 & 3546893 & 2017-04-23 & 3606408 & -1.6502570\\
+2017-10-29 & 4317572 & 2017-10-22 & 4193611 & 2.9559489\\
+2017-07-02 & 3212582 & 2017-06-25 & 3406814 & -5.7012798\\
+2017-03-26 & 3541624 & 2017-03-19 & 3425475 & 3.3907414\\
+\addlinespace
+2017-01-22 & 3299763 & 2017-01-15 & 3089595 & 6.8024450\\
+2017-08-13 & 3599772 & 2017-08-06 & 3584023 & 0.4394224\\
+2017-06-11 & 3658220 & 2017-06-04 & 3622252 & 0.9929734\\
+2017-04-02 & 3443444 & 2017-03-26 & 3541624 & -2.7721746\\
+2017-04-23 & 3606408 & 2017-04-16 & 3427564 & 5.2178165\\
+\bottomrule
+\end{tabular}
+\end{table}
+We combine the percentage change in total number of dispatched trips of
+yellow taxi and Uber, and we compare the result.
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-80}The percentage change in total number of dispatched trips comparing to the previous weeks of yellow taxi and Uber}
+\centering
+\begin{tabular}[t]{ccccc}
+\toprule
+Pickup Start Date & Weekly Rainfall & Last Week Date & uber & yellow\\
+\midrule
+2017-06-18 & 7.00 & 2017-06-11 & -0.0898798 & -2.3951884\\
+2017-04-30 & 6.71 & 2017-04-23 & -1.6502570 & -0.3245168\\
+2017-10-29 & 6.16 & 2017-10-22 & 2.9559489 & -0.0660142\\
+2017-07-02 & 5.56 & 2017-06-25 & -5.7012798 & -18.3597870\\
+2017-03-26 & 5.11 & 2017-03-19 & 3.3907414 & 3.0244648\\
+\addlinespace
+2017-01-22 & 3.99 & 2017-01-15 & 6.8024450 & 3.9612223\\
+2017-08-13 & 3.95 & 2017-08-06 & 0.4394224 & -3.0153483\\
+2017-06-11 & 3.91 & 2017-06-04 & 0.9929734 & -1.1792139\\
+2017-04-02 & 3.17 & 2017-03-26 & -2.7721746 & 3.1439975\\
+2017-04-23 & 2.88 & 2017-04-16 & 5.2178165 & 2.4460446\\
+\bottomrule
+\end{tabular}
+\end{table}
+Besides the week of April 30th, 2017, all other weeks have higher
+increases in the number of total dispatched trips of Uber or lower
+declines in the number of weekly Uber trips. Therefore, on rainy days,
+Uber drivers tend to increase the number of trips they drive at a higher
+rate.
+
+Uber passengers have to pay higher rate of fare on rainy days becasue of
+Uber's pricing model. Since taxi drivers do not get paid more on rainy
+days, they tend to work less than Uber drivers, which limits the options
+for passengers. Passengers sometimes have to choose the more costly Uber
+instead. NYC TLC could modify the rate of fare on rainy or snowy days to
+incentive taxicab drivers to pick up more trips in order to make taking
+a street hail vechcle on average more affordable on rainy days for
+passengers.
+
 \chapter{New York City Taxi Fare \& Limousine
 Commission}\label{chapter5}
 
@@ -2230,16 +2290,22 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 81.3% of 577783 rows
-Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:03
+Read 51.9% of 577783 rows
+Read 64.0% of 577783 rows
+Read 96.9% of 577783 rows
+Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:05
 \end{verbatim}
 \begin{verbatim}
 
-Read 4.0% of 1491842 rows
-Read 36.2% of 1491842 rows
-Read 54.3% of 1491842 rows
-Read 84.5% of 1491842 rows
-Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:09
+Read 0.0% of 1491842 rows
+Read 5.4% of 1491842 rows
+Read 22.8% of 1491842 rows
+Read 38.9% of 1491842 rows
+Read 53.0% of 1491842 rows
+Read 55.0% of 1491842 rows
+Read 72.4% of 1491842 rows
+Read 85.1% of 1491842 rows
+Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:15
 \end{verbatim}
 \subsection{Trips from Manhattan to JFK
 Airport}\label{trips-from-manhattan-to-jfk-airport}
@@ -2268,7 +2334,7 @@ from other taxi zones in Manhattan.
 rate?}\label{which-taxi-zones-would-pay-more-than-52-without-the-flat-rate}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-88}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-91}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2352,7 +2418,7 @@ JFK Airport to any taxi zone in New York City. What are the most popular
 drop-off zones for yellow taxis from JFK Airport?
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-94}Ten most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-97}Ten most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule

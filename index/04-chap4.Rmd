@@ -223,7 +223,16 @@ uber_weekly_data <- fread("/Users/priscilla/Desktop/Honors Thesis/data/uber_week
 
 uber_weekly <- uber_weekly_data %>%
   group_by(`Pickup Start Date`, `Pickup End Date`) %>%
-  summarise(`Total Dispatched Trips` = sum(`Total Dispatched Trips`))
+  summarise(`Total Dispatched Trips` = sum(`Total Dispatched Trips`)) %>%
+  rename(`Uber Total Dispatched Trips` = `Total Dispatched Trips`) 
+
+uber_weekly <- uber_weekly %>%
+  mutate(month = substr(`Pickup Start Date`, 1, 2),
+         day = substr(`Pickup Start Date`, 4, 5)) %>%
+  mutate(`Pickup Start Date 1` = paste0("2017-", month, "-", day)) %>%
+  select(-`Pickup Start Date`) %>%
+  rename(`Pickup Start Date` = `Pickup Start Date 1`)
+uber_weekly <- uber_weekly[, c(6,2,3)]
 ```
 
 ```{r, message=FALSE, echo=FALSE}
@@ -256,10 +265,15 @@ fwrite(yellow_weekly, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_weekly
 
 ```{r, echo=FALSE,message=FALSE}
 yellow_weekly_data <- fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_weekly_data.csv")
+yellow_weekly_data <- yellow_weekly_data %>%
+  rename(`Yellow Total Dispatched Trips` = `Total Dispatched Trips`) %>%
+  left_join(uber_weekly, by = "Pickup Start Date") %>%
+  select(-`Uber Total Dispatched Trips`)
+yellow_weekly <- yellow_weekly_data[, c(1,3,2)]
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(yellow_weekly_data[1:10,], 
+kable(yellow_weekly[1:10,], 
       caption = "Yellow Taxi 2017 Weekly Total Dispatched Trips",
       format = "latex",
       align = 'c', 
@@ -299,86 +313,112 @@ I got access to the 2017 daily Central Park weather data from the National Clima
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(lubridate)
 weather <- fread("data/nyc_weather_2017.csv")
-#str(weather)
 weather_day <- weather %>%
   mutate(date = as.Date(DATE, tz= "America/New_York")) %>%
   mutate(month = month(date),
          day = day(date)) %>%
   select(STATION_NAME, DATE, date, month, day, HOURLYPrecip) %>%
-  mutate(`Pickup Start Date` = floor_date(date, unit = "week")) %>%
+  mutate(`Pickup Start Date` = floor_date(date, unit = "week"),
+         `Pickup End Date` = ceiling_date(date, unit = "week")) %>%
   filter(HOURLYPrecip != "T") %>%
   mutate(rainfall = substr(HOURLYPrecip, 1,4)) %>%
   mutate(rainfall = as.numeric(rainfall)) %>%
-  group_by(`Pickup Start Date`) %>%
+  group_by(`Pickup Start Date`, `Pickup End Date`) %>%
   summarise(`Weekly Rainfall` = sum(rainfall, na.rm = TRUE)) %>%
   arrange(desc(`Weekly Rainfall`))
 ```
 
-```{r, echo=FALSE}
-weather_day_1 <- weather_day %>%
-  mutate(`Previous Week` = as.Date(`Pickup Start Date`)-7) %>%
-  mutate(`Pickup Start Date` = as.character(`Pickup Start Date`),
-         `Previous Week` = as.character(`Previous Week`))
-weather_day <- weather_day %>%
+First, we generate a list of total amount of daily rainfall in New York City and we pick the 10 weeks that have the most rainfall in 2017.
+
+```{r, message=FALSE, echo=FALSE}
+kable(weather_day[1:10,],
+      caption = "10 weeks that have the most rainfall in 2017",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```
+
+We then find the weekly total number of dispatched yellow taxi trips of the 10 weeks with the srtat date listed above.
+
+```{r, message=FALSE, echo=FALSE}
+weather_week <- weather_day %>%
+  mutate(`Last Week Date` = as.Date(`Pickup Start Date`)-7) %>%
+  mutate(`Last Week Date` = as.character(`Last Week Date`),
+         `Pickup Start Date 1` = as.character(`Pickup Start Date`))
+weather_week <- weather_week[, 2:5]
+weather_week <- weather_week %>%
+  rename(`Pickup Start Date` = `Pickup Start Date 1`)
+yellow_weekly <- yellow_weekly %>%
   mutate(`Pickup Start Date` = as.character(`Pickup Start Date`))
-weather_day_1 <- weather_day_1 %>%
-  left_join(weather_day, by = c("Previous Week"="Pickup Start Date")) 
 
-# rain_week <- weather_day_1 %>%
-#   mutate(diff = `Weekly Rainfall.x` - `Weekly Rainfall.y`) %>%
-#   arrange(desc(diff))
-
-weather_yellow <- weather_day_1 %>%
-  left_join(yellow_weekly_data, by = "Pickup Start Date") %>%
-  rename(`Current Week Dispatched Trips` = `Total Dispatched Trips`)
-
+#yellow
+weather_yellow <- weather_week %>%
+  left_join(yellow_weekly, by = "Pickup Start Date") %>%
+  rename(`Dispatched Trips` = `Yellow Total Dispatched Trips`)
+weather_yellow <- weather_yellow %>%
+  left_join(yellow_weekly, by = c("Last Week Date" = "Pickup Start Date")) %>%
+  rename(`Last Week Trips` = `Yellow Total Dispatched Trips`,
+         `Pickup Date` = `Pickup Start Date`)
 weather_yellow_1 <- weather_yellow %>%
-  left_join(yellow_weekly_data, by = c("Previous Week" = "Pickup Start Date")) %>%
-  rename(`Last Week Dispatched Trips` = `Total Dispatched Trips`)
-
-weather_yellow_1 <- weather_yellow_1 %>%
-  mutate(`Percetage Change In Number of Trips` = ((`Current Week Dispatched Trips`-`Last Week Dispatched Trips`)/`Last Week Dispatched Trips`) *100)
+  mutate(`%Change Trips` = ((`Dispatched Trips`-`Last Week Trips`)/`Last Week Trips`) *100)
+weather_yellow_1 <- weather_yellow_1[, c(4, 6, 3, 8, 9)]
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(weather_day_1[1:10,],
+kable(weather_yellow_1[1:10,],
       caption = "10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks",
       format = "latex",
       align = 'c', 
       escape = TRUE,
       booktabs = TRUE)
 ```
-First, we generate a list of total amount of daily rainfall in New York City and we pick the 10 weeks that have the most rainfall in 2017. We then find the weekly total number of dispatched yellow taxi trips of the 4 weeks with the srtat date listed above. We also need to add the weekly total number of dispatched Uber trips of the 10 weeks with the most rainfall.
+
+We also need to add the weekly total number of dispatched Uber trips of the 10 weeks with the most rainfall.
 
 ```{r, echo=FALSE}
-uber_weekly_data <- uber_weekly_data %>%
-  select(`Pickup Start Date`, `Total Dispatched Trips`) %>%
-  mutate(month = substr(`Pickup Start Date`, 1, 2),
-         day = substr(`Pickup Start Date`, 4, 5)) %>%
-  mutate(`Pickup Start Date` = paste0("2017-", month, "-", day)) %>%
-  group_by(`Pickup Start Date`) %>%
-  summarise(`Total Dispatched Trips` = sum(`Total Dispatched Trips`))
+#Uber
+weather_uber <- weather_week %>%
+  left_join(uber_weekly, by = "Pickup Start Date") %>%
+  rename(`Dispatched Trips` = `Uber Total Dispatched Trips`)
 
-weather_uber <- weather_day_1 %>%
-  left_join(uber_weekly_data, by = "Pickup Start Date") %>%
-  rename(`Current Week Dispatched Trips` = `Total Dispatched Trips`)
+weather_uber <- weather_uber %>%
+  left_join(uber_weekly, by = c("Last Week Date" = "Pickup Start Date")) %>%
+  rename(`Last Week Trips` = `Uber Total Dispatched Trips`,
+         `Pickup Date` = `Pickup Start Date`)
 
 weather_uber_1 <- weather_uber %>%
-  left_join(uber_weekly_data, by = c("Previous Week" = "Pickup Start Date")) %>%
-  rename(`Last Week Dispatched Trips` = `Total Dispatched Trips`)
-
-weather_uber_1 <- weather_uber_1 %>%
-  mutate(`Percetage Change In Number of Trips` = ((`Current Week Dispatched Trips`-`Last Week Dispatched Trips`)/`Last Week Dispatched Trips`) *100)
-
-weather_day_1$uber <- weather_uber_1$`Percetage Change In Number of Trips`
-weather_day_1$yellow <- weather_yellow_1$`Percetage Change In Number of Trips`
+  mutate(`%Change Trips` = ((`Dispatched Trips`-`Last Week Trips`)/`Last Week Trips`) *100)
+weather_uber_1 <- weather_uber_1[, c(4, 6, 3, 8, 9)]
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(weather_day_1[1:10, c(1:2, 5:6)],
-      caption = "10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks",
+kable(weather_uber_1[1:10,],
+      caption = "10 weeks that have the most rainfall in 2017 and the total number of dispatched Uber trips in those weeks",
       format = "latex",
       align = 'c', 
       escape = TRUE,
       booktabs = TRUE)
 ```
+
+We combine the percentage change in total number of dispatched trips of yellow taxi and Uber, and we compare the result.
+
+```{r, message=FALSE, echo=FALSE}
+##total
+weather_week$uber <- weather_uber_1$`%Change Trips`
+weather_week$yellow <- weather_yellow_1$`%Change Trips`
+weather_week <- weather_week[, c(4,2,3,5,6)]
+```
+
+```{r, message=FALSE, echo=FALSE}
+kable(weather_week[1:10,],
+      caption = "The percentage change in total number of dispatched trips comparing to the previous weeks of yellow taxi and Uber",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```
+
+Besides the week of April 30th, 2017, all other weeks have higher increases in the number of total dispatched trips of Uber or lower declines in the number of weekly Uber trips. Therefore, on rainy days, Uber drivers tend to increase the number of trips they drive at a higher rate.
+
+Uber passengers have to pay higher rate of fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead. New York City TLC could modify the rate of fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make taking a street hail vechcle on average more affordable on rainy days for passengers.
