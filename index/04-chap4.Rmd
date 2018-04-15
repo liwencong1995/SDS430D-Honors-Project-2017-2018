@@ -4,7 +4,7 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 
 # New York City Taxi Passengers {#chapter4}
 
-## How long does it take to get to JFK, La Guardia, and Newark Airports? When is the best time to depart?
+## How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City? When is the best time to travel in order to avoid the traffic?
 We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. We need to load trip records with destination as one of the three airports from the MySQL connection we built.
 
 ```{r, message=FALSE, echo=FALSE, eval=FALSE}
@@ -235,7 +235,7 @@ kable(uber_weekly[1:10,],
       booktabs = TRUE)
 ```
 
-**Yellow Cab Weekly Data**
+#### Yellow Cab Weekly Data
 ```{r, eval=FALSE, echo=FALSE}
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", db)
@@ -270,9 +270,7 @@ kable(yellow_weekly_data[1:10,],
 In this section, we use New York City Yellow Taxi and Uber data to calculate the number of trips occurred in each week. 
 
 ### Case Study: March 14th, 2017 Snow Storm
-There are two commonly known bad weather consitions, rainy and snowy day. Let's first focus on snowstorm. I downloaded daily Central Park weather data from the National Climatic Data Center, and joined it to the taxi data to see if we could learn anything else about the relationship between weather and taxi rides. 
-
-On March 14th, 2017, a snow storm brought seven inches of snow to New York City.
+There are two commonly known bad weather consitions, rainy and snowy days. Let's first focus on snowstorm. On March 14th, 2017, a snow storm brought seven inches of snow to New York City.
 **Yellow Taxi**
 ```{r, echo=FALSE}
 yellow_weekly_data %>%
@@ -293,4 +291,94 @@ uber_weekly %>%
 ```
 In this case, we observe that the percent decline in Uber's total number of pick-ups is 10% less than the percent decline in Yellow Taxi's total number of dropp-off. Even though the total number of Uber pick-ups did not increase, Uber's pricing model definitely was able to keep more drivers in the market on a snowy day.
 
-**More analysis is needed here**
+### Case Study: Impact of Precipitation on Taxi Rides
+People living in New York might have noticed that it is hard to find a taxi on the street when it rains. Economists have studied this phenomena for a long time, and an analysis studied the correlationship between taxi movement and hourly rainfall data in Central Park from 2009 to 2013 has found that there is no significant correlation between a driver's hourly wage and rain in the city, which implies that drivers don't earn more when it's raining [@citylab]. 
+
+I got access to the 2017 daily Central Park weather data from the National Climatic Data Center by submitting a Climate Data Online request (Appendix D) to National Centers for Environmental Information [@noaa], and joined it to the 2017 taxi data to study relationship between rainfall and taxi rides. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(lubridate)
+weather <- fread("data/nyc_weather_2017.csv")
+#str(weather)
+weather_day <- weather %>%
+  mutate(date = as.Date(DATE, tz= "America/New_York")) %>%
+  mutate(month = month(date),
+         day = day(date)) %>%
+  select(STATION_NAME, DATE, date, month, day, HOURLYPrecip) %>%
+  mutate(`Pickup Start Date` = floor_date(date, unit = "week")) %>%
+  filter(HOURLYPrecip != "T") %>%
+  mutate(rainfall = substr(HOURLYPrecip, 1,4)) %>%
+  mutate(rainfall = as.numeric(rainfall)) %>%
+  group_by(`Pickup Start Date`) %>%
+  summarise(`Weekly Rainfall` = sum(rainfall, na.rm = TRUE)) %>%
+  arrange(desc(`Weekly Rainfall`))
+```
+
+```{r, echo=FALSE}
+weather_day_1 <- weather_day %>%
+  mutate(`Previous Week` = as.Date(`Pickup Start Date`)-7) %>%
+  mutate(`Pickup Start Date` = as.character(`Pickup Start Date`),
+         `Previous Week` = as.character(`Previous Week`))
+weather_day <- weather_day %>%
+  mutate(`Pickup Start Date` = as.character(`Pickup Start Date`))
+weather_day_1 <- weather_day_1 %>%
+  left_join(weather_day, by = c("Previous Week"="Pickup Start Date")) 
+
+# rain_week <- weather_day_1 %>%
+#   mutate(diff = `Weekly Rainfall.x` - `Weekly Rainfall.y`) %>%
+#   arrange(desc(diff))
+
+weather_yellow <- weather_day_1 %>%
+  left_join(yellow_weekly_data, by = "Pickup Start Date") %>%
+  rename(`Current Week Dispatched Trips` = `Total Dispatched Trips`)
+
+weather_yellow_1 <- weather_yellow %>%
+  left_join(yellow_weekly_data, by = c("Previous Week" = "Pickup Start Date")) %>%
+  rename(`Last Week Dispatched Trips` = `Total Dispatched Trips`)
+
+weather_yellow_1 <- weather_yellow_1 %>%
+  mutate(`Percetage Change In Number of Trips` = ((`Current Week Dispatched Trips`-`Last Week Dispatched Trips`)/`Last Week Dispatched Trips`) *100)
+```
+
+```{r, message=FALSE, echo=FALSE}
+kable(weather_day_1[1:10,],
+      caption = "10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```
+First, we generate a list of total amount of daily rainfall in New York City and we pick the 10 weeks that have the most rainfall in 2017. We then find the weekly total number of dispatched yellow taxi trips of the 4 weeks with the srtat date listed above. We also need to add the weekly total number of dispatched Uber trips of the 10 weeks with the most rainfall.
+
+```{r, echo=FALSE}
+uber_weekly_data <- uber_weekly_data %>%
+  select(`Pickup Start Date`, `Total Dispatched Trips`) %>%
+  mutate(month = substr(`Pickup Start Date`, 1, 2),
+         day = substr(`Pickup Start Date`, 4, 5)) %>%
+  mutate(`Pickup Start Date` = paste0("2017-", month, "-", day)) %>%
+  group_by(`Pickup Start Date`) %>%
+  summarise(`Total Dispatched Trips` = sum(`Total Dispatched Trips`))
+
+weather_uber <- weather_day_1 %>%
+  left_join(uber_weekly_data, by = "Pickup Start Date") %>%
+  rename(`Current Week Dispatched Trips` = `Total Dispatched Trips`)
+
+weather_uber_1 <- weather_uber %>%
+  left_join(uber_weekly_data, by = c("Previous Week" = "Pickup Start Date")) %>%
+  rename(`Last Week Dispatched Trips` = `Total Dispatched Trips`)
+
+weather_uber_1 <- weather_uber_1 %>%
+  mutate(`Percetage Change In Number of Trips` = ((`Current Week Dispatched Trips`-`Last Week Dispatched Trips`)/`Last Week Dispatched Trips`) *100)
+
+weather_day_1$uber <- weather_uber_1$`Percetage Change In Number of Trips`
+weather_day_1$yellow <- weather_yellow_1$`Percetage Change In Number of Trips`
+```
+
+```{r, message=FALSE, echo=FALSE}
+kable(weather_day_1[1:10, c(1:2, 5:6)],
+      caption = "10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```

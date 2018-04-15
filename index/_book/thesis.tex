@@ -539,8 +539,9 @@ The data can be accessed by using the following commands:
 
 The total size of Uber pick-up data (from Apr to Sep 2014 and from Jan
 to June 2015) is 900 MB, and thanks to FiveThirtyEight who obtained the
-data from NYC TLC by submitting a Freedom of Information Law request on
-July 20, 2015, these data are now open to public. (staff, 2009c)
+data from NYC TLC by submitting a Freedom of Information Law (FOIL)
+request on July 20, 2015, these data are now open to public (staff,
+2009c).
 
 The 2014 Uber data contains 4 variables: \texttt{Date/Time} (the date
 and time of the Uber pick-up), \texttt{Lat} (the latitude of the Uber
@@ -727,6 +728,10 @@ The default \texttt{years} is the current year, and the default
 transportation is \texttt{yellow}. When an invalid month is entered,
 warning message will suggest users to reconsider their choice and select
 a new set of month.
+
+An utility function, \texttt{download\_nyc\_data()}, was written to be
+used in \texttt{etl\_extract.etl\_nyctaxi()} to make this function more
+condense (Appendix A).
 
 \subsection{Transform}\label{transform}
 
@@ -1506,11 +1511,14 @@ Therefore, in order to make more profit, taxi drivers prefer to pick up
 passengers who offer big amount of tips. What are the regions that
 provide the most tips to yellow taxicab drivers?
 
-In the following analysis, we will focus on trip data collected in 2017.
-Taxi drivers usually do not correctly record the amount of tips paid by
-cash or check (W. Li, 2018). Therefore, in order to find out the regions
-that offer the most tips, we need to filter out the trips that are not
-paid by credit or debit card.
+In this analysis, we will focus on trip data collected in 2017.
+Descriptions of variables mentioned in the following chapters can be
+found in Appendix B.
+
+In order to answer questions regarding to taxi trips' tips, we filter
+out trips that are not paid by credit or debit card, because taxi
+drivers usually do not correctly record the amount of tips paid by cash
+or check (Appendix C) (W. Li, 2018).
 
 As mentioned in the previous chapter, that we can utlize the connection
 to a MySQL database to run data analysis in MySQL for medium-sized data.
@@ -1888,9 +1896,10 @@ during rush hours.
 
 \chapter{New York City Taxi Passengers}\label{chapter4}
 
-\section{How long does it take to get to JFK, La Guardia, and Newark
-Airports? When is the best time to
-depart?}\label{how-long-does-it-take-to-get-to-jfk-la-guardia-and-newark-airports-when-is-the-best-time-to-depart}
+\section{How long does it take passengers to get to JFK, La Guardia, and
+Newark Airports from anywhere in New York City? When is the best time to
+travel in order to avoid the
+traffic?}\label{how-long-does-it-take-passengers-to-get-to-jfk-la-guardia-and-newark-airports-from-anywhere-in-new-york-city-when-is-the-best-time-to-travel-in-order-to-avoid-the-traffic}
 
 We want to calculate the average number of minutes it takes to go to all
 three airport from a specific taxi zone at every hour. First, we want to
@@ -2035,7 +2044,7 @@ Pickup Start Date & Pickup End Date & Total Dispatched Trips\\
 \bottomrule
 \end{tabular}
 \end{table}
-\textbf{Yellow Cab Weekly Data}
+\subsubsection{Yellow Cab Weekly Data}\label{yellow-cab-weekly-data}
 \begin{table}
 
 \caption{\label{tab:unnamed-chunk-68}Yellow Taxi 2017 Weekly Total Dispatched Trips}
@@ -2065,13 +2074,8 @@ calculate the number of trips occurred in each week.
 Storm}\label{case-study-march-14th-2017-snow-storm}
 
 There are two commonly known bad weather consitions, rainy and snowy
-day. Let's first focus on snowstorm. I downloaded daily Central Park
-weather data from the National Climatic Data Center, and joined it to
-the taxi data to see if we could learn anything else about the
-relationship between weather and taxi rides.
-
-On March 14th, 2017, a snow storm brought seven inches of snow to New
-York City. \textbf{Yellow Taxi}
+days. Let's first focus on snowstorm. On March 14th, 2017, a snow storm
+brought seven inches of snow to New York City. \textbf{Yellow Taxi}
 \begin{verbatim}
   Pickup Start Date Total Dispatched Trips
 1        2017-03-05                2456285
@@ -2108,8 +2112,72 @@ number of dropp-off. Even though the total number of Uber pick-ups did
 not increase, Uber's pricing model definitely was able to keep more
 drivers in the market on a snowy day.
 
-\textbf{More analysis is needed here}
+\subsection{Case Study: Impact of Precipitation on Taxi
+Rides}\label{case-study-impact-of-precipitation-on-taxi-rides}
 
+People living in New York might have noticed that it is hard to find a
+taxi on the street when it rains. Economists have studied this phenomena
+for a long time, and an analysis studied the correlationship between
+taxi movement and hourly rainfall data in Central Park from 2009 to 2013
+has found that there is no significant correlation between a driver's
+hourly wage and rain in the city, which implies that drivers don't earn
+more when it's raining (Jaffe, 2014).
+
+I got access to the 2017 daily Central Park weather data from the
+National Climatic Data Center by submitting a Climate Data Online
+request (Appendix D) to National Centers for Environmental Information
+(Environmental Information staff, n.d.), and joined it to the 2017 taxi
+data to study relationship between rainfall and taxi rides.
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-75}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
+\centering
+\begin{tabular}[t]{cccc}
+\toprule
+Pickup Start Date & Weekly Rainfall.x & Previous Week & Weekly Rainfall.y\\
+\midrule
+2017-06-18 & 7.00 & 2017-06-11 & 3.91\\
+2017-04-30 & 6.71 & 2017-04-23 & 2.88\\
+2017-10-29 & 6.16 & 2017-10-22 & 0.20\\
+2017-07-02 & 5.56 & 2017-06-25 & 0.78\\
+2017-03-26 & 5.11 & 2017-03-19 & 0.01\\
+\addlinespace
+2017-01-22 & 3.99 & 2017-01-15 & 1.03\\
+2017-08-13 & 3.95 & 2017-08-06 & 2.34\\
+2017-06-11 & 3.91 & 2017-06-04 & 0.22\\
+2017-04-02 & 3.17 & 2017-03-26 & 5.11\\
+2017-04-23 & 2.88 & 2017-04-16 & 1.58\\
+\bottomrule
+\end{tabular}
+\end{table}
+First, we generate a list of total amount of daily rainfall in New York
+City and we pick the 10 weeks that have the most rainfall in 2017. We
+then find the weekly total number of dispatched yellow taxi trips of the
+4 weeks with the srtat date listed above. We also need to add the weekly
+total number of dispatched Uber trips of the 10 weeks with the most
+rainfall.
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-77}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
+\centering
+\begin{tabular}[t]{cccc}
+\toprule
+Pickup Start Date & Weekly Rainfall.x & uber & yellow\\
+\midrule
+2017-06-18 & 7.00 & -0.0898798 & -2.3951884\\
+2017-04-30 & 6.71 & -1.6502570 & -0.3245168\\
+2017-10-29 & 6.16 & 2.9559489 & -0.0660142\\
+2017-07-02 & 5.56 & -5.7012798 & -18.3597870\\
+2017-03-26 & 5.11 & 3.3907414 & 3.0244648\\
+\addlinespace
+2017-01-22 & 3.99 & 6.8024450 & 3.9612223\\
+2017-08-13 & 3.95 & 0.4394224 & -3.0153483\\
+2017-06-11 & 3.91 & 0.9929734 & -1.1792139\\
+2017-04-02 & 3.17 & -2.7721746 & 3.1439975\\
+2017-04-23 & 2.88 & 5.2178165 & 2.4460446\\
+\bottomrule
+\end{tabular}
+\end{table}
 \chapter{New York City Taxi Fare \& Limousine
 Commission}\label{chapter5}
 
@@ -2162,16 +2230,17 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 77.9% of 577783 rows
+Read 79.6% of 577783 rows
 Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:03
 \end{verbatim}
 \begin{verbatim}
 
-Read 15.4% of 1491842 rows
-Read 24.8% of 1491842 rows
+Read 4.0% of 1491842 rows
+Read 36.2% of 1491842 rows
+Read 53.6% of 1491842 rows
 Read 54.3% of 1491842 rows
-Read 85.1% of 1491842 rows
-Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:08
+Read 84.5% of 1491842 rows
+Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:09
 \end{verbatim}
 \subsection{Trips from Manhattan to JFK
 Airport}\label{trips-from-manhattan-to-jfk-airport}
@@ -2200,7 +2269,7 @@ from other taxi zones in Manhattan.
 rate?}\label{which-taxi-zones-would-pay-more-than-52-without-the-flat-rate}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-83}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-88}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2284,7 +2353,7 @@ JFK Airport to any taxi zone in New York City. What are the most popular
 drop-off zones for yellow taxis from JFK Airport?
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-89}Ten most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-94}Ten most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2391,9 +2460,8 @@ might be possible for me to predict the future market share distribution
 and find out what features of ride-hail transportation are the ones that
 affect market share distribution the most.
 
-\chapter{Appendix A}\label{appendix-a}
-
-\section{utility function}\label{utility-function}
+\section{Appendix A: Utility
+Function}\label{appendix-a-utility-function}
 
 This utility function was written to shortened the source code in ETL
 \texttt{etl\_extract.etl\_nyctaxi()} function.
@@ -2407,6 +2475,31 @@ This utility function was written to shortened the source code in ETL
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
+\section{Appendix B: Data Dictionary -- Yellow Taxi Trips
+Records}\label{appendix-b-data-dictionary-yellow-taxi-trips-records}
+\begin{figure}
+  \centering
+  \includegraphics[width=6in]{figure/data_dictionary_trip_records_yellow.pdf}
+  \caption{Data Dictionary -- Yellow Taxi Trips Records}
+\end{figure}
+\section{Appendix C: FOIL Request}\label{appendix-c-foil-request}
+\begin{figure}
+  \centering
+  \includegraphics[width=6in]{figure/appendix_foil_form_doc.pdf}
+  \caption{FOIL Request}
+\end{figure}
+\section{Appendix D: NOAA Climate Data
+Request}\label{appendix-d-noaa-climate-data-request}
+\begin{figure}
+  \centering
+  \includegraphics[width=6in]{figure/app_noaa_request.pdf}
+  \caption{NOAA Climate Data Request}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=6in]{figure/app_noaa_com.pdf}
+  \caption{NOAA Climate Data Order Compeleted}
+\end{figure}
 \backmatter
 
 \chapter*{References}\label{references}
@@ -2440,6 +2533,11 @@ tired of Christmas and Donald Trump. New York Post. Retrieved from
 Dowle, M., \& Srinivasan, A. (2017). \emph{Data.table: Extension of
 `data.frame`}. Retrieved from
 \url{https://CRAN.R-project.org/package=data.table}
+
+\hypertarget{ref-noaa}{}
+Environmental Information staff, N. C. for. (n.d.). Climate Data Online.
+National Centers for Environmental Information. Retrieved from
+\url{https://www.ncdc.noaa.gov/cdo-web/}
 
 \hypertarget{ref-wikipedia}{}
 Extract, transform, load. (2018, March). \emph{Wikipedia}. Wikimedia
@@ -2475,6 +2573,11 @@ Many a Thing of the Past. The New York Times. Retrieved from
 HyreCar. (2018, January). Uber's 4 Basic Level of Service. HyreCar.
 Retrieved from
 \url{https://hyrecar.com/blog/difference-between-uber-cars/}
+
+\hypertarget{ref-citylab}{}
+Jaffe, E. (2014, October). Why New Yorkers Can't Find a Taxi When It
+Rains. CITYLAB. Retrieved from
+\url{https://www.citylab.com/environment/2014/10/why-new-yorkers-cant-find-a-taxi-when-it-rains/381652/}
 
 \hypertarget{ref-foirequest}{}
 Li, W. (2018, February). FOIL request. NYC TLC.
@@ -2524,8 +2627,8 @@ Commission. Retrieved from
 \url{http://www.nyc.gov/html/tlc/html/passenger/shl_passenger.shtml}
 
 \hypertarget{ref-tlcfarerate}{}
-staff, N. T. (n.d.). Taxicab Rate of Fare. NYC TLC. Retrieved from
-\url{http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml}
+staff, N. T. (n.d.). NYC tlc Taxicab Rate of Fare. NYC TLC. Retrieved
+from \url{http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml}
 
 \hypertarget{ref-sugar2017}{}
 Sugar, R. (2017, January). Uber and Lyft cars now outnumber yellow cabs

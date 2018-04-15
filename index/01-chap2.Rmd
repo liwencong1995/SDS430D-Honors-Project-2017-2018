@@ -41,7 +41,7 @@ download.file("http://data.cityofnewyork.us/api/views/2v9c-2k7f/rows.csv?accessT
 ```
 
 ### Uber
-The total size of Uber pick-up data (from Apr to Sep 2014 and from Jan to June 2015) is 900 MB, and thanks to FiveThirtyEight who obtained the data from NYC TLC by submitting a Freedom of Information Law request on July 20, 2015, these data are now open to public. [@datauber]
+The total size of Uber pick-up data (from Apr to Sep 2014 and from Jan to June 2015) is 900 MB, and thanks to FiveThirtyEight who obtained the data from NYC TLC by submitting a Freedom of Information Law (FOIL) request on July 20, 2015, these data are now open to public [@datauber].
 
 The 2014 Uber data contains 4 variables: `Date/Time` (the date and time of the Uber pick-up), `Lat` (the latitude of the Uber pick-up), `Lon` (the longitude of the Uber pick-up), and `Base` (the TLC base company code affiliated with the Uber pickup).
 
@@ -144,6 +144,8 @@ taxi %>%
 ```
 
 The default `years` is the current year, and the default `months` are the all twelve months. The default type of transportation is `yellow`. When an invalid month is entered, warning message will suggest users to reconsider their choice and select a new set of month. 
+
+An utility function, `download_nyc_data()`, was written to be used in `etl_extract.etl_nyctaxi()` to make this function more condense (Appendix A).
 
 ### Transform
 `etl_transform.etl_nyctaxi()` allows users to transform New York City yellow taxi, green taxi, Uber, and Lyft data into cleaned formats, and it utlizes different data cleaning techniques when it transforms data for each transportation type. In general, it cleans the data and creates a new `csv` file in the `load` directory to store the cleaned data. It helps us to retain and protect raw data from being modified or destroyed. Users are allowed to specify the month of interest in order to only transform the data that they are interested in. This functionality helps people to be more efficient with their use of time.

@@ -45,19 +45,22 @@
 \BOOKMARK [2][-]{subsection.3.3.1}{Do taxi drivers tend to go to zones that offer high tips?}{section.3.3}% 45
 \BOOKMARK [2][-]{subsection.3.3.2}{Do passengers pay more tips during rush hours?}{section.3.3}% 46
 \BOOKMARK [0][-]{chapter.4}{Chapter 4: New York City Taxi Passengers}{}% 47
-\BOOKMARK [1][-]{section.4.1}{How long does it take to get to JFK, La Guardia, and Newark Airports? When is the best time to depart?}{chapter.4}% 48
+\BOOKMARK [1][-]{section.4.1}{How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City? When is the best time to travel in order to avoid the traffic?}{chapter.4}% 48
 \BOOKMARK [2][-]{subsection.4.1.1}{Case Study: From Alphabet City, Manhattan to all three airport}{section.4.1}% 49
 \BOOKMARK [2][-]{subsection.4.1.2}{A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{section.4.1}% 50
 \BOOKMARK [1][-]{section.4.2}{How does weather affect the number of taxi and Lyft trips?}{chapter.4}% 51
 \BOOKMARK [2][-]{subsection.4.2.1}{Case Study: March 14th, 2017 Snow Storm}{section.4.2}% 52
-\BOOKMARK [0][-]{chapter.5}{Chapter 5: New York City Taxi Fare \046 Limousine Commission}{}% 53
-\BOOKMARK [1][-]{section.5.1}{Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{chapter.5}% 54
-\BOOKMARK [2][-]{subsection.5.1.1}{People departing from Manhattan benefit from the \04452 flat rate}{section.5.1}% 55
-\BOOKMARK [2][-]{subsection.5.1.2}{Trips from Manhattan to JFK Airport}{section.5.1}% 56
-\BOOKMARK [2][-]{subsection.5.1.3}{Which taxi zones would pay more than \04452 without the flat rate?}{section.5.1}% 57
-\BOOKMARK [1][-]{section.5.2}{However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?}{chapter.5}% 58
-\BOOKMARK [0][-]{chapter.6}{Chapter 6: Conclusion}{}% 59
-\BOOKMARK [1][-]{section.6.1}{Future Research}{chapter.6}% 60
-\BOOKMARK [0][-]{chapter.7}{Chapter 7: Appendix A}{}% 61
-\BOOKMARK [1][-]{section.7.1}{utility function}{chapter.7}% 62
-\BOOKMARK [0][-]{chapter*.37}{References}{}% 63
+\BOOKMARK [2][-]{subsection.4.2.2}{Case Study: Impact of Precipitation on Taxi Rides}{section.4.2}% 53
+\BOOKMARK [0][-]{chapter.5}{Chapter 5: New York City Taxi Fare \046 Limousine Commission}{}% 54
+\BOOKMARK [1][-]{section.5.1}{Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{chapter.5}% 55
+\BOOKMARK [2][-]{subsection.5.1.1}{People departing from Manhattan benefit from the \04452 flat rate}{section.5.1}% 56
+\BOOKMARK [2][-]{subsection.5.1.2}{Trips from Manhattan to JFK Airport}{section.5.1}% 57
+\BOOKMARK [2][-]{subsection.5.1.3}{Which taxi zones would pay more than \04452 without the flat rate?}{section.5.1}% 58
+\BOOKMARK [1][-]{section.5.2}{However, are taxi drivers happy when their passengers are going to JFK Airport from Manhattan?}{chapter.5}% 59
+\BOOKMARK [0][-]{chapter.6}{Chapter 6: Conclusion}{}% 60
+\BOOKMARK [1][-]{section.6.1}{Future Research}{chapter.6}% 61
+\BOOKMARK [1][-]{section.6.2}{Appendix A: Utility Function}{chapter.6}% 62
+\BOOKMARK [1][-]{section.6.3}{Appendix B: Data Dictionary \205 Yellow Taxi Trips Records}{chapter.6}% 63
+\BOOKMARK [1][-]{section.6.4}{Appendix C: FOIL Request}{chapter.6}% 64
+\BOOKMARK [1][-]{section.6.5}{Appendix D: NOAA Climate Data Request}{chapter.6}% 65
+\BOOKMARK [0][-]{chapter*.44}{References}{}% 66
