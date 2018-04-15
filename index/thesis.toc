@@ -68,8 +68,8 @@
 \contentsline {subsubsection}{Hourly fare rate for taxi drivers going from Manhattan to JFK airport}{81}{section*.39}
 \contentsline {chapter}{Chapter 6: Conclusion}{83}{chapter.6}
 \contentsline {section}{\numberline {6.1}Future Research}{83}{section.6.1}
-\contentsline {section}{\numberline {6.2}Appendix A: Utility Function}{84}{section.6.2}
-\contentsline {section}{\numberline {6.3}Appendix B: Data Dictionary -- Yellow Taxi Trips Records}{86}{section.6.3}
-\contentsline {section}{\numberline {6.4}Appendix C: FOIL Request}{87}{section.6.4}
-\contentsline {section}{\numberline {6.5}Appendix D: NOAA Climate Data Request}{89}{section.6.5}
-\contentsline {chapter}{References}{91}{chapter*.44}
+\contentsline {chapter}{Appendix A: Utility Function}{85}{appendix.A}
+\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{87}{appendix.B}
+\contentsline {chapter}{Appendix C: Appendix C: FOIL Request}{89}{appendix.C}
+\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{91}{appendix.D}
+\contentsline {chapter}{References}{93}{appendix*.44}

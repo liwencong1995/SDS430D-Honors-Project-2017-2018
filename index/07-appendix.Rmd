@@ -1,6 +1,13 @@
-# Appendix 
+`r if(knitr:::is_latex_output()) '\\appendix'`
 
-## Appendix A: Utility Function
+`r if(!knitr:::is_latex_output()) '# (APPENDIX) Appendix {-}'` 
+
+<!--
+If you feel it necessary to include an appendix, it goes here.
+-->
+
+
+# Utility Function
 This utility function was written to shortened the source code in ETL `etl_extract.etl_nyctaxi()` function.
 
 ```{r, eval=FALSE}
@@ -12,31 +19,31 @@ download_nyc_data <- function(obj, url, years, n, names, ...) {
 }
 ```
 
-## Appendix B: Data Dictionary -- Yellow Taxi Trips Records
+# Data Dictionary -- Yellow Taxi
 \begin{figure}
   \centering
-  \includegraphics[width=6in]{figure/data_dictionary_trip_records_yellow.pdf}
+  \includegraphics[width=4in]{figure/data_dictionary_trip_records_yellow.pdf}
   \caption{Data Dictionary -- Yellow Taxi Trips Records}
 \end{figure}
 
-## Appendix C: FOIL Request
+# Appendix C: FOIL Request
 \begin{figure}
   \centering
-  \includegraphics[width=6in]{figure/appendix_foil_form_doc.pdf}
+  \includegraphics[width=4in]{figure/appendix_foil_form_doc.pdf}
   \caption{FOIL Request}
 \end{figure}
 
 
-## Appendix D: NOAA Climate Data Request
+# NOAA Climate Data Request
 \begin{figure}
   \centering
-  \includegraphics[width=6in]{figure/app_noaa_request.pdf}
+  \includegraphics[width=4in]{figure/app_noaa_request.pdf}
   \caption{NOAA Climate Data Request}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=6in]{figure/app_noaa_com.pdf}
+  \includegraphics[width=4in]{figure/app_noaa_com.pdf}
   \caption{NOAA Climate Data Order Compeleted}
 \end{figure}
 
