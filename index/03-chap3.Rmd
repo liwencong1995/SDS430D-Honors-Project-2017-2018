@@ -112,8 +112,8 @@ fwrite(yellow_2017_summary_1, "/Users/priscilla/Desktop/Honors Thesis/data/yello
 yellow_2017_summary <- bind_rows(yellow_2017_summary_1, yellow_2017_summary_2)
 ```
 
-## Aggregated Zone-level Tip Information
-Instead of the absolute amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. Therefore, we use tip amount over fare amount to calculate the percent tip. We then calculated the mean percent tip, mean distances travelled, mean number of minutes spent travelling, and total number of trips of each pick-up and drop-off pair in 2017 to get the aggregated zone-level information in order to compare the percent tip passengers pay in each zone. 
+## Aggregated Zone-level Tip Amount
+Instead of the nominal amount of tips, we want to focus on the percentage of tips that passengers pay in addition to the total fare amount. Therefore, we use tip amount over fare amount to calculate the percent tip. We then calculated the mean percent tip, mean distances travelled, mean number of minutes spent travelling, and total number of trips of each pick-up and drop-off pair in 2017 to get the aggregated zone-level information in order to compare the percent tip passengers pay in each zone. 
 
 ```{r, eval=FALSE}
 yellow_2017_summary <- yellow_2017 %>%
@@ -176,7 +176,7 @@ Figure \@ref(fig:region-vis) is a histogram of mean tip percents for all known p
 knitr::include_graphics("figure/taxi-screen.jpg", dpi = 100 )
 ```
 
-### Pick-up Zone Tip Information
+### Pick-up Zone Percent Tip Amount
 Taxi drivers are required to be indifferent to where passengers are going. It is illegal for New York city taxi drivers to refuse service because of passengers' race, ethnicity, cultural background, disbility, gender, or destination [@Rebecca2015]. Taxi drivers cannot choose where the passengers want to go, and instead they can only choose which pick-up zone they would prefer to driver around to get hailed. Therefore, it makes sense to investigate the average amount of tips paid by passengers departed from each pick-up zone. What are the taxi pick-up zones that have the highest percent tips paid by passengers?
 
 We first calculate the average percent tip paid for each pick-up zone. 
@@ -204,7 +204,7 @@ kable(tip_pickup_1[1:10,c(4, 6:9)],
       escape = TRUE,
       booktabs = TRUE)
 ```
-Table \@ref(tab:tip_pickup_1) is a list of pick-up zones with their average percent tips.
+Table 3.1 is a list of pick-up zones with their average percent tips.
 
 We created a histogram to visualize the distribution of average percent tips paid for all pick-up zones. 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
@@ -216,19 +216,10 @@ knitr::include_graphics("figure/pickup_vis.png", dpi = 150 )
 ```
 As show in Figure \@ref(fig:pickup-vis), the first peak is around 20%, which is the cheapest default option on the touch panel for passengers to chose. 
 
-### Does trip distance increase the percent tips paid? 
-Will longer trips result in higher tip percent. It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. I personally pay higher percent of tips for longer rides, so I believe trip distance has an impact on percentage of tips paid.
-
-```{r, echo=FALSE}
-tip_distance <- lm(avg_tip ~ avg_dis + PULocationID + DOLocationID, data = tip_region)
-summary(tip_distance)$coef[1:2,]
-```
-Acoording to the simple linear regression result, trip distance does have a negative significant impact on the percent of tips paid, controlling for both pick-up and drop-off locations. This could be caused by a psychological reason. Long trips cost more than short trips. For a constant tip percent, the nominal value of tip amount cost more for longer trips. For example, for a \$100 trip, 20% tip costs \$20; for a \$50 trip, 20% tip costs \$10. Even though consumers are paying the same percent amount of tips, \$20 is more expensive than \$10. Therefore, consumers might decide to pay less percent tip for longer trips.
-
-### Which taxi zones have the highest number of pick-ups?
+### Which pick-up zones have the highest number of pick-ups?
 Which pick-up zones have the highest number of taxi trip pick-ups? We can create a heat map to visualizae the number of trips for each pick-up zones on a map of New York City Taxi Zones.
 
-```{r, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 tip_pickup_zone <- tip_pickup %>%
   group_by(PULocationID) %>%
   summarise(avg_tip = round(mean(avg_tip), 2), 
@@ -259,10 +250,10 @@ URL <- "/Users/priscilla/Desktop/Honors Thesis/figure/num_trip.html"
 webshot(URL, "figure/num_trip.png", cliprect = "viewport")
 ```
 
-```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE}
+```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE, warning=FALSE}
 knitr::include_graphics("figure/num_trip.png", dpi = 200 )
 ```
-According to Figure \@ref(fig:num-trip), It's obvious that Upper East Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most popular location for pick-ups.
+According to Figure \@ref(fig:num-trip), it's obvious that Upper East Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most popular location for pick-ups.
 
 ```{r, message=FALSE, echo=FALSE}
 kable(tip_pickup_zone[1:10,c(2, 4:7)], 
@@ -272,11 +263,11 @@ kable(tip_pickup_zone[1:10,c(2, 4:7)],
       escape = TRUE,
       booktabs = TRUE)
 ```
-Table \@ref(tab:tip_pickup_zone) gives you a better idea of which taxi zones have the highest number of pick-ups.
+Table 3.2 gives you a better idea of which taxi zones have the highest number of pick-ups.
 
-### Which taxi zones have the highest percent tips? 
+### Which pick-up zones have the highest percent tips? 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up zones that have at least 24 trips per day or 8760 per year, we will observe that many taxi pick-up zones with the highest percent tips are not necessarily the ones with the highest number of pick-ups. 
-```{r}
+```{r, echo=FALSE}
 #pick a threshold for the cutoff number of trips
 pickup_zone_30 <- tip_pickup_zone %>%
   filter(num_trips >= (24*365)) %>%
@@ -294,7 +285,7 @@ kable(pickup_zone_30[1:10, c(2, 4:7)], caption = "Ten taxi pick-up zones with th
 People might think it is more reasonable to see a list that is populated with Zones in Manhattan, since that's where most of the wealthy people live. However, Table \@ref(tab:pickup_zone_30) shows that passengers who get on taxis from certain zones in Brooklyn and Queens also pay a lot of tips. Taxi drivers who would love to get more tips compensation can drive to the zones listed above to pick-up passengers.
 
 If we focus on the pick-up zones that have more than 2400 trips per day, then we observe that all pick-up zones that have the highest percent tips are in Manhattan besides La Guardia Airport.
-```{r}
+```{r, echo=FALSE}
 pickup_zone_3000 <- tip_pickup_zone %>%
   filter(num_trips >= (365*24*60)) %>%
   arrange(desc(avg_tip))
@@ -308,44 +299,37 @@ kable(pickup_zone_3000[1:10,c(2, 4:7)],
       escape = TRUE,
       booktabs = TRUE)
 ```
-There are more than 100 times more yellow cab pick-ups that happen in Manhattan everyday than in Brooklyn. By comparing the average tip percent in Table \@ref(tab:pickup_zone_30) and Table \@ref(tab:pickup_zone_3000), we can observe that percent tips paid in taxi zones with low pick-up numbers seem to be higher than percent tips paid in taxi zones with high pick-up numbers. 
+There are more than 100 times more yellow cab pick-ups that happen in Manhattan everyday than in Brooklyn. By comparing the average tip percent in Table 3.2 and Table 3.3, we can observe that percent tips paid in taxi zones with low pick-up numbers seem to be higher than percent tips paid in taxi zones with high pick-up numbers. 
 
-## add median income variable
-
-## What features of taxi trips are attractive to taxi drivers?
+## What features of taxi trips increase the percent tip amount that passengers pay?
 So far, we have learned what pick-up zones offer the highest percent tip. Now, we want to dig into the relationships between percent tip and taxi-zone-specific variables. 
 
-### Do taxi drivers tend to go to zones that offer high tips?
-It is not easy to find an available taxi on the street on New York City, because the demand for taxi trips is much higher than the supply. Do passengers departing from the same taxi zone paying high percent tips help customers to attract more taxis? 
+### Does trip distance increase the percent tips paid by passengers? 
+Will longer trips result in higher tip percent. It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. I personally pay higher percent of tips for longer rides, so I believe trip distance has an impact on percentage of tips paid.
 
-If customers from certain regions keep paying higher tips, taxi drivers might be able to learn from their experiences in those regions, and be willing to wonder around those regions more often and pick up passengers. Pick-up zones with higher tips should attract more taxi drivers with the control of taxi zones. However, conflicting to what I assumed, Table \@ref(tab:pickup_zone_30) and Table \@ref(tab:pickup_zone_3000) show that percent tips seem to have a inverse relationship with number of pick-ups. 
-
-Let's test the relationship between number of trips and average percent tips in each pick-up zone:
 ```{r, echo=FALSE}
-tip_pickup$PULocationID <- as.character(tip_pickup$PULocationID)
-tip_pickup$month <- as.character(tip_pickup$month)
-tip_and_trip_1 <- lm(num_trips ~ avg_tip + month, data = tip_pickup)
-summary(tip_and_trip_1)$coef[1:2,]
+tip_distance <- lm(avg_tip ~ avg_dis + PULocationID + DOLocationID, data = tip_region)
+summary(tip_distance)$coef[1:2,]
 ```
-Each one percent increase in average tips in pick-up zones is associated with a significant decline in the number of trips per month. Therefore, increase in average percent tips in pick-up zones does not make pick-up zones more attractive. Taxi drivers are not attracted to taxi zones with high percent tips. This is why we observe high percent tips in Baisley Park, Queens in Table \@ref(tab:pickup_zone_30). 
+Acoording to the simple linear regression result, trip distance does have a negative significant impact on the percent of tips paid, controlling for both pick-up and drop-off locations. This could be caused by a psychological reason. Long trips cost more than short trips. For a constant tip percent, the nominal value of tip amount cost more for longer trips. For example, for a \$100 trip, 20% tip costs \$20; for a \$50 trip, 20% tip costs \$10. Even though consumers are paying the same percent amount of tips, \$20 is more expensive than \$10. Therefore, consumers might decide to pay less percent tip for longer trips.
 
 ### Do passengers pay more tips during rush hours? 
 New York City Taxi Fare & Limousine Commission has information on how New York City taxi fare amount is calculated on their [official website](http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml). 
 
 #### Metered Fare Information
-*Onscreen rate is ‘Rate #01 – Standard City Rate.’
-*The initial charge is $2.50.
-*Plus 50 cents per 1/5 mile or 50 cents per 60 seconds in slow traffic or when the vehicle is stopped.
-*In moving traffic on Manhattan streets, the meter should “click” approximately every four downtown blocks, or one block going cross-town (East-West).
-*There is a 50-cent MTA State Surcharge for all trips that end in New York City or Nassau, Suffolk, Westchester, Rockland, Dutchess, Orange or Putnam Counties.
-*There is a 30-cent Improvement Surcharge. 
-*There is a daily 50-cent surcharge from 8pm to 6am.
-*There is a $1 surcharge from 4pm to 8pm on weekdays, excluding holidays.
-*Passengers must pay all bridge and tunnel tolls.
-*Your receipt will show your total fare including tolls. Please take your receipt.
-*The driver is not required to accept bills over $20.
-*Please tip your driver for safety and good service.
-*There are no charges for extra passengers or bags.
+* Onscreen rate is ‘Rate #01 – Standard City Rate.’
+* The initial charge is $2.50.
+* Plus 50 cents per 1/5 mile or 50 cents per 60 seconds in slow traffic or when the vehicle is stopped.
+* In moving traffic on Manhattan streets, the meter should “click” approximately every four downtown blocks, or one block going cross-town (East-West).
+* There is a 50-cent MTA State Surcharge for all trips that end in New York City or Nassau, Suffolk, Westchester, Rockland, Dutchess, Orange or Putnam Counties.
+* There is a 30-cent Improvement Surcharge. 
+* There is a daily 50-cent surcharge from 8pm to 6am.
+* There is a $1 surcharge from 4pm to 8pm on weekdays, excluding holidays.
+* Passengers must pay all bridge and tunnel tolls.
+* Your receipt will show your total fare including tolls. Please take your receipt.
+* The driver is not required to accept bills over $20.
+* Please tip your driver for safety and good service.
+* There are no charges for extra passengers or bags.
 
 The metered fare rate information is collected from TLC rate of fare webpage [@tlcfarerate].
 
@@ -361,5 +345,7 @@ yellow_2017_summary_small <- yellow_2017_summary %>%
 min_mile_ratio <- lm(avg_tip ~ min_per_mile, data = yellow_2017_summary_small)
 summary(min_mile_ratio)$coef[1:2,]
 ```
-As shown in the regression result, fare per minute ratio has a positive impact on percent tip. `min_per_mile` ratio does have an positive impact on percent tips. Since trips with slow traffic can be depicted by high minute per mile ratio, passengers do pay more tips during rush hours. 
+As shown in the regression result, `min_per_mile` ratio does have an positive impact on percent tips. Since trips with slow traffic can be depicted by high minute per mile ratio, passengers do pay more tips during rush hours. 
+
+Our analysis has proved that taxi passengers are sympathetic with the drivers who have to suffer the cogestion in New York City, and taxi drivers do get compensated more during rush hours.
 

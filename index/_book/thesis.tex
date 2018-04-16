@@ -1541,9 +1541,9 @@ connection we just generated, \texttt{taxi}.
 \end{Highlighting}
 \end{Shaded}
 \section{Aggregated Zone-level Tip
-Information}\label{aggregated-zone-level-tip-information}
+Amount}\label{aggregated-zone-level-tip-amount}
 
-Instead of the absolute amount of tips, we want to focus on the
+Instead of the nominal amount of tips, we want to focus on the
 percentage of tips that passengers pay in addition to the total fare
 amount. Therefore, we use tip amount over fare amount to calculate the
 percent tip. We then calculated the mean percent tip, mean distances
@@ -1589,8 +1589,8 @@ debit car payments.
 
 \caption{Tip Payment Page on New York City Touch Panel}\label{fig:taxi-screen}
 \end{figure}
-\subsection{Pick-up Zone Tip
-Information}\label{pick-up-zone-tip-information}
+\subsection{Pick-up Zone Percent Tip
+Amount}\label{pick-up-zone-percent-tip-amount}
 
 Taxi drivers are required to be indifferent to where passengers are
 going. It is illegal for New York city taxi drivers to refuse service
@@ -1625,8 +1625,7 @@ avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
 \bottomrule
 \end{tabular}
 \end{table}
-Table @ref(tab:tip\_pickup\_1) is a list of pick-up zones with their
-average percent tips.
+Table 3.1 is a list of pick-up zones with their average percent tips.
 
 We created a histogram to visualize the distribution of average percent
 tips paid for all pick-up zones.
@@ -1642,39 +1641,12 @@ As show in Figure \ref{fig:pickup-vis}, the first peak is around 20\%,
 which is the cheapest default option on the touch panel for passengers
 to chose.
 
-\subsection{Does trip distance increase the percent tips
-paid?}\label{does-trip-distance-increase-the-percent-tips-paid}
-
-Will longer trips result in higher tip percent. It takes taxi drivers
-more time to complete longer trips, so passengers might want to
-compensate taxi drivers more. I personally pay higher percent of tips
-for longer rides, so I believe trip distance has an impact on percentage
-of tips paid.
-\begin{verbatim}
-                Estimate   Std. Error   t value Pr(>|t|)
-(Intercept)  0.211325482 3.733048e-04 566.09360        0
-avg_dis     -0.001052903 2.105014e-05 -50.01881        0
-\end{verbatim}
-Acoording to the simple linear regression result, trip distance does
-have a negative significant impact on the percent of tips paid,
-controlling for both pick-up and drop-off locations. This could be
-caused by a psychological reason. Long trips cost more than short trips.
-For a constant tip percent, the nominal value of tip amount cost more
-for longer trips. For example, for a \$100 trip, 20\% tip costs \$20;
-for a \$50 trip, 20\% tip costs \$10. Even though consumers are paying
-the same percent amount of tips, \$20 is more expensive than \$10.
-Therefore, consumers might decide to pay less percent tip for longer
-trips.
-
-\subsection{Which taxi zones have the highest number of
-pick-ups?}\label{which-taxi-zones-have-the-highest-number-of-pick-ups}
+\subsection{Which pick-up zones have the highest number of
+pick-ups?}\label{which-pick-up-zones-have-the-highest-number-of-pick-ups}
 
 Which pick-up zones have the highest number of taxi trip pick-ups? We
 can create a heat map to visualizae the number of trips for each pick-up
 zones on a map of New York City Taxi Zones.
-\begin{verbatim}
-Warning: package 'sp' was built under R version 3.4.3
-\end{verbatim}
 \begin{figure}
 
 {\centering \includegraphics[width=4.96in]{figure/num_trip} 
@@ -1683,12 +1655,12 @@ Warning: package 'sp' was built under R version 3.4.3
 
 \caption{Number of Pick-ups in Each Taxi Zone}\label{fig:num-trip}
 \end{figure}
-According to Figure \ref{fig:num-trip}, It's obvious that Upper East
+According to Figure \ref{fig:num-trip}, it's obvious that Upper East
 Side Manhattan, Midtown Manhattan, and La Guardia Airport are the most
 popular location for pick-ups.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-45}Ten taxi zones with the highest number of pick-ups}
+\caption{\label{tab:unnamed-chunk-44}Ten taxi zones with the highest number of pick-ups}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -1708,27 +1680,19 @@ avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
 \bottomrule
 \end{tabular}
 \end{table}
-Table @ref(tab:tip\_pickup\_zone) gives you a better idea of which taxi
-zones have the highest number of pick-ups.
+Table 3.2 gives you a better idea of which taxi zones have the highest
+number of pick-ups.
 
-\subsection{Which taxi zones have the highest percent
-tips?}\label{which-taxi-zones-have-the-highest-percent-tips}
+\subsection{Which pick-up zones have the highest percent
+tips?}\label{which-pick-up-zones-have-the-highest-percent-tips}
 
 Most yellow cab pick-ups occur in Manhattan. If we focus on the pick-up
 zones that have at least 24 trips per day or 8760 per year, we will
 observe that many taxi pick-up zones with the highest percent tips are
 not necessarily the ones with the highest number of pick-ups.
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{#pick a threshold for the cutoff number of trips}
-\NormalTok{pickup_zone_}\DecValTok{30}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{24}\OperatorTok{*}\DecValTok{365}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
-\end{Highlighting}
-\end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-47}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per hour)}
+\caption{\label{tab:unnamed-chunk-46}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per hour)}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -1758,16 +1722,9 @@ can drive to the zones listed above to pick-up passengers.
 If we focus on the pick-up zones that have more than 2400 trips per day,
 then we observe that all pick-up zones that have the highest percent
 tips are in Manhattan besides La Guardia Airport.
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{pickup_zone_}\DecValTok{3000}\NormalTok{ <-}\StringTok{ }\NormalTok{tip_pickup_zone }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(num_trips }\OperatorTok{>=}\StringTok{ }\NormalTok{(}\DecValTok{365}\OperatorTok{*}\DecValTok{24}\OperatorTok{*}\DecValTok{60}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(avg_tip))}
-\end{Highlighting}
-\end{Shaded}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-49}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per minute)}
+\caption{\label{tab:unnamed-chunk-48}Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per minute)}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -1789,50 +1746,41 @@ avg\_tip & avg\_dis & avg\_duration & Borough & Zone\\
 \end{table}
 There are more than 100 times more yellow cab pick-ups that happen in
 Manhattan everyday than in Brooklyn. By comparing the average tip
-percent in Table @ref(tab:pickup\_zone\_30) and Table
-@ref(tab:pickup\_zone\_3000), we can observe that percent tips paid in
-taxi zones with low pick-up numbers seem to be higher than percent tips
-paid in taxi zones with high pick-up numbers.
+percent in Table 3.2 and Table 3.3, we can observe that percent tips
+paid in taxi zones with low pick-up numbers seem to be higher than
+percent tips paid in taxi zones with high pick-up numbers.
 
-\section{add median income variable}\label{add-median-income-variable}
-
-\section{What features of taxi trips are attractive to taxi
-drivers?}\label{what-features-of-taxi-trips-are-attractive-to-taxi-drivers}
+\section{What features of taxi trips increase the percent tip amount
+that passengers
+pay?}\label{what-features-of-taxi-trips-increase-the-percent-tip-amount-that-passengers-pay}
 
 So far, we have learned what pick-up zones offer the highest percent
 tip. Now, we want to dig into the relationships between percent tip and
 taxi-zone-specific variables.
 
-\subsection{Do taxi drivers tend to go to zones that offer high
-tips?}\label{do-taxi-drivers-tend-to-go-to-zones-that-offer-high-tips}
+\subsection{Does trip distance increase the percent tips paid by
+passengers?}\label{does-trip-distance-increase-the-percent-tips-paid-by-passengers}
 
-It is not easy to find an available taxi on the street on New York City,
-because the demand for taxi trips is much higher than the supply. Do
-passengers departing from the same taxi zone paying high percent tips
-help customers to attract more taxis?
-
-If customers from certain regions keep paying higher tips, taxi drivers
-might be able to learn from their experiences in those regions, and be
-willing to wonder around those regions more often and pick up
-passengers. Pick-up zones with higher tips should attract more taxi
-drivers with the control of taxi zones. However, conflicting to what I
-assumed, Table @ref(tab:pickup\_zone\_30) and Table
-@ref(tab:pickup\_zone\_3000) show that percent tips seem to have a
-inverse relationship with number of pick-ups.
-
-Let's test the relationship between number of trips and average percent
-tips in each pick-up zone:
+Will longer trips result in higher tip percent. It takes taxi drivers
+more time to complete longer trips, so passengers might want to
+compensate taxi drivers more. I personally pay higher percent of tips
+for longer rides, so I believe trip distance has an impact on percentage
+of tips paid.
 \begin{verbatim}
-             Estimate Std. Error   t value     Pr(>|t|)
-(Intercept) 61203.500   6818.591  8.975975 5.106658e-19
-avg_tip     -1668.077    271.246 -6.149682 8.900927e-10
+                Estimate   Std. Error   t value Pr(>|t|)
+(Intercept)  0.211325482 3.733048e-04 566.09360        0
+avg_dis     -0.001052903 2.105014e-05 -50.01881        0
 \end{verbatim}
-Each one percent increase in average tips in pick-up zones is associated
-with a significant decline in the number of trips per month. Therefore,
-increase in average percent tips in pick-up zones does not make pick-up
-zones more attractive. Taxi drivers are not attracted to taxi zones with
-high percent tips. This is why we observe high percent tips in Baisley
-Park, Queens in Table @ref(tab:pickup\_zone\_30).
+Acoording to the simple linear regression result, trip distance does
+have a negative significant impact on the percent of tips paid,
+controlling for both pick-up and drop-off locations. This could be
+caused by a psychological reason. Long trips cost more than short trips.
+For a constant tip percent, the nominal value of tip amount cost more
+for longer trips. For example, for a \$100 trip, 20\% tip costs \$20;
+for a \$50 trip, 20\% tip costs \$10. Even though consumers are paying
+the same percent amount of tips, \$20 is more expensive than \$10.
+Therefore, consumers might decide to pay less percent tip for longer
+trips.
 
 \subsection{Do passengers pay more tips during rush
 hours?}\label{do-passengers-pay-more-tips-during-rush-hours}
@@ -1843,23 +1791,42 @@ New York City taxi fare amount is calculated on their
 website}.
 
 \subsubsection{Metered Fare Information}\label{metered-fare-information}
-
-\emph{Onscreen rate is `Rate \#01 -- Standard City Rate.' }The initial
-charge is \$2.50. \emph{Plus 50 cents per 1/5 mile or 50 cents per 60
-seconds in slow traffic or when the vehicle is stopped. }In moving
-traffic on Manhattan streets, the meter should ``click'' approximately
-every four downtown blocks, or one block going cross-town (East-West).
-\emph{There is a 50-cent MTA State Surcharge for all trips that end in
-New York City or Nassau, Suffolk, Westchester, Rockland, Dutchess,
-Orange or Putnam Counties. }There is a 30-cent Improvement Surcharge.
-\emph{There is a daily 50-cent surcharge from 8pm to 6am. }There is a
-\$1 surcharge from 4pm to 8pm on weekdays, excluding holidays.
-\emph{Passengers must pay all bridge and tunnel tolls. }Your receipt
-will show your total fare including tolls. Please take your receipt.
-\emph{The driver is not required to accept bills over \$20. }Please tip
-your driver for safety and good service. *There are no charges for extra
-passengers or bags.
-
+\begin{itemize}
+\tightlist
+\item
+  Onscreen rate is `Rate \#01 -- Standard City Rate.'
+\item
+  The initial charge is \$2.50.
+\item
+  Plus 50 cents per 1/5 mile or 50 cents per 60 seconds in slow traffic
+  or when the vehicle is stopped.
+\item
+  In moving traffic on Manhattan streets, the meter should ``click''
+  approximately every four downtown blocks, or one block going
+  cross-town (East-West).
+\item
+  There is a 50-cent MTA State Surcharge for all trips that end in New
+  York City or Nassau, Suffolk, Westchester, Rockland, Dutchess, Orange
+  or Putnam Counties.
+\item
+  There is a 30-cent Improvement Surcharge.
+\item
+  There is a daily 50-cent surcharge from 8pm to 6am.
+\item
+  There is a \$1 surcharge from 4pm to 8pm on weekdays, excluding
+  holidays.
+\item
+  Passengers must pay all bridge and tunnel tolls.
+\item
+  Your receipt will show your total fare including tolls. Please take
+  your receipt.
+\item
+  The driver is not required to accept bills over \$20.
+\item
+  Please tip your driver for safety and good service.
+\item
+  There are no charges for extra passengers or bags.
+\end{itemize}
 The metered fare rate information is collected from TLC rate of fare
 webpage (N. T. staff, n.d.).
 
@@ -1888,11 +1855,14 @@ sympathetic to taxi drivers for the time they spend in slow traffic?
 (Intercept)  0.193453599 1.870711e-04 1034.1180        0
 min_per_mile 0.002841351 3.134322e-05   90.6528        0
 \end{verbatim}
-As shown in the regression result, fare per minute ratio has a positive
-impact on percent tip. \texttt{min\_per\_mile} ratio does have an
-positive impact on percent tips. Since trips with slow traffic can be
-depicted by high minute per mile ratio, passengers do pay more tips
-during rush hours.
+As shown in the regression result, \texttt{min\_per\_mile} ratio does
+have an positive impact on percent tips. Since trips with slow traffic
+can be depicted by high minute per mile ratio, passengers do pay more
+tips during rush hours.
+
+Our analysis has proved that taxi passengers are sympathetic with the
+drivers who have to suffer the cogestion in New York City, and taxi
+drivers do get compensated more during rush hours.
 
 \chapter{New York City Taxi Passengers}\label{chapter4}
 
@@ -1934,7 +1904,7 @@ and put information related to trip duration to all three airports in
 the same table.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-59}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
+\caption{\label{tab:unnamed-chunk-58}Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours}
 \centering
 \begin{tabular}[t]{lcccc}
 \toprule
@@ -2027,7 +1997,7 @@ when weather gets bad.
 \textbf{Uber Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-64}Uber 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-63}Uber 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
@@ -2050,7 +2020,7 @@ Pickup Start Date & Pickup End Date & Uber Total Dispatched Trips\\
 \subsubsection{Yellow Cab Weekly Data}\label{yellow-cab-weekly-data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-67}Yellow Taxi 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-66}Yellow Taxi 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
@@ -2134,7 +2104,7 @@ First, we generate a list of total amount of daily rainfall in New York
 City and we pick the 10 weeks that have the most rainfall in 2017.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-73}10 weeks that have the most rainfall in 2017}
+\caption{\label{tab:unnamed-chunk-72}10 weeks that have the most rainfall in 2017}
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
@@ -2158,7 +2128,7 @@ We then find the weekly total number of dispatched yellow taxi trips of
 the 10 weeks with the srtat date listed above.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-75}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
+\caption{\label{tab:unnamed-chunk-74}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2182,7 +2152,7 @@ We also need to add the weekly total number of dispatched Uber trips of
 the 10 weeks with the most rainfall.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-77}10 weeks that have the most rainfall in 2017 and the total number of dispatched Uber trips in those weeks}
+\caption{\label{tab:unnamed-chunk-76}10 weeks that have the most rainfall in 2017 and the total number of dispatched Uber trips in those weeks}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2206,7 +2176,7 @@ We combine the percentage change in total number of dispatched trips of
 yellow taxi and Uber, and we compare the result.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-79}The percentage change in total number of dispatched trips comparing to the previous weeks of yellow taxi and Uber}
+\caption{\label{tab:unnamed-chunk-78}The percentage change in total number of dispatched trips comparing to the previous weeks of yellow taxi and Uber}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2299,10 +2269,10 @@ Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:03
 \begin{verbatim}
 
 Read 4.0% of 1491842 rows
-Read 33.5% of 1491842 rows
+Read 32.2% of 1491842 rows
 Read 53.0% of 1491842 rows
 Read 55.0% of 1491842 rows
-Read 84.5% of 1491842 rows
+Read 83.8% of 1491842 rows
 Read 85.1% of 1491842 rows
 Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:10
 \end{verbatim}
@@ -2333,7 +2303,7 @@ from other taxi zones in Manhattan.
 rate?}\label{which-taxi-zones-would-pay-more-than-52-without-the-flat-rate}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-90}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-89}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2421,7 +2391,7 @@ passengers departing from JFK
 Airport?}\label{what-are-the-most-popular-drop-off-locations-for-passengers-departing-from-jfk-airport}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-97}5 most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-96}5 most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2469,7 +2439,7 @@ We can use a map to visualize the distribution of average fare amount
 needed to travel from JFK Airport to any taxi zone in New York City.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-101}10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount}
+\caption{\label{tab:unnamed-chunk-100}10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2542,13 +2512,14 @@ By analyzing trip records of New York City's yellow taxi, we found
 answers to questions that are commonly asked by taxi drivers,
 passengers, and TLC officials.
 
-We found which taxi zone have passengers who offer the highest percent
-of tip. We are able to help passengers to know the average time it takes
-to go to one of the three airports in New York City so that passengers
-can plan their trips accordingly. We also found that the \$52 flat rate
-between Manhattan and JFK Airport is beneficial for the passengers,
-because it is cheaper than the average amount of fare that passenger
-would need to pay without the flat rate.
+We found which taxi zones have passengers who offer the highest percent
+of tips, and we proved that taxi drivers do get compensated more during
+rush hours. We are able to help passengers to know the average time it
+takes to go to one of the three airports in New York City so that
+passengers can plan their trips accordingly. We also found that the \$52
+flat rate between Manhattan and JFK Airport is beneficial for the
+passengers, because it is cheaper than the average amount of fare that
+passenger would need to pay without the flat rate.
 
 \section{Future Research}\label{future-research}
 
@@ -2559,12 +2530,13 @@ introducing new GPS and entertainment system is on the number of rides.
 The global product and marketing at Verifone, Jason Gross, said that,
 ``We like to say that we provide what Uber says it provides.'' With the
 raised expectation among rides caused by Uber and Lyft, yellow taxi
-industry need to respond quickly. How does the market react to the newly
-installed entertainment system? Has the market share of yellow cab
-rebounded since 2016? By looking into the patterns in market shares, it
-might be possible for me to predict the future market share distribution
-and find out what features of ride-hail transportation are the ones that
-affect market share distribution the most.
+industry need to respond quickly (Hawkins, 2016). How does the market
+react to the newly installed entertainment system? Has the market share
+of yellow cab rebounded since 2016? By looking into the patterns in
+market shares, it might be possible for me to predict the future market
+share distribution and find out what features of ride-hail
+transportation are the ones that affect market share distribution the
+most.
 
 \appendix
 
@@ -2664,6 +2636,11 @@ Taxi? Big Data Will Solve The Dilemma. Forbes Tech. Retrieved from
 Harshbarger, R. (2015, June). City puts biased drivers who refuse rides
 on notice with new video. New York Post. Retrieved from
 \url{https://nypost.com/2015/06/09/city-puts-biased-taxi-drivers-on-notice/}
+
+\hypertarget{ref-andrew2016}{}
+Hawkins, A. J. (2016, September). Yellow taxis have a new weapon in
+their war against uber: Gadgets. The Verge. Retrieved from
+\url{https://www.theverge.com/2016/9/26/13035642/nyc-taxi-cab-android-touchscreen-tablet-verifone}
 
 \hypertarget{ref-hu2017}{}
 Hu, W. (2017, January). Yellow Cab, Long a Fixture of City Life, Is for
