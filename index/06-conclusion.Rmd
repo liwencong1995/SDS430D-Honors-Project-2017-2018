@@ -1,4 +1,4 @@
-# Conclusion {#chapter5}
+# Conclusion {#chapter6}
 In this Honors thesis, we present a more efficient and easy-to-use way for users to retrieve trip records information of both New York City taxi and other ride-sharing services, such as Uber and Lyft, in New York City. 
 
 By analyzing trip records of New York City’s yellow taxi, we found answers to questions that are commonly asked by taxi drivers, passengers, and TLC officials.
