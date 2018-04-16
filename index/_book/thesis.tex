@@ -1925,12 +1925,11 @@ the same table.
 \bottomrule
 \end{tabular}
 \end{table}
-Table @ref(tab:three\_air) displays the average number of minutes it
-takes from Alphabet City, Manhattan to JFK Airport during different
-hours.
+Table 4.1 displays the average number of minutes it takes from Alphabet
+City, Manhattan to JFK Airport during different hours.
 
-\subsection{Case Study: From Alphabet City, Manhattan to all three
-airport}\label{case-study-from-alphabet-city-manhattan-to-all-three-airport}
+\subsection{Case Study: From Central Park, Manhattan to all three
+airport}\label{case-study-from-central-park-manhattan-to-all-three-airport}
 
 Alphabet City, Manhattan has pick-up zone ID number 4. Let's take a look
 at how much time is needed to travel to all three airports from taxi
@@ -1938,28 +1937,24 @@ zone No.4.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{alphabet <-}\StringTok{ }\NormalTok{three_air}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\DecValTok{4}\NormalTok{)}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\DecValTok{43}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 \begin{figure}
-\centering
-\includegraphics{thesis_files/figure-latex/airport-vis-1.pdf}
-\caption{\label{fig:airport-vis}Average number of minutes it takes from
-Alphabet City, Manhattan to all three airports during different hours}
+\includegraphics[width=4.17in]{figure/airport_vis} \caption{Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours}\label{fig:airport-vis}
 \end{figure}
 According to the red line Figure \ref{fig:airport-vis}, it takes the
-least time, less than 30 minutes, to travel from Alphabet City,
-Manhattan to JFK Airport around 4 AM in the morning, and it takes the
-most time, about 70 minutes, around 4 PM in the afternoon.
+least time, less than 30 minutes, to travel from Central Park, Manhattan
+to Newark Airport around 4 AM in the morning and it takes more than 70
+minutes around 11 PM at night.
 
-According to the green line, it takes the least time, about 20 minutes,
-to travel to La Guardia Airport around 5 AM in the morning, and it takes
-the most time, more than 40 minutes, around 5 PM in the afternoon.
+According to the green line, it only takes about 30 minutes to travel to
+JFK Airport around 4 AM in the morning, and it takes the most time,
+about 70 minutes, around 4 PM in the afternoon.
 
-As shown by the blue line, it takes the least time, a little less than
-30 minutes, to travel to Newark Airport at 2 AM at midnight, and it
-takes the most time, a little less than 80 minutes, around 6 PM in the
-evening.
+As shown by the blue line, it takes the least time, about 20 minutes, to
+travel to La Guardia Airport at 1 AM at midnight, and it takes a little
+more than 40 minutes around 4 PM in the evening.
 
 Being able to know the average time it takes to go to one of the
 airports ahead, passengers can buy their flight tickets accordingly.
@@ -1997,7 +1992,7 @@ when weather gets bad.
 \textbf{Uber Weekly Data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-63}Uber 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-64}Uber 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
@@ -2020,7 +2015,7 @@ Pickup Start Date & Pickup End Date & Uber Total Dispatched Trips\\
 \subsubsection{Yellow Cab Weekly Data}\label{yellow-cab-weekly-data}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-66}Yellow Taxi 2017 Weekly Total Dispatched Trips}
+\caption{\label{tab:unnamed-chunk-67}Yellow Taxi 2017 Weekly Total Dispatched Trips}
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
@@ -2104,7 +2099,7 @@ First, we generate a list of total amount of daily rainfall in New York
 City and we pick the 10 weeks that have the most rainfall in 2017.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-72}10 weeks that have the most rainfall in 2017}
+\caption{\label{tab:unnamed-chunk-73}10 weeks that have the most rainfall in 2017}
 \centering
 \begin{tabular}[t]{ccc}
 \toprule
@@ -2128,7 +2123,7 @@ We then find the weekly total number of dispatched yellow taxi trips of
 the 10 weeks with the srtat date listed above.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-74}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
+\caption{\label{tab:unnamed-chunk-75}10 weeks that have the most rainfall in 2017 and the total number of dispatched yellow taxi trips in those weeks}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2152,7 +2147,7 @@ We also need to add the weekly total number of dispatched Uber trips of
 the 10 weeks with the most rainfall.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-76}10 weeks that have the most rainfall in 2017 and the total number of dispatched Uber trips in those weeks}
+\caption{\label{tab:unnamed-chunk-77}10 weeks that have the most rainfall in 2017 and the total number of dispatched Uber trips in those weeks}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2176,7 +2171,7 @@ We combine the percentage change in total number of dispatched trips of
 yellow taxi and Uber, and we compare the result.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-78}The percentage change in total number of dispatched trips comparing to the previous weeks of yellow taxi and Uber}
+\caption{\label{tab:unnamed-chunk-79}The percentage change in total number of dispatched trips comparing to the previous weeks of yellow taxi and Uber}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2268,11 +2263,12 @@ Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:03
 \end{verbatim}
 \begin{verbatim}
 
-Read 0.0% of 1491842 rows
-Read 16.8% of 1491842 rows
-Read 44.2% of 1491842 rows
-Read 55.0% of 1491842 rows
+Read 4.0% of 1491842 rows
+Read 35.5% of 1491842 rows
+Read 53.0% of 1491842 rows
+Read 57.0% of 1491842 rows
 Read 85.1% of 1491842 rows
+Read 87.8% of 1491842 rows
 Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:10
 \end{verbatim}
 \subsection{Trips from Manhattan to JFK
@@ -2302,7 +2298,7 @@ from other taxi zones in Manhattan.
 rate?}\label{which-taxi-zones-would-pay-more-than-52-without-the-flat-rate}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-89}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
+\caption{\label{tab:unnamed-chunk-90}Ten pick-up zones with the highest avergae fare from Manhattan to JKF Airport}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2390,7 +2386,7 @@ passengers departing from JFK
 Airport?}\label{what-are-the-most-popular-drop-off-locations-for-passengers-departing-from-jfk-airport}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-96}5 most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-97}5 most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2438,7 +2434,7 @@ We can use a map to visualize the distribution of average fare amount
 needed to travel from JFK Airport to any taxi zone in New York City.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-100}10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount}
+\caption{\label{tab:unnamed-chunk-101}10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2565,7 +2561,8 @@ Taxi}\label{data-dictionary-yellow-taxi}
   \includegraphics[width=4in]{figure/data_dictionary_trip_records_yellow.pdf}
   \caption{Data Dictionary -- Yellow Taxi Trips Records}
 \end{figure}
-\chapter{Appendix C: FOIL Request}\label{appendix-c-foil-request}
+\chapter{Freedom of Information Law
+Request}\label{freedom-of-information-law-request}
 \begin{figure}
   \centering
   \includegraphics[width=4in]{figure/appendix_foil_form_doc.pdf}

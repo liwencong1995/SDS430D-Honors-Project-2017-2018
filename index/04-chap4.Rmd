@@ -114,7 +114,8 @@ to_lg_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_lg_zone.csv"
 to_newark_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zone.csv")
 ```
 
-So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. It would be easier if we combine all three tables and put information related to trip duration to all three airports in the same table.
+So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. It would be easier if we combine all three tables and put information related to trip duration to all three airports in the same table. 
+
 ```{r, echo=FALSE}
 to_jfk_zone <- to_jfk_zone %>%
   mutate(airport = "JFK") %>%
@@ -139,16 +140,16 @@ kable(three_air[10:20,],
       escape = TRUE,
       booktabs = TRUE)
 ```
-Table \@ref(tab:three_air) displays the average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours.
+Table 4.1 displays the average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours.
 
-### Case Study: From Alphabet City, Manhattan to all three airport
+### Case Study: From Central Park, Manhattan to all three airport
 Alphabet City, Manhattan has pick-up zone ID number 4. Let's take a look at how much time is needed to travel to all three airports from taxi zone No.4.
 ```{r}
 alphabet <- three_air%>%
-  filter(PULocationID ==4)
+  filter(PULocationID ==43)
 ```
 
-```{r airport-vis, message=FALSE, echo=FALSE, fig.cap="Average number of minutes it takes from Alphabet City, Manhattan to all three airports during different hours"}
+```{r, eval=FALSE, echo=FALSE}
 airport_vis <- ggplot(data = alphabet, 
                      aes(x = hour, y = avg_min, colour = airport)) +
   geom_line(aes(group = airport)) + geom_point() +
@@ -158,11 +159,15 @@ airport_vis <- ggplot(data = alphabet,
 airport_vis
 ```
 
-According to the red line Figure \@ref(fig:airport-vis), it takes the least time, less than 30 minutes, to travel from Alphabet City, Manhattan to JFK Airport around 4 AM in the morning, and it takes the most time, about 70 minutes, around 4 PM in the afternoon.
+```{r airport-vis, message=FALSE, echo=FALSE, fig.cap="Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours", echo=FALSE}
+knitr::include_graphics("figure/airport_vis.png", dpi = 120 )
+```
 
-According to the green line, it takes the least time, about 20 minutes, to travel to La Guardia Airport around 5 AM in the morning, and it takes the most time, more than 40 minutes, around 5 PM in the afternoon.
+According to the red line Figure \@ref(fig:airport-vis), it takes the least time, less than 30 minutes, to travel from Central Park, Manhattan to Newark Airport around 4 AM in the morning and it takes more than 70 minutes around 11 PM at night.
 
-As shown by the blue line, it takes the least time, a little less than 30 minutes, to travel to Newark Airport at 2 AM at midnight, and it takes the most time, a little less than 80 minutes, around 6 PM in the evening.
+According to the green line, it only takes about 30 minutes to travel to JFK Airport around 4 AM in the morning, and it takes the most time, about 70 minutes, around 4 PM in the afternoon.
+
+As shown by the blue line, it takes the least time, about 20 minutes, to travel to La Guardia Airport at 1 AM at midnight, and it takes a little more than 40 minutes around 4 PM in the evening.
 
 Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. 
 

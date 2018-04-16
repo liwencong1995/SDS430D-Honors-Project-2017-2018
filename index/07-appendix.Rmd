@@ -26,7 +26,7 @@ download_nyc_data <- function(obj, url, years, n, names, ...) {
   \caption{Data Dictionary -- Yellow Taxi Trips Records}
 \end{figure}
 
-# Appendix C: FOIL Request
+# Freedom of Information Law Request
 \begin{figure}
   \centering
   \includegraphics[width=4in]{figure/appendix_foil_form_doc.pdf}
