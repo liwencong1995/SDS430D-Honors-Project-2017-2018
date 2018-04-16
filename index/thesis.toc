@@ -65,10 +65,10 @@
 \contentsline {subsubsection}{What are the most popular drop-off locations for passengers departing from JFK Airport?}{79}{section*.35}
 \contentsline {subsubsection}{What's the average fare to each dropp-off zone from JFK Airport?}{81}{section*.38}
 \contentsline {subsubsection}{How much on average would taxi driver make on their way back from JFK Airport?}{82}{section*.41}
-\contentsline {chapter}{Chapter 6: Conclusion}{83}{chapter.6}
-\contentsline {section}{\numberline {6.1}Future Research}{84}{section.6.1}
-\contentsline {chapter}{Appendix A: Utility Function}{85}{appendix.A}
-\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{87}{appendix.B}
-\contentsline {chapter}{Appendix C: Appendix C: FOIL Request}{89}{appendix.C}
-\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{91}{appendix.D}
-\contentsline {chapter}{References}{93}{appendix*.46}
+\contentsline {chapter}{Chapter 6: Conclusion}{85}{chapter.6}
+\contentsline {section}{\numberline {6.1}Future Research}{86}{section.6.1}
+\contentsline {chapter}{Appendix A: Utility Function}{87}{appendix.A}
+\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{89}{appendix.B}
+\contentsline {chapter}{Appendix C: Appendix C: FOIL Request}{91}{appendix.C}
+\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{93}{appendix.D}
+\contentsline {chapter}{References}{95}{appendix*.46}
