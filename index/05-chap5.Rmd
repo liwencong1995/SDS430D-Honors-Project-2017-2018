@@ -7,7 +7,7 @@ Imagine it's your first time travelling to New York City, and you decided to liv
 
 Additionally, people living in most parts of Manhattan would have paid more than $52 to take a taxi to go to the JFK Airport. The higher the taxi fare is, the less the demand for taxi will be. Therefore, having a flat rate might help taxi drivers to get more trips from Manhattan to JFK Airport.
 
-### People departing from Manhattan benefit from the $52 flat rate
+## Passengers departing from Manhattan benefit from the $52 flat rate
 If there is no flat rate between JFK and Manhattan, how much would passengers pay for the distance they travelled between JFK Airport AND Manhattan? And how much more or less should they have paid comparing to the \$52 flat rate?
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
@@ -182,96 +182,80 @@ knitr::include_graphics("figure/to_jfk_fare_above_vis.png", dpi = 200 )
 ```
 Therefore, passengers from places in Manhattan besides Midtown, East Village, and some parts of Lower Manhattan benefit from the $52 flat rate. However, people living in Midtown, East Village, and some parts of Lower Manhattan might be relatively more indifferent to the price of taxi. Instead, they probably put more emphasis on convenience and time.
 
-```{r}
-mean(to_jkf_zone$avg_est_diff)
+```{r, echo=FALSE}
 meanfare <- mean(to_jkf_zone$avg_est_diff)
+meanfare
 ```
 On average people travel from Manhattan pay `meanfare` less with the \$52 flat rate policy. Therefore, passengers overall benefit from the $52 flat rate policy.
 
-## However, are taxi drivers happy when a passenger wants to go to JFK Airport from Manhattan?
+## Are taxi drivers happy when a passenger wants to go to JFK Airport from Manhattan?
 
 Everytime I travel to New York City, I always take Yellow cabs to go around the city. It seemed to me that the cab drivers were always happy when they heard me telling them that I needed to go to the JFK Airport from Manhattan. Are taxi drivers happy when their passengers want to go to JFK Airport from Manhattan? In this section, we study the hourly wage of taxi drivers for different trips they completed, and we investigate whether taxi driver hourly wage from Manhattan to JFK Airport is higher than other trips.
 
 ```{r, echo=FALSE}
-from_jfk <- from_jfk %>%
-  mutate(est_fare = 2.5 + 0.5 * trip_distance * 5 + extra + improvement_surcharge + mta_tax + tolls_amount) %>%
-  mutate(est_diff = est_fare - fare_amount) %>%
-  rename(LocationID = DOLocationID) %>%
+yellow_2017 <- fread("/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary_1.csv")
+yellow_2017_s <- yellow_2017 %>%
+  filter(PULocationID < 264) %>%
+  filter(DOLocationID < 264)
+```
+
+```{r, echo=FALSE}
+yellow_2017_s <- yellow_2017_s %>%
+  filter(avg_duration > 10) %>%
+  mutate(hourly_wage = avg_fare/(avg_duration/60)) %>%
+  rename(LocationID = PULocationID) %>%
   left_join(taxi_zone_lookup , by = "LocationID")
+yellow_2017_overall <- yellow_2017_s %>%
+  mutate(key = paste0(Borough,DOLocationID)) %>%
+  filter(key != "Manhattan132")
+mean_overall <- mean(yellow_2017_overall$hourly_wage)
+mean_overall
 ```
+The average hourly wage of taxi drivers calculated by using all trips excluding the ones going from Manhattan to JFK Airport is `mean_overall`. 
 
-Since a taxi driver coming from Manhattan to JFK Airport could be directed back to anywhere in the city. We can calculate the average taxi fare amount that the taxi drivers would get paid for a random trip from JFK Airport to any part of the city.
-
-```{r, message=FALSE, warning=FALSE}
-mean(from_jfk$est_fare)
+```{r, echo=FALSE}
+yellow_2017_jfk <- yellow_2017_s %>%
+  mutate(key = paste0(Borough,DOLocationID)) %>%
+  filter(key == "Manhattan132")
+mean_jfk <- mean(yellow_2017_jfk$hourly_wage)
+mean_jfk
 ```
-On average, taxi drivers would get paid for \$50.18 for a trip from the JFK Airport to any taxi zone in New York City. What are the most popular drop-off zones for yellow taxis from JFK Airport?
+The average hourly wage of taxi drivers calculated by using trips going from Manhattan to JFK Airport is `mean_jfk`. `mean_jfk` dollar per hour is higher than `mean_overall` dollar per hour, which means that on average taxi drivers driving from Manhattan to JFK Airport have an hourly wage that is about $6 higher than the hourly wage of taxi drivers doing other trips.
+
+### How much on average would taxi driver make on their way back from JFK Airport?
+
+Since a taxi driver waiting in line to pickup passengers at JFK Airport could be directed back to anywhere in the city. We calculate the average taxi fare amount that a taxi driver would get paid for a trip from JFK Airport to any part of the city.
+
 ```{r, echo=FALSE, message=FALSE}
 from_jkf_zone <- from_jfk %>%
-  group_by(LocationID) %>%
+  mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
+                                         tz= "America/New_York"),
+         tpep_pickup_datetime = ymd_hms(tpep_pickup_datetime,  
+                                        tz= "America/New_York")) %>%
+  mutate(duration = round((tpep_dropoff_datetime - tpep_pickup_datetime), 2) ) %>%
+  mutate(duration = as.numeric(duration)) %>%
+  filter(duration > 0) %>%
+  group_by(DOLocationID) %>%
   summarise(num_trips = n(), 
             avg_fare = mean(fare_amount),
-            avg_est_fare = mean(est_fare),
-            avg_est_diff = mean(est_diff)) %>%
+            avg_fare = mean(total_amount),
+            avg_duration = mean(duration)) %>%
+  rename(LocationID = DOLocationID) %>%
   left_join(taxi_zone_lookup , by = "LocationID") %>%
   arrange(desc(num_trips))
 ```
 
+#### What are the most popular drop-off locations for passengers departing from JFK Airport?
+
 ```{r, message=FALSE, echo=FALSE}
-kable(from_jkf_zone[1:10,c(3, 5:7)], 
-      caption = "Ten most popular destinations in Manhattan",
+kable(from_jkf_zone[1:5,c(5,6,2:4)], 
+      caption = "5 most popular destinations in Manhattan",
       format = "latex",
       align = 'c', 
       escape = TRUE,
       booktabs = TRUE)
 ```
 Table \@ref(tab:from_jkf_zone) shows that Times Square is the most popular destination for passengers coming from the JFK Airport in 2017!
-
-### How much on average would taxi driver make on their way back from JFK Airport?
-#### What's the average fare to each dropp-off zone from JFK Airport?
-```{r, eval=FALSE, echo=FALSE}
-from_jkf_fare <- merge(taxi_zones, from_jkf_zone, by.x = "LocationID", by.y = "LocationID")
-
-from_jkf_fare_vis <- leaflet(data = from_jkf_fare) %>%
-  addProviderTiles(providers$OpenStreetMap) %>%
-  addPolygons(fillColor = ~reds(avg_fare),
-              fillOpacity = 0.6,
-              weight = 1,
-              opacity = 0.8) %>%
-  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
-
-saveWidget(from_jkf_fare_vis, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_vis.html")
-URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_vis.html"
-webshot(URL, "figure/from_jkf_fare_vis.png", cliprect = "viewport")
-
-from_jkf_fare_est <- leaflet(data = from_jkf_fare) %>%
-  addProviderTiles(providers$OpenStreetMap) %>%
-  addPolygons(fillColor = ~reds(avg_est_fare),
-              fillOpacity = 0.6,
-              weight = 1,
-              opacity = 0.8) %>%
-  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
-
-saveWidget(from_jkf_fare_est, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_est.html")
-URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_est.html"
-webshot(URL, "figure/from_jkf_fare_est.png", cliprect = "viewport")
-```
-
-```{r from-jkf-fare-vis, fig.cap="Zones that cost more than the 52 US Dollar flat rate", fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/from_jkf_fare_vis.png", dpi = 200 )
-```
-
-As we expected, the red shades are smoothly distributed, since taxi zones that are futher away should cost more to get there.
-
-By comparing the distribution of the true average fare and estimated average fare calculated by distance travelled, 
-
-****** add sentences *******
-
-```{r from-jkf-fare-est, fig.cap="Zones that cost more than the 52 US Dollar flat rate", fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/from_jkf_fare_est.png", dpi = 200 )
-```
-
-#### What are the most popular drop-off locations for passengers departing from JFK Airport?
 
 ```{r, eval=FALSE, echo=FALSE}
 from_jkf_num_trips <- leaflet(data = from_jkf_fare) %>%
@@ -290,8 +274,7 @@ webshot(URL, "figure/from_jkf_num_trips.png", cliprect = "viewport")
 ```{r from-jkf-num-trips, fig.cap="Zones that cost more than the 52 US Dollar flat rate", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/from_jkf_num_trips.png", dpi = 200 )
 ```
-
-According to the map above, Manhattan is still the most popular destination for passengers departing from the JFK Airport. 
+According to the Figure @\ref(fig:from-jkf-num-trips), Manhattan is the most popular destination for passengers departing from JFK Airport. 
 
 ```{r, echo=FALSE}
 from_jkf_zone %>%
@@ -299,10 +282,83 @@ from_jkf_zone %>%
   group_by(Manhattan) %>%
   summarise(all_trips = sum(num_trips))
 ```
-```{r}
-from_jkf_zone[2,2]/(from_jkf_zone[1,2] + from_jkf_zone[2,2])
+
+```{r, echo=FALSE}
+total_trip <- from_jkf_zone[2,2]/(from_jkf_zone[1,2] + from_jkf_zone[2,2])
 ```
-According to the summary, the total amount of trips from JFK Airport to Manhattan is about 65.05% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthwhile Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan. 
 
-#### Hourly fare rate for taxi drivers going from Manhattan to JFK airport
+According to the summary, the total amount of trips from JFK Airport to Manhattan is about `total_trip`% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. In this case, a round trip to and from JFK Airport is worthwhile Therefore, taxi drivers should be pretty happy when their passengers are going to JFK Airport from Manhattan.
 
+#### What's the average fare to each dropp-off zone from JFK Airport?
+
+We can use a map to visualize the distribution of average fare amount needed to travel from JFK Airport to any taxi zone in New York City.
+
+```{r, message=FALSE, echo=FALSE}
+kable(from_jkf_zone[1:10,c(5,6,2:4)],
+      caption = "10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```
+
+```{r, eval=FALSE, echo=FALSE}
+from_jkf_fare <- merge(taxi_zones, from_jkf_zone, by.x = "LocationID", by.y = "LocationID")
+
+from_jkf_fare_vis <- leaflet(data = from_jkf_fare) %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  addPolygons(fillColor = ~reds(avg_fare),
+              fillOpacity = 0.6,
+              weight = 1,
+              opacity = 0.8) %>%
+  setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+
+saveWidget(from_jkf_fare_vis, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_vis.html")
+URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_vis.html"
+webshot(URL, "figure/from_jkf_fare_vis.png", cliprect = "viewport")
+
+# from_jkf_fare_est <- leaflet(data = from_jkf_fare) %>%
+#   addProviderTiles(providers$OpenStreetMap) %>%
+#   addPolygons(fillColor = ~reds(avg_est_fare),
+#               fillOpacity = 0.6,
+#               weight = 1,
+#               opacity = 0.8) %>%
+#   setView(lat = 40.7128, lng = -74.0060, zoom = 11)
+# 
+# saveWidget(from_jkf_fare_est, file = "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_est.html")
+# URL <- "/Users/priscilla/Desktop/Honors Thesis/writing/figures/from_jkf_fare_est.html"
+# webshot(URL, "figure/from_jkf_fare_est.png", cliprect = "viewport")
+```
+
+```{r from-jkf-fare-vis, fig.cap="Zones that cost more than the 52 US Dollar flat rate", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/from_jkf_fare_vis.png", dpi = 200 )
+```
+
+As we expected, the red shades are smoothly distributed, since taxi zones that are futher away should cost more to get there.
+
+#### How much on average would taxi driver make on their way back from JFK Airport?
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+mean_fare <- mean(from_jfk$total_amount)
+mean_fare
+```
+On average, taxi drivers would get paid for `mean_fare` for a trip from the JFK Airport to any taxi zone in New York City. 
+
+```{r, echo=FALSE}
+yellow_2017_no_jfk <- yellow_2017_s %>%
+  filter(DOLocationID != 132)
+mean_no_jfk <- mean(yellow_2017_no_jfk$hourly_wage)
+mean_no_jfk
+```
+The average hourly wage of taxi drivers calculated by using all trips excluding the ones departing from JFK Airport is `mean_no_jfk`. 
+
+```{r, echo=FALSE}
+from_jkf_zone_1 <- from_jkf_zone %>%
+  filter(avg_duration > 10) %>%
+  mutate(hourly_wage = avg_fare/(avg_duration/60))
+mean_from_jfk_wage <- mean(from_jkf_zone_1$hourly_wage)
+mean_from_jfk_wage
+```
+
+The average hourly wage of taxi drivers calculated by using trips departing from JFK Airport is `mean_from_jfk_wage` dollar per hour. `mean_from_jfk_wage` dollar per hour is higher than `mean_no_jfk` dollar per hour, which means that on average taxi drivers going from JFK Airport to any taxi zones in New York City have an hourly wage that is more than $30 higher than the hourly wage of taxi drivers doing other trips.
+
+In conclusion, taxi drivers' hourly wages are higher when they drive from Manhattan to JFK Airport. On their way back, they make on average `mean_from_jfk_wage` dollar per hour, which is much higher than the average hourly wage of yellow cab drivers. Therefore, taxicab drivers feel happy when they pick up passengers who want to go to JFK Airport in Manhattan.

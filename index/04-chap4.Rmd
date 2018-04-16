@@ -164,6 +164,8 @@ According to the green line, it takes the least time, about 20 minutes, to trave
 
 As shown by the blue line, it takes the least time, a little less than 30 minutes, to travel to Newark Airport at 2 AM at midnight, and it takes the most time, a little less than 80 minutes, around 6 PM in the evening.
 
+Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. 
+
 ### A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York
 
 ```{r, echo=FALSE, eval=FALSE}

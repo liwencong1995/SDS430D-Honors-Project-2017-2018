@@ -74,6 +74,10 @@ taxi <- etl("nyctaxi", db)
 #first half
 yellow_2017_1 <- taxi %>%
   tbl("yellow") %>%
+  collect(n = Inf)
+
+yellow_2017_1 <- taxi %>%
+  tbl("yellow") %>%
   filter(payment_type == 1) %>%
   filter(month(tpep_pickup_datetime) < 7) %>%
   collect(n = Inf)
@@ -102,10 +106,10 @@ yellow_2017_summary_1 <- yellow_2017_1 %>%
             avg_total = mean(total_amount),
             avg_fare = mean(fare_amount))
 
+fwrite(yellow_2017_summary_1, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary_1.csv")
+
 #Combine summary_2 and summary_1
 yellow_2017_summary <- bind_rows(yellow_2017_summary_1, yellow_2017_summary_2)
-
-fwrite(yellow_2017_summary, "/Users/priscilla/Desktop/Honors Thesis/data/yellow_2017_summary_1.csv")
 ```
 
 ## Aggregated Zone-level Tip Information
