@@ -1867,9 +1867,8 @@ drivers do get compensated more during rush hours.
 \chapter{New York City Taxi Passengers}\label{chapter4}
 
 \section{How long does it take passengers to get to JFK, La Guardia, and
-Newark Airports from anywhere in New York City? When is the best time to
-travel in order to avoid the
-traffic?}\label{how-long-does-it-take-passengers-to-get-to-jfk-la-guardia-and-newark-airports-from-anywhere-in-new-york-city-when-is-the-best-time-to-travel-in-order-to-avoid-the-traffic}
+Newark Airports from anywhere in New York
+City?}\label{how-long-does-it-take-passengers-to-get-to-jfk-la-guardia-and-newark-airports-from-anywhere-in-new-york-city}
 
 We want to calculate the average number of minutes it takes to go to all
 three airport from a specific taxi zone at every hour. First, we want to
@@ -1931,17 +1930,11 @@ City, Manhattan to JFK Airport during different hours.
 \subsection{Case Study: From Central Park, Manhattan to all three
 airport}\label{case-study-from-central-park-manhattan-to-all-three-airport}
 
-Alphabet City, Manhattan has pick-up zone ID number 4. Let's take a look
+Central Park, Manhattan has pick-up zone ID number 43. Let's take a look
 at how much time is needed to travel to all three airports from taxi
 zone No.4.
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{alphabet <-}\StringTok{ }\NormalTok{three_air}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(PULocationID }\OperatorTok{==}\DecValTok{43}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
 \begin{figure}
-\includegraphics[width=4.17in]{figure/airport_vis} \caption{Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours}\label{fig:airport-vis}
+\includegraphics[width=5.67in]{figure/airport_vis} \caption{Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours}\label{fig:airport-vis}
 \end{figure}
 According to the red line Figure \ref{fig:airport-vis}, it takes the
 least time, less than 30 minutes, to travel from Central Park, Manhattan
@@ -1969,8 +1962,8 @@ This Shiny App helps passengers to estimate the amount of time that is
 needed for them to travel to any one of the these three airports from
 any New York City taxi zones.
 
-\section{How does weather affect the number of taxi and Lyft
-trips?}\label{how-does-weather-affect-the-number-of-taxi-and-lyft-trips}
+\section{How does weather affect the number of taxi and Uber
+trips?}\label{how-does-weather-affect-the-number-of-taxi-and-uber-trips}
 
 On a snowy or rainy day, it is hard for passengers to find a yellow cab
 on the street. Taxi drivers get paid at the same rate no matter how bad
@@ -1980,13 +1973,12 @@ snowy or rainy day, since Uber uses a pricing model that takes the
 number of Uber vehicles available on the street into account. When
 weather is bad, fewer Uber vehicles are available on the street, so Uber
 fare rate increases. Uber's pricing model gives Uber drivers an
-incentive to keep working on ugly days. Lyft has a similar pricing model
-to the one that Uber uses.
+incentive to keep working on ugly days.
 
-In this section, we want to study the number of pickups of yellow cab,
-Uber, and Lyft. We compare number of pick-ups in each taxi zone in the
-weeks of bad weather with previous weeks' total number of pick-ups to
-see whether Uber drivers have an incentive to drive around the city more
+In this section, we want to study the number of pickups of yellow cab
+and Uber. We compare number of pick-ups in each taxi zone in the weeks
+of bad weather with previous weeks' total number of pick-ups to see
+whether Uber drivers have an incentive to drive around the city more
 when weather gets bad.
 
 \textbf{Uber Weekly Data}
@@ -2258,16 +2250,15 @@ Manhattan and JFK Airport.
 \end{Shaded}
 \begin{verbatim}
 
-Read 81.3% of 577783 rows
+Read 77.9% of 577783 rows
 Read 577783 rows and 20 (of 20) columns from 0.064 GB file in 00:00:03
 \end{verbatim}
 \begin{verbatim}
 
-Read 4.0% of 1491842 rows
-Read 35.5% of 1491842 rows
-Read 53.0% of 1491842 rows
+Read 0.0% of 1491842 rows
+Read 14.7% of 1491842 rows
+Read 42.9% of 1491842 rows
 Read 57.0% of 1491842 rows
-Read 85.1% of 1491842 rows
 Read 87.8% of 1491842 rows
 Read 1491842 rows and 20 (of 20) columns from 0.164 GB file in 00:00:10
 \end{verbatim}
@@ -2518,8 +2509,8 @@ passengers can plan their trips accordingly. We also found that the \$52
 flat rate between Manhattan and JFK Airport is beneficial for the
 passengers, because it is cheaper than the average amount of fare that
 passenger would need to pay without the flat rate. We have also shown
-that the flat rate does not disencourage drivers. Therefore, the \$52
-flat rate is appropriate.
+that the flat rate does not discourage drivers. Therefore, the \$52 flat
+rate is appropriate.
 
 \section{Future Research}\label{future-research}
 

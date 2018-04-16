@@ -4,7 +4,8 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 
 # New York City Taxi Passengers {#chapter4}
 
-## How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City? When is the best time to travel in order to avoid the traffic?
+## How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City? 
+
 We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. We need to load trip records with destination as one of the three airports from the MySQL connection we built.
 
 ```{r, message=FALSE, echo=FALSE, eval=FALSE}
@@ -143,8 +144,8 @@ kable(three_air[10:20,],
 Table 4.1 displays the average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours.
 
 ### Case Study: From Central Park, Manhattan to all three airport
-Alphabet City, Manhattan has pick-up zone ID number 4. Let's take a look at how much time is needed to travel to all three airports from taxi zone No.4.
-```{r}
+Central Park, Manhattan has pick-up zone ID number 43. Let's take a look at how much time is needed to travel to all three airports from taxi zone No.4.
+```{r, echo=FALSE}
 alphabet <- three_air%>%
   filter(PULocationID ==43)
 ```
@@ -159,7 +160,7 @@ airport_vis <- ggplot(data = alphabet,
 airport_vis
 ```
 
-```{r airport-vis, message=FALSE, echo=FALSE, fig.cap="Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours", echo=FALSE}
+```{r airport-vis, fig.cap="Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours", echo=FALSE}
 knitr::include_graphics("figure/airport_vis.png", dpi = 120 )
 ```
 
@@ -215,10 +216,10 @@ knitr::include_graphics("figure/shinyapp.png", dpi = 100 )
 ```
 This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the these three airports from any New York City taxi zones.
 
-## How does weather affect the number of taxi and Lyft trips?
-On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes the number of Uber vehicles available on the street into account. When weather is bad, fewer Uber vehicles are available on the street, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to keep working on ugly days. Lyft has a similar pricing model to the one that Uber uses.
+## How does weather affect the number of taxi and Uber trips?
+On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes the number of Uber vehicles available on the street into account. When weather is bad, fewer Uber vehicles are available on the street, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to keep working on ugly days. 
 
-In this section, we want to study the number of pickups of yellow cab, Uber, and Lyft. We compare number of pick-ups in each taxi zone in the weeks of bad weather with previous weeks' total number of pick-ups to see whether Uber drivers have an incentive to drive around the city more when weather gets bad.
+In this section, we want to study the number of pickups of yellow cab and Uber. We compare number of pick-ups in each taxi zone in the weeks of bad weather with previous weeks' total number of pick-ups to see whether Uber drivers have an incentive to drive around the city more when weather gets bad.
 
 **Uber Weekly Data**
 ```{r, eval=FALSE, echo=FALSE}

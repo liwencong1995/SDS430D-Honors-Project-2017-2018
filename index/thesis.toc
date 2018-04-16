@@ -48,27 +48,27 @@
 \contentsline {subsection}{\numberline {3.2.2}Do passengers pay more tips during rush hours?}{57}{subsection.3.2.2}
 \contentsline {subsubsection}{Metered Fare Information}{57}{section*.22}
 \contentsline {chapter}{Chapter 4: New York City Taxi Passengers}{61}{chapter.4}
-\contentsline {section}{\numberline {4.1}How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City? When is the best time to travel in order to avoid the traffic?}{61}{section.4.1}
+\contentsline {section}{\numberline {4.1}How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City?}{61}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}Case Study: From Central Park, Manhattan to all three airport}{63}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{65}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}How does weather affect the number of taxi and Lyft trips?}{66}{section.4.2}
-\contentsline {subsubsection}{Yellow Cab Weekly Data}{67}{section*.26}
+\contentsline {subsection}{\numberline {4.1.2}A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York}{64}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}How does weather affect the number of taxi and Uber trips?}{65}{section.4.2}
+\contentsline {subsubsection}{Yellow Cab Weekly Data}{65}{section*.26}
 \contentsline {subsection}{\numberline {4.2.1}Case Study: March 14th, 2017 Snow Storm}{67}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Case Study: Impact of Precipitation on Taxi Rides}{68}{subsection.4.2.2}
-\contentsline {chapter}{Chapter 5: New York City Taxi Fare \& Limousine Commission}{73}{chapter.5}
-\contentsline {section}{\numberline {5.1}Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{73}{section.5.1}
-\contentsline {section}{\numberline {5.2}Passengers departing from Manhattan benefit from the \$52 flat rate}{74}{section.5.2}
-\contentsline {subsection}{\numberline {5.2.1}Trips from Manhattan to JFK Airport}{75}{subsection.5.2.1}
-\contentsline {subsection}{\numberline {5.2.2}Which taxi zones would pay more than \$52 without the flat rate?}{76}{subsection.5.2.2}
-\contentsline {section}{\numberline {5.3}Are taxi drivers happy when a passenger wants to go to JFK Airport from Manhattan?}{78}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}How much on average would taxi driver make on their way back from JFK Airport?}{79}{subsection.5.3.1}
-\contentsline {subsubsection}{What are the most popular drop-off locations for passengers departing from JFK Airport?}{79}{section*.35}
-\contentsline {subsubsection}{What's the average fare to each dropp-off zone from JFK Airport?}{81}{section*.38}
-\contentsline {subsubsection}{How much on average would taxi driver make on their way back from JFK Airport?}{82}{section*.41}
-\contentsline {chapter}{Chapter 6: Conclusion}{85}{chapter.6}
-\contentsline {section}{\numberline {6.1}Future Research}{86}{section.6.1}
-\contentsline {chapter}{Appendix A: Utility Function}{87}{appendix.A}
-\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{89}{appendix.B}
-\contentsline {chapter}{Appendix C: Freedom of Information Law Request}{91}{appendix.C}
-\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{93}{appendix.D}
-\contentsline {chapter}{References}{95}{appendix*.46}
+\contentsline {chapter}{Chapter 5: New York City Taxi Fare \& Limousine Commission}{71}{chapter.5}
+\contentsline {section}{\numberline {5.1}Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{71}{section.5.1}
+\contentsline {section}{\numberline {5.2}Passengers departing from Manhattan benefit from the \$52 flat rate}{72}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Trips from Manhattan to JFK Airport}{73}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Which taxi zones would pay more than \$52 without the flat rate?}{74}{subsection.5.2.2}
+\contentsline {section}{\numberline {5.3}Are taxi drivers happy when a passenger wants to go to JFK Airport from Manhattan?}{76}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}How much on average would taxi driver make on their way back from JFK Airport?}{77}{subsection.5.3.1}
+\contentsline {subsubsection}{What are the most popular drop-off locations for passengers departing from JFK Airport?}{77}{section*.35}
+\contentsline {subsubsection}{What's the average fare to each dropp-off zone from JFK Airport?}{79}{section*.38}
+\contentsline {subsubsection}{How much on average would taxi driver make on their way back from JFK Airport?}{80}{section*.41}
+\contentsline {chapter}{Chapter 6: Conclusion}{83}{chapter.6}
+\contentsline {section}{\numberline {6.1}Future Research}{84}{section.6.1}
+\contentsline {chapter}{Appendix A: Utility Function}{85}{appendix.A}
+\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{87}{appendix.B}
+\contentsline {chapter}{Appendix C: Freedom of Information Law Request}{89}{appendix.C}
+\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{91}{appendix.D}
+\contentsline {chapter}{References}{93}{appendix*.46}
