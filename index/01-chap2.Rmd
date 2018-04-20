@@ -3,7 +3,7 @@ library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 ```
 
-# Data and nyctaxi Package {#chapter2}
+# Data and `nyctaxi` Package {#chapter2}
 ## Data and Storage
 The `nyctaxi` **R** package allows users to download, clean, and load data into SQL databases. There are four types of data that are available for users to get access to: trip level yellow taxi data from 2009 to the most recent month, trip level green taxi data from August 2013 to the most recent month, Uber pick-up data from April to September 2014 and from Janaury to June 2015, and weekly-aggregated Lyft trip data from 2016 to the most recent week [@pkgnyctaxi].
 
