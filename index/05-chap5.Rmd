@@ -363,3 +363,4 @@ The average hourly wage of taxi drivers calculated by using trips departing from
 
 In conclusion, taxi drivers' hourly wages are higher when they drive from Manhattan to JFK Airport. On their way back, they make on average `mean_from_jfk_wage` dollar per hour, which is much higher than the average hourly wage of yellow cab drivers. Taxicab drivers feel happy when they pick up passengers who want to go to JFK Airport in Manhattan. Even though \$52 is lower than the average amount of fare that taxi drivers would have made without the flat rate, it still induces an higher than average hourly wage, so it does not disincentive drivers. Therefore, the \$52 flat rate is appropriate. 
 
+## Recommendations to New York City Taxi Fare & Limousine Commission

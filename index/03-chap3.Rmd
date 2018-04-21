@@ -208,7 +208,7 @@ names(tip_pickup_1) <- c("Year", "Month", "PULocationID","Average % Tips", "Trip
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(tip_pickup_1[1:10,c(4, c(8:9,4))],
+kable(tip_pickup_1[1:10, c(8:9,4)],
       caption = "Ten taxi pick-up zones with the highest average tip in January, 2017",
       format = "latex",
       align = 'c', 
@@ -259,7 +259,7 @@ In Figure \@ref(fig:num-trip), taxi zones with more number of pick-ups are color
 
 ```{r, message=FALSE, echo=FALSE}
 names(tip_pickup_zone) <- c("PULocationID", "Average % Tips", "Number of Trips", "Average Distance", "Average Duration", "Borough", "Zone")
-kable(tip_pickup_zone[1:10,c(2, c(6,7,3))], 
+kable(tip_pickup_zone[1:10, c(6,7,3)], 
       caption = "Ten taxi zones with the highest number of pick-ups",
       format = "latex",
       align = 'c', 
@@ -278,7 +278,7 @@ pickup_zone_24 <- tip_pickup_zone %>%
 ```
 
 ```{r, echo=FALSE}
-kable(pickup_zone_24[1:10, c(2, c(6,7,2))], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per hour)",
+kable(pickup_zone_24[1:10, c(6,7,2)], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per hour)",
       format = "latex",
       align = 'c', 
       escape = TRUE,
@@ -296,7 +296,7 @@ pickup_zone_60 <- tip_pickup_zone %>%
 ```
 
 ```{r, echo=FALSE}
-kable(pickup_zone_60[1:10, c(2, c(6,7,2))], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per minute)",
+kable(pickup_zone_60[1:10, c(6,7,2)], caption = "Ten taxi pick-up zones with the highest percent tip (taxi zones has at least 1 pick-up per minute)",
       format = "latex",
       align = 'c', 
       escape = TRUE,

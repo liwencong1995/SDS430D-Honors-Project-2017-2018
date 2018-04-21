@@ -115,7 +115,7 @@ to_lg_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_lg_zone.csv"
 to_newark_zone <- fread("/Users/priscilla/Desktop/Honors Thesis/data/to_newark_zone.csv")
 ```
 
-So far, we have created three tables summarsing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. It would be easier if we combine all three tables and put information related to trip duration to all three airports in the same table. 
+So far, we have created three tables summarizing the average number of minutes it takes to go to all three airports for every hour from different taxi zones. It would be easier if we combine all three tables and put information related to trip duration to all three airports in the same table. 
 
 ```{r, echo=FALSE}
 to_jfk_zone <- to_jfk_zone %>%
@@ -131,10 +131,15 @@ to_newark_zone <- to_newark_zone %>%
   rename(avg_min = jfk_avg_min)
 
 three_air <- bind_rows(to_jfk_zone, to_lg_zone, to_newark_zone)
+three_air_1 <- three_air %>%
+  rename(LocationID = PULocationID) %>%
+  left_join(taxi_zone_lookup, by = "LocationID")
+
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(three_air[10:20,], 
+names(three_air_1) <- c("PULocation", "Hour of Departure", "Average Number of Minutes", "Airport", "Borough", "Zone")
+kable(three_air_1[10:22,c(5,6,2,3)], 
       caption = "Average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours",
       format = "latex",
       align = 'c', 
@@ -143,11 +148,11 @@ kable(three_air[10:20,],
 ```
 Table 4.1 displays the average number of minutes it takes from Alphabet City, Manhattan to JFK Airport during different hours.
 
-### Case Study: From Central Park, Manhattan to all three airport
+### Case Study: From Central Park, Manhattan to all three airports
 Central Park, Manhattan has pick-up zone ID number 43. Let's take a look at how much time is needed to travel to all three airports from taxi zone No.4.
 ```{r, echo=FALSE}
-alphabet <- three_air%>%
-  filter(PULocationID ==43)
+alphabet <- three_air %>%
+  filter(PULocationID == 43)
 ```
 
 ```{r, eval=FALSE, echo=FALSE}
@@ -168,11 +173,11 @@ According to the red line Figure \@ref(fig:airport-vis), it takes the least time
 
 According to the green line, it only takes about 30 minutes to travel to JFK Airport around 4 AM in the morning, and it takes the most time, about 70 minutes, around 4 PM in the afternoon.
 
-As shown by the blue line, it takes the least time, about 20 minutes, to travel to La Guardia Airport at 1 AM at midnight, and it takes a little more than 40 minutes around 4 PM in the evening.
+As shown by the blue line, it takes the least time, about 20 minutes, to travel to La Guardia Airport at 1 AM at midnight, and it takes a little more than 40 minutes around 4 PM in the evening. 
 
-Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. 
+Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. For example, a mum who wants to visit Disney World with her kids can use this visulization to estimate the amount of time needed for her and her families to catch their flight. If this mum wants to catch a flight that departs at 10 AM from JFK Airport, then when she should depart from Central Park in order to get to the airport on time? According to Figure \@ref(fig:airport-vis), she can depart at 7 AM, and it will take a little bit more than 40 minutes for her to get to JFK Airport to catch her 10 AM flight.
 
-### A Shiny App: allowing users to choose a pick up zone of their interest, and output the best time to travel from that zone to all three airports in New York
+### A Shiny App: When is the best time to travel to JFK Airport?
 
 ```{r, echo=FALSE, eval=FALSE}
 library(shiny)
@@ -219,9 +224,10 @@ This Shiny App helps passengers to estimate the amount of time that is needed fo
 ## How does weather affect the number of taxi and Uber trips?
 On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes the number of Uber vehicles available on the street into account. When weather is bad, fewer Uber vehicles are available on the street, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to keep working on ugly days. 
 
-In this section, we want to study the number of pickups of yellow cab and Uber. We compare number of pick-ups in each taxi zone in the weeks of bad weather with previous weeks' total number of pick-ups to see whether Uber drivers have an incentive to drive around the city more when weather gets bad.
+In this section, we study the number of pickups of yellow cab and Uber. We compare number of pick-ups in each taxi zone in the weeks of bad weather with previous weeks' total number of pick-ups to see whether Uber drivers have an incentive to drive around the city more when weather gets bad.
 
 **Uber Weekly Data**
+We first calculated the number of total dispatched trips of Uber by using weekly-aggregated Uber pick-up data available on NYC OpenData [@datauberweek], and summary is shown in Table 4.2.
 ```{r, eval=FALSE, echo=FALSE}
 download.file("https://data.cityofnewyork.us/resource/gt3n-7ri6.csv?years=2017&$limit=50000", destfile = "/Users/priscilla/Desktop/Honors Thesis/data/uber_weekly_data.csv")
 ```
@@ -241,10 +247,16 @@ uber_weekly <- uber_weekly %>%
   select(-`Pickup Start Date`) %>%
   rename(`Pickup Start Date` = `Pickup Start Date 1`)
 uber_weekly <- uber_weekly[, c(6,2,3)]
+
+uber_weekly_1 <- uber_weekly %>%
+  mutate(month = substr(`Pickup End Date`, 1, 2),
+         day = substr(`Pickup End Date`, 4, 5)) %>%
+  mutate(`Pickup End Date` = paste0("2017-", month, "-", day))
+
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(uber_weekly[1:10,], 
+kable(uber_weekly_1[1:10,1:3], 
       caption = "Uber 2017 Weekly Total Dispatched Trips",
       format = "latex",
       align = 'c', 
@@ -253,6 +265,7 @@ kable(uber_weekly[1:10,],
 ```
 
 #### Yellow Cab Weekly Data
+We also calculated the number of total dispatched trips of New York City yellow cabs by using `nyctaxi` package to retrieve yellow taxi data from 2017, and the summary is shown in Table 4.3.
 ```{r, eval=FALSE, echo=FALSE}
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
 taxi <- etl("nyctaxi", db)
@@ -278,10 +291,14 @@ yellow_weekly_data <- yellow_weekly_data %>%
   left_join(uber_weekly, by = "Pickup Start Date") %>%
   select(-`Uber Total Dispatched Trips`)
 yellow_weekly <- yellow_weekly_data[, c(1,3,2)]
+yellow_weekly_1 <- yellow_weekly %>%
+  mutate(month = substr(`Pickup End Date`, 1, 2),
+         day = substr(`Pickup End Date`, 4, 5)) %>%
+  mutate(`Pickup End Date` = paste0("2017-", month, "-", day))
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-kable(yellow_weekly[1:10,], 
+kable(yellow_weekly_1[1:10,1:3], 
       caption = "Yellow Taxi 2017 Weekly Total Dispatched Trips",
       format = "latex",
       align = 'c', 
@@ -289,34 +306,56 @@ kable(yellow_weekly[1:10,],
       booktabs = TRUE)
 ```
 
-In this section, we use New York City Yellow Taxi and Uber data to calculate the number of trips occurred in each week. 
-
 ### Case Study: March 14th, 2017 Snow Storm
-There are two commonly known bad weather consitions, rainy and snowy days. Let's first focus on snowstorm. On March 14th, 2017, a snow storm brought seven inches of snow to New York City.
+There are two commonly known bad weather conditions, rainy and snowy days. Let's first focus on snowstorm. On March 14th, 2017, a snow storm brought seven inches of snow to New York City.
+
 **Yellow Taxi**
 ```{r, echo=FALSE}
-yellow_weekly_data %>%
+yellow <- yellow_weekly_1 %>%
   filter(`Pickup Start Date` == "2017-03-12" | `Pickup Start Date` == "2017-03-05")
 ```
 
-```{r}
+```{r, message=FALSE, echo=FALSE}
+kable(yellow[,1:3], 
+      caption = "Yellow Taxi Total Dispatched Trips",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```
+
+```{r, echo=FALSE}
 (2066285-2456285)/2456285
 ```
 
+Yellow taxi's number of total dispatched trips declined by 15% (see Table 4.4).
+
 **Uber**
 ```{r, echo=FALSE}
-uber_weekly %>%
-  filter(`Pickup Start Date` == "03/12/2017" | `Pickup Start Date` == "03/05/2017")
+uber <- uber_weekly_1 %>%
+  filter(`Pickup Start Date` == "2017-03-12" | `Pickup Start Date` == "2017-03-05")
 ```
-```{r}
+
+```{r, message=FALSE, echo=FALSE}
+kable(uber[,1:3], 
+      caption = "Uber Total Dispatched Trips",
+      format = "latex",
+      align = 'c', 
+      escape = TRUE,
+      booktabs = TRUE)
+```
+
+```{r, echo=FALSE}
 (3430189-3614559)/3614559
 ```
-In this case, we observe that the percent decline in Uber's total number of pick-ups is 10% less than the percent decline in Yellow Taxi's total number of dropp-off. Even though the total number of Uber pick-ups did not increase, Uber's pricing model definitely was able to keep more drivers in the market on a snowy day.
+Uber's number of total dispatched trips declined by 5% (see Table 4.5).
+
+In this case, we observe that the percent decline in Uber's total number of pick-ups is 10% less than the percent decline in Yellow Taxi's total number of drop-off. Even though the total number of Uber pick-ups did not increase, Uber's pricing model may keep more drivers in the market on a snowy day.
 
 ### Case Study: Impact of Precipitation on Taxi Rides
-People living in New York might have noticed that it is hard to find a taxi on the street when it rains. Economists have studied this phenomena for a long time, and an analysis studied the correlationship between taxi movement and hourly rainfall data in Central Park from 2009 to 2013 has found that there is no significant correlation between a driver's hourly wage and rain in the city, which implies that drivers don't earn more when it's raining [@citylab]. 
+People living in New York might have noticed that it is hard to find a taxi on the street when it rains. Economists have studied this phenomena for a long time, and an analysis that studied the correlation between taxi movement and hourly rainfall data in Central Park from 2009 to 2013 found that there is no significant correlation between a driver's hourly wage and rain in the city, which implies that drivers don't earn more when it's raining [@citylab]. 
 
-I got access to the 2017 daily Central Park weather data from the National Climatic Data Center by submitting a Climate Data Online request (Appendix D) to National Centers for Environmental Information [@noaa], and joined it to the 2017 taxi data to study relationship between rainfall and taxi rides. 
+We got access to the 2017 daily Central Park weather data from the National Climatic Data Center by submitting a Climate Data Online request (Appendix D) to National Centers for Environmental Information [@noaa], and joined it to the 2017 taxi data to study relationship between rainfall and taxi rides. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(lubridate)
@@ -336,7 +375,7 @@ weather_day <- weather %>%
   arrange(desc(`Weekly Rainfall`))
 ```
 
-First, we generate a list of total amount of daily rainfall in New York City and we pick the 10 weeks that have the most rainfall in 2017.
+First, we generate a list of total amount of daily rainfall in New York City and we pick the 10 weeks that have the most rainfall in 2017 (see Table 4.6).
 
 ```{r, message=FALSE, echo=FALSE}
 kable(weather_day[1:10,],
@@ -347,7 +386,7 @@ kable(weather_day[1:10,],
       booktabs = TRUE)
 ```
 
-We then find the weekly total number of dispatched yellow taxi trips of the 10 weeks with the srtat date listed above.
+We then find the weekly total number of dispatched yellow taxi trips of the 10 weeks with the most rainfall (see Table 4.7).
 
 ```{r, message=FALSE, echo=FALSE}
 weather_week <- weather_day %>%
@@ -369,7 +408,8 @@ weather_yellow <- weather_yellow %>%
   rename(`Last Week Trips` = `Yellow Total Dispatched Trips`,
          `Pickup Date` = `Pickup Start Date`)
 weather_yellow_1 <- weather_yellow %>%
-  mutate(`%Change Trips` = ((`Dispatched Trips`-`Last Week Trips`)/`Last Week Trips`) *100)
+  mutate(`% Change Trips` = ((`Dispatched Trips`-`Last Week Trips`)/`Last Week Trips`) *100) %>%
+  mutate(`% Change Trips` = round(`% Change Trips`, 2))
 weather_yellow_1 <- weather_yellow_1[, c(4, 6, 3, 8, 9)]
 ```
 
@@ -382,7 +422,7 @@ kable(weather_yellow_1[1:10,],
       booktabs = TRUE)
 ```
 
-We also need to add the weekly total number of dispatched Uber trips of the 10 weeks with the most rainfall.
+We also need to add the weekly total number of dispatched Uber trips of the 10 weeks with the most rainfall (see Table 4.8).
 
 ```{r, echo=FALSE}
 #Uber
@@ -396,7 +436,8 @@ weather_uber <- weather_uber %>%
          `Pickup Date` = `Pickup Start Date`)
 
 weather_uber_1 <- weather_uber %>%
-  mutate(`%Change Trips` = ((`Dispatched Trips`-`Last Week Trips`)/`Last Week Trips`) *100)
+  mutate(`% Change Trips` = ((`Dispatched Trips`-`Last Week Trips`)/`Last Week Trips`) *100) %>%
+  mutate(`% Change Trips` = round(`% Change Trips`, 2))
 weather_uber_1 <- weather_uber_1[, c(4, 6, 3, 8, 9)]
 ```
 
@@ -409,12 +450,12 @@ kable(weather_uber_1[1:10,],
       booktabs = TRUE)
 ```
 
-We combine the percentage change in total number of dispatched trips of yellow taxi and Uber, and we compare the result.
+We combine the percentage change in total number of dispatched trips of yellow taxi and Uber, and we compare the result (see Table 4.9).
 
 ```{r, message=FALSE, echo=FALSE}
 ##total
-weather_week$uber <- weather_uber_1$`%Change Trips`
-weather_week$yellow <- weather_yellow_1$`%Change Trips`
+weather_week$Uber <- weather_uber_1$`% Change Trips`
+weather_week$Yellow <- weather_yellow_1$`% Change Trips`
 weather_week <- weather_week[, c(4,2,3,5,6)]
 ```
 
@@ -429,4 +470,34 @@ kable(weather_week[1:10,],
 
 Besides the week of April 30th, 2017, all other weeks have higher increases in the number of total dispatched trips of Uber or lower declines in the number of weekly Uber trips. Therefore, on rainy days, Uber drivers tend to increase the number of trips they drive at a higher rate.
 
-Uber passengers have to pay higher rate of fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead. New York City TLC could modify the rate of fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make taking a street hail vechcle on average more affordable on rainy days for passengers.
+We then plot the weekly rainfall and Yellow Taxi and Uber's percent Change in Number of Dispatched Trips from Previous Week.
+
+```{r, echo=FALSE, eval=FALSE}
+weather_week_1 <- weather_week %>%
+  mutate(`Pickup Start Date` = as.POSIXct(`Pickup Start Date`)) %>%
+  filter(`Pickup Start Date` != "2017-12-31")
+weather_vis <- ggplot(data = weather_week_1, aes(x = `Pickup Start Date`)) +
+  geom_point(aes(y = Uber, colour="Uber")) +
+  geom_line(aes(y = Uber, colour="Uber")) + 
+  geom_point(aes(y = Yellow, color="Yellow Taxi")) +
+  geom_line(aes(y = Yellow, color="Yellow Taxi")) +
+  xlab("Pickup Start Date") +
+  ylab("% Change in Number of Dispatched Trips from Previous Week")
+rainfall_vis <- ggplot(data = weather_week_1, aes(x = `Pickup Start Date`)) +
+  geom_point(aes(y = `Weekly Rainfall`, color="Rainfall")) +
+  geom_line(aes(y = `Weekly Rainfall`, color="Rainfall"))
+```
+
+```{r rainfall_vis, fig.caption = "Weekly Rainfall in New York City in 2017",fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/rainfall_vis.png", dpi = 100 )
+```
+
+```{r weather_vis, fig.caption = "Yellow Taxi and Uber's % Change in Number of Dispatched Trips from Previous Week in 2017",fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/weather_vis.png", dpi = 100 )
+```
+According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead.
+
+## Recommendations to Taxi Passengers and NYC TLC
+We suggest passengers to use our Shiny App to choose a pick up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.
+
+In this chapter, we have shown that Uber's pricing model might keep more drivers working on rainy days. Therefore, we suggest New York City TLC to modify the fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make taking a street hail vehicle on average more affordable on rainy days for passengers.
