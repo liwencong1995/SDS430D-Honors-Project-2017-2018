@@ -8,7 +8,7 @@ If you feel it necessary to include an appendix, it goes here.
 
 
 # Utility Function
-This utility function was written to shortened the source code in ETL `etl_extract.etl_nyctaxi()` function.
+This utility function was written to shorten the source code in ETL `etl_extract.etl_nyctaxi()` function. It takes in ``url`, `year`, `n` (number of observations), and `names` (which are the names CSV data files), and create a list of raw data directories. 
 
 ```{r, eval=FALSE}
 download_nyc_data <- function(obj, url, years, n, names, ...) {
@@ -20,30 +20,38 @@ download_nyc_data <- function(obj, url, years, n, names, ...) {
 ```
 
 # Data Dictionary -- Yellow Taxi
+All variables used in data analysis of yellow taxi data are listed in this data dictionary. 
+
 \begin{figure}
   \centering
-  \includegraphics[width=4in]{figure/data_dictionary_trip_records_yellow.pdf}
+  \includegraphics[width=4.5in]{figure/data_dictionary_trip_records_yellow.pdf}
   \caption{Data Dictionary -- Yellow Taxi Trips Records}
 \end{figure}
 
 # Freedom of Information Law Request
+We submitted this FOIL Request to seek asnswers of the questions listed below to better analyze the yellow taxi data.
+
 \begin{figure}
   \centering
-  \includegraphics[width=4in]{figure/appendix_foil_form_doc.pdf}
+  \includegraphics[width=4.5in]{figure/appendix_foil_form_doc.pdf}
   \caption{FOIL Request}
 \end{figure}
 
 
 # NOAA Climate Data Request
-\begin{figure}
-  \centering
-  \includegraphics[width=4in]{figure/app_noaa_request.pdf}
-  \caption{NOAA Climate Data Request}
-\end{figure}
+We submitted the NOAA Climate Data Request to get access to 2017 New York City weather data.
 
 \begin{figure}
   \centering
-  \includegraphics[width=4in]{figure/app_noaa_com.pdf}
+  \includegraphics[width=4.5in]{figure/app_noaa_request.pdf}
+  \caption{NOAA Climate Data Request}
+\end{figure}
+
+The NOAA Climate Data Order Compeleted Notification grants me rights the access to 2017 New York City weather data.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=4.5in]{figure/app_noaa_com.pdf}
   \caption{NOAA Climate Data Order Compeleted}
 \end{figure}
 

@@ -185,7 +185,7 @@ pickup_vis <- region_vis %+% tip_pickup
 ```
 
 ```{r pickup-vis, fig.cap= "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC" ,fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/pickup_vis.png", dpi = 150 )
+knitr::include_graphics("figure/pickup_vis.png", dpi = 120 )
 ```
 
 We created a histogram to visualize the distribution of average percent tips paid for all pick-up zones. As show in Figure \@ref(fig:pickup-vis), the first peak is around 20%, which is the cheapest default option on the touch panel for passengers to chose. 
@@ -253,7 +253,7 @@ webshot(URL, "figure/num_trip.png", cliprect = "viewport")
 ```
 
 ```{r num-trip, fig.cap="Number of Pick-ups in Each Taxi Zone", fig.align='center', echo=FALSE, warning=FALSE}
-knitr::include_graphics("figure/num_trip.png", dpi = 200 )
+knitr::include_graphics("figure/num_trip.png", dpi = 170 )
 ```
 In Figure \@ref(fig:num-trip), taxi zones with more number of pick-ups are colored by darker shades of orange, and it is obvious that Manhattan and La Guardia Airport are the most popular locations for taxi pick-ups.
 

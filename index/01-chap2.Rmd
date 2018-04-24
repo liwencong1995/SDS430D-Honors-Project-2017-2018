@@ -24,7 +24,7 @@ In addition, the trip level NYC Uber data only covers two periods, from April to
 webshot("http://www.nyc.gov/html/tlc/html/technology/aggregated_data.shtml","figure/a-report.png", cliprect = "viewport")
 ```
 
-```{r a-report, fig.cap="NYC Taxi & Limousine Commission Aggregated Reports", fig.align='center', echo=FALSE}
+```{r a-report, fig.cap="NYC Taxi and Limousine Commission Aggregated Reports", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/a-report.png", dpi = 170 )
 ```
 
@@ -47,10 +47,10 @@ The 2014 Uber data contains 4 variables: `Date/Time` (the date and time of the U
 
 The 2015 Uber data contains 4 variables: `Dispatching_base_num` (the TLC base company code of the base that dispatched the Uber), `Pickup_date` (the date of the Uber pick-up), `Affiliated_base_num` (the TLC base company code affiliated with the Uber pickup), and `locationID` (the pick-up location ID affiliated with the Uber pickup).
 
-NYC Open Data also provides weekly-aggregated Uber pick-up data from 2015 to the most recent month. [@datauberweek]
+NYC Open Data also provides weekly-aggregated Uber pick-up data from 2015 to the most recent month [@datauberweek].
 
 ### Lyft
-The total size of weekly-aggregated Lyft trip data (from Jan 2015 to Dec 2016) is 914.9 MB, and these data are open to public and weekly-aggregated Lyft data from 2015 to the most recent week can be found on NYC OpenData website. [@datalyft]
+The total size of weekly-aggregated Lyft trip data (from Jan 2015 to Dec 2016) is 914.9 MB, and these data are open to public and weekly-aggregated Lyft data from 2015 to the most recent week can be found on NYC OpenData website [@datalyft].
 
 ### Data Storage
 The total size of all `csv` files of the four services is about 200 GB, and a laptop usually has memory less than or equal to 8 GB. Limited memory constrains the amount of data that can be loaded by a personal computer at one time. When users load data into **R** environment, **R** keeps them in memory; when the amount of data loaded into **R** environment gets close to the limit of a computer’s memory, **R** becomes unresponsive or force quit the current session. Therefore, better ways to work with data that takes more space than 8 GB is needed. Comparing to RAM, hard disk is often used to store medium-sized data, because it is affordable and are designed for storing large items permanently. However, retrieving data from hard drives is about 1,000,000 times slower.
@@ -58,11 +58,11 @@ The total size of all `csv` files of the four services is about 200 GB, and a la
 ## ETL nyctaxi Package
 `etl` is the parent package of `nyctaxi`. `etl` provides a framework that allows **R** users to work with medium data without any knowledge in SQL database. Users can run SQL queries by using `dplyr` commands in **R** and choose to only return the final result, which could be a summary table, from SQL database into **R** Environment in order to aovid **R** from crashing. The user interaction takes place solely within **R**. 
 
-`etl` framework has three operations -Extract, Transfer, and Load- which bring real-time data into local or remote SQL databases. Users can  specify which type of SQL database they prefer to connect to. `etl`-dependent packages, such as `nyctaxi`, make medium data more accessible to a wider audience. [@baumer2014]
+`etl` framework has three operations -Extract, Transfer, and Load- which bring real-time data into local or remote SQL databases. Users can  specify which type of SQL database they prefer to connect to. `etl`-dependent packages, such as `nyctaxi`, make medium data more accessible to a wider audience [@baumer2014].
 
-`nyctaxi` was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiles three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services. [@pkgnyctaxi]
+`nyctaxi` was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiles three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services [@pkgnyctaxi].
 
-This package inherits functions from many packages: `etl`, `dplyr`, `DBI`, `rlang`, and `stringr`. 
+This package inherits functions from many packages: `etl`[@pkgetl], `dplyr` [@pkgdplyr], `DBI` [@pkgDBI], `rlang` [@pkgrlang], `lubridate` [@pkglubridate], `leaflet` [@pkgleaflet], and `stringr` [@pkgstringr]. 
 
 Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert **R** code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in **R**.
 
@@ -201,7 +201,7 @@ In order to increase the query speed at the data analysis stage, `KEY`s are crea
 
 Due to the large size of Yellow Taxi datasets, `yellow_old` and `yellow` are partitioned into subgroups by `year`. When we need to run a query on data from a specific year, having partitions allows MySQL to directly find the data specified without filtering on every single row. It speeds up the query process.  
 
-```{r, fig.cap="MySQL View: yellow_old_sum", fig.align='center', echo=FALSE, echo=FALSE}
+```{r mysql-view, fig.cap="MySQL View", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/mysql_view.png", dpi = 250 )
 ```
 
@@ -261,7 +261,7 @@ num_trips <- ggplot(data = combined, aes(x = date, y = num_trips, colour = type)
 ```{r num-trips-summary, fig.cap="Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/Num_trips_summary.jpeg", dpi = 130 )
 ```
-Figure \@ref(fig:num-trips-summary) is a summary of total number of trips made by all 4 types of transporations that are available to users from 2014 to 2016. In order to generate this summary, I combined trip-level yellow and green taxi data from TLC website [@yellowdata] and weekly Uber [@datauberweek] and Lyft data from NYC OpenData [@datalyft]. Trip-level Uber data that can be accessed by using the `nyctaxi` package is not used in the creation of Figure \@ref(fig:num-trips-summary) because of the limited ranges of dates where the Uber trip-level data is available.
+Figure \@ref(fig:num-trips-summary) is a summary of total number of trips made by all 4 types of transporations that are available to users from 2014 to 2016. In order to generate this summary, I combined trip-level yellow and green taxi data from TLC website [@datayellow] and weekly Uber [@datauberweek] and Lyft data from NYC OpenData [@datalyft]. Trip-level Uber data that can be accessed by using the `nyctaxi` package is not used in the creation of Figure \@ref(fig:num-trips-summary) because of the limited ranges of dates where the Uber trip-level data is available.
 
 Data used in Figure \@ref(fig:num-trips-summary) can be accessed by running the code below:
 

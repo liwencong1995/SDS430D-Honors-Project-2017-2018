@@ -489,13 +489,13 @@ rainfall_vis <- ggplot(data = weather_week_1, aes(x = `Pickup Start Date`)) +
 ```
 
 ```{r rainfall_vis, fig.caption = "Weekly Rainfall in New York City in 2017",fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/rainfall_vis.png", dpi = 100 )
+knitr::include_graphics("figure/rainfall_vis.png", dpi = 120 )
 ```
 
 ```{r weather_vis, fig.caption = "Yellow Taxi and Uber's % Change in Number of Dispatched Trips from Previous Week in 2017",fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/weather_vis.png", dpi = 100 )
+knitr::include_graphics("figure/weather_vis.png", dpi = 120 )
 ```
-According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead.
+According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in total number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead.
 
 ## Recommendations to Taxi Passengers and NYC TLC
 We suggest passengers to use our Shiny App to choose a pick up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.
