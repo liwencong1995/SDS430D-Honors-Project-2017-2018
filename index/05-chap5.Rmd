@@ -1,4 +1,4 @@
-# New York City Taxi Fare & Limousine Commission {#chapter5}
+# New York City Taxi & Limousine Commission {#chapter5}
 
 ## Should there be a flat rate between Manhattan and John F. Kennedy International Airport?
 Why is there a flat rate to and from JFK airport and any location in Manhattan? Why is the flat rate \$52? Does TLC make profit from the \$52 flat rate? Does \$52 reduce the cogestion on the road to JFK airport and make taking a train a more preferable choice? The New York City taxi trip records can reveal the answers to these questions.

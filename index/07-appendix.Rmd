@@ -47,7 +47,7 @@ We submitted the NOAA Climate Data Request to get access to 2017 New York City w
   \caption{NOAA Climate Data Request}
 \end{figure}
 
-The NOAA Climate Data Order Compeleted Notification grants me rights the access to 2017 New York City weather data.
+The NOAA Climate Data Order Completed Notification grants me rights the access to 2017 New York City weather data.
 
 \begin{figure}
   \centering

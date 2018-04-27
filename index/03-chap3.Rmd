@@ -356,6 +356,5 @@ summary(min_mile_ratio)$coef[1:2,]
 As shown in the regression result, `min_per_mile` ratio does have a positive impact on percent tips. Since trips with slow traffic can be depicted by high minute per mile ratio, passengers do pay more tips during rush hours. 
 
 ## Recommendations to Taxi Drivers
-Our analysis has suggested that taxi passengers are sympathetic with the drivers who have to suffer the cogestion in New York City, and taxi drivers do get compensated more during rush hours. Therefore, we hope that taxi drivers would feel better during rush hours by knowing 
-that passengers do pay for tips to compensate the negative feelings that drivers carry in cogestion.
+Our analysis has suggested that taxi passengers are sympathetic with the drivers who have to suffer the cogestion in New York City, and taxi drivers do get compensated more during rush hours. Therefore, we hope that taxi drivers would feel better during rush hours by knowing that passengers do pay for tips to compensate the negative feelings that drivers carry in cogestion.
 
