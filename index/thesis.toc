@@ -57,7 +57,7 @@
 \contentsline {subsection}{\numberline {4.2.1}Case Study: March 14th, 2017 Snow Storm}{68}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Case Study: Impact of Precipitation on Taxi Rides}{69}{subsection.4.2.2}
 \contentsline {section}{\numberline {4.3}Recommendations to Taxi Passengers and NYC TLC}{73}{section.4.3}
-\contentsline {chapter}{Chapter 5: New York City Taxi Fare \& Limousine Commission}{75}{chapter.5}
+\contentsline {chapter}{Chapter 5: New York City Taxi \& Limousine Commission}{75}{chapter.5}
 \contentsline {section}{\numberline {5.1}Should there be a flat rate between Manhattan and John F. Kennedy International Airport?}{75}{section.5.1}
 \contentsline {section}{\numberline {5.2}Passengers departing from Manhattan benefit from the \$52 flat rate}{76}{section.5.2}
 \contentsline {subsection}{\numberline {5.2.1}Trips from Manhattan to JFK Airport}{77}{subsection.5.2.1}

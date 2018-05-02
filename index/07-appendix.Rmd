@@ -22,37 +22,28 @@ download_nyc_data <- function(obj, url, years, n, names, ...) {
 # Data Dictionary -- Yellow Taxi
 All variables used in data analysis of yellow taxi data are listed in this data dictionary. 
 
-\begin{figure}
-  \centering
-  \includegraphics[width=4.5in]{figure/data_dictionary_trip_records_yellow.pdf}
-  \caption{Data Dictionary -- Yellow Taxi Trips Records}
-\end{figure}
+```{r datadic, fig.cap="Data Dictionary -- Yellow Taxi Trips Records", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/data_dictionary_trip_records_yellow.png", dpi = 200 )
+```
 
 # Freedom of Information Law Request
-We submitted this FOIL Request to seek asnswers of the questions listed below to better analyze the yellow taxi data.
+We submitted this FOIL Request to seek answers of the questions listed below to better analyze the yellow taxi data.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=4.5in]{figure/appendix_foil_form_doc.pdf}
-  \caption{FOIL Request}
-\end{figure}
-
+```{r foil, fig.cap="Freedom of Information Law Request", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/appendix_foil_form_doc.png", dpi = 200 )
+```
 
 # NOAA Climate Data Request
 We submitted the NOAA Climate Data Request to get access to 2017 New York City weather data.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=4.5in]{figure/app_noaa_request.pdf}
-  \caption{NOAA Climate Data Request}
-\end{figure}
+```{r noaareq, fig.cap="NOAA Climate Data Request", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/app_noaa_request.png", dpi = 220 )
+```
 
-The NOAA Climate Data Order Completed Notification grants me rights the access to 2017 New York City weather data.
+The NOAA Climate Data Order Completion Notification grants me rights the access to 2017 New York City weather data.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=4.5in]{figure/app_noaa_com.pdf}
-  \caption{NOAA Climate Data Order Compeleted}
-\end{figure}
+```{r noaacom, fig.cap="NOAA Climate Data Order Compeletion", fig.align='center', echo=FALSE}
+knitr::include_graphics("figure/app_noaa_com.png", dpi = 220 )
+```
 
 
