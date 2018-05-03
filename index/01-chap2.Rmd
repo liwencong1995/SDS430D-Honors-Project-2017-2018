@@ -32,12 +32,16 @@ The data can be accessed by using the following commands:
 
 * Yellow taxi data
 ```{r, eval=FALSE}
-download.file("http://www.nyc.gov/html/tlc/downloads/csv/data_reports_monthly_indicators_yellow.csv", destfile = "~/Desktop/yellow_monthly_data.csv")
+download.file("http://www.nyc.gov/html/tlc/downloads/csv/data_reports_
+              monthly_indicators_yellow.csv", 
+              destfile = "~/Desktop/yellow_monthly_data.csv")
 ```
 
 * Uber and Lyft data
 ```{r, eval=FALSE}
-download.file("http://data.cityofnewyork.us/api/views/2v9c-2k7f/rows.csv?accessType=DOWNLOAD", destfile = "~/Desktop/fhv_weekly_data.csv")
+download.file("http://data.cityofnewyork.us/api/views/2v9c-2k7f/rows.csv
+              ?accessType=DOWNLOAD", 
+              destfile = "~/Desktop/fhv_weekly_data.csv")
 ```
 
 ### Uber
@@ -53,18 +57,26 @@ NYC Open Data also provides weekly-aggregated Uber pick-up data from 2015 to the
 The total size of weekly-aggregated Lyft trip data (from Jan 2015 to Dec 2016) is 914.9 MB, and these data are open to public and weekly-aggregated Lyft data from 2015 to the most recent week can be found on NYC OpenData website [@datalyft].
 
 ### Data Storage
-The total size of all `csv` files of the four services is about 200 GB, and a laptop usually has memory less than or equal to 8 GB. Limited memory constrains the amount of data that can be loaded by a personal computer at one time. When users load data into **R** environment, **R** keeps them in memory; when the amount of data loaded into **R** environment gets close to the limit of a computer’s memory, **R** becomes unresponsive or force quit the current session. Therefore, better ways to work with data that takes more space than 8 GB is needed. Comparing to RAM, hard disk is often used to store medium-sized data, because it is affordable and are designed for storing large items permanently. However, retrieving data from hard drives is about 1,000,000 times slower.
+The total size of all `csv` files of the four services is about 200 GB, and a laptop usually has 8 GB of physical memory. Limited memory constrains the amount of data that can be loaded by a personal computer at one time. When users load data into **R** environment, **R** keeps them in memory; when the amount of data loaded into **R** environment gets close to the limit of a computer’s memory, **R** becomes unresponsive or force quit the current session. Therefore, better ways to work with data that takes more space than 8 GB is needed. Comparing to RAM, hard disk is often used to store medium-sized data, because it is affordable and are designed for storing large items permanently. However, retrieving data from hard drives is about 1,000,000 times slower[@vega2017].
 
-## ETL nyctaxi Package
+## `ettl` and `nyctaxi` Packages
 `etl` is the parent package of `nyctaxi`. `etl` provides a framework that allows **R** users to work with medium data without any knowledge in SQL database. Users can run SQL queries by using `dplyr` commands in **R** and choose to only return the final result, which could be a summary table, from SQL database into **R** Environment in order to aovid **R** from crashing. The user interaction takes place solely within **R**. 
 
 `etl` framework has three operations -Extract, Transfer, and Load- which bring real-time data into local or remote SQL databases. Users can  specify which type of SQL database they prefer to connect to. `etl`-dependent packages, such as `nyctaxi`, make medium data more accessible to a wider audience [@baumer2014].
 
 `nyctaxi` was initially designed to work with New York City taxi data, but later on Uber and Lyft data were added and the ETL functions are modified to be specialized in working with these data. This package compiles three major sources of hail service in New York City so that it is convenient for users to compare and contrast the performance of these three services [@pkgnyctaxi].
 
-This package inherits functions from many packages: `etl`[@pkgetl], `dplyr` [@pkgdplyr], `DBI` [@pkgDBI], `rlang` [@pkgrlang], `lubridate` [@pkglubridate], `leaflet` [@pkgleaflet], and `stringr` [@pkgstringr]. 
+This package inherits functions from many packages: 
 
-Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert **R** code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in **R**.
+* `etl`[@pkgetl]
+* `dplyr` [@pkgdplyr]
+* `DBI` [@pkgDBI]
+* `rlang` [@pkgrlang]
+* `lubridate` [@pkglubridate]
+* `leaflet` [@pkgleaflet] 
+* `stringr` [@pkgstringr]
+
+SQL database can store medium data and it takes less time to retrieve data from a SQL database than from a hard disk. Since SQL databases are good tools for medium data analysis, ETL functions build connection to a SQL database at the back end and convert **R** code automatically into SQL queries and send them to the SQL database to get data tables containing data of each hail service. Thus, users do not need to have any knowledge of SQL queries and they can draw in any subsets of the data from the SQL database in **R**.
 
 ```{r, message=FALSE, eval=FALSE, echo=FALSE}
 webshot("https://github.com/beanumber/nyctaxi","figure/nyctaxi-page.png", cliprect = c(1425, 0, 1000, 500))
@@ -76,7 +88,7 @@ knitr::include_graphics("figure/nyctaxi-page.png", dpi = 170 )
 
 In general, `etl_extract.etl_nyctaxi()` function downloads data of the four types of hail service data (yellow taxi, green taxi, Uber, and Lyft) from the corresponding sources. `etl_transform.etl_nyctaxi()` uses different techniques to clean all four types of data to get then ready for the next step. `etl_load.etl_nyctaxi()` loads the data user selected to a SQL database. 
  
-The Comprehensive **R** Archive Network (CRAN) is a collection of sites that carry identical material, consisting of the **R** distributions, the contributed extensions, documentation for **R**, and binaries [@cran]. `nyctaxi` **R** package lives on CRAN, and it can be installed with the `install.packages()` function in **R**. 
+The Comprehensive **R** Archive Network (CRAN) is a collection of sites that carry identical material, consisting of the **R** distributions, the contributed extensions, documentation for **R**, and binaries [@cran]. `nyctaxi` **R** package lives on CRAN, and it can be installed as follows:
 
 ```{r, eval = FALSE}
 install.packages("nyctaxi")
@@ -99,9 +111,9 @@ db <- src_mysql("nyctaxi", user = "urname", host = "host",
 taxi <- etl("nyctaxi", dir = "~/Desktop/nyctaxi", db)
 ```
 
-In the example above, a folder called `nyctaxi` is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, two subfolders, `raw` and `load`, are also created under the directory the user specifies. The `raw` folder stores data downloaded from online open sources, and and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
+In the example above, a folder called `nyctaxi` is created on the desktop and a connection to a MySQL database is generated. In the procession of initialization, two subfolders, `raw` and `load`, are also created under the directory the user specifies. The `raw` folder stores data downloaded from online open sources, and `load` folder stores cleaned CSV data files that are ready to be loaded into SQL database. The ETL framework keeps data directly scraped from online data sources in their original forms. In this way, the original data is always available to users in case data corruption happens in later stages. 
 
-After an `etl` object is created (`taxi` is the `etl` object in this case), four parameters are needed to specify the data that users want: (1) `obj`: an etl object; (2) `years`: a numeric vector giving the years, and the default is the most recent year; (3) `months`: a numeric vector giving the months, and the default is `1:12`; (4) `type`: a character variable giving the type of data the user wants to download. There are four types: `yellow`, `green`, `uber`, and `lyft`. The default is `yellow`.
+After an `etl` object is created (`taxi` is the `etl` object in this case), four parameters are needed to specify the data that users want: (1) `obj`: an `etl` object; (2) `years`: a numeric vector giving the years, and the default is the most recent year; (3) `months`: a numeric vector giving the months, and the default is `1:12`; (4) `type`: a character variable giving the type of data the user wants to download. There are four types correspondinng to four street-hail services: `yellow`, `green`, `uber`, and `lyft`. The default is `yellow`.
 
 ### Taxi zone shapefile attached to nyctaxi **R** package
 Two datasets are attached to `nyctaxi`. The first one is called `taxi_zone_lookup`, and this dataset contains information, such as taxi zone location IDs, location names, and corresponding boroughs for each ID [@datayellow]. A shapefile containing the boundaries for the taxi zones, `taxi_zones`, is also included in the package for users to do spatial analysis. This shapefile is publicly accessible on NYC TLC's website [@datayellow]. 
@@ -133,7 +145,7 @@ taxi %>%
                type = c("yellow", "green"))
 ```
 
-Uber trip record data is static and small, so we decided to only give users the options to either download all data from April to Sepetember, 2014 or download all Uber trip records from Janaury to June, 2015 at once. Users do not have the ability to download Uber data from a specific month.
+Uber trip record data is static and small, so we decided to only give users the options to download either all data from April to Sepetember, 2014 or all Uber trip records from Janaury to June, 2015 at once. We do not give users the option to download Uber data by month, since the total size of all trip-level data from 2014 and 2015 are small.
 
 ```{r, eval=FALSE}
 taxi %>% 
@@ -141,7 +153,7 @@ taxi %>%
                type = c("uber"))
 ```
 
-Lyft data is updated on NYC Open Data website on a weekly basis. Since the weekly-aggregated data is tiny and only data later than 2014 is available, we decided to only allow users to download Lyft data by year. 
+Lyft data is updated on NYC Open Data website on a weekly basis. Since the weekly-aggregated data is tiny and only data later than 2014 is available, we decided to only allow users to download Lyft data by year. We do not give users the option to download Lyft data by month, since trip records are weekly-aggregated.
 
 ```{r, eval=FALSE}
 taxi %>% 
@@ -149,12 +161,12 @@ taxi %>%
                type = c("lyft"))
 ```
 
-The default `years` is the current year, and the default `months` are the all twelve months. The default type of transportation is `yellow`. When an invalid month is entered, warning message will suggest users to reconsider their choice and select a new set of month. 
+The default `years` is the current year, and the default `months` are all twelve months. The default type of transportation is `yellow`. When an invalid month is entered, warning message will suggest users to reconsider their choice and select a new set of month. 
 
 An utility function, `download_nyc_data()`, was written to be used in `etl_extract.etl_nyctaxi()` to make this function more concise (Appendix A).
 
 ### Transform
-`etl_transform.etl_nyctaxi()` allows users to transform New York City yellow taxi, green taxi, Uber, and Lyft data into cleaned formats, and it utilizes different data cleaning techniques when it transforms data for each transportation type. In general, it cleans the data and creates a new `csv` file in the `load` directory to store the cleaned data. It helps us to retain and protect raw data from being modified or destroyed. Users are allowed to specify the month of interest in order to only transform the data that they are interested in. This functionality helps people to be more efficient with their use of time.
+`etl_transform.etl_nyctaxi()` allows users to transform the data into cleaned formats, and it utilizes different data cleaning techniques when it transforms data for each transportation type. In general, it cleans the data and creates a new `csv` file in the `load` directory to store the cleaned data. It helps us to retain and protect raw data from being modified or destroyed. Users are allowed to specify the month of interest in order to only transform data from certain months. This functionality helps people to be more efficient with their use of time by only transforming months of data that are needed in later steps.
 
 By default, it takes the current year yellow taxi trip records data files, and saves copies of them in the `load` diectory. It skips the cleaning step, because the raw yellow taxi data downloaded from TLC is already in a desired format with all variables correctly labelled. 
 
@@ -188,7 +200,7 @@ taxi %>%
 ```
 
 ### SQL Database Initialization
-`init.mysql` is written under `nyctaxi` to help users to set up five basic table structures for MySQL database. `yellow_old` is created for Yellow Taxi data that are prior to August 2016, and `yellow` is created for data later than July 2016. `green`, `uber`, and `lyft` are also initiated for the three transportations. 
+`init.mysql` is written under `nyctaxi` to help users to set up five basic table structures for MySQL database. `yellow_old` is created for Yellow Taxi data that are prior to July 2016, and `yellow` is created for data later than June 2016. There are two tables created for yellow taxi data because NYC TLC changed the variables included in yellow taxi datasets in July 2016. `green`, `uber`, and `lyft` are also initiated for the three transportations. 
 
 `etl_init()` can be run after a database connection is built to process to process `init.mysql` to initialize a MySQL database, and default columns with the correct variable names and types defined will be automatically generated.
 

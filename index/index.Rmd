@@ -6,7 +6,7 @@ date: 'May 2018'
 institution: 'Smith College'
 #division: 'Statistical and Data Sciences'
 advisor: 'Benjamin Baumer'
-#altadvisor: 'Jordan Crouser'
+#altadvisor: 'R. Jordan Crouser'
 # Delete line 6 if you only have one advisor
 department: 'Statistical and Data Sciences'
 degree: 'Bachelor of Arts'
@@ -27,7 +27,7 @@ abstract: |
 # like below, use a command like that for the abstract above.  Note that a tab is 
 # needed on the line after the |.
 acknowledgements: |
-  I would love to thank my thesis advisor Benjamin Baumer, Assistant Professor of Statistical and Data Sciences at Smith College, for encouraging me to challenge myself and guiding me through this project. I want to thank Jordan Crouser for being my second reader and help me to revise my paper. I also want to thank all my friends and my roommates for their love and support. 
+  I would love to thank my thesis advisor Benjamin Baumer, Assistant Professor of Statistical and Data Sciences at Smith College, for encouraging me to challenge myself and guiding me through this project. I want to thank R. Jordan Crouser for being my second reader and helping me to revise my paper. I also want to thank all my friends and my roommates for their love and support. 
 
 bibliography: bib/thesis.bib
 # Download your specific bibliography database file and refer to it in the line above.
