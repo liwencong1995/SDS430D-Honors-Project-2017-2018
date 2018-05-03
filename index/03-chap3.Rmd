@@ -2,12 +2,14 @@
 opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
 ```
 
+In the second part of the thesis, we give examples of how to answer New York City street-hail service related questions that used to be impossible to be answered by using R on a standard laptop. 
+
 # New York City Taxi Drivers {#chapter3}
 The income of Taxi drivers in New York City comes from two sources: taxi fare and tips. Taxi fare is usually calculated by the meters installed in the taxis, and the rate of fare cannot be changed by taxi drivers. Therefore, in order to make more profit, taxi drivers prefer to pick up passengers who offer big amount of tips. What are the regions that provide the most tips to yellow taxicab drivers?
 
 In this analysis, we will focus on trip data collected in 2017. Descriptions of variables mentioned in the following chapters can be found in Appendix B. 
 
-In order to answer questions regarding to taxi trips' tips, we filter out trips that are not paid by credit or debit card, because taxi drivers usually do not correctly record the amount of tips paid by cash or check (Appendix C)[@foirequest].  
+In order to answer questions regarding to taxi trips' tips, we filter out trips that are not paid by credit or debit card, because taxi drivers usually do not correctly record the amount of tips paid by cash or check [@foirequest].  
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE}
 library(dplyr)
@@ -30,10 +32,11 @@ Since we are using all 12 month data from 2017 in this analysis, it is impractic
 
 In this section, we only want to load trip records with payment type equals to 1, which represents credit card. Only trip records with payment type credit card have accurate information on tip amount. Let's load the 2017 trip record into **R** environment by using the MySQL connection we just generated, `taxi`.
 ```{r, eval=FALSE}
+# extract yellow taxi trip records that have payment type equals to credit card 
+# from MySQL database
 yellow_2017 <- taxi %>%
   tbl("yellow") %>%
-  filter(payment_type == 1) %>%
-  collect(n = Inf)
+  filter(payment_type == 1)
 ```
 
 ```{r, echo=FALSE, message=FALSE, eval=FALSE}
@@ -171,7 +174,7 @@ region_vis <- ggplot(data = tip_region_1, aes(x = avg_tip) ) +
 knitr::include_graphics("figure/region_vis.png", dpi = 120 )
 ```
 
-Figure \@ref(fig:region-vis) is a histogram of mean tip percents for all known pick-up and drop-off zone pairs. The red, green, and yellow dash lines are drawn at 20%, 25%, and 30%, which are the default percentage of tips that are shown on the touch panel for credit and debit car payments (see Figure \@ref(fig:taxi-screen)), and passengers tend to pick the the lowest default percent tip.
+Figure \@ref(fig:region-vis) is a histogram of mean tip percents for all known pick-up and drop-off zone pairs. The red dash lines are drawn at 20%, 25%, and 30%, which are the default percentage of tips that are shown on the touch panel for credit and debit car payments (see Figure \@ref(fig:taxi-screen)), and passengers tend to pick the the lowest default percent tip.
 
 ```{r taxi-screen, fig.cap= "Tip Payment Page on New York City Touch Panel" ,fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/taxi-screen.jpg", dpi = 100 )
@@ -185,10 +188,8 @@ pickup_vis <- region_vis %+% tip_pickup
 ```
 
 ```{r pickup-vis, fig.cap= "Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC" ,fig.align='center', echo=FALSE}
-knitr::include_graphics("figure/pickup_vis.png", dpi = 120 )
+# knitr::include_graphics("figure/pickup_vis.png", dpi = 120 )
 ```
-
-We created a histogram to visualize the distribution of average percent tips paid for all pick-up zones. As show in Figure \@ref(fig:pickup-vis), the first peak is around 20%, which is the cheapest default option on the touch panel for passengers to chose. 
 
 ```{r, message=FALSE, echo=FALSE}
 tip_pickup <- yellow_2017_summary %>%
@@ -215,11 +216,11 @@ kable(tip_pickup_1[1:10, c(8:9,4)],
       escape = TRUE,
       booktabs = TRUE)
 ```
-We also calculated the average percent tip paid for each pick-up zone as shown in Table 3.1. According to Table 3.1, 6 out of 10 taxi zones with the highest average percent tips are in Queens. At a first glance, Queens seems to be a good place for taxi drivers to go and pick up passengers to make more money.
+We calculated the average percent tip paid for each pick-up zone as shown in Table 3.1. According to Table 3.1, 6 out of 10 taxi zones with the highest average percent tips are in Queens. At a first glance, Queens seems to be a good place for taxi drivers to go and pick up passengers to make more money.
 
 ### Which taxi zones are the most popular ones for pick-ups?
 
-Which pick-up zones have the highest number of taxi trip pick-ups? We can create a heat map to visualizae the number of trips for each pick-up zones on a map of New York City Taxi Zones.
+Which pick-up zones have the highest number of taxi trip pick-ups? We can create a heat map to visualize the number of trips for each pick-up zones on a map of New York City Taxi Zones.
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE}
 tip_pickup_zone <- tip_pickup %>%
@@ -285,9 +286,9 @@ kable(pickup_zone_24[1:10, c(6,7,2)], caption = "Ten taxi pick-up zones with the
       booktabs = TRUE
       )
 ```
-People might think it is more reasonable to see a list that is populated with zones in Manhattan, since that's where most of the wealthy people live. However, Table 3.3 shows that passengers who get on taxis from certain zones in Brooklyn and Queens also pay a lot of tips. Taxi drivers who would love to get more tips compensation can drive to the zones listed above to pick-up passengers.
+People might think it is more reasonable to see a list that is populated with zones in Manhattan, since that's where most of the wealthy people live. However, Table 3.3 shows that passengers who get on taxis from certain zones in Brooklyn and Queens also pay a lot of tips. Taxi drivers who would love to get higher percent tips can drive to the zones listed above to pick-up passengers.
 
-If we focus on the pick-up zones that have more than 1 trip per minute (or 24 trips per hour), then we observe that all pick-up zones that have the highest percent tips are in Manhattan besides La Guardia Airport.
+If we focus on the pick-up zones that have more than 1 trip per minute (or 60 trips per hour), then we observe that all pick-up zones that have the highest percent tips are in Manhattan besides La Guardia Airport.
 
 ```{r, echo=FALSE}
 pickup_zone_60 <- tip_pickup_zone %>%
@@ -309,14 +310,17 @@ There are more than 100 times more yellow cab pick-ups that happen in Manhattan 
 So far, we have learned what pick-up zones offer the highest percent tip. Now, we want to dig into the relationships between percent tip and taxi-zone-specific variables. 
 
 ### Does trip distance increase the percent tips paid by passengers? 
-Do longer trips result in higher tip percent? It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. I personally pay higher percent of tips for longer rides, so I believe trip distance has an impact on percentage of tips paid.
+Do longer trips result in higher tip percent? It takes taxi drivers more time to complete longer trips, so passengers might want to compensate taxi drivers more. 
+
+```{r}
+tip_distance <- lm(avg_tip ~ avg_dis + PULocationID + DOLocationID, data = tip_region)
+```
 
 ```{r, echo=FALSE}
-tip_distance <- lm(avg_tip ~ avg_dis + PULocationID + DOLocationID, data = tip_region)
 summary(tip_distance)$coef[1:2,]
 ```
 
-Acoording to the simple linear regression result, trip distance does have a negative impact on the percent of tips paid, controlling for both pick-up and drop-off locations. Since the number of obervations in this regression model is big, the p-value quickly goes to zero. Therefore, in this regression, p-value does not matter so much. What is important in this result is the negative correlation between average percent tips and average distance that a taxi travels.
+Acoording to the simple linear regression result, trip distance does have a small negative impact on the percent of tips paid, controlling for both pick-up and drop-off locations. Since the number of obervations in this regression model is big, the p-value quickly goes to zero. Therefore, in this regression, p-value does not matter so much. What is important in this result is the negative correlation between average percent tips and average distance that a taxi travels.
 
 The negative correlation could be caused by a psychological reason. Long trips cost more than short trips. For a constant tip percent, the nominal value of tip amount cost more for longer trips. For example, for a \$100 trip, 20% tip costs \$20; for a \$50 trip, 20% tip costs \$10. Even though consumers are paying the same percent amount of tips, \$20 is more expensive than \$10. Therefore, consumers might decide to pay less percent tip for longer trips.
 
@@ -342,19 +346,24 @@ The metered fare rate information is collected from TLC rate of fare webpage [@t
 
 In taxi fare calculation, the only unknown variable is slow-traffic time, and all other variables were collected by the meters installed on each medallion taxi for each trip. It is reasonable to assume that for trips with the same pick-up and drop-off locations, the longer the total slow traffic time is, the longer the trip would take. Taxi drivers are compensated for both the normal-speed trip distance and the time spent in slow-traffic. According to the fare calculation algorithm, in moving traffic on Manhattan streets, the meter should “click” approximately every four downtown blocks, or one block going cross-town (East-West); in slow traffic, the meter should "click" every 60 seconds. Therefore, slow traffic increases the minute per mile ratio. 
 
-New York City has the worst traffic jams, and it has overtaken Miami to be voted the U.S. city with the angriest and most aggressive drivers in 2009, according to a survey on road rage. Bad traffic also causes slow-traffic, and taxi drivers tend to get stuck in traffic during rush hours [@reaney2009]. Does minute per mile ratio have an impact on the percent tip that passengers pay? Do passengers compensate taxi drivers more during rush hours? Are passengers sympathetic to taxi drivers for the time they spend in slow traffic?
+Does minute per mile ratio have an impact on the percent tip that passengers pay? Do passengers compensate taxi drivers more during rush hours? Are passengers sympathetic to taxi drivers for the time they spend in slow traffic?
 
 ```{r, message=FALSE, echo=FALSE}
 yellow_2017_summary_small <- yellow_2017_summary %>%
   mutate(min_per_mile = avg_duration/avg_dis) %>%
   filter(trips > 30)
+```
 
+```{r, message=FALSE}
 min_mile_ratio <- lm(avg_tip ~ min_per_mile, data = yellow_2017_summary_small)
+```
+
+```{r, message=FALSE, echo=FALSE}
 summary(min_mile_ratio)$coef[1:2,]
 ```
 
-As shown in the regression result, `min_per_mile` ratio does have a positive impact on percent tips. Since trips with slow traffic can be depicted by high minute per mile ratio, passengers do pay more tips during rush hours. 
+As shown in the regression result, `min_per_mile` ratio does have a small positive impact on percent tips. Since trips with slow traffic can be depicted by high minute per mile ratio, passengers do pay more tips during rush hours. 
 
 ## Recommendations to Taxi Drivers
-Our analysis has suggested that taxi passengers are sympathetic with the drivers who have to suffer the cogestion in New York City, and taxi drivers do get compensated more during rush hours. Therefore, we hope that taxi drivers would feel better during rush hours by knowing that passengers do pay for tips to compensate the negative feelings that drivers carry in cogestion.
+Our analysis has suggested that taxi passengers are sympathetic with the drivers who have to suffer the cogestion in New York City, so we hope that taxi drivers would feel better during rush hours by knowing that passengers do pay for tips to compensate the negative feelings that drivers carry in congestion.
 

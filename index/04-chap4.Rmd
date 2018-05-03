@@ -14,20 +14,23 @@ taxi <- etl("nyctaxi", db)
 ```
 
 ```{r, message=FALSE, eval=FALSE}
+# extract data of trips going to JFK Airport
+# from MySQL database
 to_jfk_trip <- taxi %>%
   tbl("yellow") %>%
-  filter(DOLocationID == 132) %>%
-  collect(n = Inf)
+  filter(DOLocationID == 132) 
 
+# extract data of trips going to La Guardia Airport
+# from MySQL database
 to_lg_trip <- taxi %>%
   tbl("yellow") %>%
-  filter(DOLocationID == 138) %>%
-  collect(n = Inf)
+  filter(DOLocationID == 138) 
 
+# extract data of trips going to Newark Airport
+# from MySQL database
 to_newark_trip <- taxi %>%
   tbl("yellow") %>%
-  filter(DOLocationID == 1) %>%
-  collect(n = Inf)
+  filter(DOLocationID == 1) 
 ```
 
 Now we want to calculate the average amount of time it take from each zone to one of the three airports during each hour.
@@ -160,8 +163,8 @@ airport_vis <- ggplot(data = alphabet,
                      aes(x = hour, y = avg_min, colour = airport)) +
   geom_line(aes(group = airport)) + geom_point() +
   xlab("Hour of Departure") +
-  ylab("Average Number of Minutes") +
-  scale_x_continuous(limits = c(0, 23))
+  ylab("Average Total Time (Minutes)") +
+  scale_x_continuous(limits = c(0, 23), breaks = c(0, 4, 8, 12, 16, 20, 24))
 airport_vis
 ```
 
@@ -173,9 +176,9 @@ According to the red line Figure \@ref(fig:airport-vis), it takes the least time
 
 According to the green line, it only takes about 30 minutes to travel to JFK Airport around 4 AM in the morning, and it takes the most time, about 70 minutes, around 4 PM in the afternoon.
 
-As shown by the blue line, it takes the least time, about 20 minutes, to travel to La Guardia Airport at 1 AM at midnight, and it takes a little more than 40 minutes around 4 PM in the evening. 
+As shown by the blue line, it takes the least time, about 20 minutes, to travel to La Guardia Airport at 2 AM at midnight, and it takes a little more than 40 minutes around 4 PM in the evening. 
 
-Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. For example, a mum who wants to visit Disney World with her kids can use this visulization to estimate the amount of time needed for her and her families to catch their flight. If this mum wants to catch a flight that departs at 10 AM from JFK Airport, then when she should depart from Central Park in order to get to the airport on time? According to Figure \@ref(fig:airport-vis), she can depart at 7 AM, and it will take a little bit more than 40 minutes for her to get to JFK Airport to catch her 10 AM flight.
+Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. For example, a mum who wants to visit Disney World with her kids can use this visualization to estimate the amount of time needed for her and her families to catch their flight. If this mum wants to catch a flight that departs at 10 AM from JFK Airport, then when she should depart from Central Park in order to get to the airport on time? According to Figure \@ref(fig:airport-vis), she can depart at 7 AM, and it will take a little bit more than 40 minutes for her to get to JFK Airport to catch her 10 AM flight.
 
 ### A Shiny App: When is the best time to travel to JFK Airport?
 
@@ -219,10 +222,12 @@ shinyApp(ui, server)
 ```{r shinyapp, fig.caption = "Shiny App: Average Number of Minutes Takes to Go to All Three Airports",fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/shinyapp.png", dpi = 100 )
 ```
-This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the these three airports from any New York City taxi zones.
+According to \@ref(fig:shinyapp), a person travelling from Times Square to JFK Airport to catch a 11AM flight need to depart around 8:30 AM in order to arrive at the airport 2 hours before the flight departs. 
+
+This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the these three airports from any New York City taxi zones. 
 
 ## How does weather affect the number of taxi and Uber trips?
-On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes the number of Uber vehicles available on the street into account. When weather is bad, fewer Uber vehicles are available on the street, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to keep working on ugly days. 
+On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes supply and demand into account. When weather is bad, demand for rides is higher, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to work extra hard on ugly days. 
 
 In this section, we study the number of pickups of yellow cab and Uber. We compare number of pick-ups in each taxi zone in the weeks of bad weather with previous weeks' total number of pick-ups to see whether Uber drivers have an incentive to drive around the city more when weather gets bad.
 
@@ -307,7 +312,7 @@ kable(yellow_weekly_1[1:10,1:3],
 ```
 
 ### Case Study: March 14th, 2017 Snow Storm
-There are two commonly known bad weather conditions, rainy and snowy days. Let's first focus on snowstorm. On March 14th, 2017, a snow storm brought seven inches of snow to New York City.
+On March 14th, 2017, a snow storm brought seven inches of snow to New York City.
 
 **Yellow Taxi**
 ```{r, echo=FALSE}
@@ -324,7 +329,7 @@ kable(yellow[,1:3],
       booktabs = TRUE)
 ```
 
-```{r, echo=FALSE}
+```{r}
 (2066285-2456285)/2456285
 ```
 
@@ -345,7 +350,7 @@ kable(uber[,1:3],
       booktabs = TRUE)
 ```
 
-```{r, echo=FALSE}
+```{r}
 (3430189-3614559)/3614559
 ```
 Uber's number of total dispatched trips declined by 5% (see Table 4.5).
@@ -353,7 +358,7 @@ Uber's number of total dispatched trips declined by 5% (see Table 4.5).
 In this case, we observe that the percent decline in Uber's total number of pick-ups is 10% less than the percent decline in Yellow Taxi's total number of drop-off. Even though the total number of Uber pick-ups did not increase, Uber's pricing model may keep more drivers in the market on a snowy day.
 
 ### Case Study: Impact of Precipitation on Taxi Rides
-People living in New York might have noticed that it is hard to find a taxi on the street when it rains. Economists have studied this phenomena for a long time, and an analysis that studied the correlation between taxi movement and hourly rainfall data in Central Park from 2009 to 2013 found that there is no significant correlation between a driver's hourly wage and rain in the city, which implies that drivers don't earn more when it's raining [@citylab]. 
+People living in New York might have noticed that it is hard to find a taxi on the street when it rains. Economists have studied this phenomena for a long time, and an analysis that studied the correlation between taxi movement and hourly rainfall data in Central Park from 2009 to 2013 found that there is no significant correlation between a driver's hourly wage and precipitation in the city, which implies that drivers don't earn more or less when it rains [@citylab]. 
 
 We got access to the 2017 daily Central Park weather data from the National Climatic Data Center by submitting a Climate Data Online request (Appendix D) to National Centers for Environmental Information [@noaa], and joined it to the 2017 taxi data to study relationship between rainfall and taxi rides. 
 
@@ -485,7 +490,8 @@ weather_vis <- ggplot(data = weather_week_1, aes(x = `Pickup Start Date`)) +
   ylab("% Change in Number of Dispatched Trips from Previous Week")
 rainfall_vis <- ggplot(data = weather_week_1, aes(x = `Pickup Start Date`)) +
   geom_point(aes(y = `Weekly Rainfall`, color="Rainfall")) +
-  geom_line(aes(y = `Weekly Rainfall`, color="Rainfall"))
+  geom_line(aes(y = `Weekly Rainfall`, color="Rainfall")) +
+  ylab("Weekly Rainfall (Inches)")
 ```
 
 ```{r rainfall_vis, fig.caption = "Weekly Rainfall in New York City in 2017",fig.align='center', echo=FALSE}
@@ -495,9 +501,7 @@ knitr::include_graphics("figure/rainfall_vis.png", dpi = 120 )
 ```{r weather_vis, fig.caption = "Yellow Taxi and Uber's % Change in Number of Dispatched Trips from Previous Week in 2017",fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/weather_vis.png", dpi = 120 )
 ```
-According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in total number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead.
+According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in total number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead [@citylab].
 
-## Recommendations to Taxi Passengers and NYC TLC
+## Recommendations to Taxi Passengers
 We suggest passengers to use our Shiny App to choose a pick up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.
-
-In this chapter, we have shown that Uber's pricing model might keep more drivers working on rainy days. Therefore, we suggest New York City TLC to modify the fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make taking a street hail vehicle on average more affordable on rainy days for passengers.
