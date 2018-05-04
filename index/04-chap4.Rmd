@@ -1,5 +1,6 @@
 ```{r, message=FALSE, echo=FALSE}
 opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
+knitr::opts_chunk$set(fig.pos = 'h')
 ```
 
 # New York City Taxi Passengers {#chapter4}

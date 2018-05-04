@@ -1,6 +1,7 @@
 ```{r, message=FALSE, echo=FALSE}
 #library(knitr)
 opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=FALSE)
+knitr::opts_chunk$set(fig.pos = 'h')
 ```
 
 # Data and `nyctaxi` Package {#chapter2}
