@@ -2,28 +2,27 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces NYC Monthly Taxi Pickups\relax }}{5}{figure.caption.6}
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces NYC Taxi and Limousine Commission Aggregated Reports\relax }}{13}{figure.caption.7}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces `nyctaxi` package GitHub Repository\relax }}{16}{figure.caption.8}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces NYC Taxi Zone Map\relax }}{18}{figure.caption.9}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces MySQL View\relax }}{23}{figure.caption.14}
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC\relax }}{24}{figure.caption.15}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces `nyctaxi` package GitHub Repository\relax }}{17}{figure.caption.8}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces NYC Taxi Zone Map\relax }}{19}{figure.caption.9}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces MySQL View\relax }}{24}{figure.caption.14}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC\relax }}{25}{figure.caption.15}
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Percent Tip Paid by Passengers in Each Pick-up And Drop-off Pair in NYC\relax }}{51}{figure.caption.16}
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Tip Payment Page on New York City Touch Panel\relax }}{52}{figure.caption.17}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Percent Tip Paid by Passengers on Each Pick-up Taxi Zone in NYC\relax }}{53}{figure.caption.18}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Number of Pick-ups in Each Taxi Zone\relax }}{55}{figure.caption.20}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Number of Pick-ups in Each Taxi Zone\relax }}{54}{figure.caption.19}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours\relax }}{63}{figure.caption.26}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours\relax }}{63}{figure.caption.25}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Estmated fare amount from the each pick-up zone to JFK Airport\relax }}{77}{figure.caption.36}
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Pick-up Zones that cost more than the 52 US Dollar flat rate\relax }}{79}{figure.caption.38}
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Number of trips from JFK Airport to any Taxi Zones\relax }}{82}{figure.caption.41}
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Zones that cost more than the 52 US Dollar flat rate\relax }}{84}{figure.caption.45}
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Estmated fare amount from the each pick-up zone to JFK Airport\relax }}{75}{figure.caption.35}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Pick-up Zones that cost more than the 52 US Dollar flat rate\relax }}{77}{figure.caption.37}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Number of trips from JFK Airport to any Taxi Zones\relax }}{79}{figure.caption.40}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Zones that cost more than the 52 US Dollar flat rate\relax }}{81}{figure.caption.44}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {B.1}{\ignorespaces Data Dictionary -- Yellow Taxi Trips Records\relax }}{92}{figure.caption.48}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {C.1}{\ignorespaces Freedom of Information Law Request\relax }}{94}{figure.caption.49}
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Data Dictionary -- Yellow Taxi Trips Records\relax }}{90}{figure.caption.47}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {D.1}{\ignorespaces NOAA Climate Data Request\relax }}{96}{figure.caption.50}
-\contentsline {figure}{\numberline {D.2}{\ignorespaces NOAA Climate Data Order Compeletion\relax }}{97}{figure.caption.51}
+\contentsline {figure}{\numberline {C.1}{\ignorespaces Freedom of Information Law Request\relax }}{92}{figure.caption.48}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {D.1}{\ignorespaces NOAA Climate Data Request\relax }}{94}{figure.caption.49}
+\contentsline {figure}{\numberline {D.2}{\ignorespaces NOAA Climate Data Order Compeletion\relax }}{95}{figure.caption.50}
