@@ -374,7 +374,7 @@ traffic, in order to make a living.
 
 \subsection{Competition between New York City taxi and e-hail
 services}\label{competition-between-new-york-city-taxi-and-e-hail-services}
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.33in]{figure/totals_by_car_type} 
 
@@ -465,7 +465,7 @@ this honors project. As scholars place more emphasis on the
 reproducibility of research studies, it is essential for us to make our
 data and code openly available for people to redo the analysis.
 
-\texttt{Knitr} (Xie, 2018) and Github are used in this project to make
+\texttt{knitr} (Xie, 2018) and Github are used in this project to make
 the study reproducible, ranging from the initial data source to the
 \texttt{nyctaxi} package to the statistical data analysis. We used an
 \textbf{R} package called \texttt{thesisdown} to typeset this paper.
@@ -555,7 +555,7 @@ In addition, the trip level NYC Uber data only covers two periods, from
 April to September 2014 and from January to June 2015. However, the
 summary reports cover weekly-aggreagated data from 2015 to the most
 recent week (N. T. Staff, 2009c).
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/a-report} 
 
@@ -685,7 +685,7 @@ into SQL queries and send them to the SQL database to get data tables
 containing data of each hail service. Thus, users do not need to have
 any knowledge of SQL queries and they can draw in any subsets of the
 data from the SQL database in \textbf{R}.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.88in]{figure/nyctaxi-page} 
 
@@ -756,7 +756,7 @@ for each ID (N. T. Staff, 2009b). A shapefile containing the boundaries
 for the taxi zones, \texttt{taxi\_zones}, is also included in the
 package for users to do spatial analysis. This shapefile is publicly
 accessible on NYC TLC's website (N. T. Staff, 2009b).
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/zonemap} 
 
@@ -933,7 +933,7 @@ Due to the large size of Yellow Taxi datasets, \texttt{yellow\_old} and
 need to run a query on data from a specific year, having partitions
 allows MySQL to directly find the data specified without filtering on
 every single row. It speeds up the query process.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.76in]{figure/mysql_view} 
 
@@ -947,7 +947,7 @@ month.
 
 \section{New York City Taxicab and E-hail Services
 Summary}\label{new-york-city-taxicab-and-e-hail-services-summary}
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.75in]{figure/Num_trips_summary} 
 
@@ -1682,7 +1682,7 @@ function properly, so the information recorded is not always accurate.
 When taxi meters dysfunction, taxi pick-up and drop-off locations are
 labelled as ``Unknown''. We only want to include trips coming from and
 going to known taxi zones in this analysis.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=3.89in]{figure/region_vis} 
 
@@ -1696,7 +1696,7 @@ known pick-up and drop-off zone pairs. The red dash lines are drawn at
 shown on the touch panel for credit and debit car payments (see Figure
 \ref{fig:taxi-screen}), and passengers tend to pick the the lowest
 default percent tip.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=4.8in]{figure/taxi-screen} 
 
@@ -1750,7 +1750,7 @@ pick-ups?}\label{which-taxi-zones-are-the-most-popular-ones-for-pick-ups}
 Which pick-up zones have the highest number of taxi trip pick-ups? We
 can create a heat map to visualize the number of trips for each pick-up
 zones on a map of New York City Taxi Zones.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/num_trip} 
 
@@ -2062,7 +2062,7 @@ airports}\label{case-study-from-central-park-manhattan-to-all-three-airports}
 Central Park, Manhattan has pick-up zone ID number 43. Let's take a look
 at how much time is needed to travel to all three airports from taxi
 zone No.4.
-\begin{figure}
+\begin{figure}[h]
 \includegraphics[width=5.67in]{figure/airport_vis} \caption{Average number of minutes it takes from Central Park, Manhattan to all three airports during different hours}\label{fig:airport-vis}
 \end{figure}
 According to the red line Figure \ref{fig:airport-vis}, it takes the
@@ -2437,7 +2437,7 @@ JFK Airport, and then we calculate the estimated fare amount that the
 passengers should have paid based on the distance travelled from each
 pick-up point to JFK Airport based on the fare rate suggested by TLC for
 each pick-up zone.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/to_jfk_fare_vis} 
 
@@ -2455,7 +2455,7 @@ average cost less than trips from other taxi zones in Manhattan.
 rate?}\label{which-taxi-zones-would-pay-more-than-52-without-the-flat-rate}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-94}Ten pick-up zones with the highest avergae fare from Manhattan to JFK Airport}
+\caption{\label{tab:unnamed-chunk-95}Ten pick-up zones with the highest avergae fare from Manhattan to JFK Airport}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2480,7 +2480,7 @@ each taxi zone in Manhattan to JFK Airport in Table 5.1.
 
 Let's visualize the taxi zones that would have cost more than the \$52
 flat rate.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/to_jfk_fare_above_vis} 
 
@@ -2537,7 +2537,7 @@ passengers departing from JFK
 Airport?}\label{what-are-the-most-popular-drop-off-locations-for-passengers-departing-from-jfk-airport}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-101}5 most popular destinations in Manhattan}
+\caption{\label{tab:unnamed-chunk-102}5 most popular destinations in Manhattan}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2553,7 +2553,7 @@ Manhattan & Midtown Center & 36405 & 69.64272 & 52.62410\\
 \end{table}
 Table 5.2 shows that Times Square is the most popular destination for
 passengers coming from the JFK Airport in 2017.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/from_jfk_num_trips} 
 
@@ -2565,7 +2565,7 @@ According to the Figure @\ref(fig:from-jfk-num-trips), Manhattan is the
 most popular destination for passengers departing from JFK Airport.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-104}Number of Trips going to Manhattan or other boroughs from JFK Airport}
+\caption{\label{tab:unnamed-chunk-105}Number of Trips going to Manhattan or other boroughs from JFK Airport}
 \centering
 \begin{tabular}[t]{cc}
 \toprule
@@ -2589,7 +2589,7 @@ We can use a map to visualize the distribution of average fare amount
 needed to travel from JFK Airport to any taxi zone in New York City.
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-106}10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount}
+\caption{\label{tab:unnamed-chunk-107}10 most popular taxi drop-off zones from JFK Airport with the corresponding average fare amount}
 \centering
 \begin{tabular}[t]{ccccc}
 \toprule
@@ -2609,7 +2609,7 @@ Manhattan & Upper West Side South & 24723 & 69.95 & 50.87777\\
 \bottomrule
 \end{tabular}
 \end{table}
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/from_jfk_fare_vis} 
 
@@ -2756,7 +2756,7 @@ Taxi}\label{data-dictionary-yellow-taxi}
 
 All variables used in data analysis of yellow taxi data are listed in
 this data dictionary.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=6.38in]{figure/data_dictionary_trip_records_yellow} 
 
@@ -2769,7 +2769,7 @@ Request}\label{freedom-of-information-law-request}
 
 We submitted this FOIL Request to seek answers of the questions listed
 below to better analyze the yellow taxi data.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=6.38in]{figure/appendix_foil_form_doc} 
 
@@ -2781,7 +2781,7 @@ below to better analyze the yellow taxi data.
 
 We submitted the NOAA Climate Data Request to get access to 2017 New
 York City weather data.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.8in]{figure/app_noaa_request} 
 
@@ -2791,7 +2791,7 @@ York City weather data.
 \end{figure}
 The NOAA Climate Data Order Completion Notification grants me rights the
 access to 2017 New York City weather data.
-\begin{figure}
+\begin{figure}[h]
 
 {\centering \includegraphics[width=5.8in]{figure/app_noaa_com} 
 
