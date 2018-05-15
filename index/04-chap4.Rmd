@@ -7,7 +7,7 @@ knitr::opts_chunk$set(fig.pos = 'h')
 
 ## How long does it take passengers to get to JFK, La Guardia, and Newark Airports from anywhere in New York City? 
 
-We want to calculate the average number of minutes it takes to go to all three airport from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. We need to load trip records with destination as one of the three airports from the MySQL connection we built.
+We want to calculate the average number of minutes it takes to go to all three airports from a specific taxi zone at every hour. First, we want to focus on trips going to any of the three airports, JFK, LaGuardia, or Newark Airport. We need to load trip records with destination as one of the three airports from the MySQL connection we built.
 
 ```{r, message=FALSE, echo=FALSE, eval=FALSE}
 db <- src_mysql("nyctaxi", user = "wli37", host = "scidb.smith.edu", password = "Calculati0n")
@@ -34,7 +34,7 @@ to_newark_trip <- taxi %>%
   filter(DOLocationID == 1) 
 ```
 
-Now we want to calculate the average amount of time it take from each zone to one of the three airports during each hour.
+Now we want to calculate the average amount of time it takes from each zone to one of the three airports during each hour.
 ```{r, echo=FALSE, eval=FALSE}
 to_jfk_zone <- to_jfk_trip %>%
   mutate(tpep_dropoff_datetime = ymd_hms(tpep_dropoff_datetime,  
@@ -179,7 +179,7 @@ According to the green line, it only takes about 30 minutes to travel to JFK Air
 
 As shown by the blue line, it takes the least time, about 20 minutes, to travel to La Guardia Airport at 2 AM at midnight, and it takes a little more than 40 minutes around 4 PM in the evening. 
 
-Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. For example, a mum who wants to visit Disney World with her kids can use this visualization to estimate the amount of time needed for her and her families to catch their flight. If this mum wants to catch a flight that departs at 10 AM from JFK Airport, then when she should depart from Central Park in order to get to the airport on time? According to Figure \@ref(fig:airport-vis), she can depart at 7 AM, and it will take a little bit more than 40 minutes for her to get to JFK Airport to catch her 10 AM flight.
+Being able to know the average time it takes to go to one of the airports ahead, passengers can buy their flight tickets accordingly. For example, a mum who wants to visit Disney World with her kids can use this visualization to estimate the amount of time needed for her and her families to catch their flight. If this mum wants to catch a flight that departs at 10 AM from JFK Airport, then when she should depart from Central Park in order to get to the airport on time? According to Figure \@ref(fig:airport-vis), she can depart at 7 AM, and it will take about 40 minutes for her to get to JFK Airport to catch her 10 AM flight.
 
 ### A Shiny App: When is the best time to travel to JFK Airport?
 
@@ -225,7 +225,7 @@ knitr::include_graphics("figure/shinyapp.png", dpi = 100 )
 ```
 According to \@ref(fig:shinyapp), a person travelling from Times Square to JFK Airport to catch a 11AM flight need to depart around 8:30 AM in order to arrive at the airport 2 hours before the flight departs. 
 
-This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the these three airports from any New York City taxi zones. 
+This Shiny App helps passengers to estimate the amount of time that is needed for them to travel to any one of the three airports from any New York City taxi zones. 
 
 ## How does weather affect the number of taxi and Uber trips?
 On a snowy or rainy day, it is hard for passengers to find a yellow cab on the street. Taxi drivers get paid at the same rate no matter how bad the weather gets, so they tend to stay at home instead of going out to work when the weather is bad. Uber drivers, however, get paid more on a snowy or rainy day, since Uber uses a pricing model that takes supply and demand into account. When weather is bad, demand for rides is higher, so Uber fare rate increases. Uber's pricing model gives Uber drivers an incentive to work extra hard on ugly days. 
@@ -502,7 +502,7 @@ knitr::include_graphics("figure/rainfall_vis.png", dpi = 120 )
 ```{r weather_vis, fig.caption = "Yellow Taxi and Uber's % Change in Number of Dispatched Trips from Previous Week in 2017",fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/weather_vis.png", dpi = 120 )
 ```
-According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in total number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days becasue of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more costly Uber instead [@citylab].
+According to Figure \@ref(fig:rainfall_vis) and Figure \@ref(fig:weather_vis), when weekly rainfall is high, Uber usually have less percent decline in total number of dispatched trips comparing to the total number of trips from previous week than yellow cab does. Uber passengers pay higher fare on rainy days because of Uber's pricing model. Since taxi drivers do not get paid more on rainy days, they tend to work less than Uber drivers, which limits the options for passengers. Passengers sometimes have to choose the more expensive Uber instead [@citylab].
 
 ## Recommendations to Taxi Passengers
-We suggest passengers to use our Shiny App to choose a pick up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.
+We suggest passengers to use our Shiny App to choose a pick-up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.

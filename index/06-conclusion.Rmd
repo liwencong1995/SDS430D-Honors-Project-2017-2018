@@ -9,11 +9,13 @@ By analyzing trip records of New York City’s yellow taxi, we found answers to 
 
 * We also found that the \$52 flat rate between Manhattan and JFK Airport is beneficial for the passengers, because it is cheaper than the average amount of fare that passenger would need to pay without the flat rate. 
 
-* We have also shown that the flat rate does not discourage drivers, even though taxi drivers would have be paid more without the flat rate.
+* We have also shown that the flat rate does not discourage drivers, even though taxi drivers would have been paid more without the flat rate.
 
-We suggest passengers to use our Shiny App to choose a pick up zone of their interest and then decide when is the most favorable time for them to travel to any airport in New York. We recommend New York City TLC to modify the fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make street-hail service more affordable on rainy days for passengers. We also suggest the TLC to keep the \$52 flat rate between Manhattan and JFK Airport so that passengers do not have any uncertainty in cost and they are more willing to take a taxi to travel to JFK Airport from Manhattan.
+We suggest passengers to use our Shiny App to choose a pick-up zone of their interest and then decide when is the most favorable time for them to travel to any airport in New York. We recommend New York City TLC to modify the fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make street-hail service more affordable on rainy days for passengers. We also suggest the TLC to keep the \$52 flat rate between Manhattan and JFK Airport so that passengers do not have any uncertainty in cost and they are more willing to take a taxi to travel to JFK Airport from Manhattan.
 
 ## Future Research
+With more time given, I would love to add more functionalities to `nyctaxi` **R** package. I could include more types of transportation in this package so that users not only can study questions related to Uber or Lyft but also can investigate behaviors of other e-hail services, such as Juno and Via. I could also include more geographic locations in `nyctaxi` so that users can compare the behaviors of multiple street-hail services across different cities.
+
 Using `nyctaxi` R package, we can answer more street-hail services related questions. We would love to investigate the sharp decline in the consumption of NYC yellow cab after e-hail services were introduced into the NYC ride-hail market. By looking into the patterns in market shares, it might be possible to predict the future market share distribution and find out what features of ride-hail transportation are the ones that affect market share the most. 
 
 As mentioned in Chapter 3, we also want to study the correlation between number of trips and average percent tips in each taxi zone. If more taxi-zone-specific data is provided, we could find out the true correlation between the two variables.

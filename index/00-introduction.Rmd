@@ -13,7 +13,7 @@ Working with medium data, such as the taxi TLC trips records, in **R** is not an
 
 New York City taxi drivers, passengers, and New York City TLC are the three parties who are closely involved in the New York City taxi industry. Each party has its own needs. By using a tool that allows users to answer questions of NYC Street-Hail Services in R, we can provide solutions to satisfy their needs.
 
-This work contains two main components. The first component is building the tool to work with the TLC taxi trip data, and the second component is using the tool we build to understand the taxicab and e-hail service use in New York City.
+This work contains two main components. The first component is building the tool to work with the TLC taxi trip data and other New York City street-hail services data, and the second component is using the tool we build to understand the taxicab and e-hail service use in New York City.
 
 ## Background
 
@@ -35,16 +35,16 @@ Similar to Uber, Lyft is also an on-demand transportation company, and it operat
 ### New York City Traffic and Taxi
 New York City is one of the most popular cities in the United States. New York City's traffic is a popular topic in journalism, and different aspects of it has been studied by journalists. New York City's traffic is a "nightmare", and the city officials have long been trying to solve the congestion problem. In 2009, New York City was voted to be the U.S. city with the "angriest and most aggressive drivers", and the bad temper of drivers are exacerbated by New York City's severe congestion [@reaney2009]. 
 
-How bad is the cogestion? In "NYC is already tired of Christmas and Donald Trump", New York City has been described as "the city that never moves" [@furfaro2016]. What has led to the congestion in the city? According to "Uber and Lyft cars now outnumber yellow cabs in NYC 4 to 1", "the city streets are being engineered to create traffic congestion, to slow traffic down, to favor bikers and pedestrians" so that drivers will have the incentive to leave their cars at home and turn to mass transit or bicycles [@sugar2017]. 
+How bad is the congestion? In "NYC is already tired of Christmas and Donald Trump", New York City has been described as "the city that never moves" [@furfaro2016]. What has led to the congestion in the city? According to "Uber and Lyft cars now outnumber yellow cabs in NYC 4 to 1", "the city streets are being engineered to create traffic congestion, to slow traffic down, to favor bikers and pedestrians" so that drivers will have the incentive to leave their cars at home and turn to mass transit or bicycles [@sugar2017]. 
 
-No matter how miserable the driving experiences are, taxi drivers have no luxury to choose alternative transportation, and instead thay have to consistently drive their cabs, which are usually surrounded by bad traffic, in order to make a living.
+No matter how miserable the driving experiences are, taxi drivers have no luxury to choose alternative transportation, and instead they have to consistently drive their cabs, which are usually surrounded by bad traffic, in order to make a living.
 
 ### Competition between New York City taxi and e-hail services
 ```{r totals-by-car-type, fig.cap= "NYC Monthly Taxi Pickups" ,fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/totals_by_car_type.png", dpi = 150 )
 ```
 
-As shown in the visulization above [@schneider2015], the number of New York City yellow taxi trips has been consistently declining for about 4 years, and the number of Uber and Lyft trips keep increasing. In 2017, for the first time, the total number of monthly Uber trips exceeded the number of yellow taxi trips. 
+As shown in the visualization above [@schneider2015], the number of New York City yellow taxi trips has been consistently declining for about 4 years, and the number of Uber and Lyft trips keep increasing. In 2017, for the first time, the total number of monthly Uber trips exceeded the number of yellow taxi trips. 
 
 Some studies have shown how competitive Uber and Lyft are. In 2017, Uber and Lyft registered vehicles outnumbered NYC yellow cabs by 4 to 1 [@sugar2017]. Even though yellow cabs used to be the most popular street-hail transportation service in New York City, passengers nowadays tend to choose the more convenient options, ride-hailing apps [@hu2017].
 
@@ -53,7 +53,9 @@ Data scientists from the University of Cambridge in the UK and the University of
 Apps, such as Openstreetcab, that compare the price of Uber and taxi trips are designed to help customers to compare the fares of different transportations [@guerrini2015].
 
 ### `etl` R package
-Working with taxi trip data is not an easy task, because of the large size of the taxi trip datasets [@emma2017]. Loading these datasets into **R** environment takes a long time and might crush an **R** session. Taxi trip datasets are classified as medium data, because they are too big to be processed in an R session but not too big to be saved on a hard drive. 
+Working with taxi trip data is not an easy task, because of the large size of the taxi trip datasets [@emma2017]. Loading these datasets into **R** environment takes a long time and might crush an **R** session. Taxi trip datasets are classified as medium data, because they are too big to be processed in an **R** session but not too big to be saved on a hard drive. 
+
+To better understand how difficult it was to work with medium data in **R**, I tried to calculate a simple average of total amount of taxi fare that passengers  paid to New York City yellow taxi drivers in 2017. I was not able to get a simple average by using **R** on my laptop which has 8 GB of physical memory, because the total amount of yellow taxi 2017 data is about 10 GB. I was not even able to load all 2017 data into **R** environment. It used to be impossible to answer "simple" questions related to New York City yellow taxi with the help of **R**.
 
 The `etl` **R** package creates a user-friendly platform that allows **R** users to easily work with medium data with the *extract*, *transform*, *load* framework, which is commonly known as ETL in computing. The `ETL` process has been set up [@pkgetl] in **R** to facilitate `etl` operations for medium data, and it is designed to work with any general data set. Packages that are specific to  particular data sets are needed to be written in order to better work with complex medium-sized data sets.
 
@@ -61,7 +63,7 @@ The `etl` **R** package creates a user-friendly platform that allows **R** users
 This thesis has two main components: the `nyctaxi` **R** package, which helps users to analyze the New York City street-hail services' data in **R**, and recommendations for taxi drivers, passengers, and TLC officials. In addition to the two main parts, we focus on making all analysis and visualizations in this study reproducible. 
 
 ### 'nyctaxi' Package
-`nyctaxi` is an **R** package that help users to easily get access to New York City Taxi, Uber and Lyft trip data[@pkgetl]. This package facilitates ETL to deal with medium data that are too big to store in memory on a laptop. Users are given the option to choose specific years and months as the input parameters of the three ETL functions, and a connection to a populated SQL database will be returned as the output. Users do not need to learn SQL queries, since all user interaction is in **R**.
+`nyctaxi` is an **R** package that help users to easily get access to New York City Taxi, Uber and Lyft trip data [@pkgetl]. This package facilitates ETL to deal with medium data that are too big to store in memory on a laptop. Users are given the option to choose specific years and months as the input parameters of the three ETL functions, and a connection to a populated SQL database will be returned as the output. Users do not need to learn SQL queries, since all user interaction is in **R**.
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE, eval=FALSE}
 library(webshot)
@@ -73,11 +75,11 @@ knitr::include_graphics("figure/nyctaxi-page.png", dpi = 170 )
 ```
 
 ### Reproducible Research
-In `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that _R Markdown_ replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reprodicible statistical analysis straight-forward [@baumer2014].
+In `R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics`, the authors have presented experimental and statistical evidence that _R Markdown_ replaced the antiquated and hard-to-reproduce `copy-and-paste workflow`, and makes creating fully-reproducible statistical analysis straight-forward [@baumer2014].
 
 Reproducible research and open source are two main points of emphasis in this honors project. As scholars place more emphasis on the reproducibility of research studies, it is essential for us to make our data and code openly available for people to redo the analysis. 
 
-`knitr` [@pkgknitr] and Github are used in this project to make the study reproducible, ranging from the initial data source to the `nyctaxi` package to the statistical data analysis. We used an **R** package called `thesisdown` to typeset this paper. This tool allows authors to create reproducible and dynamic technical report in **R** Markdown. It also allows users to embed **R** code and interactive applicationis, and output into PDF, Word, ePub, or gitbook documents. `thesisdown` helps users to efficiently put together any paper with similar format [@pkgthesisdown].
+`knitr` [@pkgknitr] and Github are used in this project to make the study reproducible, ranging from the initial data source to the `nyctaxi` package to the statistical data analysis. We used an **R** package called `thesisdown` to typeset this paper. This tool allows authors to create reproducible and dynamic technical report in **R** Markdown. It also allows users to embed **R** code and interactive applications, and output into PDF, Word, ePub, or gitbook documents. `thesisdown` helps users to efficiently put together any paper with similar format [@pkgthesisdown].
 
 Github is used to store the scripts for `nyctaxi` and this thesis. `nyctaxi` is available on CRAN for people to download and install [@pkgnyctaxi], and the source code for data analysis in this thesis is available under the Github account of the author so that scholars can easily access the  information that they are interested in. In terms of tables, figures, and anything included in the Appendix attached to this thesis, scripts that are used to generate them are included in the Github repository.  
 
@@ -86,6 +88,6 @@ In Chapters 3 to 5, we analyze what taxi drivers, passengers, and TLC officials 
 
 NYC Taxi drivers want to make the profit. Our analysis has suggested that taxi passengers are sympathetic with the drivers who have to suffer the congestion in New York City, and pay more tips during rush hours.
 
-Taxi passengers want the cheapest and most convenient way of transportation. We created a Shiny App for passengers to choose a pick up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.
+Taxi passengers want the cheapest and most convenient way of transportation. We created a Shiny App for passengers to choose a pick-up zone of their interest and then decide when is the most favorable time for them to travel from that zone to any of the three airports in New York.
 
 TLC wants to protect both taxi drivers and passengers, and it creates policies to make NYC taxi more accessible to consumers and taxi drivers enjoy their work. We suggest New York City TLC to modify the fare on rainy or snowy days to incentive taxicab drivers to pick up more trips in order to make taking a street hail vehicle on average more affordable on rainy days for passengers.

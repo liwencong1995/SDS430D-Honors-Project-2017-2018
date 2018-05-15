@@ -100,7 +100,7 @@ from_jfk <- read.csv("~/Desktop/Honors Thesis/mysql/csv sum/from_jfk_small.csv")
 ```
 
 ### Trips from Manhattan to JFK Airport
-We first focus on all the trips that departed from Manhattan and went to JFK Airport, and then we calculate the estimated fare amount that the passengers should have paid based on the distance travelled from each pick-up point to JFK Airport based on the fare rate suggested by TLC for each pick-up zone. 
+We first focus on all the trips that departed from Manhattan and went to JFK Airport, and then we calculate the estimated taxi fare amount that the passengers should have paid based on the distance travelled from each pick-up point to JFK Airport based on the fare rate suggested by TLC for each pick-up zone. 
 
 ```{r, message=FALSE, echo=FALSE}
 data("taxi_zone_lookup")
@@ -137,10 +137,10 @@ URL <- "/Users/priscilla/Desktop/Honors Thesis/figure/to_jfk_fare_vis.html"
 webshot(URL, "figure/to_jfk_fare_vis.png", cliprect = "viewport")
 ```
 
-```{r to-jfk-fare-vis, fig.cap="Estmated fare amount from the each pick-up zone to JFK Airport", fig.align='center', echo=FALSE}
+```{r to-jfk-fare-vis, fig.cap="Estimated fare amount from each pick-up zone to JFK Airport", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/to_jfk_fare_vis.png", dpi = 170 )
 ```
-Figure \@ref(fig:to-jfk-fare-vis) is a map of estmated fare amount calculated by taking the average of all estimated fare amounts from the same pick-up zone to JFK Airport based on the fare rate suggested by TLC for each pick-up zone. According to the map, trips from Midtown on average cost less than trips from other taxi zones in Manhattan.
+Figure \@ref(fig:to-jfk-fare-vis) is a map of estimated fare amount calculated by taking the average of all estimated fare amounts from the same pick-up zone to JFK Airport based on the fare rate suggested by TLC for each pick-up zone. According to the map, trips from Midtown on average cost less than trips from other taxi zones in Manhattan.
 
 ### Which taxi zones would pay more than $52 without the flat rate?
 
@@ -155,7 +155,7 @@ to_jfk_zone_above_1 <- to_jfk_zone_above %>%
 
 ```{r, echo=FALSE}
 kable(to_jfk_zone_above_1[1:10, 3:6],
-      caption = "Ten pick-up zones with the highest avergae fare from Manhattan to JFK Airport",
+      caption = "Ten pick-up zones with the highest average  fare from Manhattan to JFK Airport",
       format = "latex",
       align = 'c', 
       escape = TRUE,
@@ -229,7 +229,7 @@ The average hourly wage of taxi drivers calculated by using trips going from Man
 
 ### How much on average would taxi driver make on their way back from JFK Airport?
 
-A taxi driver waiting in line to pickup passengers at JFK Airport could be directed back to anywhere in the city. Therefore, the estimated fare that a taxi driver would make on the way back from JFK is unknown. We calculate the average taxi fare amount that a taxi driver would get paid for a trip from JFK Airport to any part of the city.
+A taxi driver waiting in line to pick-up passengers at JFK Airport could be directed back to anywhere in the city. Therefore, the estimated fare that a taxi driver would make on the way back from JFK is unknown. We calculate the average taxi fare amount that a taxi driver would get paid for a trip from JFK Airport to any part of the city.
 
 ```{r, echo=FALSE, message=FALSE}
 from_jfk_zone <- from_jfk %>%
@@ -279,7 +279,7 @@ webshot(URL, "figure/from_jfk_num_trips.png", cliprect = "viewport")
 ```{r from-jfk-num-trips, fig.cap="Number of trips from JFK Airport to any Taxi Zones", fig.align='center', echo=FALSE}
 knitr::include_graphics("figure/from_jfk_num_trips.png", dpi = 170 )
 ```
-According to the Figure @\ref(fig:from-jfk-num-trips), Manhattan is the most popular destination for passengers departing from JFK Airport. 
+According to the Figure 5.3, Manhattan is the most popular destination for passengers departing from JFK Airport. 
 
 ```{r, echo=FALSE}
 from_jfk_zone_1 <- from_jfk_zone %>%
@@ -303,7 +303,7 @@ total_trip <- from_jfk_zone_1[2,2]/(from_jfk_zone_1[1,2] + from_jfk_zone_1[2,2])
 total_trip <- round(total_trip*100, 2)
 ```
 
-According to the summary, the total amount of trips from JFK Airport to Manhattan is about `r total_trip`% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. 
+According to the summary, the total number of trips from JFK Airport to Manhattan is about `r total_trip`% of the total number of trips travelling from JFK Airport to all other Borough. Therefore, it is very likely for taxi drivers to get passengers who want to go to Manhattan with a flat rate of \$52. 
 
 #### What's the average fare to each drop-off zone from JFK Airport?
 
@@ -374,4 +374,4 @@ The average hourly wage of taxi drivers calculated by using trips departing from
 On average taxi drivers driving from Manhattan to JFK Airport make \$6 more every hour than taxi drivers doing other trips. On average taxi drivers going from JFK Airport to any taxi zones in New York City make \$30 more every hour than taxi drivers doing other trips. Overall, a taxi driver doing a round trip to and from JFK Airport make \$36 more every hour, comparing to a taxi driver doing any other trips. In this case, a round trip to and from JFK Airport is worthwhile, and that's why taxi drivers should feel happy when pick up a passenger in Manhattan and is told that he or she wants to go to JFK Airport.
 
 ## Recommendations to New York City Taxi Fare & Limousine Commission
-In this chapter, we have found the reason why taxicab drivers feel happy when they pick up passengers who want to go to JFK Airport in Manhattan. Even though \$52 is lower than the average amount of fare that taxi drivers would have made without the flat rate, it still induces an higher than average hourly wage, so it does not disincentive drivers to go to JFK Airport from Manhattan. Therefore, we suggest the TLC to keep this flat rate so that passengers do not have any uncertainty in cost and they are more willing to take a taxi to travel to JFK Airport from Manhattan.
+In this chapter, we have found the reason why taxicab drivers feel happy when they pick up passengers who want to go to JFK Airport in Manhattan. Even though \$52 is lower than the average amount of fare that taxi drivers would have made without the flat rate, it still induces a higher than average hourly wage, so it does not disincentive drivers to go to JFK Airport from Manhattan. Therefore, we suggest the TLC to keep this flat rate so that passengers do not have any uncertainty in cost and they are more willing to take a taxi to travel to JFK Airport from Manhattan.
