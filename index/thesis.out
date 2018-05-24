@@ -20,7 +20,7 @@
 \BOOKMARK [2][-]{subsection.2.1.4}{Uber}{section.2.1}% 20
 \BOOKMARK [2][-]{subsection.2.1.5}{Lyft}{section.2.1}% 21
 \BOOKMARK [2][-]{subsection.2.1.6}{Data Storage}{section.2.1}% 22
-\BOOKMARK [1][-]{section.2.2}{ettl and nyctaxi Packages}{chapter.2}% 23
+\BOOKMARK [1][-]{section.2.2}{etl and nyctaxi Packages}{chapter.2}% 23
 \BOOKMARK [2][-]{subsection.2.2.1}{Taxi zone shapefile attached to nyctaxi R package}{section.2.2}% 24
 \BOOKMARK [1][-]{section.2.3}{Extract-Transform-Load}{chapter.2}% 25
 \BOOKMARK [2][-]{subsection.2.3.1}{Extract}{section.2.3}% 26

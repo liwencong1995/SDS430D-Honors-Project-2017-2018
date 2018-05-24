@@ -44,7 +44,7 @@ No matter how miserable the driving experiences are, taxi drivers have no luxury
 knitr::include_graphics("figure/totals_by_car_type.png", dpi = 150 )
 ```
 
-As shown in the visualization above [@schneider2015], the number of New York City yellow taxi trips has been consistently declining for about 4 years, and the number of Uber and Lyft trips keep increasing. In 2017, for the first time, the total number of monthly Uber trips exceeded the number of yellow taxi trips. 
+As shown in Figure 1.1  [@schneider2015], the number of New York City yellow taxi trips has been consistently declining for about 4 years, and the number of Uber and Lyft trips keep increasing. In 2017, for the first time, the total number of monthly Uber trips exceeded the number of yellow taxi trips. 
 
 Some studies have shown how competitive Uber and Lyft are. In 2017, Uber and Lyft registered vehicles outnumbered NYC yellow cabs by 4 to 1 [@sugar2017]. Even though yellow cabs used to be the most popular street-hail transportation service in New York City, passengers nowadays tend to choose the more convenient options, ride-hailing apps [@hu2017].
 

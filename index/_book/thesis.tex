@@ -287,9 +287,9 @@ users to answer questions of NYC Street-Hail Services in R, we can
 provide solutions to satisfy their needs.
 
 This work contains two main components. The first component is building
-the tool to work with the TLC taxi trip data, and the second component
-is using the tool we build to understand the taxicab and e-hail service
-use in New York City.
+the tool to work with the TLC taxi trip data and other New York City
+street-hail services data, and the second component is using the tool we
+build to understand the taxicab and e-hail service use in New York City.
 
 \section{Background}\label{background}
 
@@ -358,7 +358,7 @@ U.S. city with the ``angriest and most aggressive drivers'', and the bad
 temper of drivers are exacerbated by New York City's severe congestion
 (Reaney, 2009).
 
-How bad is the cogestion? In ``NYC is already tired of Christmas and
+How bad is the congestion? In ``NYC is already tired of Christmas and
 Donald Trump'', New York City has been described as ``the city that
 never moves'' (Furfaro, Cohen, \& Fears, 2016). What has led to the
 congestion in the city? According to ``Uber and Lyft cars now outnumber
@@ -368,7 +368,7 @@ pedestrians'' so that drivers will have the incentive to leave their
 cars at home and turn to mass transit or bicycles (Sugar, 2017).
 
 No matter how miserable the driving experiences are, taxi drivers have
-no luxury to choose alternative transportation, and instead thay have to
+no luxury to choose alternative transportation, and instead they have to
 consistently drive their cabs, which are usually surrounded by bad
 traffic, in order to make a living.
 
@@ -382,11 +382,11 @@ services}\label{competition-between-new-york-city-taxi-and-e-hail-services}
 
 \caption{NYC Monthly Taxi Pickups}\label{fig:totals-by-car-type}
 \end{figure}
-As shown in the visulization above (Schneider, 2015), the number of New
-York City yellow taxi trips has been consistently declining for about 4
-years, and the number of Uber and Lyft trips keep increasing. In 2017,
-for the first time, the total number of monthly Uber trips exceeded the
-number of yellow taxi trips.
+As shown in Figure 1.1 (Schneider, 2015), the number of New York City
+yellow taxi trips has been consistently declining for about 4 years, and
+the number of Uber and Lyft trips keep increasing. In 2017, for the
+first time, the total number of monthly Uber trips exceeded the number
+of yellow taxi trips.
 
 Some studies have shown how competitive Uber and Lyft are. In 2017, Uber
 and Lyft registered vehicles outnumbered NYC yellow cabs by 4 to 1
@@ -415,8 +415,18 @@ Working with taxi trip data is not an easy task, because of the large
 size of the taxi trip datasets (Whitford, 2017). Loading these datasets
 into \textbf{R} environment takes a long time and might crush an
 \textbf{R} session. Taxi trip datasets are classified as medium data,
-because they are too big to be processed in an R session but not too big
-to be saved on a hard drive.
+because they are too big to be processed in an \textbf{R} session but
+not too big to be saved on a hard drive.
+
+To better understand how difficult it was to work with medium data in
+\textbf{R}, I tried to calculate a simple average of total amount of
+taxi fare that passengers paid to New York City yellow taxi drivers in
+2017. I was not able to get a simple average by using \textbf{R} on my
+laptop which has 8 GB of physical memory, because the total amount of
+yellow taxi 2017 data is about 10 GB. I was not even able to load all
+2017 data into \textbf{R} environment. It used to be impossible to
+answer ``simple'' questions related to New York City yellow taxi with
+the help of \textbf{R}.
 
 The \texttt{etl} \textbf{R} package creates a user-friendly platform
 that allows \textbf{R} users to easily work with medium data with the
@@ -441,7 +451,7 @@ reproducible.
 Package}{nyctaxi Package}}\label{nyctaxi-package}
 
 \texttt{nyctaxi} is an \textbf{R} package that help users to easily get
-access to New York City Taxi, Uber and Lyft trip data(B. S. Baumer,
+access to New York City Taxi, Uber and Lyft trip data (B. S. Baumer,
 2017). This package facilitates ETL to deal with medium data that are
 too big to store in memory on a laptop. Users are given the option to
 choose specific years and months as the input parameters of the three
@@ -456,7 +466,7 @@ In
 \texttt{R\ Markdown:\ Integrating\ A\ Reproducible\ Analysis\ Tool\ into\ Introductory\ Statistics},
 the authors have presented experimental and statistical evidence that
 \emph{R Markdown} replaced the antiquated and hard-to-reproduce
-\texttt{copy-and-paste\ workflow}, and makes creating fully-reprodicible
+\texttt{copy-and-paste\ workflow}, and makes creating fully-reproducible
 statistical analysis straight-forward (B. Baumer, Cetinkaya-Rundel,
 Bray, Loi, \& Horton, 2014).
 
@@ -471,9 +481,9 @@ the study reproducible, ranging from the initial data source to the
 \textbf{R} package called \texttt{thesisdown} to typeset this paper.
 This tool allows authors to create reproducible and dynamic technical
 report in \textbf{R} Markdown. It also allows users to embed \textbf{R}
-code and interactive applicationis, and output into PDF, Word, ePub, or
+code and interactive applications, and output into PDF, Word, ePub, or
 gitbook documents. \texttt{thesisdown} helps users to efficiently put
-together any paper with similar format (Solomon, n.d.).
+together any paper with similar format (Solomon, 2016).
 
 Github is used to store the scripts for \texttt{nyctaxi} and this
 thesis. \texttt{nyctaxi} is available on CRAN for people to download and
@@ -495,10 +505,10 @@ that taxi passengers are sympathetic with the drivers who have to suffer
 the congestion in New York City, and pay more tips during rush hours.
 
 Taxi passengers want the cheapest and most convenient way of
-transportation. We created a Shiny App for passengers to choose a pick
-up zone of their interest and then decide when is the most favorable
-time for them to travel from that zone to any of the three airports in
-New York.
+transportation. We created a Shiny App for passengers to choose a
+pick-up zone of their interest and then decide when is the most
+favorable time for them to travel from that zone to any of the three
+airports in New York.
 
 TLC wants to protect both taxi drivers and passengers, and it creates
 policies to make NYC taxi more accessible to consumers and taxi drivers
@@ -553,8 +563,8 @@ glimpse into the state of the cutthroat NYC taxi market. (N. T. Staff,
 
 In addition, the trip level NYC Uber data only covers two periods, from
 April to September 2014 and from January to June 2015. However, the
-summary reports cover weekly-aggreagated data from 2015 to the most
-recent week (N. T. Staff, 2009c).
+summary reports cover weekly-aggregated data from 2015 to the most
+recent week (N. T. Staff, 2009c) (Figure 2.1).
 \begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/a-report} 
@@ -632,17 +642,17 @@ Therefore, better ways to work with data that takes more space than 8 GB
 is needed. Comparing to RAM, hard disk is often used to store
 medium-sized data, because it is affordable and are designed for storing
 large items permanently. However, retrieving data from hard drives is
-about 1,000,000 times slower(Zhnag, 2017).
+about 1,000,000 times slower (Zhnag, 2017).
 
-\section{\texorpdfstring{\texttt{ettl} and \texttt{nyctaxi}
-Packages}{ettl and nyctaxi Packages}}\label{ettl-and-nyctaxi-packages}
+\section{\texorpdfstring{\texttt{etl} and \texttt{nyctaxi}
+Packages}{etl and nyctaxi Packages}}\label{etl-and-nyctaxi-packages}
 
 \texttt{etl} is the parent package of \texttt{nyctaxi}. \texttt{etl}
 provides a framework that allows \textbf{R} users to work with medium
 data without any knowledge in SQL database. Users can run SQL queries by
 using \texttt{dplyr} commands in \textbf{R} and choose to only return
 the final result, which could be a summary table, from SQL database into
-\textbf{R} Environment in order to aovid \textbf{R} from crashing. The
+\textbf{R} Environment in order to avoid \textbf{R} from crashing. The
 user interaction takes place solely within \textbf{R}.
 
 \texttt{etl} framework has three operations -Extract, Transfer, and
@@ -651,18 +661,18 @@ Users can specify which type of SQL database they prefer to connect to.
 \texttt{etl}-dependent packages, such as \texttt{nyctaxi}, make medium
 data more accessible to a wider audience (B. Baumer et al., 2014).
 
-\texttt{nyctaxi} was initially designed to work with New York City taxi
-data, but later on Uber and Lyft data were added and the ETL functions
-are modified to be specialized in working with these data. This package
-compiles three major sources of hail service in New York City so that it
-is convenient for users to compare and contrast the performance of these
-three services (W. P. Li et al., 2017).
+\texttt{nyctaxi} (Figure 2.2) was initially designed to work with New
+York City taxi data, but later on Uber and Lyft data were added and the
+ETL functions are modified to be specialized in working with these data.
+This package compiles three major sources of hail service in New York
+City so that it is convenient for users to compare and contrast the
+performance of these three services (W. P. Li et al., 2017).
 
 This package inherits functions from many packages:
 \begin{itemize}
 \tightlist
 \item
-  \texttt{etl}(B. S. Baumer, 2017)
+  \texttt{etl} (B. S. Baumer, 2017)
 \item
   \texttt{dplyr} (Wickham, Francois, Henry, \& Müller, 2017)
 \item
@@ -704,7 +714,7 @@ database.
 The Comprehensive \textbf{R} Archive Network (CRAN) is a collection of
 sites that carry identical material, consisting of the \textbf{R}
 distributions, the contributed extensions, documentation for \textbf{R},
-and binaries (C. Staff, n.d.). \texttt{nyctaxi} \textbf{R} package lives
+and binaries (C. Staff, 1993). \texttt{nyctaxi} \textbf{R} package lives
 on CRAN, and it can be installed as follows:
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -741,7 +751,7 @@ the data that users want: (1) \texttt{obj}: an \texttt{etl} object; (2)
 the most recent year; (3) \texttt{months}: a numeric vector giving the
 months, and the default is \texttt{1:12}; (4) \texttt{type}: a character
 variable giving the type of data the user wants to download. There are
-four types correspondinng to four street-hail services: \texttt{yellow},
+four types corresponding to four street-hail services: \texttt{yellow},
 \texttt{green}, \texttt{uber}, and \texttt{lyft}. The default is
 \texttt{yellow}.
 
@@ -764,7 +774,7 @@ accessible on NYC TLC's website (N. T. Staff, 2009b).
 
 \caption{NYC Taxi Zone Map}\label{fig:zonemap}
 \end{figure}
-Visulizations similar to Figure \ref{fig:zonemap} can be generated with
+Visualizations similar to Figure \ref{fig:zonemap} can be generated with
 the shapefile.
 
 \section{Extract-Transform-Load}\label{extract-transform-load}
@@ -785,8 +795,8 @@ on NYC Taxi \& Limousine Commission (TLC) website on a monthly basis.
 \end{Highlighting}
 \end{Shaded}
 Uber trip record data is static and small, so we decided to only give
-users the options to download either all data from April to Sepetember,
-2014 or all Uber trip records from Janaury to June, 2015 at once. We do
+users the options to download either all data from April to September,
+2014 or all Uber trip records from January to June, 2015 at once. We do
 not give users the option to download Uber data by month, since the
 total size of all trip-level data from 2014 and 2015 are small.
 \begin{Shaded}
@@ -832,7 +842,7 @@ with their use of time by only transforming months of data that are
 needed in later steps.
 
 By default, it takes the current year yellow taxi trip records data
-files, and saves copies of them in the \texttt{load} diectory. It skips
+files, and saves copies of them in the \texttt{load} directory. It skips
 the cleaning step, because the raw yellow taxi data downloaded from TLC
 is already in a desired format with all variables correctly labelled.
 \begin{Shaded}
@@ -850,7 +860,7 @@ Column}\label{green-taxi-extra-blank-row-and-column}
 Green Taxi monthly data from August 2013 to the most recent month
 besides 2015 all have a blank second row in the \texttt{csv} files.
 Similar to this problem, Green Taxi data from 2013, 2014, and 2015 all
-have an extra blank columns attanched to the right-most column. These
+have an extra blank column attached to the right-most column. These
 blank rows and columns cause problems in the later stage when users want
 to load data into SQL database. In order to get Green Taxi data ready
 for the \texttt{load} phase, we used the \texttt{system()} function in
@@ -861,7 +871,7 @@ remove the blank rows and columns.
 Filenames}\label{uber-data-reconciling-inconsistent-filenames}
 
 Uber only released over 4.5 million data records from April to September
-2014 and 14.3 million records from Janaury to June 2015. Information of
+2014 and 14.3 million records from January to June 2015. Information of
 different sets of variables are released for 2014 and 2015, and
 variables have different naming convention. When users want to download
 data from both years, variables are renamed so that data from both years
@@ -909,8 +919,8 @@ set up five basic table structures for MySQL database.
 July 2016, and \texttt{yellow} is created for data later than June 2016.
 There are two tables created for yellow taxi data because NYC TLC
 changed the variables included in yellow taxi datasets in July 2016.
-\texttt{green}, \texttt{uber}, and \texttt{lyft} are also initiated for
-the three transportations.
+Table \texttt{green}, \texttt{uber}, and \texttt{lyft} are also
+initiated for green taxi, Uber and Lyft data.
 
 \texttt{etl\_init()} can be run after a database connection is built to
 process to process \texttt{init.mysql} to initialize a MySQL database,
@@ -956,7 +966,7 @@ Summary}\label{new-york-city-taxicab-and-e-hail-services-summary}
 \caption{Summary of Number of trips Made by 4 Types of Transportations between 2014 and 2016 in NYC}\label{fig:num-trips-summary}
 \end{figure}
 Figure \ref{fig:num-trips-summary} is a summary of total number of trips
-made by all 4 types of transporations that are available to users from
+made by all 4 types of transportations that are available to users from
 2014 to 2016. In order to generate this summary, I combined trip-level
 yellow and green taxi data from TLC website (N. T. Staff, 2009b) and
 weekly Uber (N. O. Staff, 2015b) and Lyft data from NYC OpenData (N. O.
@@ -1609,31 +1619,29 @@ running the code below:
 \NormalTok{); }
 \end{Highlighting}
 \end{Shaded}
-In the second part of the thesis, we give examples of how to answer New
-York City street-hail service related questions that used to be
-impossible to be answered by using R on a standard laptop.
-
 \chapter{New York City Taxi Drivers}\label{chapter3}
 
 The income of Taxi drivers in New York City comes from two sources: taxi
 fare and tips. Taxi fare is usually calculated by the meters installed
 in the taxis, and the rate of fare cannot be changed by taxi drivers.
 Therefore, in order to make more profit, taxi drivers prefer to pick up
-passengers who offer big amount of tips. What are the regions that
-provide the most tips to yellow taxicab drivers?
+passengers who offer a lot of tips. What are the regions that provide
+the most tips to yellow taxicab drivers?
 
-In this analysis, we will focus on trip data collected in 2017.
-Descriptions of variables mentioned in the following chapters can be
-found in Appendix B.
+By using \texttt{nyctaxi} \textbf{R} package, we are now able to answer
+questions that used to be impossible to be answered by using \textbf{R}
+on a standard laptop. In this analysis, we will focus on trip data
+collected in 2017. Descriptions of variables mentioned in the following
+chapters can be found in Appendix B.
 
 In order to answer questions regarding to taxi trips' tips, we filter
 out trips that are not paid by credit or debit card, because taxi
-drivers usually do not correctly record the amount of tips paid by cash
+drivers usually do not correctly record the number of tips paid by cash
 or check (W. Li, 2018).
 
-As mentioned in the previous chapter, we can utlize the connection to a
+As mentioned in the previous chapter, we can use the connection to a
 MySQL database to run data analysis in MySQL for medium-sized data.
-Since we are using all 12 month data from 2017 in this analysis, it is
+Since we are using all 12-month data from 2017 in this analysis, it is
 impractical to load all data needed into \textbf{R} environment.
 Instead, we want to only load a fraction of the 2017 Yellow Taxi data
 from MySQL database.
@@ -1688,14 +1696,14 @@ going to known taxi zones in this analysis.
 
 }
 
-\caption{Percent Tip Paid by Passengers in Each Pick-up And Drop-off Pair in NYC}\label{fig:region-vis}
+\caption{Percent Tip Paid by Passengers in Each Pick-up and Drop-off Pair in NYC}\label{fig:region-vis}
 \end{figure}
-Figure \ref{fig:region-vis} is a histogram of mean tip percents for all
+Figure \ref{fig:region-vis} is a histogram of mean tip percent for all
 known pick-up and drop-off zone pairs. The red dash lines are drawn at
 20\%, 25\%, and 30\%, which are the default percentage of tips that are
 shown on the touch panel for credit and debit car payments (see Figure
-\ref{fig:taxi-screen}), and passengers tend to pick the the lowest
-default percent tip.
+\ref{fig:taxi-screen}), and passengers tend to pick the lowest default
+percent tip.
 \begin{figure}[h]
 
 {\centering \includegraphics[width=4.8in]{figure/taxi-screen} 
@@ -1709,13 +1717,13 @@ Amount}\label{pick-up-zone-percent-tips-amount}
 
 Taxi drivers are required to be indifferent to where passengers are
 going. It is illegal for New York city taxi drivers to refuse service
-because of passengers' race, ethnicity, cultural background, disbility,
+because of passengers' race, ethnicity, cultural background, disability,
 gender, or destination (N. T. Staff, 2018). Taxi drivers cannot choose
 where the passengers want to go, and instead they can only choose which
 pick-up zone they would prefer to drive around to get hailed. Therefore,
 it makes sense to investigate the average amount of tips paid by
 passengers departed from each pick-up zone. What are the taxi pick-up
-zones that have the highest percent tips paid by passengers?
+zone that have the highest percent tips paid by passengers?
 \begin{table}
 
 \caption{\label{tab:unnamed-chunk-39}Ten taxi pick-up zones with the highest average tip in January, 2017}
@@ -1786,7 +1794,7 @@ Manhattan & Times Sq/Theatre District & 1972303\\
 Table 3.2 tells which specific taxi zones have the highest number of
 pick-ups, and 9 out of the top 10 taxi zones that have the most number
 of pick-ups are located in Manhattan. There are about 6000 yellow taxi
-pick-ups in the top 10 taxi zones everyday in 2017.
+pick-ups in the top 10 taxi zones every day in 2017.
 
 \subsection{Which pick-up zones have the highest percent
 tips?}\label{which-pick-up-zones-have-the-highest-percent-tips}
@@ -1856,7 +1864,7 @@ percent tips in taxi zones with high pick-up numbers in Table 3.4 are
 lower than average percent tips in taxi zones with low pick-up numbers
 in Table 3.3. Therefore, there could be a correlation between number of
 trips and average percent tips that passengers pay, and this can be
-futher studied with more taxi-zone-specific data, such as median
+further studied with more taxi-zone-specific data, such as median
 household income, provided.
 
 \section{What features of taxi trips increase the percent tip amount
@@ -1883,21 +1891,21 @@ taxi drivers more.
 (Intercept)  0.211325482 3.733048e-04 566.09360        0
 avg_dis     -0.001052903 2.105014e-05 -50.01881        0
 \end{verbatim}
-Acoording to the simple linear regression result, trip distance does
+According to the simple linear regression result, trip distance does
 have a small negative impact on the percent of tips paid, controlling
-for both pick-up and drop-off locations. Since the number of obervations
-in this regression model is big, the p-value quickly goes to zero.
-Therefore, in this regression, p-value does not matter so much. What is
-important in this result is the negative correlation between average
-percent tips and average distance that a taxi travels.
+for both pick-up and drop-off locations. Since the number of
+observations in this regression model is big, the p-value quickly goes
+to zero. Therefore, in this regression, p-value does not matter so much.
+What is important in this result is the negative correlation between
+average percent tips and average distance that a taxi travels.
 
 The negative correlation could be caused by a psychological reason. Long
 trips cost more than short trips. For a constant tip percent, the
 nominal value of tip amount cost more for longer trips. For example, for
 a \$100 trip, 20\% tip costs \$20; for a \$50 trip, 20\% tip costs \$10.
-Even though consumers are paying the same percent amount of tips, \$20
-is more expensive than \$10. Therefore, consumers might decide to pay
-less percent tip for longer trips.
+Even though consumers are paying the same percent of tips, \$20 is more
+expensive than \$10. Therefore, consumers might decide to pay less
+percent tip for longer trips.
 
 \subsection{Do passengers pay more tips during rush
 hours?}\label{do-passengers-pay-more-tips-during-rush-hours}
@@ -1945,7 +1953,7 @@ website}.
   There are no charges for extra passengers or bags.
 \end{itemize}
 The metered fare rate information is collected from TLC rate of fare
-webpage (N. T. Staff, n.d.).
+webpage (N. T. Staff, 1996).
 
 In taxi fare calculation, the only unknown variable is slow-traffic
 time, and all other variables were collected by the meters installed on
@@ -1982,7 +1990,7 @@ more tips during rush hours.
 Drivers}\label{recommendations-to-taxi-drivers}
 
 Our analysis has suggested that taxi passengers are sympathetic with the
-drivers who have to suffer the cogestion in New York City, so we hope
+drivers who have to suffer the congestion in New York City, so we hope
 that taxi drivers would feel better during rush hours by knowing that
 passengers do pay for tips to compensate the negative feelings that
 drivers carry in congestion.
@@ -1994,8 +2002,8 @@ Newark Airports from anywhere in New York
 City?}\label{how-long-does-it-take-passengers-to-get-to-jfk-la-guardia-and-newark-airports-from-anywhere-in-new-york-city}
 
 We want to calculate the average number of minutes it takes to go to all
-three airport from a specific taxi zone at every hour. First, we want to
-focus on trips going to any of the three airports, JFK, LaGuardia, or
+three airports from a specific taxi zone at every hour. First, we want
+to focus on trips going to any of the three airports, JFK, LaGuardia, or
 Newark Airport. We need to load trip records with destination as one of
 the three airports from the MySQL connection we built.
 \begin{Shaded}
@@ -2019,7 +2027,7 @@ the three airports from the MySQL connection we built.
 \StringTok{  }\KeywordTok{filter}\NormalTok{(DOLocationID }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }
 \end{Highlighting}
 \end{Shaded}
-Now we want to calculate the average amount of time it take from each
+Now we want to calculate the average amount of time it takes from each
 zone to one of the three airports during each hour.
 
 So far, we have created three tables summarizing the average number of
@@ -2085,9 +2093,8 @@ this visualization to estimate the amount of time needed for her and her
 families to catch their flight. If this mum wants to catch a flight that
 departs at 10 AM from JFK Airport, then when she should depart from
 Central Park in order to get to the airport on time? According to Figure
-\ref{fig:airport-vis}, she can depart at 7 AM, and it will take a little
-bit more than 40 minutes for her to get to JFK Airport to catch her 10
-AM flight.
+\ref{fig:airport-vis}, she can depart at 7 AM, and it will take about 40
+minutes for her to get to JFK Airport to catch her 10 AM flight.
 
 \subsection{A Shiny App: When is the best time to travel to JFK
 Airport?}\label{a-shiny-app-when-is-the-best-time-to-travel-to-jfk-airport}
@@ -2098,8 +2105,8 @@ to JFK Airport to catch a 11AM flight need to depart around 8:30 AM in
 order to arrive at the airport 2 hours before the flight departs.
 
 This Shiny App helps passengers to estimate the amount of time that is
-needed for them to travel to any one of the these three airports from
-any New York City taxi zones.
+needed for them to travel to any one of the three airports from any New
+York City taxi zones.
 
 \section{How does weather affect the number of taxi and Uber
 trips?}\label{how-does-weather-affect-the-number-of-taxi-and-uber-trips}
@@ -2247,7 +2254,7 @@ earn more or less when it rains (Jaffe, 2014).
 We got access to the 2017 daily Central Park weather data from the
 National Climatic Data Center by submitting a Climate Data Online
 request (Appendix D) to National Centers for Environmental Information
-(Environmental Information Staff, n.d.), and joined it to the 2017 taxi
+(Environmental Information Staff, 2018), and joined it to the 2017 taxi
 data to study relationship between rainfall and taxi rides.
 
 First, we generate a list of total amount of daily rainfall in New York
@@ -2362,16 +2369,16 @@ According to Figure @ref(fig:rainfall\_vis) and Figure
 @ref(fig:weather\_vis), when weekly rainfall is high, Uber usually have
 less percent decline in total number of dispatched trips comparing to
 the total number of trips from previous week than yellow cab does. Uber
-passengers pay higher fare on rainy days becasue of Uber's pricing
+passengers pay higher fare on rainy days because of Uber's pricing
 model. Since taxi drivers do not get paid more on rainy days, they tend
 to work less than Uber drivers, which limits the options for passengers.
-Passengers sometimes have to choose the more costly Uber instead (Jaffe,
-2014).
+Passengers sometimes have to choose the more expensive Uber instead
+(Jaffe, 2014).
 
 \section{Recommendations to Taxi
 Passengers}\label{recommendations-to-taxi-passengers}
 
-We suggest passengers to use our Shiny App to choose a pick up zone of
+We suggest passengers to use our Shiny App to choose a pick-up zone of
 their interest and then decide when is the most favorable time for them
 to travel from that zone to any of the three airports in New York.
 
@@ -2433,19 +2440,19 @@ as 132 from the database.
 Airport}\label{trips-from-manhattan-to-jfk-airport}
 
 We first focus on all the trips that departed from Manhattan and went to
-JFK Airport, and then we calculate the estimated fare amount that the
-passengers should have paid based on the distance travelled from each
-pick-up point to JFK Airport based on the fare rate suggested by TLC for
-each pick-up zone.
+JFK Airport, and then we calculate the estimated taxi fare amount that
+the passengers should have paid based on the distance travelled from
+each pick-up point to JFK Airport based on the fare rate suggested by
+TLC for each pick-up zone.
 \begin{figure}[h]
 
 {\centering \includegraphics[width=5.84in]{figure/to_jfk_fare_vis} 
 
 }
 
-\caption{Estmated fare amount from the each pick-up zone to JFK Airport}\label{fig:to-jfk-fare-vis}
+\caption{Estimated fare amount from each pick-up zone to JFK Airport}\label{fig:to-jfk-fare-vis}
 \end{figure}
-Figure \ref{fig:to-jfk-fare-vis} is a map of estmated fare amount
+Figure \ref{fig:to-jfk-fare-vis} is a map of estimated fare amount
 calculated by taking the average of all estimated fare amounts from the
 same pick-up zone to JFK Airport based on the fare rate suggested by TLC
 for each pick-up zone. According to the map, trips from Midtown on
@@ -2455,7 +2462,7 @@ average cost less than trips from other taxi zones in Manhattan.
 rate?}\label{which-taxi-zones-would-pay-more-than-52-without-the-flat-rate}
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-95}Ten pick-up zones with the highest avergae fare from Manhattan to JFK Airport}
+\caption{\label{tab:unnamed-chunk-95}Ten pick-up zones with the highest average  fare from Manhattan to JFK Airport}
 \centering
 \begin{tabular}[t]{cccc}
 \toprule
@@ -2526,7 +2533,7 @@ than the hourly wage of taxi drivers doing other trips.
 from JFK
 Airport?}\label{how-much-on-average-would-taxi-driver-make-on-their-way-back-from-jfk-airport}
 
-A taxi driver waiting in line to pickup passengers at JFK Airport could
+A taxi driver waiting in line to pick-up passengers at JFK Airport could
 be directed back to anywhere in the city. Therefore, the estimated fare
 that a taxi driver would make on the way back from JFK is unknown. We
 calculate the average taxi fare amount that a taxi driver would get paid
@@ -2561,8 +2568,8 @@ passengers coming from the JFK Airport in 2017.
 
 \caption{Number of trips from JFK Airport to any Taxi Zones}\label{fig:from-jfk-num-trips}
 \end{figure}
-According to the Figure @\ref(fig:from-jfk-num-trips), Manhattan is the
-most popular destination for passengers departing from JFK Airport.
+According to the Figure 5.3, Manhattan is the most popular destination
+for passengers departing from JFK Airport.
 \begin{table}
 
 \caption{\label{tab:unnamed-chunk-105}Number of Trips going to Manhattan or other boroughs from JFK Airport}
@@ -2576,7 +2583,7 @@ Going to Manhattan & Number of Trips\\
 \bottomrule
 \end{tabular}
 \end{table}
-According to the summary, the total amount of trips from JFK Airport to
+According to the summary, the total number of trips from JFK Airport to
 Manhattan is about 65.04\% of the total number of trips travelling from
 JFK Airport to all other Borough. Therefore, it is very likely for taxi
 drivers to get passengers who want to go to Manhattan with a flat rate
@@ -2663,11 +2670,11 @@ Commission}\label{recommendations-to-new-york-city-taxi-fare-limousine-commissio
 In this chapter, we have found the reason why taxicab drivers feel happy
 when they pick up passengers who want to go to JFK Airport in Manhattan.
 Even though \$52 is lower than the average amount of fare that taxi
-drivers would have made without the flat rate, it still induces an
-higher than average hourly wage, so it does not disincentive drivers to
-go to JFK Airport from Manhattan. Therefore, we suggest the TLC to keep
-this flat rate so that passengers do not have any uncertainty in cost
-and they are more willing to take a taxi to travel to JFK Airport from
+drivers would have made without the flat rate, it still induces a higher
+than average hourly wage, so it does not disincentive drivers to go to
+JFK Airport from Manhattan. Therefore, we suggest the TLC to keep this
+flat rate so that passengers do not have any uncertainty in cost and
+they are more willing to take a taxi to travel to JFK Airport from
 Manhattan.
 
 \chapter{Conclusion}\label{chapter6}
@@ -2695,10 +2702,10 @@ and TLC officials:
   the flat rate.
 \item
   We have also shown that the flat rate does not discourage drivers,
-  even though taxi drivers would have be paid more without the flat
+  even though taxi drivers would have been paid more without the flat
   rate.
 \end{itemize}
-We suggest passengers to use our Shiny App to choose a pick up zone of
+We suggest passengers to use our Shiny App to choose a pick-up zone of
 their interest and then decide when is the most favorable time for them
 to travel to any airport in New York. We recommend New York City TLC to
 modify the fare on rainy or snowy days to incentive taxicab drivers to
@@ -2710,27 +2717,46 @@ travel to JFK Airport from Manhattan.
 
 \section{Future Research}\label{future-research}
 
-Using \texttt{nyctaxi} R package, we can answer more street-hail
-services related questions. We would love to investigate the sharp
-decline in the consumption of NYC yellow cab after e-hail services were
-introduced into the NYC ride-hail market. By looking into the patterns
-in market shares, it might be possible to predict the future market
-share distribution and find out what features of ride-hail
-transportation are the ones that affect market share the most.
+With more time given, I would love to add more functionalities to
+\texttt{nyctaxi} \textbf{R} package. I could include more types of
+transportation in this package so that users not only can study
+questions related to Uber or Lyft but also can investigate behaviors of
+other e-hail services, such as Juno and Via. I could also include more
+geographic locations in \texttt{nyctaxi} so that users can compare the
+behaviors of multiple street-hail services across different cities.
+
+Using \texttt{nyctaxi} \textbf{R} package, we can answer more
+street-hail services related questions. We would love to investigate the
+sharp decline in the consumption of NYC yellow cab after e-hail services
+were introduced into the NYC ride-hail market (Board, 2018). By looking
+into the patterns in market shares, it might be possible to predict the
+future market share distribution and find out what features of
+street-hail transportation are the ones that affect market share the
+most.
 
 As mentioned in Chapter 3, we also want to study the correlation between
 number of trips and average percent tips in each taxi zone. If more
 taxi-zone-specific data is provided, we could find out the true
 correlation between the two variables.
 
-we could also use \texttt{nyctaxi} R package to study the impact of the
-newly-installed GPS and entertainment system in taxicabs on the number
-of taxi rides. With the raised expectation among ride experience caused
-by Uber and Lyft, yellow taxi industry need to respond quickly (Hawkins,
-2016). TLC decided to install GPS and entertainment system in order to
-attract more passengers to take taxis. How does the market react to the
-newly installed entertainment system? Has the market share of yellow cab
-rebounded since the installation of the entertainment system in 2016?
+We could also use \texttt{nyctaxi} \textbf{R} package to study the
+impact of the newly-installed GPS and entertainment system in taxicabs
+on the number of taxi rides. With the raised expectation among ride
+experience caused by Uber and Lyft, yellow taxi industry need to respond
+quickly (Hawkins, 2016). TLC decided to install GPS and entertainment
+system in order to attract more passengers to take taxis. How does the
+market react to the newly installed entertainment system? Has the market
+share of yellow cab rebounded since the installation of the
+entertainment system in 2016?
+
+An article of The New York Times talks about the pros and cons of
+introducing e-hail services into New York City. E-hail services are
+beneficial to New Yorker who want to ``avoids their dysfunctional subway
+system'', but they are turning New York City's already packed streets
+into ``glorified parking lots'' (Board, 2018). With the help of
+\texttt{nyctaxi} \textbf{R}, we want to further investigate the solution
+of reducing traffic congestion in New York City by enforcing new
+policies on e-hail services.
 
 \appendix
 
@@ -2822,6 +2848,10 @@ Baumer, B., Cetinkaya-Rundel, M., Bray, A., Loi, L., \& Horton, N. J.
 (2014). R markdown: Integrating a reproducible analysis tool into
 introductory statistics. \emph{TISE}.
 
+\hypertarget{ref-nytimes2018}{}
+Board, T. E. (2018). What Will New York Do About Its Uber Problem?
+\emph{The New York Times}.
+
 \hypertarget{ref-pkgleaflet}{}
 Cheng, J., Karambelkar, B., \& Xie, Y. (2017). \emph{Leaflet: Create
 interactive web maps with the javascript 'leaflet' library}. Retrieved
@@ -2833,7 +2863,7 @@ Dowle, M., \& Srinivasan, A. (2017). \emph{Data.table: Extension of
 \url{https://CRAN.R-project.org/package=data.table}
 
 \hypertarget{ref-noaa}{}
-Environmental Information Staff, N. C. for. (n.d.). Climate Data Online.
+Environmental Information Staff, N. C. for. (2018). Climate Data Online.
 National Centers for Environmental Information. Retrieved from
 \url{https://www.ncdc.noaa.gov/cdo-web/}
 
@@ -2895,11 +2925,11 @@ Uber Trips, with a Vengeance. Todd W. Schneider. Retrieved from
 \url{http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/}
 
 \hypertarget{ref-pkgthesisdown}{}
-Solomon, N. (n.d.). \emph{Thesisdown: An updated r markdown thesis
+Solomon, N. (2016). \emph{Thesisdown: An updated r markdown thesis
 template using the bookdown package}.
 
 \hypertarget{ref-cran}{}
-Staff, C. (n.d.). The Comprehensive R Archive Network. Retrieved from
+Staff, C. (1993). The Comprehensive R Archive Network. Retrieved from
 \url{https://cran.r-project.org/index.html}
 
 \hypertarget{ref-uberx}{}
@@ -2914,6 +2944,10 @@ Staff, N. O. (2015a). LYFT Data. NYC OpenData. Retrieved from
 \hypertarget{ref-datauberweek}{}
 Staff, N. O. (2015b). Uber Trips NYC 2016. NYC OpenData. Retrieved from
 \url{https://data.cityofnewyork.us/Transportation/Uber-Trips-NYC-2016/gt3n-7ri6/data}
+
+\hypertarget{ref-tlcfarerate}{}
+Staff, N. T. (1996). NYC tlc Taxicab Rate of Fare. NYC TLC. Retrieved
+from \url{http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml}
 
 \hypertarget{ref-datayellowmonth}{}
 Staff, N. T. (2009a). TLC Aggregated Reports. NYC Taxi \& Limousine
@@ -2939,10 +2973,6 @@ Commission. Retrieved from
 Staff, N. T. (2018). NYC Taxi \& Limousine Commission. NYC Taxi \&
 Limousine Commission. Retrieved from
 \url{http://www.nyc.gov/html/tlc/html/home/home.shtml}
-
-\hypertarget{ref-tlcfarerate}{}
-Staff, N. T. (n.d.). NYC tlc Taxicab Rate of Fare. NYC TLC. Retrieved
-from \url{http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml}
 
 \hypertarget{ref-uberweb}{}
 Staff, U. (2009, March). Uber Technologies Inc. Retrieved from

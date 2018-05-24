@@ -1,6 +1,6 @@
 \contentsline {chapter}{Chapter 1: Introduction}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Background}{2}{section.1.1}
-\contentsline {subsection}{\numberline {1.1.1}Yellow Taxi}{2}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Yellow Taxi}{3}{subsection.1.1.1}
 \contentsline {subsection}{\numberline {1.1.2}Green Taxi}{3}{subsection.1.1.2}
 \contentsline {subsection}{\numberline {1.1.3}Uber}{3}{subsection.1.1.3}
 \contentsline {subsection}{\numberline {1.1.4}Lyft}{4}{subsection.1.1.4}
@@ -20,7 +20,7 @@
 \contentsline {subsection}{\numberline {2.1.4}Uber}{13}{subsection.2.1.4}
 \contentsline {subsection}{\numberline {2.1.5}Lyft}{14}{subsection.2.1.5}
 \contentsline {subsection}{\numberline {2.1.6}Data Storage}{14}{subsection.2.1.6}
-\contentsline {section}{\numberline {2.2}\texttt {ettl} and \texttt {nyctaxi} Packages}{15}{section.2.2}
+\contentsline {section}{\numberline {2.2}\texttt {etl} and \texttt {nyctaxi} Packages}{15}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Taxi zone shapefile attached to nyctaxi \textbf {R} package}{18}{subsection.2.2.1}
 \contentsline {section}{\numberline {2.3}Extract-Transform-Load}{19}{section.2.3}
 \contentsline {subsection}{\numberline {2.3.1}Extract}{19}{subsection.2.3.1}
@@ -70,8 +70,8 @@
 \contentsline {section}{\numberline {5.4}Recommendations to New York City Taxi Fare \& Limousine Commission}{82}{section.5.4}
 \contentsline {chapter}{Chapter 6: Conclusion}{83}{chapter.6}
 \contentsline {section}{\numberline {6.1}Future Research}{84}{section.6.1}
-\contentsline {chapter}{Appendix A: Utility Function}{85}{appendix.A}
-\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{87}{appendix.B}
-\contentsline {chapter}{Appendix C: Freedom of Information Law Request}{89}{appendix.C}
-\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{91}{appendix.D}
-\contentsline {chapter}{References}{95}{appendix*.51}
+\contentsline {chapter}{Appendix A: Utility Function}{87}{appendix.A}
+\contentsline {chapter}{Appendix B: Data Dictionary -- Yellow Taxi}{89}{appendix.B}
+\contentsline {chapter}{Appendix C: Freedom of Information Law Request}{91}{appendix.C}
+\contentsline {chapter}{Appendix D: NOAA Climate Data Request}{93}{appendix.D}
+\contentsline {chapter}{References}{97}{appendix*.51}
